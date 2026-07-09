@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Six-digit plain numbers to match the legacy series (019385).
+             Adjust number_next at cutover if the client wants
+             continuity with the old system. -->
+        <record id="seq_hotel_reservation" model="ir.sequence">
+            <field name="name">Hotel Reservation</field>
+            <field name="code">hotel.reservation</field>
+            <field name="padding">6</field>
+            <field name="number_next">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

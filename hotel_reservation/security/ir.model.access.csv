@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hotel_reservation_frontdesk,hotel.reservation frontdesk,model_hotel_reservation,hotel_base.group_hotel_frontdesk,1,1,1,0
+access_hotel_reservation_housekeeping,hotel.reservation housekeeping,model_hotel_reservation,hotel_base.group_hotel_housekeeping,1,0,0,0
+access_hotel_reservation_manager,hotel.reservation manager,model_hotel_reservation,hotel_base.group_hotel_manager,1,1,1,1

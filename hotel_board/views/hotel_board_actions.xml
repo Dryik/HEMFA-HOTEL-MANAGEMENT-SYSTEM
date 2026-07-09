@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_hotel_dashboard" model="ir.actions.client">
+        <field name="name">Front Desk Dashboard</field>
+        <field name="tag">hotel_board.dashboard</field>
+    </record>
+
+    <!-- Sequence 5: first item under the Hotel app, so the dashboard
+         is the landing screen. -->
+    <menuitem id="menu_hotel_dashboard"
+        name="Dashboard"
+        parent="hotel_base.menu_hotel_root"
+        action="action_hotel_dashboard"
+        sequence="5"/>
+</odoo>

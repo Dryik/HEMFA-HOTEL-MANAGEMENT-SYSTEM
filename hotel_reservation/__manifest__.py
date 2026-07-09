@@ -1,11 +1,18 @@
 {
     "name": "Hotel Reservations",
-    "summary": "Reservation lifecycle, groups and rooming lists, stay amendments, availability with DB exclusion constraint",
-    "version": "19.0.0.1.0",
+    "summary": "Reservation lifecycle, Gantt tape chart, calendar, availability",
+    "version": "19.0.1.0.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",
-    "depends": ["hotel_base", "hotel_rate"],
-    "data": [],
-    "installable": False,  # skeleton: flip to True when the module lands
+    "depends": ["hotel_base", "web_gantt"],
+    "data": [
+        "security/ir.model.access.csv",
+        "data/ir_sequence_data.xml",
+        "views/hotel_reservation_views.xml",
+    ],
+    "demo": [
+        "demo/hotel_reservation_demo.xml",
+    ],
+    "installable": True,
 }

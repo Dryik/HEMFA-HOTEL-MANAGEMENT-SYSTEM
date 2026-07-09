@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="hotel_board.HotelDashboard">
+        <div class="o_hotel_dashboard h-100 overflow-auto p-4">
+            <t t-if="state.data">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h2 class="mb-0">Front Desk</h2>
+                    <div>
+                        <button class="btn btn-primary me-2" t-on-click="newReservation">
+                            <i class="fa fa-plus me-1"/>New Reservation
+                        </button>
+                        <button class="btn btn-secondary"
+                            t-on-click="() => this.openAction('hotel_reservation.action_hotel_reservation')">
+                            <i class="fa fa-calendar me-1"/>Planning
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Occupancy headline -->
+                <div class="o_hotel_card o_hotel_occupancy mb-4 p-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="o_hotel_kpi_label">Occupancy</div>
+                            <div class="o_hotel_kpi_huge">
+                                <t t-esc="state.data.occupancy_pct"/>%
+                            </div>
+                            <div class="text-muted">
+                                <t t-esc="state.data.occupied"/> of
+                                <t t-esc="state.data.sellable_rooms"/> sellable rooms occupied
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-5">
+                            <div class="progress o_hotel_progress">
+                                <div class="progress-bar bg-success"
+                                     t-attf-style="width: {{ state.data.occupancy_pct }}%"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today row -->
+                <div class="row g-3 mb-3">
+                    <div class="col-6 col-md-3">
+                        <div class="o_hotel_card o_hotel_clickable p-3"
+                             t-on-click="() => this.openAction('hotel_reservation.action_hotel_arrivals_today')">
+                            <div class="o_hotel_kpi_label">Arrivals Today</div>
+                            <div class="o_hotel_kpi text-warning">
+                                <t t-esc="state.data.arrivals_today"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="o_hotel_card o_hotel_clickable p-3"
+                             t-on-click="() => this.openAction('hotel_reservation.action_hotel_departures_today')">
+                            <div class="o_hotel_kpi_label">Departures Today</div>
+                            <div class="o_hotel_kpi text-info">
+                                <t t-esc="state.data.departures_today"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="o_hotel_card o_hotel_clickable p-3"
+                             t-on-click="() => this.openAction('hotel_reservation.action_hotel_reservation_list')">
+                            <div class="o_hotel_kpi_label">In House</div>
+                            <div class="o_hotel_kpi text-success">
+                                <t t-esc="state.data.in_house"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="o_hotel_card o_hotel_clickable p-3"
+                             t-on-click="() => this.openRooms('')">
+                            <div class="o_hotel_kpi_label">Reserved Rooms</div>
+                            <div class="o_hotel_kpi text-primary">
+                                <t t-esc="state.data.reserved"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rooms row -->
+                <div class="row g-3">
+                    <div class="col-6 col-md-3">
+                        <div class="o_hotel_card o_hotel_clickable p-3"
+                             t-on-click="() => this.openRooms('vacant')">
+                            <div class="o_hotel_kpi_label">Vacant Clean</div>
+                            <div class="o_hotel_kpi text-success">
+                                <t t-esc="state.data.vacant_clean"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="o_hotel_card o_hotel_clickable p-3"
+                             t-on-click="() => this.openRooms('dirty')">
+                            <div class="o_hotel_kpi_label">Vacant Dirty</div>
+                            <div class="o_hotel_kpi text-danger">
+                                <t t-esc="state.data.vacant_dirty"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="o_hotel_card o_hotel_clickable p-3"
+                             t-on-click="() => this.openRooms('ooo')">
+                            <div class="o_hotel_kpi_label">Out of Order</div>
+                            <div class="o_hotel_kpi text-muted">
+                                <t t-esc="state.data.out_of_order"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="o_hotel_card o_hotel_clickable p-3"
+                             t-on-click="() => this.openRooms('')">
+                            <div class="o_hotel_kpi_label">Admin Use</div>
+                            <div class="o_hotel_kpi text-muted">
+                                <t t-esc="state.data.admin_use"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="d-flex align-items-center justify-content-center h-100">
+                    <i class="fa fa-spinner fa-spin fa-2x"/>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

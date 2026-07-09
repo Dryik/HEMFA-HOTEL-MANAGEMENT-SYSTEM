@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="demo_guest_fatima" model="res.partner">
+        <field name="name">Fatima Ben Ali</field>
+        <field name="is_hotel_guest">True</field>
+        <field name="guest_gender">female</field>
+        <field name="guest_nationality_id" ref="base.ly"/>
+        <field name="guest_id_type">national_id</field>
+        <field name="guest_id_number">219900004567</field>
+    </record>
+    <record id="demo_guest_smith" model="res.partner">
+        <field name="name">John Smith</field>
+        <field name="is_hotel_guest">True</field>
+        <field name="guest_gender">male</field>
+        <field name="guest_nationality_id" ref="base.uk"/>
+        <field name="guest_id_type">passport</field>
+        <field name="guest_id_number">P-88112233</field>
+        <field name="hotel_agency_id" ref="hotel_base.demo_agency_altahadi"/>
+    </record>
+
+    <!-- In-house guest: arrived yesterday, leaves in 2 days -->
+    <record id="demo_reservation_1" model="hotel.reservation">
+        <field name="partner_id" ref="hotel_base.demo_guest_ahmed"/>
+        <field name="room_id" ref="hotel_base.demo_room_105"/>
+        <field name="room_type_id" ref="hotel_base.demo_room_type_double"/>
+        <field name="checkin_date" eval="DateTime.now() + relativedelta(days=-1, hour=12, minute=0, second=0)"/>
+        <field name="checkout_date" eval="DateTime.now() + relativedelta(days=2, hour=12, minute=0, second=0)"/>
+        <field name="state">checked_in</field>
+        <field name="actual_checkin" eval="DateTime.now() + relativedelta(days=-1, hour=13, minute=20, second=0)"/>
+        <field name="rate_night">220</field>
+        <field name="agency_id" ref="hotel_base.demo_agency_altahadi"/>
+    </record>
+    <record id="hotel_base.demo_room_105" model="hotel.room">
+        <field name="occupancy_state">occupied</field>
+    </record>
+
+    <!-- Arrival today, confirmed -->
+    <record id="demo_reservation_2" model="hotel.reservation">
+        <field name="partner_id" ref="demo_guest_fatima"/>
+        <field name="room_id" ref="hotel_base.demo_room_203"/>
+        <field name="room_type_id" ref="hotel_base.demo_room_type_suite"/>
+        <field name="checkin_date" eval="DateTime.now() + relativedelta(hour=12, minute=0, second=0)"/>
+        <field name="checkout_date" eval="DateTime.now() + relativedelta(days=3, hour=12, minute=0, second=0)"/>
+        <field name="state">confirmed</field>
+        <field name="rate_night">400</field>
+    </record>
+    <record id="hotel_base.demo_room_203" model="hotel.room">
+        <field name="occupancy_state">reserved</field>
+    </record>
+
+    <!-- Future booking next week -->
+    <record id="demo_reservation_3" model="hotel.reservation">
+        <field name="partner_id" ref="demo_guest_smith"/>
+        <field name="room_id" ref="hotel_base.demo_room_101"/>
+        <field name="room_type_id" ref="hotel_base.demo_room_type_single"/>
+        <field name="checkin_date" eval="DateTime.now() + relativedelta(days=6, hour=12, minute=0, second=0)"/>
+        <field name="checkout_date" eval="DateTime.now() + relativedelta(days=9, hour=12, minute=0, second=0)"/>
+        <field name="state">confirmed</field>
+        <field name="rate_night">150</field>
+        <field name="agency_id" ref="hotel_base.demo_agency_altahadi"/>
+        <field name="coming_from">London</field>
+        <field name="trip_number">BA-897</field>
+    </record>
+
+    <!-- Draft enquiry -->
+    <record id="demo_reservation_4" model="hotel.reservation">
+        <field name="partner_id" ref="demo_guest_fatima"/>
+        <field name="room_id" ref="hotel_base.demo_room_110"/>
+        <field name="room_type_id" ref="hotel_base.demo_room_type_double"/>
+        <field name="checkin_date" eval="DateTime.now() + relativedelta(days=4, hour=12, minute=0, second=0)"/>
+        <field name="checkout_date" eval="DateTime.now() + relativedelta(days=5, hour=12, minute=0, second=0)"/>
+        <field name="state">draft</field>
+    </record>
+</odoo>
