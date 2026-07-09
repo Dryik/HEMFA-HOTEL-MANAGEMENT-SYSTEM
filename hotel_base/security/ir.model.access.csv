@@ -1,0 +1,18 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hotel_property_frontdesk,hotel.property frontdesk,model_hotel_property,group_hotel_frontdesk,1,0,0,0
+access_hotel_property_housekeeping,hotel.property housekeeping,model_hotel_property,group_hotel_housekeeping,1,0,0,0
+access_hotel_property_maintenance,hotel.property maintenance,model_hotel_property,group_hotel_maintenance,1,0,0,0
+access_hotel_property_manager,hotel.property manager,model_hotel_property,group_hotel_manager,1,1,1,1
+access_hotel_floor_frontdesk,hotel.floor frontdesk,model_hotel_floor,group_hotel_frontdesk,1,0,0,0
+access_hotel_floor_housekeeping,hotel.floor housekeeping,model_hotel_floor,group_hotel_housekeeping,1,0,0,0
+access_hotel_floor_maintenance,hotel.floor maintenance,model_hotel_floor,group_hotel_maintenance,1,0,0,0
+access_hotel_floor_manager,hotel.floor manager,model_hotel_floor,group_hotel_manager,1,1,1,1
+access_hotel_room_type_frontdesk,hotel.room.type frontdesk,model_hotel_room_type,group_hotel_frontdesk,1,0,0,0
+access_hotel_room_type_housekeeping,hotel.room.type housekeeping,model_hotel_room_type,group_hotel_housekeeping,1,0,0,0
+access_hotel_room_type_manager,hotel.room.type manager,model_hotel_room_type,group_hotel_manager,1,1,1,1
+access_hotel_amenity_frontdesk,hotel.amenity frontdesk,model_hotel_amenity,group_hotel_frontdesk,1,0,0,0
+access_hotel_amenity_manager,hotel.amenity manager,model_hotel_amenity,group_hotel_manager,1,1,1,1
+access_hotel_room_frontdesk,hotel.room frontdesk,model_hotel_room,group_hotel_frontdesk,1,1,0,0
+access_hotel_room_housekeeping,hotel.room housekeeping,model_hotel_room,group_hotel_housekeeping,1,1,0,0
+access_hotel_room_maintenance,hotel.room maintenance,model_hotel_room,group_hotel_maintenance,1,1,0,0
+access_hotel_room_manager,hotel.room manager,model_hotel_room,group_hotel_manager,1,1,1,1

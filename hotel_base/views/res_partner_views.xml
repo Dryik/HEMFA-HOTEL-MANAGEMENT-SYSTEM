@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_partner_view_form_hotel" model="ir.ui.view">
+        <field name="name">res.partner.form.hotel</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Hotel Guest" name="hotel_guest"
+                      invisible="not is_hotel_guest"
+                      groups="hotel_base.group_hotel_frontdesk">
+                    <group>
+                        <group string="Identity">
+                            <field name="guest_gender"/>
+                            <field name="guest_nationality_id"/>
+                            <field name="guest_birthdate"/>
+                            <field name="guest_birthplace"/>
+                            <field name="guest_national_number"/>
+                            <field name="guest_profession"/>
+                        </group>
+                        <group string="Identification Document">
+                            <field name="guest_id_type"/>
+                            <field name="guest_id_number"/>
+                            <field name="guest_id_expiry"/>
+                            <field name="hotel_agency_id"/>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+            <xpath expr="//field[@name='category_id']" position="before">
+                <field name="is_hotel_guest" groups="hotel_base.group_hotel_frontdesk"/>
+                <field name="is_hotel_agency" groups="hotel_base.group_hotel_frontdesk"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hotel_guest_action" model="ir.actions.act_window">
+        <field name="name">Guests</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_hotel_guest', '=', True)]</field>
+        <field name="context">{'default_is_hotel_guest': True, 'default_company_type': 'person'}</field>
+    </record>
+
+    <record id="hotel_agency_action" model="ir.actions.act_window">
+        <field name="name">Agencies / Entities</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_hotel_agency', '=', True)]</field>
+        <field name="context">{'default_is_hotel_agency': True, 'default_company_type': 'company'}</field>
+    </record>
+</odoo>

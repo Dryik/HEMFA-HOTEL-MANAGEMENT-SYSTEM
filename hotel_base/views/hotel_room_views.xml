@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hotel_room_view_list" model="ir.ui.view">
+        <field name="name">hotel.room.list</field>
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="floor_id"/>
+                <field name="room_type_id"/>
+                <field name="occupancy_state"/>
+                <field name="hk_status"/>
+                <field name="out_of_order" optional="show"/>
+                <field name="admin_use" optional="hide"/>
+                <field name="property_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hotel_room_view_form" model="ir.ui.view">
+        <field name="name">hotel.room.form</field>
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. 101"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="floor_id"/>
+                            <field name="property_id"/>
+                            <field name="room_type_id"/>
+                            <field name="telephone_extension"/>
+                        </group>
+                        <group>
+                            <field name="occupancy_state"/>
+                            <field name="hk_status"/>
+                            <field name="out_of_order" readonly="1"/>
+                            <field name="admin_use" groups="hotel_base.group_hotel_manager"/>
+                            <field name="is_sellable"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="amenity_ids" widget="many2many_tags"/>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hotel_room_view_kanban" model="ir.ui.view">
+        <field name="name">hotel.room.kanban</field>
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="floor_id" quick_create="false">
+                <field name="occupancy_state"/>
+                <field name="hk_status"/>
+                <field name="out_of_order"/>
+                <field name="admin_use"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="p-2">
+                            <strong><field name="name"/></strong>
+                            <div><field name="room_type_id"/></div>
+                            <div>
+                                <field name="occupancy_state" widget="badge"
+                                    decoration-success="occupancy_state == 'vacant'"
+                                    decoration-danger="occupancy_state == 'occupied'"
+                                    decoration-warning="occupancy_state in ('reserved', 'checkout')"/>
+                                <field name="hk_status" widget="badge"
+                                    decoration-danger="hk_status == 'dirty'"
+                                    decoration-success="hk_status != 'dirty'"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="hotel_room_view_search" model="ir.ui.view">
+        <field name="name">hotel.room.search</field>
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="room_type_id"/>
+                <filter string="Vacant" name="vacant" domain="[('occupancy_state', '=', 'vacant')]"/>
+                <filter string="Occupied" name="occupied" domain="[('occupancy_state', '=', 'occupied')]"/>
+                <filter string="Dirty" name="dirty" domain="[('hk_status', '=', 'dirty')]"/>
+                <filter string="Out of Order" name="ooo" domain="[('out_of_order', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Floor" name="group_floor" context="{'group_by': 'floor_id'}"/>
+                    <filter string="Room Type" name="group_type" context="{'group_by': 'room_type_id'}"/>
+                    <filter string="Occupancy" name="group_occ" context="{'group_by': 'occupancy_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hotel_room_action" model="ir.actions.act_window">
+        <field name="name">Rooms</field>
+        <field name="res_model">hotel.room</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+</odoo>

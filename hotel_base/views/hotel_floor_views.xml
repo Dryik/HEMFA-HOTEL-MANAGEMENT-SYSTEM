@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hotel_floor_view_list" model="ir.ui.view">
+        <field name="name">hotel.floor.list</field>
+        <field name="model">hotel.floor</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="property_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hotel_floor_action" model="ir.actions.act_window">
+        <field name="name">Floors</field>
+        <field name="res_model">hotel.floor</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

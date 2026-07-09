@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="demo_property_tubactus" model="hotel.property">
+        <field name="name">Tubactus Hotel</field>
+        <field name="code">TBK</field>
+    </record>
+
+    <record id="demo_floor_1" model="hotel.floor">
+        <field name="name">Floor 1</field>
+        <field name="sequence">1</field>
+        <field name="property_id" ref="demo_property_tubactus"/>
+    </record>
+    <record id="demo_floor_2" model="hotel.floor">
+        <field name="name">Floor 2</field>
+        <field name="sequence">2</field>
+        <field name="property_id" ref="demo_property_tubactus"/>
+    </record>
+    <record id="demo_floor_3" model="hotel.floor">
+        <field name="name">Floor 3</field>
+        <field name="sequence">3</field>
+        <field name="property_id" ref="demo_property_tubactus"/>
+    </record>
+    <record id="demo_floor_4" model="hotel.floor">
+        <field name="name">Floor 4</field>
+        <field name="sequence">4</field>
+        <field name="property_id" ref="demo_property_tubactus"/>
+    </record>
+    <record id="demo_floor_5" model="hotel.floor">
+        <field name="name">Floor 5</field>
+        <field name="sequence">5</field>
+        <field name="property_id" ref="demo_property_tubactus"/>
+    </record>
+    <record id="demo_floor_6" model="hotel.floor">
+        <field name="name">Floor 6</field>
+        <field name="sequence">6</field>
+        <field name="property_id" ref="demo_property_tubactus"/>
+    </record>
+
+    <record id="demo_room_type_single" model="hotel.room.type">
+        <field name="name">Single</field>
+        <field name="code">SGL</field>
+        <field name="sequence">1</field>
+        <field name="base_price">150</field>
+        <field name="capacity_adults">1</field>
+    </record>
+    <record id="demo_room_type_double" model="hotel.room.type">
+        <field name="name">Double</field>
+        <field name="code">DBL</field>
+        <field name="sequence">2</field>
+        <field name="base_price">220</field>
+        <field name="capacity_adults">2</field>
+    </record>
+    <record id="demo_room_type_suite" model="hotel.room.type">
+        <field name="name">Suite</field>
+        <field name="code">STE</field>
+        <field name="sequence">3</field>
+        <field name="base_price">400</field>
+        <field name="capacity_adults">2</field>
+        <field name="capacity_children">2</field>
+    </record>
+
+    <!-- Floor 1: rooms 101-116 as on the legacy board -->
+    <record id="demo_room_101" model="hotel.room">
+        <field name="name">101</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_single"/>
+    </record>
+    <record id="demo_room_102" model="hotel.room">
+        <field name="name">102</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_single"/>
+    </record>
+    <record id="demo_room_103" model="hotel.room">
+        <field name="name">103</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_single"/>
+    </record>
+    <record id="demo_room_104" model="hotel.room">
+        <field name="name">104</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_105" model="hotel.room">
+        <field name="name">105</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_106" model="hotel.room">
+        <field name="name">106</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_107" model="hotel.room">
+        <field name="name">107</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_108" model="hotel.room">
+        <field name="name">108</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_109" model="hotel.room">
+        <field name="name">109</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_110" model="hotel.room">
+        <field name="name">110</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_111" model="hotel.room">
+        <field name="name">111</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_112" model="hotel.room">
+        <field name="name">112</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_113" model="hotel.room">
+        <field name="name">113</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_114" model="hotel.room">
+        <field name="name">114</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_115" model="hotel.room">
+        <field name="name">115</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_suite"/>
+    </record>
+    <record id="demo_room_116" model="hotel.room">
+        <field name="name">116</field>
+        <field name="floor_id" ref="demo_floor_1"/>
+        <field name="room_type_id" ref="demo_room_type_suite"/>
+    </record>
+
+    <!-- Floor 2 sample -->
+    <record id="demo_room_201" model="hotel.room">
+        <field name="name">201</field>
+        <field name="floor_id" ref="demo_floor_2"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_202" model="hotel.room">
+        <field name="name">202</field>
+        <field name="floor_id" ref="demo_floor_2"/>
+        <field name="room_type_id" ref="demo_room_type_double"/>
+    </record>
+    <record id="demo_room_203" model="hotel.room">
+        <field name="name">203</field>
+        <field name="floor_id" ref="demo_floor_2"/>
+        <field name="room_type_id" ref="demo_room_type_suite"/>
+    </record>
+    <record id="demo_room_204" model="hotel.room">
+        <field name="name">204</field>
+        <field name="floor_id" ref="demo_floor_2"/>
+        <field name="room_type_id" ref="demo_room_type_single"/>
+    </record>
+
+    <record id="demo_agency_altahadi" model="res.partner">
+        <field name="name">Altahadi Oil Services</field>
+        <field name="is_company">True</field>
+        <field name="is_hotel_agency">True</field>
+    </record>
+
+    <record id="demo_guest_ahmed" model="res.partner">
+        <field name="name">Ahmed Al-Mansouri</field>
+        <field name="is_hotel_guest">True</field>
+        <field name="guest_gender">male</field>
+        <field name="guest_nationality_id" ref="base.ly"/>
+        <field name="guest_id_type">national_id</field>
+        <field name="guest_id_number">119850001234</field>
+        <field name="hotel_agency_id" ref="demo_agency_altahadi"/>
+    </record>
+</odoo>

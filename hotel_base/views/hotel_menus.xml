@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_hotel_root"
+        name="Hotel"
+        sequence="15"
+        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_maintenance"/>
+
+    <menuitem id="menu_hotel_rooms"
+        name="Rooms"
+        parent="menu_hotel_root"
+        action="hotel_room_action"
+        sequence="20"/>
+
+    <menuitem id="menu_hotel_guests"
+        name="Guests"
+        parent="menu_hotel_root"
+        action="hotel_guest_action"
+        sequence="30"
+        groups="hotel_base.group_hotel_frontdesk"/>
+
+    <menuitem id="menu_hotel_agencies"
+        name="Agencies / Entities"
+        parent="menu_hotel_root"
+        action="hotel_agency_action"
+        sequence="40"
+        groups="hotel_base.group_hotel_frontdesk"/>
+
+    <menuitem id="menu_hotel_config"
+        name="Configuration"
+        parent="menu_hotel_root"
+        sequence="100"
+        groups="hotel_base.group_hotel_manager"/>
+
+    <menuitem id="menu_hotel_config_property"
+        name="Properties"
+        parent="menu_hotel_config"
+        action="hotel_property_action"
+        sequence="10"/>
+
+    <menuitem id="menu_hotel_config_floor"
+        name="Floors"
+        parent="menu_hotel_config"
+        action="hotel_floor_action"
+        sequence="20"/>
+
+    <menuitem id="menu_hotel_config_room_type"
+        name="Room Types"
+        parent="menu_hotel_config"
+        action="hotel_room_type_action"
+        sequence="30"/>
+
+    <menuitem id="menu_hotel_config_amenity"
+        name="Amenities"
+        parent="menu_hotel_config"
+        action="hotel_amenity_action"
+        sequence="40"/>
+</odoo>

@@ -1,0 +1,3 @@
+# Extra Python dependencies installed by Odoo.sh on build.
+# xlsxwriter ships with Odoo; add report engine deps here if the
+# OCA report_xlsx route is confirmed in the Phase 0 spike.
