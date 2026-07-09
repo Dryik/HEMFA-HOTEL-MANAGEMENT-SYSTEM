@@ -3,7 +3,7 @@
     "summary": "Cashier shift sessions, multi-currency cash counts, shift-close report",
     "version": "19.0.0.1.0",
     "category": "Hotel Management",
-    "author": "Tubactus Hotel",
+    "author": "HEMFA",
     "license": "OPL-1",
     "depends": ["hotel_folio"],
     "data": [],

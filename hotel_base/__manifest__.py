@@ -3,7 +3,7 @@
     "summary": "Properties, floors, room types, rooms, guests and agencies",
     "version": "19.0.1.0.0",
     "category": "Hotel Management",
-    "author": "Tubactus Hotel",
+    "author": "HEMFA",
     "license": "OPL-1",
     "depends": ["base", "mail", "product", "contacts"],
     "data": [

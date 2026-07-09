@@ -1,7 +1,8 @@
-# Tubactus Hotel PMS — Odoo 19 Enterprise
+# HEMFA HOTEL MANAGEMENT SYSTEM — Odoo 19 Enterprise
 
-Custom hotel property management addon suite for Tubactus Hotel (Libya).
+Custom hotel property management addon suite (first deployment: Tubactus Hotel, Libya).
 Deployment target: **Odoo.sh** (dev / staging / production branches).
+Repository: https://github.com/Dryik/HEMFA-HOTEL-MANAGEMENT-SYSTEM
 
 See `../implementation-plan-v3.md` for the full build plan and client decisions.
 
