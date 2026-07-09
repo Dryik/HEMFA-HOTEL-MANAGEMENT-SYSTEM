@@ -1,5 +1,6 @@
 from odoo.tests.common import TransactionCase
 from odoo.tests import tagged
+from odoo.tools import mute_logger
 
 
 @tagged("post_install", "-at_install")
@@ -46,6 +47,7 @@ class TestHotelBase(TransactionCase):
         room.admin_use = True
         self.assertFalse(room.is_sellable)
 
+    @mute_logger("odoo.sql_db")
     def test_room_number_unique_per_property(self):
         self.env["hotel.room"].create(
             {
@@ -54,7 +56,7 @@ class TestHotelBase(TransactionCase):
                 "room_type_id": self.room_type.id,
             }
         )
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception), self.env.cr.savepoint():
             self.env["hotel.room"].create(
                 {
                     "name": "202",
@@ -62,3 +64,4 @@ class TestHotelBase(TransactionCase):
                     "room_type_id": self.room_type.id,
                 }
             )
+            self.env["hotel.room"].flush_model()
