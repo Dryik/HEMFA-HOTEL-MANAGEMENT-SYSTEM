@@ -44,13 +44,10 @@ class HotelProperty(models.Model):
         "admin-use rooms. Denominator for occupancy-based pricing.",
     )
 
-    _sql_constraints = [
-        (
-            "code_company_uniq",
-            "unique(code, company_id)",
-            "Property code must be unique per company.",
-        ),
-    ]
+    _code_company_uniq = models.Constraint(
+        "unique (code, company_id)",
+        "Property code must be unique per company.",
+    )
 
     @api.depends("room_ids.active", "room_ids.is_sellable")
     def _compute_room_count(self):

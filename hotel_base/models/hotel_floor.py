@@ -14,10 +14,7 @@ class HotelFloor(models.Model):
     room_ids = fields.One2many("hotel.room", "floor_id", string="Rooms")
     active = fields.Boolean(default=True)
 
-    _sql_constraints = [
-        (
-            "name_property_uniq",
-            "unique(name, property_id)",
-            "Floor name must be unique per property.",
-        ),
-    ]
+    _name_property_uniq = models.Constraint(
+        "unique (name, property_id)",
+        "Floor name must be unique per property.",
+    )

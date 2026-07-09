@@ -70,13 +70,10 @@ class HotelRoom(models.Model):
         help="Counts toward availability and the occupancy denominator.",
     )
 
-    _sql_constraints = [
-        (
-            "name_property_uniq",
-            "unique(name, property_id)",
-            "Room number must be unique per property.",
-        ),
-    ]
+    _name_property_uniq = models.Constraint(
+        "unique (name, property_id)",
+        "Room number must be unique per property.",
+    )
 
     @api.depends("active", "out_of_order", "admin_use")
     def _compute_is_sellable(self):

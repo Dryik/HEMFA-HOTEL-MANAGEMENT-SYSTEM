@@ -92,7 +92,7 @@
                 <filter string="Occupied" name="occupied" domain="[('occupancy_state', '=', 'occupied')]"/>
                 <filter string="Dirty" name="dirty" domain="[('hk_status', '=', 'dirty')]"/>
                 <filter string="Out of Order" name="ooo" domain="[('out_of_order', '=', True)]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Floor" name="group_floor" context="{'group_by': 'floor_id'}"/>
                     <filter string="Room Type" name="group_type" context="{'group_by': 'room_type_id'}"/>
                     <filter string="Occupancy" name="group_occ" context="{'group_by': 'occupancy_state'}"/>
