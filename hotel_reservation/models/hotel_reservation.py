@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
+from odoo.tools import mute_logger
 
 _logger = logging.getLogger(__name__)
 
@@ -210,12 +211,28 @@ class HotelReservation(models.Model):
     def init(self):
         # Database-level double-booking guard. Needs btree_gist for
         # integer equality inside a gist exclusion constraint; Python
-        # validation above stays as the user-friendly error.
+        # validation above stays as the user-friendly error. On Odoo.sh
+        # the db user may not create extensions, so probe first and try
+        # the creation silently: without the extension we simply rely
+        # on the ORM validation (covered by tests).
         super().init()
         cr = self.env.cr
+        cr.execute("SELECT 1 FROM pg_extension WHERE extname = 'btree_gist'")
+        has_gist = bool(cr.fetchone())
+        if not has_gist:
+            try:
+                with mute_logger("odoo.sql_db"), cr.savepoint():
+                    cr.execute("CREATE EXTENSION IF NOT EXISTS btree_gist")
+                has_gist = True
+            except Exception:
+                _logger.info(
+                    "btree_gist extension unavailable; room-overlap "
+                    "enforcement uses ORM validation only."
+                )
+        if not has_gist:
+            return
         try:
             with cr.savepoint():
-                cr.execute("CREATE EXTENSION IF NOT EXISTS btree_gist")
                 cr.execute(
                     """
                     SELECT 1 FROM pg_constraint
@@ -237,8 +254,7 @@ class HotelReservation(models.Model):
                     )
         except Exception:
             _logger.warning(
-                "Could not create the room-overlap exclusion constraint "
-                "(btree_gist unavailable?). Relying on ORM validation only."
+                "Could not create the room-overlap exclusion constraint."
             )
 
     @api.model_create_multi
