@@ -5,45 +5,71 @@
         <field name="sequence">25</field>
     </record>
 
-    <record id="group_hotel_housekeeping" model="res.groups">
-        <field name="name">Housekeeping</field>
+    <!-- Odoo 19: groups belong to a privilege; each privilege renders as
+         one role dropdown on the user form, so groups inside a privilege
+         form a linear implied chain. -->
+    <record id="privilege_hotel_front_office" model="res.groups.privilege">
+        <field name="name">Hotel Front Office</field>
+        <field name="sequence">10</field>
         <field name="category_id" ref="module_category_hotel"/>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
     </record>
 
-    <record id="group_hotel_maintenance" model="res.groups">
-        <field name="name">Maintenance</field>
+    <record id="privilege_hotel_housekeeping" model="res.groups.privilege">
+        <field name="name">Hotel Housekeeping</field>
+        <field name="sequence">20</field>
         <field name="category_id" ref="module_category_hotel"/>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="privilege_hotel_maintenance" model="res.groups.privilege">
+        <field name="name">Hotel Maintenance</field>
+        <field name="sequence">30</field>
+        <field name="category_id" ref="module_category_hotel"/>
     </record>
 
     <record id="group_hotel_frontdesk" model="res.groups">
         <field name="name">Front Desk</field>
-        <field name="category_id" ref="module_category_hotel"/>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="privilege_hotel_front_office"/>
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
     </record>
 
     <record id="group_hotel_cashier" model="res.groups">
         <field name="name">Cashier</field>
-        <field name="category_id" ref="module_category_hotel"/>
+        <field name="sequence">20</field>
+        <field name="privilege_id" ref="privilege_hotel_front_office"/>
         <field name="implied_ids" eval="[(4, ref('group_hotel_frontdesk'))]"/>
     </record>
 
     <record id="group_hotel_fo_supervisor" model="res.groups">
         <field name="name">Front Office Supervisor</field>
-        <field name="category_id" ref="module_category_hotel"/>
-        <field name="implied_ids" eval="[(4, ref('group_hotel_frontdesk'))]"/>
+        <field name="sequence">30</field>
+        <field name="privilege_id" ref="privilege_hotel_front_office"/>
+        <field name="implied_ids" eval="[(4, ref('group_hotel_cashier'))]"/>
+    </record>
+
+    <record id="group_hotel_housekeeping" model="res.groups">
+        <field name="name">Housekeeping</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="privilege_hotel_housekeeping"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_hotel_maintenance" model="res.groups">
+        <field name="name">Maintenance</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="privilege_hotel_maintenance"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
     </record>
 
     <record id="group_hotel_manager" model="res.groups">
         <field name="name">Manager</field>
-        <field name="category_id" ref="module_category_hotel"/>
+        <field name="sequence">40</field>
+        <field name="privilege_id" ref="privilege_hotel_front_office"/>
         <field name="implied_ids" eval="[
             (4, ref('group_hotel_fo_supervisor')),
-            (4, ref('group_hotel_cashier')),
             (4, ref('group_hotel_housekeeping')),
             (4, ref('group_hotel_maintenance')),
         ]"/>
-        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
     </record>
 </odoo>
