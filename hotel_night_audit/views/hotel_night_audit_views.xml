@@ -37,7 +37,7 @@
                     </div>
                     <group>
                         <group string="Audit Parameters">
-                            <field name="property_id"/>
+                            <field name="property_id" readonly="state != 'draft'"/>
                             <field name="date"/>
                         </group>
                         <group string="Results" invisible="state != 'done'">

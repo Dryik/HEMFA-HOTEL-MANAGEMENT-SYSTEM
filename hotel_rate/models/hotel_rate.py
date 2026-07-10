@@ -43,18 +43,14 @@ class HotelRateRule(models.Model):
         default=lambda self: self.env.company.currency_id,
     )
 
-    _sql_constraints = [
-        (
-            "date_range_check",
-            "CHECK (date_end >= date_start)",
-            "End date must be greater than or equal to start date.",
-        ),
-        (
-            "positive_rate_check",
-            "CHECK (rate_price >= 0)",
-            "Rate price must be positive.",
-        ),
-    ]
+    _date_range_check = models.Constraint(
+        "CHECK (date_end >= date_start)",
+        "End date must be greater than or equal to start date.",
+    )
+    _positive_rate_check = models.Constraint(
+        "CHECK (rate_price >= 0)",
+        "Rate price must be positive.",
+    )
 
     @api.constrains("date_start", "date_end", "property_id", "room_type_id", "guest_type")
     def _check_overlapping_rules(self):
@@ -99,18 +95,14 @@ class HotelRateOccupancyBand(models.Model):
         help="Multiplication factor to apply to the nightly rate (e.g. 1.20 for +20% price).",
     )
 
-    _sql_constraints = [
-        (
-            "occupancy_range_check",
-            "CHECK (max_occupancy >= min_occupancy AND min_occupancy >= 0 AND max_occupancy <= 100)",
-            "Occupancy percentages must be between 0 and 100, and max occupancy must be greater than or equal to min occupancy.",
-        ),
-        (
-            "positive_multiplier_check",
-            "CHECK (multiplier > 0)",
-            "Multiplier must be positive.",
-        ),
-    ]
+    _occupancy_range_check = models.Constraint(
+        "CHECK (max_occupancy >= min_occupancy AND min_occupancy >= 0 AND max_occupancy <= 100)",
+        "Occupancy percentages must be between 0 and 100, and max occupancy must be greater than or equal to min occupancy.",
+    )
+    _positive_multiplier_check = models.Constraint(
+        "CHECK (multiplier > 0)",
+        "Multiplier must be positive.",
+    )
 
     @api.constrains("min_occupancy", "max_occupancy", "property_id")
     def _check_overlapping_bands(self):

@@ -14,8 +14,6 @@ class HotelNightAudit(models.Model):
         string="Property",
         required=True,
         default=lambda self: self.env["hotel.property"].search([], limit=1),
-        readonly=True,
-        states={"draft": [("readonly", False)]},
     )
     date = fields.Date(
         string="Audit Date",
@@ -27,7 +25,6 @@ class HotelNightAudit(models.Model):
         [("draft", "Draft"), ("done", "Completed")],
         default="draft",
         readonly=True,
-        tracking=True,
     )
     run_user_id = fields.Many2one("res.users", string="Run By", readonly=True)
     occupancy_pct = fields.Float(string="Occupancy Rate (%)", readonly=True)

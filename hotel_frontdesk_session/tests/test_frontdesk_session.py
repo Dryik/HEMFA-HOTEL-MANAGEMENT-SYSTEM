@@ -22,19 +22,48 @@ class TestHotelFrontdeskSession(TransactionCase):
             )
 
         # Ensure active currency rates
-        cls.env["res.currency.rate"].create(
-            {
-                "currency_id": cls.usd_currency.id,
-                "rate": 0.2, # 1 LYD = 0.2 USD (i.e. 1 USD = 5 LYD)
-                "company_id": cls.env.company.id,
-            }
+        existing_rate = cls.env["res.currency.rate"].search(
+            [
+                ("currency_id", "=", cls.usd_currency.id),
+                ("company_id", "=", cls.env.company.id),
+                ("name", "=", fields.Date.today()),
+            ]
         )
+        if existing_rate:
+            existing_rate.write({"rate": 0.2})
+        else:
+            cls.env["res.currency.rate"].create(
+                {
+                    "currency_id": cls.usd_currency.id,
+                    "rate": 0.2, # 1 LYD = 0.2 USD (i.e. 1 USD = 5 LYD)
+                    "company_id": cls.env.company.id,
+                    "name": fields.Date.today(),
+                }
+            )
+
+        cls.partner = cls.env["res.partner"].create({"name": "Session Guest"})
+
+        cls.cash_journal = cls.env["account.journal"].search([("type", "=", "cash")], limit=1)
+        if not cls.cash_journal:
+            cls.cash_journal = cls.env["account.journal"].create(
+                {
+                    "name": "Cash Drawer",
+                    "type": "cash",
+                    "code": "CASH1",
+                }
+            )
+
+        # Ensure cashier has billing group access if it exists, to avoid AccessError in test runs
+        invoice_group = cls.env.ref("account.group_account_invoice", raise_if_not_found=False)
+        groups = [cls.env.ref("hotel_base.group_hotel_frontdesk").id]
+        if invoice_group:
+            groups.append(invoice_group.id)
 
         cls.cashier = cls.env["res.users"].create(
             {
                 "name": "Test Cashier",
                 "login": "tcashier",
-                "groups_id": [(6, 0, [cls.env.ref("hotel_base.group_hotel_frontdesk").id])],
+                "groups_id": [(6, 0, groups)],
             }
         )
 
@@ -59,9 +88,10 @@ class TestHotelFrontdeskSession(TransactionCase):
             {
                 "payment_type": "inbound",
                 "partner_type": "customer",
+                "partner_id": self.partner.id,
                 "amount": 100.0,
                 "currency_id": self.lyd_currency.id,
-                "journal_id": self.env["account.journal"].search([("type", "=", "cash")], limit=1).id,
+                "journal_id": self.cash_journal.id,
             }
         )
         # Re-compute balances

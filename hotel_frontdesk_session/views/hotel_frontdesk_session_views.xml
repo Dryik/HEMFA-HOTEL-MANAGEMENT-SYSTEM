@@ -40,8 +40,8 @@
                     </div>
                     <group>
                         <group string="Session Info">
-                            <field name="user_id"/>
-                            <field name="property_id"/>
+                            <field name="user_id" readonly="state != 'opened'"/>
+                            <field name="property_id" readonly="state != 'opened'"/>
                         </group>
                         <group string="Timeframes">
                             <field name="date_opened"/>

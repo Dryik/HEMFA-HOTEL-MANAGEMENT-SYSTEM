@@ -19,17 +19,13 @@ class HotelFrontdeskSession(models.Model):
         "res.users",
         string="Cashier",
         required=True,
-        readonly=True,
         default=lambda self: self.env.user,
-        states={"opened": [("readonly", False)]},
     )
     property_id = fields.Many2one(
         "hotel.property",
         string="Property",
         required=True,
         default=lambda self: self.env["hotel.property"].search([], limit=1),
-        readonly=True,
-        states={"opened": [("readonly", False)]},
     )
     state = fields.Selection(
         [("opened", "Open"), ("closed", "Closed")],
