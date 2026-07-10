@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hotel_folio_frontdesk,hotel.folio frontdesk,model_hotel_folio,hotel_base.group_hotel_frontdesk,1,1,1,0
+access_hotel_folio_manager,hotel.folio manager,model_hotel_folio,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_folio_line_frontdesk,hotel.folio.line frontdesk,model_hotel_folio_line,hotel_base.group_hotel_frontdesk,1,1,1,1
+access_hotel_folio_line_manager,hotel.folio.line manager,model_hotel_folio_line,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_folio_routing_rule_frontdesk,hotel.folio.routing.rule frontdesk,model_hotel_folio_routing_rule,hotel_base.group_hotel_frontdesk,1,0,0,0
+access_hotel_folio_routing_rule_manager,hotel.folio.routing.rule manager,model_hotel_folio_routing_rule,hotel_base.group_hotel_manager,1,1,1,1

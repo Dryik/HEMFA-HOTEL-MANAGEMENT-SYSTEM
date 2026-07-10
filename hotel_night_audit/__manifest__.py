@@ -6,6 +6,10 @@
     "author": "HEMFA",
     "license": "OPL-1",
     "depends": ["hotel_folio"],
-    "data": [],
-    "installable": False,  # skeleton: flip to True when the module lands
+    "data": [
+        "security/ir.model.access.csv",
+        "data/hotel_night_audit_sequence.xml",
+        "views/hotel_night_audit_views.xml",
+    ],
+    "installable": True,
 }

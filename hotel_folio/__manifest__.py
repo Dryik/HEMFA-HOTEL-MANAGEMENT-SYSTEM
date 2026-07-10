@@ -6,6 +6,11 @@
     "author": "HEMFA",
     "license": "OPL-1",
     "depends": ["hotel_reservation", "account"],
-    "data": [],
-    "installable": False,  # skeleton: flip to True when the module lands
+    "data": [
+        "security/ir.model.access.csv",
+        "data/hotel_folio_sequence.xml",
+        "views/hotel_folio_views.xml",
+        "views/hotel_reservation_views.xml",
+    ],
+    "installable": True,
 }

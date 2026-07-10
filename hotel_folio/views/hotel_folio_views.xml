@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Folio Views -->
+    <record id="hotel_folio_view_list" model="ir.ui.view">
+        <field name="name">hotel.folio.list</field>
+        <field name="model">hotel.folio</field>
+        <field name="arch" type="xml">
+            <list string="Folios">
+                <field name="name"/>
+                <field name="reservation_id"/>
+                <field name="partner_id"/>
+                <field name="agency_id"/>
+                <field name="amount_total"/>
+                <field name="amount_paid"/>
+                <field name="amount_due"/>
+                <field name="currency_id" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hotel_folio_view_form" model="ir.ui.view">
+        <field name="name">hotel.folio.form</field>
+        <field name="model">hotel.folio</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_create_invoice" type="object" string="Create Guest Invoice"
+                        class="btn-primary" context="{'partner_id': partner_id}"/>
+                    <button name="action_create_invoice" type="object" string="Create Agency Invoice"
+                        class="btn-secondary" invisible="not agency_id" context="{'partner_id': agency_id}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Stay Reference">
+                            <field name="reservation_id"/>
+                            <field name="partner_id"/>
+                            <field name="agency_id"/>
+                        </group>
+                        <group string="Financials">
+                            <field name="amount_total"/>
+                            <field name="amount_paid"/>
+                            <field name="amount_due"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Ledger / Charges">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="date"/>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="qty"/>
+                                    <field name="price_unit"/>
+                                    <field name="tax_ids" widget="many2many_tags"/>
+                                    <field name="payee_partner_id"/>
+                                    <field name="amount"/>
+                                    <field name="is_posted" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Invoices">
+                            <field name="invoice_ids" widget="many2many"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hotel_folio_action" model="ir.actions.act_window">
+        <field name="name">Folios</field>
+        <field name="res_model">hotel.folio</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No folios created yet</p>
+            <p>Folios track all guest charges, routed billing, and linked Odoo invoices.</p>
+        </field>
+    </record>
+
+    <!-- Folio Routing Rules Views -->
+    <record id="hotel_folio_routing_rule_view_list" model="ir.ui.view">
+        <field name="name">hotel.folio.routing.rule.list</field>
+        <field name="model">hotel.folio.routing.rule</field>
+        <field name="arch" type="xml">
+            <list string="Routing Rules">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="property_id"/>
+                <field name="category_id"/>
+                <field name="routing_type"/>
+                <field name="agency_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hotel_folio_routing_rule_view_form" model="ir.ui.view">
+        <field name="name">hotel.folio.routing.rule.form</field>
+        <field name="model">hotel.folio.routing.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Rule Info">
+                            <field name="name"/>
+                            <field name="sequence"/>
+                            <field name="property_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Routing Details">
+                            <field name="category_id"/>
+                            <field name="routing_type"/>
+                            <field name="agency_id" invisible="routing_type != 'agency'"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hotel_folio_routing_rule_action" model="ir.actions.act_window">
+        <field name="name">Folio Routing Rules</field>
+        <field name="res_model">hotel.folio.routing.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Define charge routing rules</p>
+            <p>Routing rules automatically direct charges of specific product categories (like room charges) to either the guest or agency folios.</p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_hotel_folios"
+        name="Folios"
+        parent="hotel_reservation.menu_hotel_frontdesk"
+        action="hotel_folio_action"
+        sequence="25"/>
+
+    <menuitem id="menu_hotel_config_folio_routing"
+        name="Folio Routing Rules"
+        parent="hotel_base.menu_hotel_config"
+        action="hotel_folio_routing_rule_action"
+        sequence="70"/>
+</odoo>

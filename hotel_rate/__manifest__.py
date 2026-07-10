@@ -5,7 +5,11 @@
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",
-    "depends": ["hotel_base", "product"],
-    "data": [],
-    "installable": False,  # skeleton: flip to True when the module lands
+    "depends": ["hotel_reservation", "product"],
+    "data": [
+        "security/ir.model.access.csv",
+        "views/hotel_rate_views.xml",
+        "views/hotel_reservation_views.xml",
+    ],
+    "installable": True,
 }

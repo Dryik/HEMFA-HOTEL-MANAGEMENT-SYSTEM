@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hotel_rate_rule_frontdesk,hotel.rate.rule frontdesk,model_hotel_rate_rule,hotel_base.group_hotel_frontdesk,1,0,0,0
+access_hotel_rate_rule_manager,hotel.rate.rule manager,model_hotel_rate_rule,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_rate_occupancy_band_frontdesk,hotel.rate.occupancy.band frontdesk,model_hotel_rate_occupancy_band,hotel_base.group_hotel_frontdesk,1,0,0,0
+access_hotel_rate_occupancy_band_manager,hotel.rate.occupancy.band manager,model_hotel_rate_occupancy_band,hotel_base.group_hotel_manager,1,1,1,1

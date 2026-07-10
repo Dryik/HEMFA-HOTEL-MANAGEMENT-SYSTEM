@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hotel_night_audit_frontdesk,hotel.night.audit frontdesk,model_hotel_night_audit,hotel_base.group_hotel_frontdesk,1,0,0,0
+access_hotel_night_audit_supervisor,hotel.night.audit supervisor,model_hotel_night_audit,hotel_base.group_hotel_fo_supervisor,1,1,1,0
+access_hotel_night_audit_manager,hotel.night.audit manager,model_hotel_night_audit,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_night_audit_line_frontdesk,hotel.night.audit.line frontdesk,model_hotel_night_audit_line,hotel_base.group_hotel_frontdesk,1,0,0,0
+access_hotel_night_audit_line_manager,hotel.night.audit.line manager,model_hotel_night_audit_line,hotel_base.group_hotel_manager,1,1,1,1

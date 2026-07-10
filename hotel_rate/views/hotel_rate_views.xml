@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Rate Rules Views -->
+    <record id="hotel_rate_rule_view_list" model="ir.ui.view">
+        <field name="name">hotel.rate.rule.list</field>
+        <field name="model">hotel.rate.rule</field>
+        <field name="arch" type="xml">
+            <list string="Rate Rules">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="property_id"/>
+                <field name="room_type_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="guest_type"/>
+                <field name="rate_price"/>
+                <field name="currency_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hotel_rate_rule_view_form" model="ir.ui.view">
+        <field name="name">hotel.rate.rule.form</field>
+        <field name="model">hotel.rate.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Rule Info">
+                            <field name="name"/>
+                            <field name="property_id"/>
+                            <field name="room_type_id"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group string="Pricing &amp; Conditions">
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="guest_type"/>
+                            <field name="rate_price"/>
+                            <field name="currency_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hotel_rate_rule_action" model="ir.actions.act_window">
+        <field name="name">Rate Rules</field>
+        <field name="res_model">hotel.rate.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Define seasonal rate rules</p>
+            <p>Seasonal rules let you override base prices for specific dates or guest nationalities.</p>
+        </field>
+    </record>
+
+    <!-- Occupancy Bands Views -->
+    <record id="hotel_rate_occupancy_band_view_list" model="ir.ui.view">
+        <field name="name">hotel.rate.occupancy.band.list</field>
+        <field name="model">hotel.rate.occupancy.band</field>
+        <field name="arch" type="xml">
+            <list string="Occupancy Bands">
+                <field name="name"/>
+                <field name="property_id"/>
+                <field name="min_occupancy"/>
+                <field name="max_occupancy"/>
+                <field name="multiplier"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hotel_rate_occupancy_band_view_form" model="ir.ui.view">
+        <field name="name">hotel.rate.occupancy.band.form</field>
+        <field name="model">hotel.rate.occupancy.band</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="property_id"/>
+                        <field name="min_occupancy"/>
+                        <field name="max_occupancy"/>
+                        <field name="multiplier"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hotel_rate_occupancy_band_action" model="ir.actions.act_window">
+        <field name="name">Occupancy Bands</field>
+        <field name="res_model">hotel.rate.occupancy.band</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Define occupancy-based price bands</p>
+            <p>Occupancy bands let you adjust room prices dynamically based on the percentage of occupied rooms.</p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_hotel_config_rates"
+        name="Rate Rules"
+        parent="hotel_base.menu_hotel_config"
+        action="hotel_rate_rule_action"
+        sequence="50"/>
+
+    <menuitem id="menu_hotel_config_occupancy_bands"
+        name="Occupancy Bands"
+        parent="hotel_base.menu_hotel_config"
+        action="hotel_rate_occupancy_band_action"
+        sequence="60"/>
+</odoo>
