@@ -19,18 +19,17 @@ class TestHotelFrontdeskSession(TransactionCase):
         cls.company_currency = cls.env.company.currency_id
         
         # Ensure we have a second currency that is different from company currency
-        if cls.company_currency.name == "USD":
-            cls.foreign_currency = cls.env["res.currency"].search([("name", "=", "EUR")], limit=1)
-            if not cls.foreign_currency:
-                cls.foreign_currency = cls.env["res.currency"].create(
-                    {"name": "EUR", "symbol": "€", "rounding": 0.01}
-                )
+        foreign_name = "EUR" if cls.company_currency.name == "USD" else "USD"
+        cls.foreign_currency = cls.env["res.currency"].with_context(active_test=False).search(
+            [("name", "=", foreign_name)], limit=1
+        )
+        if cls.foreign_currency:
+            cls.foreign_currency.write({"active": True})
         else:
-            cls.foreign_currency = cls.env["res.currency"].search([("name", "=", "USD")], limit=1)
-            if not cls.foreign_currency:
-                cls.foreign_currency = cls.env["res.currency"].create(
-                    {"name": "USD", "symbol": "$", "rounding": 0.01}
-                )
+            symbol = "€" if foreign_name == "EUR" else "$"
+            cls.foreign_currency = cls.env["res.currency"].create(
+                {"name": foreign_name, "symbol": symbol, "rounding": 0.01, "active": True}
+            )
 
         # Ensure active currency rates for foreign currency relative to company currency
         existing_rate = cls.env["res.currency.rate"].search(
