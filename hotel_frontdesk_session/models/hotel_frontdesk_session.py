@@ -118,7 +118,7 @@ class HotelFrontdeskSession(models.Model):
             else:
                 payments_domain.append(("create_date", "<=", fields.Datetime.now()))
 
-            payments = self.env["account.payment"].search(payments_domain)
+            payments = self.env["account.payment"].sudo().search(payments_domain)
             tx_total = 0.0
             for pay in payments:
                 if pay.currency_id != company_currency:

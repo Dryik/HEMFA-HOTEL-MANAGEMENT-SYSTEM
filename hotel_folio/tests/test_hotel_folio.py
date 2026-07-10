@@ -136,7 +136,7 @@ class TestHotelFolio(TransactionCase):
         invoice = self.env["account.move"].browse(action["res_id"])
         self.assertEqual(invoice.partner_id, self.guest)
         self.assertEqual(len(invoice.invoice_line_ids), 2)
-        self.assertEqual(invoice.amount_total, 35.0)
+        self.assertEqual(invoice.amount_untaxed, 35.0)
 
         # All lines should now be marked as posted
         self.assertTrue(all(line.is_posted for line in folio.line_ids))
