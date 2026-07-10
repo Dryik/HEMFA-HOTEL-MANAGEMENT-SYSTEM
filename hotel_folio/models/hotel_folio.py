@@ -140,7 +140,7 @@ class HotelFolio(models.Model):
             "move_type": "out_invoice",
             "partner_id": partner_id.id,
             "currency_id": self.currency_id.id,
-            "company_id": self.reservation_id.company_id.id or self.env.company.id,
+            "company_id": self.reservation_id.property_id.company_id.id or self.env.company.id,
             "invoice_line_ids": [
                 (
                     0,

@@ -53,19 +53,20 @@ class TestHotelFrontdeskSession(TransactionCase):
                 }
             )
 
-        # Ensure cashier has billing group access if it exists, to avoid AccessError in test runs
-        invoice_group = cls.env.ref("account.group_account_invoice", raise_if_not_found=False)
-        groups = [cls.env.ref("hotel_base.group_hotel_frontdesk").id]
-        if invoice_group:
-            groups.append(invoice_group.id)
-
         cls.cashier = cls.env["res.users"].create(
             {
                 "name": "Test Cashier",
                 "login": "tcashier",
-                "groups_id": [(6, 0, groups)],
             }
         )
+
+        # Assign groups via res.groups user_ids
+        group_fd = cls.env.ref("hotel_base.group_hotel_frontdesk")
+        group_fd.write({"user_ids": [(4, cls.cashier.id)]})
+
+        invoice_group = cls.env.ref("account.group_account_invoice", raise_if_not_found=False)
+        if invoice_group:
+            invoice_group.write({"user_ids": [(4, cls.cashier.id)]})
 
     def test_session_lifecycle(self):
         # 1. Open session
