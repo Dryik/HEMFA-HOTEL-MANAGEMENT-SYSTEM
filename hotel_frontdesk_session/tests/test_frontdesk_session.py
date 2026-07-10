@@ -14,17 +14,28 @@ class TestHotelFrontdeskSession(TransactionCase):
         cls.property = cls.env["hotel.property"].create(
             {"name": "Session Test Hotel", "code": "STH"}
         )
-        cls.lyd_currency = cls.env.company.currency_id
-        cls.usd_currency = cls.env["res.currency"].search([("name", "=", "USD")], limit=1)
-        if not cls.usd_currency:
-            cls.usd_currency = cls.env["res.currency"].create(
-                {"name": "USD", "symbol": "$", "rounding": 0.01}
-            )
+        
+        # Determine standard currencies and mock rate relation
+        cls.company_currency = cls.env.company.currency_id
+        
+        # Ensure we have a second currency that is different from company currency
+        if cls.company_currency.name == "USD":
+            cls.foreign_currency = cls.env["res.currency"].search([("name", "=", "EUR")], limit=1)
+            if not cls.foreign_currency:
+                cls.foreign_currency = cls.env["res.currency"].create(
+                    {"name": "EUR", "symbol": "€", "rounding": 0.01}
+                )
+        else:
+            cls.foreign_currency = cls.env["res.currency"].search([("name", "=", "USD")], limit=1)
+            if not cls.foreign_currency:
+                cls.foreign_currency = cls.env["res.currency"].create(
+                    {"name": "USD", "symbol": "$", "rounding": 0.01}
+                )
 
-        # Ensure active currency rates
+        # Ensure active currency rates for foreign currency relative to company currency
         existing_rate = cls.env["res.currency.rate"].search(
             [
-                ("currency_id", "=", cls.usd_currency.id),
+                ("currency_id", "=", cls.foreign_currency.id),
                 ("company_id", "=", cls.env.company.id),
                 ("name", "=", fields.Date.today()),
             ]
@@ -34,8 +45,8 @@ class TestHotelFrontdeskSession(TransactionCase):
         else:
             cls.env["res.currency.rate"].create(
                 {
-                    "currency_id": cls.usd_currency.id,
-                    "rate": 0.2, # 1 LYD = 0.2 USD (i.e. 1 USD = 5 LYD)
+                    "currency_id": cls.foreign_currency.id,
+                    "rate": 0.2, # 1 CompanyCurrency = 0.2 ForeignCurrency (i.e. 1 ForeignCurrency = 5 CompanyCurrency)
                     "company_id": cls.env.company.id,
                     "name": fields.Date.today(),
                 }
@@ -74,13 +85,13 @@ class TestHotelFrontdeskSession(TransactionCase):
             {
                 "property_id": self.property.id,
                 "opening_balance_ids": [
-                    (0, 0, {"currency_id": self.lyd_currency.id, "amount": 200.0, "type": "opening"}),
-                    (0, 0, {"currency_id": self.usd_currency.id, "amount": 50.0, "type": "opening"}), # 50 USD = 250 LYD
+                    (0, 0, {"currency_id": self.company_currency.id, "amount": 200.0, "type": "opening"}),
+                    (0, 0, {"currency_id": self.foreign_currency.id, "amount": 50.0, "type": "opening"}), # 50 Foreign = 250 Company
                 ]
             }
         )
         self.assertEqual(session.state, "opened")
-        # 200 + (50 / 0.2) = 200 + 250 = 450.0 LYD
+        # 200 + (50 / 0.2) = 200 + 250 = 450.0
         self.assertEqual(session.total_opening_balance, 450.0)
 
         # 2. Register a payment transaction during the session
@@ -91,7 +102,7 @@ class TestHotelFrontdeskSession(TransactionCase):
                 "partner_type": "customer",
                 "partner_id": self.partner.id,
                 "amount": 100.0,
-                "currency_id": self.lyd_currency.id,
+                "currency_id": self.company_currency.id,
                 "journal_id": self.cash_journal.id,
             }
         )
@@ -100,14 +111,14 @@ class TestHotelFrontdeskSession(TransactionCase):
         self.assertEqual(session.total_transactions, 100.0)
 
         # 3. Closing cash count & close session
-        # Let's say cashier counts 550.0 LYD at the end of the day (450 opening + 100 transactions)
+        # Let's say cashier counts 550.0 Company Currency units at the end of the day (450 opening + 100 transactions)
         with self.assertRaises(UserError):
             # Cannot close without defining closing cash control
             session.action_close_session()
 
         session.write({
             "closing_balance_ids": [
-                (0, 0, {"currency_id": self.lyd_currency.id, "amount": 550.0, "type": "closing"}),
+                (0, 0, {"currency_id": self.company_currency.id, "amount": 550.0, "type": "closing"}),
             ]
         })
         
