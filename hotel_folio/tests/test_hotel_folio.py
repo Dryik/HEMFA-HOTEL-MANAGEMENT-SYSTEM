@@ -64,7 +64,8 @@ class TestHotelFolio(TransactionCase):
             hour=12, minute=0, second=0, microsecond=0
         )
 
-    def _reservation(self, use_agency=False):
+    def _reservation(self, use_agency=False, offset_days=0):
+        checkin = self.checkin + timedelta(days=offset_days)
         return self.env["hotel.reservation"].create(
             {
                 "partner_id": self.guest.id,
@@ -72,8 +73,8 @@ class TestHotelFolio(TransactionCase):
                 "property_id": self.property.id,
                 "room_id": self.room.id,
                 "room_type_id": self.room_type.id,
-                "checkin_date": self.checkin,
-                "checkout_date": self.checkin + timedelta(days=2),
+                "checkin_date": checkin,
+                "checkout_date": checkin + timedelta(days=2),
                 "state": "draft",
             }
         )
@@ -152,7 +153,7 @@ class TestHotelFolio(TransactionCase):
             folio.action_create_invoice()
 
         # A non-posted folio and line should be deletable
-        res2 = self._reservation()
+        res2 = self._reservation(offset_days=5)
         res2.action_confirm()
         folio2 = res2.folio_ids[0]
         folio2.add_charge(self.burger, qty=1.0)

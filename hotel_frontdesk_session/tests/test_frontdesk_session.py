@@ -105,6 +105,7 @@ class TestHotelFrontdeskSession(TransactionCase):
                 "journal_id": self.cash_journal.id,
             }
         )
+        self.env.flush_all()
         # Re-compute balances
         session._compute_balances()
         self.assertEqual(session.total_transactions, 100.0)
