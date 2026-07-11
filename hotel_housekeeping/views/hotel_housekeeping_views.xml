@@ -106,7 +106,7 @@
         <field name="name">hotel.housekeeping.task.view.search</field>
         <field name="model">hotel.housekeeping.task</field>
         <field name="arch" type="xml">
-            <search string="Search Housekeeping Tasks">
+            <search>
                 <field name="name"/>
                 <field name="room_id"/>
                 <field name="cleaner_id"/>
@@ -117,7 +117,7 @@
                 <filter string="Inspected" name="inspected" domain="[('state', '=', 'inspected')]"/>
                 <separator/>
                 <filter string="My Tasks" name="my_tasks" domain="[('cleaner_id', '=', uid)]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Room" name="group_by_room" context="{'group_by': 'room_id'}"/>
                     <filter string="Cleaner" name="group_by_cleaner" context="{'group_by': 'cleaner_id'}"/>
                     <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
