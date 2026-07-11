@@ -24,13 +24,13 @@ class HotelHousekeepingTask(models.Model):
     cleaner_id = fields.Many2one(
         "res.users",
         string="Assigned Cleaner",
-        domain=lambda self: [("groups_id", "in", self.env.ref("hotel_base.group_hotel_housekeeping").id)],
+        domain=lambda self: [("group_ids", "in", self.env.ref("hotel_base.group_hotel_housekeeping").id)],
         tracking=True,
     )
     inspector_id = fields.Many2one(
         "res.users",
         string="Inspector",
-        domain=lambda self: [("groups_id", "in", (self.env.ref("hotel_base.group_hotel_fo_supervisor") + self.env.ref("hotel_base.group_hotel_manager")).ids)],
+        domain=lambda self: [("group_ids", "in", (self.env.ref("hotel_base.group_hotel_fo_supervisor") + self.env.ref("hotel_base.group_hotel_manager")).ids)],
         tracking=True,
     )
     state = fields.Selection(
