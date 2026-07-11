@@ -18,7 +18,7 @@ class TestHotelHousekeeping(TransactionCase):
         # Setup Room Type
         cls.room_type = cls.env["hotel.room.type"].create({
             "name": "Deluxe Room",
-            "short_code": "DLX",
+            "code": "DLX",
         })
         # Setup Room
         cls.room = cls.env["hotel.room"].create({
