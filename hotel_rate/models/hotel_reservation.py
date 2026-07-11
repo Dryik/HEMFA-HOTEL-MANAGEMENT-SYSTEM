@@ -54,7 +54,7 @@ class HotelReservation(models.Model):
                         base_price = rule.currency_id._convert(
                             rule.rate_price,
                             rec.currency_id,
-                            rec.company_id or self.env.company,
+                            rec.property_id.company_id or self.env.company,
                             checkin_date_only,
                         )
                     else:
@@ -69,8 +69,8 @@ class HotelReservation(models.Model):
                     ("checkin_date", "<=", checkin_date),
                     ("checkout_date", ">", checkin_date),
                 ]
-                if rec.id:
-                    occupied_domain.append(("id", "!=", rec.id._origin.id if hasattr(rec.id, "_origin") else rec.id))
+                if rec.id and isinstance(rec.id, int):
+                    occupied_domain.append(("id", "!=", rec.id))
                 
                 occupied_rooms = self.env["hotel.reservation"].search_count(occupied_domain)
                 sellable_rooms = self.env["hotel.room"].search_count(

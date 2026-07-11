@@ -15,7 +15,7 @@
                 <field name="total_transactions"/>
                 <field name="total_closing_balance"/>
                 <field name="difference"/>
-                <field name="currency_id" invisible="1"/>
+                <field name="currency_id" column_invisible="True"/>
                 <field name="state" widget="badge"
                     decoration-info="state == 'opened'"
                     decoration-success="state == 'closed'"/>
@@ -63,7 +63,7 @@
                                 <list editable="bottom">
                                     <field name="currency_id"/>
                                     <field name="amount"/>
-                                    <field name="type" column_invisible="1" default="opening"/>
+                                    <field name="type" column_invisible="True" default="opening"/>
                                 </list>
                             </field>
                         </page>
@@ -72,7 +72,7 @@
                                 <list editable="bottom">
                                     <field name="currency_id"/>
                                     <field name="amount"/>
-                                    <field name="type" column_invisible="1" default="closing"/>
+                                    <field name="type" column_invisible="True" default="closing"/>
                                 </list>
                             </field>
                         </page>

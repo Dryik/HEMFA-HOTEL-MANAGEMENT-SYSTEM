@@ -12,7 +12,7 @@
                 <field name="run_user_id"/>
                 <field name="occupancy_pct"/>
                 <field name="revenue_posted"/>
-                <field name="currency_id" invisible="1"/>
+                <field name="currency_id" column_invisible="True"/>
                 <field name="state" widget="badge"
                     decoration-info="state == 'draft'"
                     decoration-success="state == 'done'"/>
@@ -55,7 +55,7 @@
                                     <field name="folio_id"/>
                                     <field name="status"/>
                                     <field name="amount_posted"/>
-                                    <field name="currency_id" invisible="1"/>
+                                    <field name="currency_id" column_invisible="True"/>
                                 </list>
                             </field>
                         </page>

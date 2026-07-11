@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md"],
+  "skills": {
+    "paths": [".opencode/skills"]
+  },
+  "references": {
+    "odoo19": {
+      "path": "odoo-19.0+e.20260711",
+      "description": "Full Odoo 19 Enterprise source code for API reference. Key: odoo/orm/models.py (ORM), odoo/orm/fields.py (fields), odoo/addons/base/models/ir_actions.py (actions), odoo/addons/base/models/ir_ui_view.py (view validation), odoo/tests/common.py (test framework).",
+      "hidden": true
+    }
+  }
+}

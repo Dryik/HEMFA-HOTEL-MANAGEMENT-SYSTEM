@@ -13,7 +13,7 @@
                 <field name="amount_total"/>
                 <field name="amount_paid"/>
                 <field name="amount_due"/>
-                <field name="currency_id" invisible="1"/>
+                <field name="currency_id" column_invisible="True"/>
             </list>
         </field>
     </record>
