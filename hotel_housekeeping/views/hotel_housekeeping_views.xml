@@ -130,7 +130,7 @@
     <!-- Housekeeping Task Action -->
     <record id="hotel_housekeeping_task_action" model="ir.actions.act_window">
         <field name="name">Housekeeping Tasks</field>
-        <field name="model">hotel.housekeeping.task</field>
+        <field name="res_model">hotel.housekeeping.task</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="search_view_id" ref="hotel_housekeeping_task_view_search"/>
         <field name="help" type="html">

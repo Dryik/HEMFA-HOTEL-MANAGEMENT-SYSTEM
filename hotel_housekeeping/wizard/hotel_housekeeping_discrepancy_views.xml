@@ -33,7 +33,7 @@
     <!-- Discrepancy Action -->
     <record id="hotel_housekeeping_discrepancy_wizard_action" model="ir.actions.act_window">
         <field name="name">Housekeeping Discrepancy Report</field>
-        <field name="model">hotel.housekeeping.discrepancy.wizard</field>
+        <field name="res_model">hotel.housekeeping.discrepancy.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
