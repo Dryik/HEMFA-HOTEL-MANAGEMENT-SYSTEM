@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Housekeeping parent menu -->
+    <menuitem id="menu_hotel_housekeeping_root"
+        name="Housekeeping"
+        parent="hotel_base.menu_hotel_root"
+        sequence="35"
+        groups="hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_fo_supervisor,hotel_base.group_hotel_manager"/>
+
+    <!-- Housekeeping Tasks sub-menu -->
+    <menuitem id="menu_hotel_housekeeping_tasks"
+        name="Housekeeping Tasks"
+        parent="menu_hotel_housekeeping_root"
+        action="hotel_housekeeping_task_action"
+        sequence="10"/>
+
+    <!-- Housekeeping Discrepancy sub-menu -->
+    <menuitem id="menu_hotel_housekeeping_discrepancy"
+        name="Discrepancy Reconciliation"
+        parent="menu_hotel_housekeeping_root"
+        action="hotel_housekeeping_discrepancy_wizard_action"
+        sequence="20"/>
+</odoo>

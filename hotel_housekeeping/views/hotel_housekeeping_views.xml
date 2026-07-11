@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Housekeeping Task Kanban View -->
+    <record id="hotel_housekeeping_task_view_kanban" model="ir.ui.view">
+        <field name="name">hotel.housekeeping.task.view.kanban</field>
+        <field name="model">hotel.housekeeping.task</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column" records_draggable="true">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="room_id"/>
+                <field name="cleaner_id"/>
+                <field name="priority"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex flex-column h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="fw-bold fs-5 text-primary"><field name="name"/></span>
+                                <field name="priority" widget="priority"/>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="fs-4 text-dark"><field name="room_id"/></strong>
+                            </div>
+                            <div class="mt-auto d-flex align-items-center justify-content-between">
+                                <span class="text-muted"><field name="cleaner_id"/></span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Housekeeping Task List View -->
+    <record id="hotel_housekeeping_task_view_list" model="ir.ui.view">
+        <field name="name">hotel.housekeeping.task.view.list</field>
+        <field name="model">hotel.housekeeping.task</field>
+        <field name="arch" type="xml">
+            <list string="Housekeeping Tasks" decoration-info="state == 'draft'" decoration-warning="state in ('assigned', 'cleaning')" decoration-success="state in ('clean', 'inspected')" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="room_id"/>
+                <field name="property_id"/>
+                <field name="cleaner_id"/>
+                <field name="priority" widget="priority"/>
+                <field name="date_assigned"/>
+                <field name="date_start"/>
+                <field name="date_completed"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state in ('assigned', 'cleaning')" decoration-success="state in ('clean', 'inspected')"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Housekeeping Task Form View -->
+    <record id="hotel_housekeeping_task_view_form" model="ir.ui.view">
+        <field name="name">hotel.housekeeping.task.view.form</field>
+        <field name="model">hotel.housekeeping.task</field>
+        <field name="arch" type="xml">
+            <form string="Housekeeping Task">
+                <header>
+                    <button name="action_assign" string="Assign" type="object" class="btn-primary" invisible="state != 'draft' or not cleaner_id"/>
+                    <button name="action_start" string="Start Cleaning" type="object" class="btn-primary" invisible="state not in ('draft', 'assigned')"/>
+                    <button name="action_complete" string="Mark Cleaned" type="object" class="btn-primary" invisible="state != 'cleaning'"/>
+                    <button name="action_inspect" string="Inspect &amp; Approve" type="object" class="btn-success" invisible="state != 'clean'" groups="hotel_base.group_hotel_fo_supervisor,hotel_base.group_hotel_manager"/>
+                    <button name="action_cancel" string="Cancel Task" type="object" class="btn-secondary" invisible="state == 'inspected'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,assigned,cleaning,clean,inspected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="room_details" string="Room Details">
+                            <field name="room_id"/>
+                            <field name="property_id"/>
+                            <field name="room_type_id"/>
+                        </group>
+                        <group name="cleaning_assignment" string="Assignment &amp; Schedule">
+                            <field name="cleaner_id"/>
+                            <field name="inspector_id" readonly="1"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group name="timings" string="Timings">
+                            <field name="date_assigned"/>
+                            <field name="date_start"/>
+                            <field name="date_completed"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="notes_page" string="Notes">
+                            <field name="notes" placeholder="Enter notes about room cleaning details, amenities replaced, or issues found..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Housekeeping Task Search View -->
+    <record id="hotel_housekeeping_task_view_search" model="ir.ui.view">
+        <field name="name">hotel.housekeeping.task.view.search</field>
+        <field name="model">hotel.housekeeping.task</field>
+        <field name="arch" type="xml">
+            <search string="Search Housekeeping Tasks">
+                <field name="name"/>
+                <field name="room_id"/>
+                <field name="cleaner_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Assigned" name="assigned" domain="[('state', '=', 'assigned')]"/>
+                <filter string="Cleaning" name="cleaning" domain="[('state', '=', 'cleaning')]"/>
+                <filter string="Cleaned" name="clean" domain="[('state', '=', 'clean')]"/>
+                <filter string="Inspected" name="inspected" domain="[('state', '=', 'inspected')]"/>
+                <separator/>
+                <filter string="My Tasks" name="my_tasks" domain="[('cleaner_id', '=', uid)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Room" name="group_by_room" context="{'group_by': 'room_id'}"/>
+                    <filter string="Cleaner" name="group_by_cleaner" context="{'group_by': 'cleaner_id'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Property" name="group_by_property" context="{'group_by': 'property_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Housekeeping Task Action -->
+    <record id="hotel_housekeeping_task_action" model="ir.actions.act_window">
+        <field name="name">Housekeeping Tasks</field>
+        <field name="model">hotel.housekeeping.task</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="hotel_housekeeping_task_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No housekeeping tasks found.
+            </p>
+            <p>
+                Rooms marked as 'dirty' will automatically trigger draft tasks, or you can manually create tasks to assign cleaners.
+            </p>
+        </field>
+    </record>
+</odoo>

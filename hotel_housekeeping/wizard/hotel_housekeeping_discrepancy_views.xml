@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hotel_housekeeping_discrepancy_wizard_view_form" model="ir.ui.view">
+        <field name="name">hotel.housekeeping.discrepancy.wizard.view.form</field>
+        <field name="model">hotel.housekeeping.discrepancy.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Housekeeping Discrepancy Reconciliation">
+                <sheet>
+                    <group>
+                        <field name="property_id" options="{'no_create': True, 'no_open': True}"/>
+                    </group>
+                    <p class="text-muted">
+                        Review physical occupancy reported by housekeeping against front-office reservation status. Adjust the cleaning status directly if needed.
+                    </p>
+                    <field name="line_ids">
+                        <list editable="bottom" create="false" delete="false" decoration-danger="is_discrepancy">
+                            <field name="room_id" readonly="1"/>
+                            <field name="fo_occupancy" readonly="1" widget="badge" decoration-info="fo_occupancy == 'reserved'" decoration-warning="fo_occupancy == 'occupied'" decoration-muted="fo_occupancy == 'vacant'"/>
+                            <field name="hk_occupancy"/>
+                            <field name="hk_status" widget="badge" decoration-info="hk_status == 'clean'" decoration-warning="hk_status == 'dirty'" decoration-success="hk_status == 'inspected'"/>
+                            <field name="is_discrepancy" column_invisible="True"/>
+                        </list>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_apply" string="Apply Changes" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Discrepancy Action -->
+    <record id="hotel_housekeeping_discrepancy_wizard_action" model="ir.actions.act_window">
+        <field name="name">Housekeeping Discrepancy Report</field>
+        <field name="model">hotel.housekeeping.discrepancy.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
