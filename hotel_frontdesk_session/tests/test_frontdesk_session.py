@@ -128,12 +128,13 @@ class TestHotelFrontdeskSession(TransactionCase):
 
         # Deleting closed session is blocked
         with self.assertRaises(UserError):
-            session.unlink()
+            session.sudo().unlink()
 
         # Deleting opened session is allowed
-        session2 = self.env["hotel.frontdesk.session"].with_user(self.cashier).create(
+        session2 = self.env["hotel.frontdesk.session"].sudo().create(
             {
                 "property_id": self.property.id,
+                "user_id": self.cashier.id,
             }
         )
         self.assertEqual(session2.state, "opened")
