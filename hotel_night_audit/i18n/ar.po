@@ -1,0 +1,156 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* hotel_night_audit
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-11 12:00+0000\n"
+"PO-Revision-Date: 2026-07-11 12:00+0000\n"
+"Last-Translator: Antigravity <antigravity@gemini.google>\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+msgid "=", "checked_in"
+msgstr "=", "checked_in"
+
+msgid "=", "confirmed"
+msgstr "=", "confirmed"
+
+msgid "Already Charged"
+msgstr "تم المحاسبة بالفعل"
+
+msgid "Amount Posted"
+msgstr "المبلغ المسجل"
+
+msgid "Are you sure you want to run the night audit? This will post room-night charges, close no-shows, and roll the operational business date forward."
+msgstr "هل أنت متأكد من تشغيل التدقيق الليلي؟ سيتم ترحيل رسوم الغرف وإغلاق حالات عدم الحضور وتدوير تاريخ العمل الفندقي."
+
+msgid "Audit"
+msgstr "التدقيق"
+
+msgid "Audit Action"
+msgstr "إجراء التدقيق"
+
+msgid "Audit Date"
+msgstr "تاريخ التدقيق"
+
+msgid "Audit Details"
+msgstr "تفاصيل التدقيق"
+
+msgid "Audit Parameters"
+msgstr "معايير التدقيق"
+
+msgid "Audit Reference"
+msgstr "مرجع التدقيق"
+
+msgid "Completed"
+msgstr "مكتمل"
+
+msgid "Currency"
+msgstr "العملة"
+
+msgid "Current Business Date"
+msgstr "تاريخ العمل الحالي"
+
+msgid "Draft"
+msgstr "مسودة"
+
+msgid "Folio"
+msgstr "حساب النزيل / الفوليو"
+
+msgid "Hotel Night Audit"
+msgstr "التدقيق الليلي للفندق"
+
+msgid "Hotel Night Audit Detail Line"
+msgstr "تفاصيل التدقيق الليلي للفندق"
+
+msgid "New"
+msgstr "جديد"
+
+msgid "Night Audit"
+msgstr "التدقيق الليلي"
+
+msgid "Night Audits"
+msgstr "التدقيق الليلي"
+
+msgid "No Show Rollover"
+msgstr "ترحيل عدم الحضور"
+
+msgid "Occupancy Rate (%)"
+msgstr "نسبة الإشغال (%)"
+
+msgid "Operational business date being closed."
+msgstr "تاريخ العمل الفندقي الجاري إغلاقه بالتدقيق الليلي."
+
+msgid "Property"
+msgstr "الفندق / المنشأة"
+
+msgid "Reservation"
+msgstr "الحجز"
+
+msgid "Results"
+msgstr "النتائج"
+
+msgid "Revenue Posted"
+msgstr "الإيرادات المسجلة والملغاة"
+
+msgid "Room Charge - %s"
+msgstr "رسوم الغرفة - %s"
+
+msgid "Room Night Charged"
+msgstr "ليلة غرفة محتسبة"
+
+msgid "Run By"
+msgstr "تشغيل بواسطة"
+
+msgid "Run Night Audit"
+msgstr "بدء التدقيق الليلي"
+
+msgid "The active operational business date for the hotel, rolled forward daily by the night audit."
+msgstr "تاريخ العمل الفندقي النشط، يتم تدويره يومياً بواسطة التدقيق الليلي."
+
+msgid "This night audit is already completed."
+msgstr "تم إكمال هذا التدقيق الليلي بالفعل."
+
+msgid "You cannot delete a completed night audit record."
+msgstr "لا يمكنك حذف سجل تدقيق ليلي مكتمل."
+
+msgid "arch"
+msgstr "arch"
+
+msgid "code"
+msgstr "الرمز"
+
+msgid "date"
+msgstr "التاريخ"
+
+msgid "details"
+msgstr "التفاصيل"
+
+msgid "help"
+msgstr "مساعدة"
+
+msgid "model"
+msgstr "model"
+
+msgid "name"
+msgstr "الاسم"
+
+msgid "padding"
+msgstr "padding"
+
+msgid "prefix"
+msgstr "prefix"
+
+msgid "state"
+msgstr "الحالة"
+
+msgid "status"
+msgstr "الحالة"
+

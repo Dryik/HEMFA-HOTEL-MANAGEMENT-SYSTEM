@@ -1,0 +1,213 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* hotel_folio
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-11 12:00+0000\n"
+"PO-Revision-Date: 2026-07-11 12:00+0000\n"
+"Last-Translator: Antigravity <antigravity@gemini.google>\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+msgid "Agency / Entity"
+msgstr "الوكالة / الجهة"
+
+msgid "Amount"
+msgstr "المبلغ"
+
+msgid "Amount Due"
+msgstr "المبلغ المستحق"
+
+msgid "Amount Paid"
+msgstr "المبلغ المدفوع"
+
+msgid "Billed To"
+msgstr "مفوتر إلى"
+
+msgid "Create Agency Invoice"
+msgstr "إنشاء فاتورة الوكالة"
+
+msgid "Create Guest Invoice"
+msgstr "إنشاء فاتورة النزيل"
+
+msgid "Date"
+msgstr "التاريخ"
+
+msgid "Description"
+msgstr "الوصف"
+
+msgid "Entity responsible for this specific charge line."
+msgstr "الجهة المسؤولة عن خط الفاتورة هذا."
+
+msgid "Financials"
+msgstr "المالية"
+
+msgid "Folio"
+msgstr "حساب النزيل / الفوليو"
+
+msgid "Folio Count"
+msgstr "عدد حسابات النزلاء"
+
+msgid "Folio Lines"
+msgstr "خطوط حساب النزيل"
+
+msgid "Folio Number"
+msgstr "رقم حساب النزيل"
+
+msgid "Folio Routing Rules"
+msgstr "قواعد توجيه الحسابات"
+
+msgid "Folios"
+msgstr "حسابات النزلاء / الفوليو"
+
+msgid "Guest"
+msgstr "النزيل / الضيف"
+
+msgid "Hotel Folio Ledger"
+msgstr "دفتر حسابات الفندق (الفوليو)"
+
+msgid "Hotel Folio Line"
+msgstr "خط حساب الفندق (الفوليو)"
+
+msgid "Hotel Folio Routing Rule"
+msgstr "قاعدة توجيه حسابات الفندق"
+
+msgid "If checked, the charge is locked (e.g. invoiced or processed by night audit)."
+msgstr "عند التفعيل، تكون الرسوم مقفلة (مفوترة أو مرحلة بالتدقيق الليلي)."
+
+msgid "Invoice"
+msgstr "فاتورة"
+
+msgid "Invoice Line"
+msgstr "خط الفاتورة"
+
+msgid "Invoices"
+msgstr "الفواتير"
+
+msgid "Ledger / Charges"
+msgstr "الدفتر / الرسوم والخدمات"
+
+msgid "New"
+msgstr "جديد"
+
+msgid "No uninvoiced lines found for this payee."
+msgstr "لا توجد خطوط غير مفوترة لهذا العميل لدفعها."
+
+msgid "Posted"
+msgstr "مرحل / مسجل"
+
+msgid "Product"
+msgstr "المنتج"
+
+msgid "Product Category"
+msgstr "فئة المنتج"
+
+msgid "Product category that triggers this routing rule."
+msgstr "فئة المنتج التي تفعل قاعدة التوجيه الفوليو هذه."
+
+msgid "Property"
+msgstr "الفندق / المنشأة"
+
+msgid "Quantity"
+msgstr "الكمية"
+
+msgid "Reservation"
+msgstr "الحجز"
+
+msgid "Route To"
+msgstr "توجيه الحساب إلى"
+
+msgid "Route to Agency"
+msgstr "توجيه إلى الوكالة / الجهة"
+
+msgid "Route to Guest"
+msgstr "توجيه إلى النزيل"
+
+msgid "Routing Details"
+msgstr "تفاصيل التوجيه للحسابات"
+
+msgid "Routing Rules"
+msgstr "قواعد توجيه حسابات الفوليو"
+
+msgid "Rule Info"
+msgstr "معلومات قاعدة التسعير"
+
+msgid "Specific Agency / Entity"
+msgstr "وكالة / جهة محددة"
+
+msgid "Specific agency to route to. If left empty, routes to the reservation"
+msgstr "الوكالة المحددة للتوجيه. إذا تركت فارغة يتم التوجيه لوكالة الحجز"
+
+msgid "Stay Reference"
+msgstr "مرجع الإقامة"
+
+msgid "Taxes"
+msgstr "الضرائب"
+
+msgid "Total Charges"
+msgstr "إجمالي الرسوم والخدمات"
+
+msgid "Unit Price"
+msgstr "سعر الوحدة"
+
+msgid "You cannot delete a folio with posted or invoiced charges."
+msgstr "لا يمكنك حذف فوليو يحتوي على رسوم مرحلة أو مفوترة."
+
+msgid "You cannot delete a posted or invoiced folio line."
+msgstr "لا يمكنك حذف بند فوليو تم ترحيله أو فوترته."
+
+msgid "active"
+msgstr "نشط"
+
+msgid "amount"
+msgstr "المبلغ"
+
+msgid "arch"
+msgstr "arch"
+
+msgid "code"
+msgstr "الرمز"
+
+msgid "date"
+msgstr "التاريخ"
+
+msgid "folio_id", string="Folio Lines"
+msgstr "folio_id", string="Folio Lines"
+
+msgid "help"
+msgstr "مساعدة"
+
+msgid "invoice_ids.amount_total", "invoice_ids.payment_state"
+msgstr "invoice_ids.amount_total", "invoice_ids.payment_state"
+
+msgid "model"
+msgstr "model"
+
+msgid "name"
+msgstr "الاسم"
+
+msgid "padding"
+msgstr "padding"
+
+msgid "prefix"
+msgstr "prefix"
+
+msgid "price_unit", "tax_ids"
+msgstr "price_unit", "tax_ids"
+
+msgid "qty"
+msgstr "qty"
+
+msgid "reservation_id", string="Folios"
+msgstr "reservation_id", string="Folios"
+
+msgid "sequence"
+msgstr "التسلسل"
+

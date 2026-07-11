@@ -1,0 +1,168 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* hotel_frontdesk_session
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-11 12:00+0000\n"
+"PO-Revision-Date: 2026-07-11 12:00+0000\n"
+"Last-Translator: Antigravity <antigravity@gemini.google>\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+msgid "=", "closing"
+msgstr "=", "closing"
+
+msgid "=", "opening"
+msgstr "=", "opening"
+
+msgid "Amount"
+msgstr "المبلغ"
+
+msgid "Are you sure you want to close this cashier session? This will lock transactions and calculate differences."
+msgstr "هل أنت متأكد من رغبتك في إغلاق جلسة الصندوق هذه؟ سيتم قفل المعاملات واحتساب الفروقات."
+
+msgid "Cash Verification Summary"
+msgstr "ملخص مطابقة النقدية"
+
+msgid "Cashier"
+msgstr "أمين الصندوق / موظف الاستقبال"
+
+msgid "Cashier Sessions"
+msgstr "جلسات الاستقبال والصندوق"
+
+msgid "Close Session"
+msgstr "إغلاق الجلسة"
+
+msgid "Closed"
+msgstr "مغلقة"
+
+msgid "Closed Time"
+msgstr "وقت الإغلاق"
+
+msgid "Closing Cash Control"
+msgstr "مطابقة النقدية عند الإغلاق"
+
+msgid "Closing Cash Count"
+msgstr "جرد النقدية عند الإغلاق"
+
+msgid "Closing Count"
+msgstr "عد الإغلاق"
+
+msgid "Company Currency"
+msgstr "عملة الشركة"
+
+msgid "Currency"
+msgstr "العملة"
+
+msgid "Difference"
+msgstr "الفارق"
+
+msgid "Front Desk Cashier Session"
+msgstr "جلسة صندوق الاستقبال"
+
+msgid "Front Desk Sessions"
+msgstr "جلسات صندوق الاستقبال"
+
+msgid "New"
+msgstr "جديد"
+
+msgid "Open"
+msgstr "مفتوحة"
+
+msgid "Opened Time"
+msgstr "وقت الفتح"
+
+msgid "Opening Cash Control"
+msgstr "مطابقة النقدية عند الفتح"
+
+msgid "Opening Cash Count"
+msgstr "جرد النقدية عند الفتح"
+
+msgid "Opening Count"
+msgstr "عد الفتح"
+
+msgid "Please define the closing cash count before closing the session."
+msgstr "الرجاء إدخال قيمة جرد النقدية قبل إغلاق الجلسة."
+
+msgid "Property"
+msgstr "الفندق / المنشأة"
+
+msgid "Session"
+msgstr "الجلسة"
+
+msgid "Session Cash Entry"
+msgstr "إدخال نقدية الجلسة"
+
+msgid "Session Info"
+msgstr "معلومات الجلسة"
+
+msgid "Session Reference"
+msgstr "مرجع الجلسة"
+
+msgid "This session is already closed."
+msgstr "هذه الجلسة مغلقة بالفعل."
+
+msgid "Timeframes"
+msgstr "المدد الزمنية"
+
+msgid "Total Closing Balance"
+msgstr "إجمالي رصيد الإغلاق"
+
+msgid "Total Opening Balance"
+msgstr "إجمالي رصيد الفتح"
+
+msgid "Total Transactions"
+msgstr "إجمالي المعاملات والدفعات"
+
+msgid "Type"
+msgstr "النوع"
+
+msgid "You cannot delete a closed front desk session."
+msgstr "لا يمكنك حذف جلسة استقبال مغلقة."
+
+msgid "amount"
+msgstr "المبلغ"
+
+msgid "arch"
+msgstr "arch"
+
+msgid "closing"
+msgstr "إغلاق"
+
+msgid "code"
+msgstr "الرمز"
+
+msgid "difference"
+msgstr "الفارق"
+
+msgid "help"
+msgstr "مساعدة"
+
+msgid "model"
+msgstr "model"
+
+msgid "name"
+msgstr "الاسم"
+
+msgid "opening"
+msgstr "فتح"
+
+msgid "padding"
+msgstr "padding"
+
+msgid "prefix"
+msgstr "prefix"
+
+msgid "state"
+msgstr "الحالة"
+
+msgid "type"
+msgstr "النوع"
+

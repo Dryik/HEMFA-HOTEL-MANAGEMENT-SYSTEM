@@ -1,0 +1,312 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* hotel_base
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-11 12:00+0000\n"
+"PO-Revision-Date: 2026-07-11 12:00+0000\n"
+"Last-Translator: Antigravity <antigravity@gemini.google>\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+msgid "=", "service"
+msgstr "=", "service"
+
+msgid "Address"
+msgstr "العنوان"
+
+msgid "Admin Use"
+msgstr "استخدام إداري"
+
+msgid "Agencies / Entities"
+msgstr "الوكالات / الجهات"
+
+msgid "Amenities"
+msgstr "الخدمات المرافقة"
+
+msgid "Amenities beyond the room type"
+msgstr "الخدمات الإضافية خارج نوع الغرفة Standard"
+
+msgid "Base Nightly Price"
+msgstr "سعر الليلة الأساسي"
+
+msgid "Business Day Start"
+msgstr "بداية يوم العمل"
+
+msgid "Checked Out"
+msgstr "مغادر / مسجل خروج"
+
+msgid "Clean"
+msgstr "نظيفة"
+
+msgid "Configuration"
+msgstr "الإعدادات"
+
+msgid "Counts toward availability and the occupancy denominator."
+msgstr "يحتسب ضمن الغرف الشاغرة ومقام الإشغال."
+
+msgid "Date of Birth"
+msgstr "تاريخ الميلاد"
+
+msgid "Default Agency / Entity"
+msgstr "الوكالة / الجهة الافتراضية"
+
+msgid "Default nightly rate before seasonal, agency and occupancy"
+msgstr "السعر الافتراضي لليلة قبل التسويات الموسمية والوكالات ونسب الإشغال"
+
+msgid "Description"
+msgstr "الوصف"
+
+msgid "Dirty"
+msgstr "غير نظيفة"
+
+msgid "Drives the LYD vs foreign-currency pricing rule"
+msgstr "يتحكم في قاعدة تسعير العملة المحلية مقابل العملة الأجنبية"
+
+msgid "Driving License"
+msgstr "رخصة قيادة"
+
+msgid "Entity this guest is usually registered under. The"
+msgstr "الجهة التي يسجل تحتها النزيل غالباً."
+
+msgid "Extra Amenities"
+msgstr "وسائل راحة إضافية"
+
+msgid "Family Book"
+msgstr "كتيب العائلة"
+
+msgid "Female"
+msgstr "أنثى"
+
+msgid "Floor"
+msgstr "الطابق"
+
+msgid "Floors"
+msgstr "الطوابق"
+
+msgid "Gender"
+msgstr "الجنس"
+
+msgid "Guests"
+msgstr "النزلاء"
+
+msgid "Hotel"
+msgstr "الفندق"
+
+msgid "Hotel Floor"
+msgstr "الطابق الفندقي"
+
+msgid "Hotel Guest"
+msgstr "نزيل الفندق"
+
+msgid "Hotel Property"
+msgstr "المنشأة الفندقية"
+
+msgid "Hotel Room"
+msgstr "غرفة الفندق"
+
+msgid "Hour at which the hotel business day rolls over."
+msgstr "الساعة التي ينتهي بها يوم العمل الفندقي ويبدأ يوم جديد."
+
+msgid "Hours after the business day start during which checkout"
+msgstr "الساعات الممنوحة بعد بداية اليوم لتسجيل المغادرة بدون تكلفة إضافية"
+
+msgid "Housekeeping Status"
+msgstr "حالة نظافة الغرفة"
+
+msgid "ID Expiry"
+msgstr "تاريخ انتهاء الهوية"
+
+msgid "ID Number"
+msgstr "رقم الهوية"
+
+msgid "ID Type"
+msgstr "نوع الهوية"
+
+msgid "Identification Document"
+msgstr "وثيقة الهوية"
+
+msgid "Identity"
+msgstr "الهوية"
+
+msgid "Inspected"
+msgstr "مفتشة ومفحوصة"
+
+msgid "Is Agency / Entity"
+msgstr "هل هي وكالة / جهة؟"
+
+msgid "Late Checkout Grace (hours)"
+msgstr "مهلة تسجيل المغادرة المتأخر (بالساعات)"
+
+msgid "Leave empty for a room type shared across all properties."
+msgstr "اتركه فارغاً لنوع غرفة مشترك في كل الفنادق."
+
+msgid "Libyan national number (الرقم الوطني)."
+msgstr "الرقم الوطني الليبي."
+
+msgid "Male"
+msgstr "ذكر"
+
+msgid "National ID"
+msgstr "البطاقة الشخصية"
+
+msgid "National Number"
+msgstr "الرقم الوطني"
+
+msgid "Nationality"
+msgstr "الجنسية"
+
+msgid "Occupancy"
+msgstr "الإشغال"
+
+msgid "Occupied"
+msgstr "مشغولة"
+
+msgid "Other"
+msgstr "أخرى"
+
+msgid "Out of Order"
+msgstr "خارج الخدمة"
+
+msgid "Passport"
+msgstr "جواز سفر"
+
+msgid "Place of Birth"
+msgstr "مكان الميلاد"
+
+msgid "Profession"
+msgstr "المهنة"
+
+msgid "Properties"
+msgstr "الفنادق / المنشآت"
+
+msgid "Rate Product"
+msgstr "منتج تسعير الغرفة"
+
+msgid "Reserved"
+msgstr "محجوزة"
+
+msgid "Room Amenity"
+msgstr "وسيلة راحة الغرفة"
+
+msgid "Room Number"
+msgstr "رقم الغرفة"
+
+msgid "Room Type"
+msgstr "نوع الغرفة"
+
+msgid "Room Types"
+msgstr "أنواع الغرف"
+
+msgid "Room reserved for hotel administration; excluded from"
+msgstr "غرفة محجوزة للاستخدام الإداري، مستبعدة من البيع والإشغال"
+
+msgid "Rooms"
+msgstr "الغرف"
+
+msgid "Rooms available for sale: excludes out-of-order and"
+msgstr "الغرف القابلة للبيع (باستثناء خارج الخدمة والاستخدام الإداري)"
+
+msgid "Service product carrying the base price, taxes and income"
+msgstr "الخدمة التي تحمل السعر الأساسي والضرائب وحسابات الإيراد لهذا النوع من الغرف"
+
+msgid "Set by an open room-impacting maintenance request. Removes"
+msgstr "يتم تفعيله تلقائياً بطلب صيانة للغرفة لسحبها من الغرف القابلة للبيع"
+
+msgid "Short code used in references and reports."
+msgstr "كود اختصار مستخدم في المراجع والتقارير."
+
+msgid "Travel agency, company or government entity (جهة) that can"
+msgstr "وكالة سفر، شركة أو جهة حكومية يمكن تحميل الحسابات عليها"
+
+msgid "Vacant"
+msgstr "شاغرة"
+
+msgid "You cannot delete property %s because it has active or completed reservations."
+msgstr "لا يمكنك حذف المنشأة %s نظراً لوجود حجوزات نشطة أو منتهية مرتبطة بها."
+
+msgid "You cannot delete room %s because it has active reservations."
+msgstr "لا يمكنك حذف الغرفة %s نظراً لوجود حجوزات نشطة عليها."
+
+msgid "arch"
+msgstr "arch"
+
+msgid "card"
+msgstr "card"
+
+msgid "code"
+msgstr "الرمز"
+
+msgid "context"
+msgstr "context"
+
+msgid "description"
+msgstr "الوصف"
+
+msgid "dirty"
+msgstr "غير نظيفة"
+
+msgid "domain"
+msgstr "domain"
+
+msgid "e.g. 101"
+msgstr "e.g. 101"
+
+msgid "floor_id", string="Rooms"
+msgstr "floor_id", string="Rooms"
+
+msgid "floor_id.property_id.code"
+msgstr "floor_id.property_id.code"
+
+msgid "floors"
+msgstr "الطوابق"
+
+msgid "in", ("confirmed", "checked_in"
+msgstr "in", ("confirmed", "checked_in"
+
+msgid "model"
+msgstr "model"
+
+msgid "name"
+msgstr "الاسم"
+
+msgid "not in", ("cancelled", "no_show"
+msgstr "not in", ("cancelled", "no_show"
+
+msgid "notes"
+msgstr "الملاحظات"
+
+msgid "occupied"
+msgstr "مشغولة"
+
+msgid "ooo"
+msgstr "ooo"
+
+msgid "out_of_order", "admin_use"
+msgstr "out_of_order", "admin_use"
+
+msgid "property_id", string="Floors"
+msgstr "property_id", string="Floors"
+
+msgid "property_id", string="Rooms"
+msgstr "property_id", string="Rooms"
+
+msgid "room_ids.is_sellable"
+msgstr "room_ids.is_sellable"
+
+msgid "room_type_id", string="Rooms"
+msgstr "room_type_id", string="Rooms"
+
+msgid "sequence"
+msgstr "التسلسل"
+
+msgid "vacant"
+msgstr "شاغرة"
+
