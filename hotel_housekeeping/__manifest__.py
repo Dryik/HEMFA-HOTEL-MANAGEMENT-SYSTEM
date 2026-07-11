@@ -10,8 +10,8 @@
         "security/ir.model.access.csv",
         "data/ir_sequence_data.xml",
         "views/hotel_housekeeping_views.xml",
-        "views/hotel_housekeeping_menus.xml",
         "wizard/hotel_housekeeping_discrepancy_views.xml",
+        "views/hotel_housekeeping_menus.xml",
     ],
     "installable": True,
 }
