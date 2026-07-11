@@ -16,20 +16,11 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-msgid "=", "checked_in"
-msgstr "=", "checked_in"
-
-msgid "=", "confirmed"
-msgstr "=", "confirmed"
-
 msgid "Already Charged"
 msgstr "تم المحاسبة بالفعل"
 
 msgid "Amount Posted"
 msgstr "المبلغ المسجل"
-
-msgid "Are you sure you want to run the night audit? This will post room-night charges, close no-shows, and roll the operational business date forward."
-msgstr "هل أنت متأكد من تشغيل التدقيق الليلي؟ سيتم ترحيل رسوم الغرف وإغلاق حالات عدم الحضور وتدوير تاريخ العمل الفندقي."
 
 msgid "Audit"
 msgstr "التدقيق"
@@ -82,9 +73,6 @@ msgstr "التدقيق الليلي"
 msgid "No Show Rollover"
 msgstr "ترحيل عدم الحضور"
 
-msgid "Occupancy Rate (%)"
-msgstr "نسبة الإشغال (%)"
-
 msgid "Operational business date being closed."
 msgstr "تاريخ العمل الفندقي الجاري إغلاقه بالتدقيق الليلي."
 
@@ -112,45 +100,9 @@ msgstr "تشغيل بواسطة"
 msgid "Run Night Audit"
 msgstr "بدء التدقيق الليلي"
 
-msgid "The active operational business date for the hotel, rolled forward daily by the night audit."
-msgstr "تاريخ العمل الفندقي النشط، يتم تدويره يومياً بواسطة التدقيق الليلي."
-
 msgid "This night audit is already completed."
 msgstr "تم إكمال هذا التدقيق الليلي بالفعل."
 
 msgid "You cannot delete a completed night audit record."
 msgstr "لا يمكنك حذف سجل تدقيق ليلي مكتمل."
-
-msgid "arch"
-msgstr "arch"
-
-msgid "code"
-msgstr "الرمز"
-
-msgid "date"
-msgstr "التاريخ"
-
-msgid "details"
-msgstr "التفاصيل"
-
-msgid "help"
-msgstr "مساعدة"
-
-msgid "model"
-msgstr "model"
-
-msgid "name"
-msgstr "الاسم"
-
-msgid "padding"
-msgstr "padding"
-
-msgid "prefix"
-msgstr "prefix"
-
-msgid "state"
-msgstr "الحالة"
-
-msgid "status"
-msgstr "الحالة"
 

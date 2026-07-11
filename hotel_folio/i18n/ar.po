@@ -79,9 +79,6 @@ msgstr "خط حساب الفندق (الفوليو)"
 msgid "Hotel Folio Routing Rule"
 msgstr "قاعدة توجيه حسابات الفندق"
 
-msgid "If checked, the charge is locked (e.g. invoiced or processed by night audit)."
-msgstr "عند التفعيل، تكون الرسوم مقفلة (مفوترة أو مرحلة بالتدقيق الليلي)."
-
 msgid "Invoice"
 msgstr "فاتورة"
 
@@ -142,9 +139,6 @@ msgstr "معلومات قاعدة التسعير"
 msgid "Specific Agency / Entity"
 msgstr "وكالة / جهة محددة"
 
-msgid "Specific agency to route to. If left empty, routes to the reservation"
-msgstr "الوكالة المحددة للتوجيه. إذا تركت فارغة يتم التوجيه لوكالة الحجز"
-
 msgid "Stay Reference"
 msgstr "مرجع الإقامة"
 
@@ -162,52 +156,4 @@ msgstr "لا يمكنك حذف فوليو يحتوي على رسوم مرحلة 
 
 msgid "You cannot delete a posted or invoiced folio line."
 msgstr "لا يمكنك حذف بند فوليو تم ترحيله أو فوترته."
-
-msgid "active"
-msgstr "نشط"
-
-msgid "amount"
-msgstr "المبلغ"
-
-msgid "arch"
-msgstr "arch"
-
-msgid "code"
-msgstr "الرمز"
-
-msgid "date"
-msgstr "التاريخ"
-
-msgid "folio_id", string="Folio Lines"
-msgstr "folio_id", string="Folio Lines"
-
-msgid "help"
-msgstr "مساعدة"
-
-msgid "invoice_ids.amount_total", "invoice_ids.payment_state"
-msgstr "invoice_ids.amount_total", "invoice_ids.payment_state"
-
-msgid "model"
-msgstr "model"
-
-msgid "name"
-msgstr "الاسم"
-
-msgid "padding"
-msgstr "padding"
-
-msgid "prefix"
-msgstr "prefix"
-
-msgid "price_unit", "tax_ids"
-msgstr "price_unit", "tax_ids"
-
-msgid "qty"
-msgstr "qty"
-
-msgid "reservation_id", string="Folios"
-msgstr "reservation_id", string="Folios"
-
-msgid "sequence"
-msgstr "التسلسل"
 

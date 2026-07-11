@@ -16,12 +16,6 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-msgid "!=", rec.id._origin.id if hasattr(rec.id, "_origin"
-msgstr "!=", rec.id._origin.id if hasattr(rec.id, "_origin"
-
-msgid "=", "all"
-msgstr "=", "all"
-
 msgid "All Nationalities"
 msgstr "كل الجنسيات"
 
@@ -46,20 +40,8 @@ msgstr "شريحة إشغال الأسعار"
 msgid "Hotel Rate Rule"
 msgstr "قاعدة تسعير الفندق"
 
-msgid "If checked, nightly rate will not be updated automatically by seasonal pricing or occupancy bands."
-msgstr "عند التفعيل، لن يتغير سعر الليلة تلقائياً بالمواسم أو شرائح الإشغال."
-
 msgid "Libyan National"
 msgstr "نزيل ليبي"
-
-msgid "Max Occupancy (%)"
-msgstr "الحد الأقصى للإشغال (%)"
-
-msgid "Min Occupancy (%)"
-msgstr "الحد الأدنى للإشغال (%)"
-
-msgid "Multiplication factor to apply to the nightly rate (e.g. 1.20 for +20% price)."
-msgstr "معامل الضرب المطبق على سعر الليلة (مثال: 1.20 لزيادة 20% في السعر)."
 
 msgid "Nightly Rate"
 msgstr "سعر الليلة"
@@ -90,40 +72,4 @@ msgstr "معلومات قاعدة التسعير"
 
 msgid "Start Date"
 msgstr "تاريخ البدء"
-
-msgid "arch"
-msgstr "arch"
-
-msgid "date_end", "property_id", "room_type_id", "guest_type"
-msgstr "date_end", "property_id", "room_type_id", "guest_type"
-
-msgid "help"
-msgstr "مساعدة"
-
-msgid "in", ("all", "foreign"
-msgstr "in", ("all", "foreign"
-
-msgid "in", ("all", "local"
-msgstr "in", ("all", "local"
-
-msgid "in", ("confirmed", "checked_in"
-msgstr "in", ("confirmed", "checked_in"
-
-msgid "max_occupancy", "property_id"
-msgstr "max_occupancy", "property_id"
-
-msgid "model"
-msgstr "model"
-
-msgid "multiplier"
-msgstr "المضاعف"
-
-msgid "name"
-msgstr "الاسم"
-
-msgid "room_id", "checkin_date", "partner_id", "rate_locked"
-msgstr "room_id", "checkin_date", "partner_id", "rate_locked"
-
-msgid "sequence"
-msgstr "التسلسل"
 

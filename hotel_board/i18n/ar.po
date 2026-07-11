@@ -19,12 +19,3 @@ msgstr ""
 msgid "Dashboard"
 msgstr "لوحة التحكم"
 
-msgid "hotel_board.HotelDashboard"
-msgstr "hotel_board.HotelDashboard"
-
-msgid "name"
-msgstr "الاسم"
-
-msgid "tag"
-msgstr "tag"
-

@@ -16,12 +16,6 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-msgid "=", "checked_in"
-msgstr "=", "checked_in"
-
-msgid "=", "confirmed"
-msgstr "=", "confirmed"
-
 msgid "Agency / Entity"
 msgstr "الوكالة / الجهة"
 
@@ -36,9 +30,6 @@ msgstr "الواصلون اليوم"
 
 msgid "Assign a room before confirming."
 msgstr "يرجى تخصيص غرفة قبل تأكيد الحجز."
-
-msgid "Bill-to entity (جهة) this stay is registered under."
-msgstr "الجهة المسؤول عن دفع الفاتورة المسجل تحتها هذا الحجز."
 
 msgid "Cancel"
 msgstr "إلغاء"
@@ -156,55 +147,4 @@ msgstr "الرحلة / الزيارة"
 
 msgid "You can only delete draft or cancelled reservations."
 msgstr "يمكنك فقط حذف الحجوزات في حالة مسودة أو ملغاة."
-
-msgid "adults"
-msgstr "البالغين"
-
-msgid "arch"
-msgstr "arch"
-
-msgid "cancelled"
-msgstr "ملغاة"
-
-msgid "checkout"
-msgstr "مغادرة"
-
-msgid "children"
-msgstr "الأطفال"
-
-msgid "code"
-msgstr "الرمز"
-
-msgid "confirmed"
-msgstr "مؤكد"
-
-msgid "context"
-msgstr "context"
-
-msgid "draft"
-msgstr "مسودة"
-
-msgid "help"
-msgstr "مساعدة"
-
-msgid "model"
-msgstr "model"
-
-msgid "name"
-msgstr "الاسم"
-
-msgid "nights"
-msgstr "الليالي"
-
-msgid "notes"
-msgstr "الملاحظات"
-
-msgid "padding"
-msgstr "padding"
-
-msgid "state"
-msgstr "الحالة"
-
-msgid "state", "checkin_date", "checkout_date"
-msgstr "state", "checkin_date", "checkout_date"
 
