@@ -1,0 +1,420 @@
+import os
+import re
+
+TRANSLATIONS = {
+    "Address": "العنوان",
+    "Admin Use": "استخدام إداري",
+    "Agencies / Entities": "الوكالات / الجهات",
+    "Agency / Entity": "الوكالة / الجهة",
+    "All Nationalities": "كل الجنسيات",
+    "Already Charged": "تم المحاسبة بالفعل",
+    "Amenities": "الخدمات المرافقة",
+    "Amenities beyond the room type": "الخدمات الإضافية خارج نوع الغرفة Standard",
+    "Amount": "المبلغ",
+    "Amount Due": "المبلغ المستحق",
+    "Amount Paid": "المبلغ المدفوع",
+    "Amount Posted": "المبلغ المسجل",
+    "Applies this rate depending on the guest": "يطبق هذا السعر حسب جنسية النزيل",
+    "Are you sure you want to close this cashier session? This will lock transactions and calculate differences.": "هل أنت متأكد من رغبتك في إغلاق جلسة الصندوق هذه؟ سيتم قفل المعاملات واحتساب الفروقات.",
+    "Are you sure you want to run the night audit? This will post room-night charges, close no-shows, and roll the operational business date forward.": "هل أنت متأكد من تشغيل التدقيق الليلي؟ سيتم ترحيل رسوم الغرف وإغلاق حالات عدم الحضور وتدوير تاريخ العمل الفندقي.",
+    "Arrival": "الوصول",
+    "Arrival Date": "تاريخ الوصول",
+    "Arrivals Today": "الواصلون اليوم",
+    "Assign a room before confirming.": "يرجى تخصيص غرفة قبل تأكيد الحجز.",
+    "Audit": "التدقيق",
+    "Audit Action": "إجراء التدقيق",
+    "Audit Date": "تاريخ التدقيق",
+    "Audit Details": "تفاصيل التدقيق",
+    "Audit Parameters": "معايير التدقيق",
+    "Audit Reference": "مرجع التدقيق",
+    "Base Nightly Price": "سعر الليلة الأساسي",
+    "Bill-to entity (جهة) this stay is registered under.": "الجهة المسؤول عن دفع الفاتورة المسجل تحتها هذا الحجز.",
+    "Billed To": "مفوتر إلى",
+    "Business Day Start": "بداية يوم العمل",
+    "Cancel": "إلغاء",
+    "Cancelled": "ملغي",
+    "Cash Verification Summary": "ملخص مطابقة النقدية",
+    "Cashier": "أمين الصندوق / موظف الاستقبال",
+    "Cashier Sessions": "جلسات الاستقبال والصندوق",
+    "Check In": "تسجيل دخول",
+    "Checked In": "داخل الفندق / مسجل دخول",
+    "Checked Out": "مغادر / مسجل خروج",
+    "Clean": "نظيفة",
+    "Close Session": "إغلاق الجلسة",
+    "Closed": "مغلقة",
+    "Closed Time": "وقت الإغلاق",
+    "Closing Cash Control": "مطابقة النقدية عند الإغلاق",
+    "Closing Cash Count": "جرد النقدية عند الإغلاق",
+    "Closing Count": "عد الإغلاق",
+    "Company / Entity": "الشركة / الجهة",
+    "Company Currency": "عملة الشركة",
+    "Completed": "مكتمل",
+    "Configuration": "الإعدادات",
+    "Confirm": "تأكيد",
+    "Confirm Check Out": "تأكيد تسجيل الخروج",
+    "Confirmed": "مؤكد",
+    "Counts toward availability and the occupancy denominator.": "يحتسب ضمن الغرف الشاغرة ومقام الإشغال.",
+    "Create Agency Invoice": "إنشاء فاتورة الوكالة",
+    "Create Guest Invoice": "إنشاء فاتورة النزيل",
+    "Currency": "العملة",
+    "Current Business Date": "تاريخ العمل الحالي",
+    "Dashboard": "لوحة التحكم",
+    "Date": "التاريخ",
+    "Date of Birth": "تاريخ الميلاد",
+    "Default Agency / Entity": "الوكالة / الجهة الافتراضية",
+    "Default nightly rate before seasonal, agency and occupancy": "السعر الافتراضي لليلة قبل التسويات الموسمية والوكالات ونسب الإشغال",
+    "Departure": "المغادرة",
+    "Departures Today": "المغادرون اليوم",
+    "Description": "الوصف",
+    "Difference": "الفارق",
+    "Dirty": "غير نظيفة",
+    "Draft": "مسودة",
+    "Drives the LYD vs foreign-currency pricing rule": "يتحكم في قاعدة تسعير العملة المحلية مقابل العملة الأجنبية",
+    "Driving License": "رخصة قيادة",
+    "End Date": "تاريخ الانتهاء",
+    "Entity responsible for this specific charge line.": "الجهة المسؤولة عن خط الفاتورة هذا.",
+    "Entity this guest is usually registered under. The": "الجهة التي يسجل تحتها النزيل غالباً.",
+    "Extra Amenities": "وسائل راحة إضافية",
+    "Family": "عائلي",
+    "Family Book": "كتيب العائلة",
+    "Female": "أنثى",
+    "Financials": "المالية",
+    "Floor": "الطابق",
+    "Floors": "الطوابق",
+    "Folio": "حساب النزيل / الفوليو",
+    "Folio Count": "عدد حسابات النزلاء",
+    "Folio Lines": "خطوط حساب النزيل",
+    "Folio Number": "رقم حساب النزيل",
+    "Folio Routing Rules": "قواعد توجيه الحسابات",
+    "Folios": "حسابات النزلاء / الفوليو",
+    "Foreigner": "أجنبي",
+    "Front Desk": "مكتب الاستقبال",
+    "Front Desk Cashier Session": "جلسة صندوق الاستقبال",
+    "Front Desk Sessions": "جلسات صندوق الاستقبال",
+    "Gender": "الجنس",
+    "Group": "مجموعة",
+    "Guest": "النزيل / الضيف",
+    "Guest Nationality Type": "نوع جنسية النزيل",
+    "Guests": "النزلاء",
+    "Hotel": "الفندق",
+    "Hotel Floor": "الطابق الفندقي",
+    "Hotel Folio Ledger": "دفتر حسابات الفندق (الفوليو)",
+    "Hotel Folio Line": "خط حساب الفندق (الفوليو)",
+    "Hotel Folio Routing Rule": "قاعدة توجيه حسابات الفندق",
+    "Hotel Guest": "نزيل الفندق",
+    "Hotel Night Audit": "التدقيق الليلي للفندق",
+    "Hotel Night Audit Detail Line": "تفاصيل التدقيق الليلي للفندق",
+    "Hotel Property": "المنشأة الفندقية",
+    "Hotel Rate Occupancy Band": "شريحة إشغال الأسعار",
+    "Hotel Rate Rule": "قاعدة تسعير الفندق",
+    "Hotel Reservation": "حجز الفندق",
+    "Hotel Room": "غرفة الفندق",
+    "Hour at which the hotel business day rolls over.": "الساعة التي ينتهي بها يوم العمل الفندقي ويبدأ يوم جديد.",
+    "Hours after the business day start during which checkout": "الساعات الممنوحة بعد بداية اليوم لتسجيل المغادرة بدون تكلفة إضافية",
+    "Housekeeping Status": "حالة نظافة الغرفة",
+    "ID Expiry": "تاريخ انتهاء الهوية",
+    "ID Number": "رقم الهوية",
+    "ID Type": "نوع الهوية",
+    "Identification Document": "وثيقة الهوية",
+    "Identity": "الهوية",
+    "If checked, nightly rate will not be updated automatically by seasonal pricing or occupancy bands.": "عند التفعيل، لن يتغير سعر الليلة تلقائياً بالمواسم أو شرائح الإشغال.",
+    "If checked, the charge is locked (e.g. invoiced or processed by night audit).": "عند التفعيل، تكون الرسوم مقفلة (مفوترة أو مرحلة بالتدقيق الليلي).",
+    "In House": "نزلاء الفندق حالياً",
+    "Individual": "فردي",
+    "Inspected": "مفتشة ومفحوصة",
+    "Internal notes...": "ملاحظات داخلية...",
+    "Invoice": "فاتورة",
+    "Invoice Line": "خط الفاتورة",
+    "Invoices": "الفواتير",
+    "Is Agency / Entity": "هل هي وكالة / جهة؟",
+    "Late Checkout Grace (hours)": "مهلة تسجيل المغادرة المتأخر (بالساعات)",
+    "Leave empty for a room type shared across all properties.": "اتركه فارغاً لنوع غرفة مشترك في كل الفنادق.",
+    "Ledger / Charges": "الدفتر / الرسوم والخدمات",
+    "Libyan National": "نزيل ليبي",
+    "Libyan national number (الرقم الوطني).": "الرقم الوطني الليبي.",
+    "Male": "ذكر",
+    "Max Occupancy (%)": "الحد الأقصى للإشغال (%)",
+    "Min Occupancy (%)": "الحد الأدنى للإشغال (%)",
+    "Multiplication factor to apply to the nightly rate (e.g. 1.20 for +20% price).": "معامل الضرب المطبق على سعر الليلة (مثال: 1.20 لزيادة 20% في السعر).",
+    "National ID": "البطاقة الشخصية",
+    "National Number": "الرقم الوطني",
+    "Nationality": "الجنسية",
+    "New": "جديد",
+    "Night Audit": "التدقيق الليلي",
+    "Night Audits": "التدقيق الليلي",
+    "Nightly Rate": "سعر الليلة",
+    "No Show": "عدم حضور",
+    "No Show Rollover": "ترحيل عدم الحضور",
+    "No uninvoiced lines found for this payee.": "لا توجد خطوط غير مفوترة لهذا العميل لدفعها.",
+    "Occupancy": "الإشغال",
+    "Occupancy Bands": "شرائح الإشغال",
+    "Occupancy Rate (%)": "نسبة الإشغال (%)",
+    "Occupied": "مشغولة",
+    "Only cancelled or no-show reservations can be reset.": "يمكن فقط إعادة تهيئة الحجوزات الملغاة أو التي سجلت كعدم حضور.",
+    "Only confirmed reservations can be no-show.": "يمكن فقط تسجيل عدم حضور للحجوزات المؤكدة.",
+    "Only confirmed reservations can check in.": "يمكن فقط تسجيل الدخول للحجوزات المؤكدة.",
+    "Only draft or confirmed reservations can be cancelled.": "يمكن فقط إلغاء الحجوزات المسودة أو المؤكدة.",
+    "Only draft reservations can be confirmed.": "يمكن فقط تأكيد الحجوزات المسودة.",
+    "Only in-house reservations can check out.": "يمكن فقط تسجيل المغادرة للنزلاء المقيمين فعلياً.",
+    "Open": "مفتوحة",
+    "Opened Time": "وقت الفتح",
+    "Opening Cash Control": "مطابقة النقدية عند الفتح",
+    "Opening Cash Count": "جرد النقدية عند الفتح",
+    "Opening Count": "عد الفتح",
+    "Operational business date being closed.": "تاريخ العمل الفندقي الجاري إغلاقه بالتدقيق الليلي.",
+    "Other": "أخرى",
+    "Out of Order": "خارج الخدمة",
+    "Passport": "جواز سفر",
+    "Place of Birth": "مكان الميلاد",
+    "Please define the closing cash count before closing the session.": "الرجاء إدخال قيمة جرد النقدية قبل إغلاق الجلسة.",
+    "Posted": "مرحل / مسجل",
+    "Pricing": "التسعير",
+    "Pricing & Conditions": "التسعير والشروط",
+    "Product": "المنتج",
+    "Product Category": "فئة المنتج",
+    "Product category that triggers this routing rule.": "فئة المنتج التي تفعل قاعدة التوجيه الفوليو هذه.",
+    "Profession": "المهنة",
+    "Properties": "الفنادق / المنشآت",
+    "Property": "الفندق / المنشأة",
+    "Quantity": "الكمية",
+    "Rate Locked": "قفل السعر",
+    "Rate Multiplier": "مضاعف السعر",
+    "Rate Product": "منتج تسعير الغرفة",
+    "Rate Rules": "قواعد التسعير",
+    "Reservation": "الحجز",
+    "Reservation Number": "رقم الحجز",
+    "Reservation Planning": "مخطط الحجوزات",
+    "Reservations": "الحجوزات",
+    "Reserved": "محجوزة",
+    "Reset to Draft": "إعادة إلى مسودة",
+    "Results": "النتائج",
+    "Revenue Posted": "الإيرادات المسجلة والملغاة",
+    "Room": "الغرفة",
+    "Room Amenity": "وسيلة راحة الغرفة",
+    "Room Charge - %s": "رسوم الغرفة - %s",
+    "Room Night Charged": "ليلة غرفة محتسبة",
+    "Room Number": "رقم الغرفة",
+    "Room Type": "نوع الغرفة",
+    "Room Types": "أنواع الغرف",
+    "Room reserved for hotel administration; excluded from": "غرفة محجوزة للاستخدام الإداري، مستبعدة من البيع والإشغال",
+    "Rooms": "الغرف",
+    "Rooms available for sale: excludes out-of-order and": "الغرف القابلة للبيع (باستثناء خارج الخدمة والاستخدام الإداري)",
+    "Route To": "توجيه الحساب إلى",
+    "Route to Agency": "توجيه إلى الوكالة / الجهة",
+    "Route to Guest": "توجيه إلى النزيل",
+    "Routing Details": "تفاصيل التوجيه للحسابات",
+    "Routing Rules": "قواعد توجيه حسابات الفوليو",
+    "Rule Info": "معلومات قاعدة التسعير",
+    "Run By": "تشغيل بواسطة",
+    "Run Night Audit": "بدء التدقيق الليلي",
+    "Service product carrying the base price, taxes and income": "الخدمة التي تحمل السعر الأساسي والضرائب وحسابات الإيراد لهذا النوع من الغرف",
+    "Session": "الجلسة",
+    "Session Cash Entry": "إدخال نقدية الجلسة",
+    "Session Info": "معلومات الجلسة",
+    "Session Reference": "مرجع الجلسة",
+    "Set by an open room-impacting maintenance request. Removes": "يتم تفعيله تلقائياً بطلب صيانة للغرفة لسحبها من الغرف القابلة للبيع",
+    "Short code used in references and reports.": "كود اختصار مستخدم في المراجع والتقارير.",
+    "Specific Agency / Entity": "وكالة / جهة محددة",
+    "Specific agency to route to. If left empty, routes to the reservation": "الوكالة المحددة للتوجيه. إذا تركت فارغة يتم التوجيه لوكالة الحجز",
+    "Start Date": "تاريخ البدء",
+    "Status": "الحالة",
+    "Stay": "الحجز والإقامة",
+    "Stay Reference": "مرجع الإقامة",
+    "Taxes": "الضرائب",
+    "The active operational business date for the hotel, rolled forward daily by the night audit.": "تاريخ العمل الفندقي النشط، يتم تدويره يومياً بواسطة التدقيق الليلي.",
+    "This night audit is already completed.": "تم إكمال هذا التدقيق الليلي بالفعل.",
+    "This session is already closed.": "هذه الجلسة مغلقة بالفعل.",
+    "Timeframes": "المدد الزمنية",
+    "Total Charges": "إجمالي الرسوم والخدمات",
+    "Total Closing Balance": "إجمالي رصيد الإغلاق",
+    "Total Opening Balance": "إجمالي رصيد الفتح",
+    "Total Transactions": "إجمالي المعاملات والدفعات",
+    "Travel agency, company or government entity (جهة) that can": "وكالة سفر، شركة أو جهة حكومية يمكن تحميل الحسابات عليها",
+    "Trip": "الرحلة / الزيارة",
+    "Type": "النوع",
+    "Unit Price": "سعر الوحدة",
+    "Vacant": "شاغرة",
+    "active": "نشط",
+    "adults": "البالغين",
+    "amount": "المبلغ",
+    "cancelled": "ملغاة",
+    "checkout": "مغادرة",
+    "children": "الأطفال",
+    "closing": "إغلاق",
+    "code": "الرمز",
+    "confirmed": "مؤكد",
+    "date": "التاريخ",
+    "description": "الوصف",
+    "details": "التفاصيل",
+    "difference": "الفارق",
+    "dirty": "غير نظيفة",
+    "draft": "مسودة",
+    "floors": "الطوابق",
+    "help": "مساعدة",
+    "multiplier": "المضاعف",
+    "name": "الاسم",
+    "nights": "الليالي",
+    "notes": "الملاحظات",
+    "occupied": "مشغولة",
+    "opening": "فتح",
+    "sequence": "التسلسل",
+    "state": "الحالة",
+    "status": "الحالة",
+    "type": "النوع",
+    "vacant": "شاغرة"
+}
+
+header_template = """# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* {module_name}
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\\n"
+"Report-Msgid-Bugs-To: \\n"
+"POT-Creation-Date: 2026-07-11 12:00+0000\\n"
+"PO-Revision-Date: 2026-07-11 12:00+0000\\n"
+"Last-Translator: Antigravity <antigravity@gemini.google>\\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\\n"
+"MIME-Version: 1.0\\n"
+"Content-Type: text/plain; charset=UTF-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Language: ar\\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\\n"
+
+"""
+
+def parse_po_file(filepath):
+    """
+    Parses a PO file and returns a list of dictionaries, where each dictionary
+    represents a translation block: comment, occurrences, msgid, msgstr.
+    """
+    entries = []
+    
+    with open(filepath, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    # Split into entries by double newlines
+    raw_entries = content.split("\n\n")
+    for raw in raw_entries:
+        raw = raw.strip()
+        if not raw:
+            continue
+        
+        # Skip header
+        if "msgid \"\"" in raw and "msgstr \"\"" in raw:
+            continue
+            
+        entry = {"comment": "", "occurrences": [], "msgid": "", "msgstr": ""}
+        msgid_lines = []
+        msgstr_lines = []
+        in_msgid = False
+        in_msgstr = False
+        
+        lines = raw.split("\n")
+        for line in lines:
+            line = line.strip()
+            if line.startswith("#."):
+                entry["comment"] = line[2:].strip()
+            elif line.startswith("#:"):
+                entry["occurrences"].append(line[2:].strip())
+            elif line.startswith("msgid"):
+                in_msgid = True
+                in_msgstr = False
+                val = line.split("msgid", 1)[1].strip()
+                if val.startswith('"') and val.endswith('"'):
+                    msgid_lines.append(val[1:-1])
+            elif line.startswith("msgstr"):
+                in_msgid = False
+                in_msgstr = True
+                val = line.split("msgstr", 1)[1].strip()
+                if val.startswith('"') and val.endswith('"'):
+                    msgstr_lines.append(val[1:-1])
+            elif line.startswith('"') and line.endswith('"'):
+                if in_msgid:
+                    msgid_lines.append(line[1:-1])
+                elif in_msgstr:
+                    msgstr_lines.append(line[1:-1])
+                    
+        entry["msgid"] = "".join(msgid_lines)
+        entry["msgstr"] = "".join(msgstr_lines)
+        
+        # Only add entries that have occurrences
+        if entry["msgid"] and entry["occurrences"]:
+            entries.append(entry)
+            
+    return entries
+
+def main():
+    po_path = "/tmp/ar.po"
+    if not os.path.exists(po_path):
+        print("Error: /tmp/ar.po does not exist. Please run Odoo translation export first!")
+        return
+
+    print(f"Reading and parsing {po_path}...")
+    entries = parse_po_file(po_path)
+    print(f"Parsed {len(entries)} translation records.")
+
+    # Group entries by module name
+    module_entries = {}
+    for entry in entries:
+        module = ""
+        # Match module name from occurrences or comment
+        if entry["comment"] and entry["comment"].startswith("module:"):
+            module = entry["comment"].split("module:", 1)[1].strip()
+        else:
+            # Try to match from occurrences (e.g. model:ir.ui.menu,name:hotel_base.menu)
+            for occurrence in entry["occurrences"]:
+                # Matches model:something:module.xmlid
+                match = re.match(r'.*:([\w_]+)\.([^ ]+)', occurrence)
+                if match:
+                    module = match.group(1)
+                    break
+        
+        # If it doesn't match any hotel module, skip
+        if not module or not module.startswith("hotel_"):
+            continue
+            
+        if module not in module_entries:
+            module_entries[module] = []
+        module_entries[module].append(entry)
+
+    # Write translated entries to each module's ar.po
+    user_src_dir = "/home/odoo/src/user"
+    if not os.path.exists(user_src_dir):
+        # Fallback to local workspace if run locally
+        user_src_dir = r"c:\prototypes\HEMFA-HOTEL-MANAGEMENT-SYSTEM"
+
+    for module, entries in module_entries.items():
+        module_dir = os.path.join(user_src_dir, module)
+        if not os.path.isdir(module_dir):
+            print(f"Warning: Module directory {module_dir} does not exist. Skipping.")
+            continue
+            
+        po_output_dir = os.path.join(module_dir, "i18n")
+        os.makedirs(po_output_dir, exist_ok=True)
+        po_output_path = os.path.join(po_output_dir, "ar.po")
+
+        po_lines = []
+        for entry in entries:
+            msgid = entry["msgid"]
+            msgstr = TRANSLATIONS.get(msgid, msgid) # translate using dictionary
+            
+            # format the record block
+            block = []
+            block.append(f"#. module: {module}")
+            for occ in entry["occurrences"]:
+                block.append(f"#: {occ}")
+            block.append(f'msgid "{msgid}"')
+            block.append(f'msgstr "{msgstr}"')
+            po_lines.append("\n".join(block))
+
+        with open(po_output_path, "w", encoding="utf-8") as f:
+            f.write(header_template.format(module_name=module))
+            f.write("\n\n".join(po_lines))
+            f.write("\n")
+            
+        print(f"Generated clean translation file: {po_output_path} with {len(entries)} occurrences.")
+
+if __name__ == "__main__":
+    main()
