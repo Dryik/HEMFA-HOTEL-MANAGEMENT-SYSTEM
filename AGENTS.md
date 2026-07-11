@@ -145,6 +145,8 @@ Runtime testing happens on the Odoo.sh dev branch (no local Odoo install).
 5. **`rec.company_id` on `hotel.reservation`**: Model has no `company_id` — use `rec.property_id.company_id` instead.
 6. **`rec.id._origin.id` pattern**: Wrong — `rec.id` is an int for saved records. Use `isinstance(rec.id, int)` check.
 7. **Missing `@tagged` on test class**: All test classes need `@tagged('post_install', '-at_install')`.
+8. **`groups_id` on `res.users`**: Odoo 19 field is `group_ids` (not `groups_id`). Create users with `group_ids` or assign groups via `res.groups.write({'user_ids': [(4, user_id)]})`.
+9. **`total_transactions` stored compute returns 0**: When calling stored compute methods directly, flush + invalidate_recordset before reading to ensure cache coherence.
 
 ## Odoo 19 Source Reference
 

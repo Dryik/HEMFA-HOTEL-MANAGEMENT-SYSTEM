@@ -106,8 +106,8 @@ class TestHotelFrontdeskSession(TransactionCase):
             }
         )
         self.env.flush_all()
-        # Re-compute balances
         session._compute_balances()
+        session.invalidate_recordset(["total_transactions"])
         self.assertEqual(session.total_transactions, 100.0)
 
         # 3. Closing cash count & close session

@@ -37,7 +37,7 @@ class TestHotelHousekeeping(TransactionCase):
             "name": "Cleaner Bob",
             "login": "cleaner_bob",
             "email": "bob@example.com",
-            "groups_id": [(6, 0, [cls.env.ref("hotel_base.group_hotel_housekeeping").id])],
+            "group_ids": [(6, 0, [cls.env.ref("hotel_base.group_hotel_housekeeping").id])],
         })
 
         # Create Supervisor User
@@ -45,7 +45,7 @@ class TestHotelHousekeeping(TransactionCase):
             "name": "Supervisor Sally",
             "login": "supervisor_sally",
             "email": "sally@example.com",
-            "groups_id": [(6, 0, [cls.env.ref("hotel_base.group_hotel_fo_supervisor").id])],
+            "group_ids": [(6, 0, [cls.env.ref("hotel_base.group_hotel_fo_supervisor").id])],
         })
 
     def test_housekeeping_task_lifecycle(self):
