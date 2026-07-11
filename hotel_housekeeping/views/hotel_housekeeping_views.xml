@@ -37,16 +37,15 @@
         <field name="name">hotel.housekeeping.task.view.list</field>
         <field name="model">hotel.housekeeping.task</field>
         <field name="arch" type="xml">
-            <list string="Housekeeping Tasks" decoration-info="state == 'draft'" decoration-warning="state in ('assigned', 'cleaning')" decoration-success="state in ('clean', 'inspected')" decoration-muted="state == 'cancel'">
+            <list string="Housekeeping Tasks" decoration-info="state == 'new'" decoration-warning="state == 'cleaning'" decoration-success="state == 'cleaned'" decoration-muted="state == 'cancel'">
                 <field name="name"/>
                 <field name="room_id"/>
                 <field name="property_id"/>
                 <field name="cleaner_id"/>
                 <field name="priority" widget="priority"/>
-                <field name="date_assigned"/>
                 <field name="date_start"/>
                 <field name="date_completed"/>
-                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state in ('assigned', 'cleaning')" decoration-success="state in ('clean', 'inspected')"/>
+                <field name="state" widget="badge" decoration-info="state == 'new'" decoration-warning="state == 'cleaning'" decoration-success="state == 'cleaned'"/>
             </list>
         </field>
     </record>
@@ -58,12 +57,10 @@
         <field name="arch" type="xml">
             <form string="Housekeeping Task">
                 <header>
-                    <button name="action_assign" string="Assign" type="object" class="btn-primary" invisible="state != 'draft' or not cleaner_id"/>
-                    <button name="action_start" string="Start Cleaning" type="object" class="btn-primary" invisible="state not in ('draft', 'assigned')"/>
+                    <button name="action_start" string="Start Cleaning" type="object" class="btn-primary" invisible="state != 'new'"/>
                     <button name="action_complete" string="Mark Cleaned" type="object" class="btn-primary" invisible="state != 'cleaning'"/>
-                    <button name="action_inspect" string="Inspect &amp; Approve" type="object" class="btn-success" invisible="state != 'clean'" groups="hotel_base.group_hotel_fo_supervisor,hotel_base.group_hotel_manager"/>
-                    <button name="action_cancel" string="Cancel Task" type="object" class="btn-secondary" invisible="state == 'inspected'"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,assigned,cleaning,clean,inspected"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-secondary" invisible="state == 'cleaned'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,cleaning,cleaned"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -77,15 +74,13 @@
                             <field name="property_id"/>
                             <field name="room_type_id"/>
                         </group>
-                        <group name="cleaning_assignment" string="Assignment &amp; Schedule">
+                        <group name="cleaning_assignment" string="Cleaning">
                             <field name="cleaner_id"/>
-                            <field name="inspector_id" readonly="1"/>
                             <field name="priority" widget="priority"/>
                         </group>
                     </group>
                     <group>
                         <group name="timings" string="Timings">
-                            <field name="date_assigned"/>
                             <field name="date_start"/>
                             <field name="date_completed"/>
                         </group>
@@ -110,11 +105,9 @@
                 <field name="name"/>
                 <field name="room_id"/>
                 <field name="cleaner_id"/>
-                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
-                <filter string="Assigned" name="assigned" domain="[('state', '=', 'assigned')]"/>
+                <filter string="New" name="new" domain="[('state', '=', 'new')]"/>
                 <filter string="Cleaning" name="cleaning" domain="[('state', '=', 'cleaning')]"/>
-                <filter string="Cleaned" name="clean" domain="[('state', '=', 'clean')]"/>
-                <filter string="Inspected" name="inspected" domain="[('state', '=', 'inspected')]"/>
+                <filter string="Cleaned" name="cleaned" domain="[('state', '=', 'cleaned')]"/>
                 <separator/>
                 <filter string="My Tasks" name="my_tasks" domain="[('cleaner_id', '=', uid)]"/>
                 <group>
@@ -138,7 +131,7 @@
                 No housekeeping tasks found.
             </p>
             <p>
-                Rooms marked as 'dirty' will automatically trigger draft tasks, or you can manually create tasks to assign cleaners.
+                Rooms marked as 'dirty' will automatically create tasks, or you can create tasks manually.
             </p>
         </field>
     </record>

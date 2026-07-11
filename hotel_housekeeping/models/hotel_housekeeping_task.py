@@ -1,11 +1,12 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
+
 class HotelHousekeepingTask(models.Model):
     _name = "hotel.housekeeping.task"
     _description = "Housekeeping Cleaning Task"
     _inherit = ["mail.thread"]
-    _order = "priority desc, date_assigned desc, id desc"
+    _order = "priority desc, id desc"
 
     name = fields.Char(
         string="Task Reference",
@@ -23,27 +24,18 @@ class HotelHousekeepingTask(models.Model):
     )
     cleaner_id = fields.Many2one(
         "res.users",
-        string="Assigned Cleaner",
-        domain=lambda self: [("group_ids", "in", self.env.ref("hotel_base.group_hotel_housekeeping").id)],
-        tracking=True,
-    )
-    inspector_id = fields.Many2one(
-        "res.users",
-        string="Inspector",
-        domain=lambda self: [("group_ids", "in", (self.env.ref("hotel_base.group_hotel_fo_supervisor") + self.env.ref("hotel_base.group_hotel_manager")).ids)],
+        string="Cleaner",
         tracking=True,
     )
     state = fields.Selection(
         [
-            ("draft", "Draft"),
-            ("assigned", "Assigned"),
+            ("new", "New"),
             ("cleaning", "Cleaning"),
-            ("clean", "Cleaned"),
-            ("inspected", "Inspected"),
+            ("cleaned", "Cleaned"),
             ("cancel", "Cancelled"),
         ],
         string="Status",
-        default="draft",
+        default="new",
         required=True,
         tracking=True,
     )
@@ -59,9 +51,8 @@ class HotelHousekeepingTask(models.Model):
         required=True,
         tracking=True,
     )
-    date_assigned = fields.Datetime(string="Assigned Date", readonly=True)
-    date_start = fields.Datetime(string="Started Date", readonly=True)
-    date_completed = fields.Datetime(string="Completed Date", readonly=True)
+    date_start = fields.Datetime(string="Started", readonly=True)
+    date_completed = fields.Datetime(string="Completed", readonly=True)
     notes = fields.Text(string="Notes")
 
     property_id = fields.Many2one(
@@ -87,47 +78,30 @@ class HotelHousekeepingTask(models.Model):
                 )
         return super().create(vals_list)
 
-    def write(self, vals):
-        if "cleaner_id" in vals and vals["cleaner_id"]:
-            if not vals.get("state") or vals.get("state") == "draft":
-                vals["state"] = "assigned"
-            vals["date_assigned"] = fields.Datetime.now()
-        return super().write(vals)
-
     def unlink(self):
         for task in self:
-            if task.state not in ("draft", "cancel"):
-                raise UserError(_("You can only delete housekeeping tasks in draft or cancelled state."))
+            if task.state not in ("new", "cancel"):
+                raise UserError(_("You can only delete housekeeping tasks that are new or cancelled."))
         return super().unlink()
-
-    def action_assign(self):
-        self.ensure_one()
-        if not self.cleaner_id:
-            raise UserError(_("Please assign a cleaner first."))
-        self.write({"state": "assigned", "date_assigned": fields.Datetime.now()})
 
     def action_start(self):
         self.ensure_one()
-        if self.state not in ("draft", "assigned"):
-            raise UserError(_("You can only start cleaning from Draft or Assigned states."))
-        self.write({"state": "cleaning", "date_start": fields.Datetime.now()})
+        if self.state != "new":
+            raise UserError(_("You can only start a new task."))
+        vals = {"state": "cleaning", "date_start": fields.Datetime.now()}
+        if not self.cleaner_id:
+            vals["cleaner_id"] = self.env.uid
+        self.write(vals)
 
     def action_complete(self):
         self.ensure_one()
         if self.state != "cleaning":
-            raise UserError(_("You can only mark a task as completed when it is in Cleaning state."))
-        self.write({"state": "clean", "date_completed": fields.Datetime.now()})
+            raise UserError(_("You can only mark a task as cleaned when it is in cleaning state."))
+        self.write({"state": "cleaned", "date_completed": fields.Datetime.now()})
         self.room_id.write({"hk_status": "clean"})
-
-    def action_inspect(self):
-        self.ensure_one()
-        if self.state != "clean":
-            raise UserError(_("You can only inspect a room after it is cleaned."))
-        self.write({"state": "inspected", "inspector_id": self.env.user.id})
-        self.room_id.write({"hk_status": "inspected"})
 
     def action_cancel(self):
         self.ensure_one()
-        if self.state == "inspected":
-            raise UserError(_("You cannot cancel a task that has already been inspected."))
+        if self.state == "cleaned":
+            raise UserError(_("You cannot cancel a task that is already cleaned."))
         self.write({"state": "cancel"})

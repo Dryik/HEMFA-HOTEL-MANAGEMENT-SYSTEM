@@ -14,14 +14,13 @@ class HotelRoom(models.Model):
             existing = self.env["hotel.housekeeping.task"].search_count(
                 [
                     ("room_id", "=", room.id),
-                    ("state", "not in", ("inspected", "cancel")),
+                    ("state", "not in", ("cleaned", "cancel")),
                 ]
             )
             if not existing:
                 self.env["hotel.housekeeping.task"].create(
                     {
                         "room_id": room.id,
-                        "state": "draft",
                         "priority": "2" if room.occupancy_state == "checkout" else "1",
                     }
                 )

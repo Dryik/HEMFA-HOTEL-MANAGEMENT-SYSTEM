@@ -41,7 +41,7 @@ Deployment target: Odoo.sh (dev / staging / production branches).
 - `hotel.folio.line`: `payee_partner_id` determines who is billed.
 - `hotel.frontdesk.session`: States are `opened`, `closed`.
 - `hotel.night.audit`: States are `draft`, `done`.
-- `hotel.housekeeping.task`: States are `draft`, `assigned`, `cleaning`, `clean`, `inspected`, `cancel`.
+- `hotel.housekeeping.task`: States are `new`, `cleaning`, `cleaned`, `cancel`.
 
 ## Dependency Graph
 
