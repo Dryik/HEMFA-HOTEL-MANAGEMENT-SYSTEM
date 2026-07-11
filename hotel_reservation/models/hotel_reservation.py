@@ -344,6 +344,12 @@ class HotelReservation(models.Model):
             if not other_active and rec.room_id.occupancy_state == "reserved":
                 rec.room_id.occupancy_state = "vacant"
 
+    def unlink(self):
+        for rec in self:
+            if rec.state not in ("draft", "cancelled"):
+                raise UserError(_("You can only delete draft or cancelled reservations."))
+        return super().unlink()
+
     @api.model
     def get_dashboard_data(self):
         """KPI payload for the front-desk dashboard (hotel_board)."""

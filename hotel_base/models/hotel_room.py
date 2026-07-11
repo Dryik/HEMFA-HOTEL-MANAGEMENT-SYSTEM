@@ -1,4 +1,5 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 # Housekeeping status lives on the room so the board and the
 # discrepancy report read one field; hotel_housekeeping drives it.
@@ -87,3 +88,16 @@ class HotelRoom(models.Model):
         for room in self:
             code = room.property_id.code
             room.display_name = f"[{code}] {room.name}" if code else room.name
+
+    def unlink(self):
+        for room in self:
+            active_res = self.env["hotel.reservation"].search_count(
+                [
+                    ("room_id", "=", room.id),
+                    ("state", "in", ("confirmed", "checked_in")),
+                ]
+            )
+            if active_res:
+                raise UserError(_("You cannot delete room %s because it has active reservations.") % room.name)
+        return super().unlink()
+

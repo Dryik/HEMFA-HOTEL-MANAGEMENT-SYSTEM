@@ -1,4 +1,5 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class HotelProperty(models.Model):
@@ -55,3 +56,16 @@ class HotelProperty(models.Model):
             rooms = prop.room_ids.filtered("active")
             prop.room_count = len(rooms)
             prop.sellable_room_count = len(rooms.filtered("is_sellable"))
+
+    def unlink(self):
+        for prop in self:
+            active_res = self.env["hotel.reservation"].search_count(
+                [
+                    ("property_id", "=", prop.id),
+                    ("state", "not in", ("cancelled", "no_show")),
+                ]
+            )
+            if active_res:
+                raise UserError(_("You cannot delete property %s because it has active or completed reservations.") % prop.name)
+        return super().unlink()
+

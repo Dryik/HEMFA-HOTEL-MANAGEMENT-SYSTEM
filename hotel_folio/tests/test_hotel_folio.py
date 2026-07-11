@@ -141,6 +141,21 @@ class TestHotelFolio(TransactionCase):
         # All lines should now be marked as posted
         self.assertTrue(all(line.is_posted for line in folio.line_ids))
 
+        # Test deletion protection
+        with self.assertRaises(UserError):
+            folio.unlink()
+        with self.assertRaises(UserError):
+            folio.line_ids[0].unlink()
+
         # Trying to invoice again should raise error since there are no uninvoiced lines
         with self.assertRaises(UserError):
             folio.action_create_invoice()
+
+        # A non-posted folio and line should be deletable
+        res2 = self._reservation()
+        res2.action_confirm()
+        folio2 = res2.folio_ids[0]
+        folio2.add_charge(self.burger, qty=1.0)
+        self.assertFalse(any(line.is_posted for line in folio2.line_ids))
+        folio2.line_ids[0].unlink()
+        folio2.unlink()

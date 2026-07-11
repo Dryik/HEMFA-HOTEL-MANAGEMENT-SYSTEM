@@ -164,6 +164,12 @@ class HotelFrontdeskSession(models.Model):
         )
         return True
 
+    def unlink(self):
+        for session in self:
+            if session.state == "closed":
+                raise UserError(_("You cannot delete a closed front desk session."))
+        return super().unlink()
+
 
 class HotelFrontdeskSessionCash(models.Model):
     _name = "hotel.frontdesk.session.cash"

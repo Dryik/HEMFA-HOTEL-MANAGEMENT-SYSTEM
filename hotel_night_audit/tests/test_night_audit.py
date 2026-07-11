@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from odoo import fields
+from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -123,3 +124,15 @@ class TestHotelNightAudit(TransactionCase):
         # Verify folio has only 1 charge
         folio = res_checked_in.folio_ids[0]
         self.assertEqual(len(folio.line_ids), 1)
+
+    def test_night_audit_unlink_restricted(self):
+        audit = self.env["hotel.night.audit"].create({"property_id": self.property.id})
+        audit.action_run_audit()
+        self.assertEqual(audit.state, "done")
+        with self.assertRaises(UserError):
+            audit.unlink()
+
+        audit_draft = self.env["hotel.night.audit"].create({"property_id": self.property.id})
+        self.assertEqual(audit_draft.state, "draft")
+        audit_draft.unlink()
+

@@ -188,7 +188,6 @@ class HotelNightAudit(models.Model):
         next_date = audit_date + timedelta(days=1)
         prop.write({"current_business_date": next_date})
 
-        # Save audit values
         self.write(
             {
                 "state": "done",
@@ -199,6 +198,12 @@ class HotelNightAudit(models.Model):
             }
         )
         return True
+
+    def unlink(self):
+        for audit in self:
+            if audit.state == "done":
+                raise UserError(_("You cannot delete a completed night audit record."))
+        return super().unlink()
 
 
 class HotelNightAuditLine(models.Model):

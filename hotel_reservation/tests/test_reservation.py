@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from odoo import fields
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -100,3 +100,23 @@ class TestHotelReservation(TransactionCase):
         self.assertGreaterEqual(data["in_house"], 1)
         self.assertGreaterEqual(data["occupied"], 1)
         self.assertIn("occupancy_pct", data)
+
+    def test_reservation_unlink_restricted(self):
+        res = self._reservation(state="confirmed")
+        with self.assertRaises(UserError):
+            res.unlink()
+
+        res_draft = self._reservation(state="draft")
+        # Should succeed
+        res_draft.unlink()
+
+    def test_room_unlink_restricted(self):
+        self._reservation(state="confirmed")
+        with self.assertRaises(UserError):
+            self.room.unlink()
+
+    def test_property_unlink_restricted(self):
+        self._reservation(state="confirmed")
+        with self.assertRaises(UserError):
+            self.property.unlink()
+

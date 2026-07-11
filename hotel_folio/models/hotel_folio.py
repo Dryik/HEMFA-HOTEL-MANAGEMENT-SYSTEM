@@ -173,6 +173,12 @@ class HotelFolio(models.Model):
             "target": "current",
         }
 
+    def unlink(self):
+        for folio in self:
+            if any(line.is_posted for line in folio.line_ids):
+                raise UserError(_("You cannot delete a folio with posted or invoiced charges."))
+        return super().unlink()
+
 
 class HotelFolioLine(models.Model):
     _name = "hotel.folio.line"
@@ -225,6 +231,12 @@ class HotelFolioLine(models.Model):
             # but for folio lines let's calculate subtotal before tax to keep it simple and robust,
             # or sum up with taxes. Let's calculate standard untaxed subtotal.
             line.amount = line.price_unit * line.qty
+
+    def unlink(self):
+        for line in self:
+            if line.is_posted:
+                raise UserError(_("You cannot delete a posted or invoiced folio line."))
+        return super().unlink()
 
 
 class HotelFolioRoutingRule(models.Model):
