@@ -16,60 +16,79 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
+#. module: hotel_rate
 msgid "All Nationalities"
 msgstr "كل الجنسيات"
 
+#. module: hotel_rate
 msgid "Applies this rate depending on the guest"
 msgstr "يطبق هذا السعر حسب جنسية النزيل"
 
+#. module: hotel_rate
 msgid "Currency"
 msgstr "العملة"
 
+#. module: hotel_rate
 msgid "End Date"
 msgstr "تاريخ الانتهاء"
 
+#. module: hotel_rate
 msgid "Foreigner"
 msgstr "أجنبي"
 
+#. module: hotel_rate
 msgid "Guest Nationality Type"
 msgstr "نوع جنسية النزيل"
 
+#. module: hotel_rate
 msgid "Hotel Rate Occupancy Band"
 msgstr "شريحة إشغال الأسعار"
 
+#. module: hotel_rate
 msgid "Hotel Rate Rule"
 msgstr "قاعدة تسعير الفندق"
 
+#. module: hotel_rate
 msgid "Libyan National"
 msgstr "نزيل ليبي"
 
+#. module: hotel_rate
 msgid "Nightly Rate"
 msgstr "سعر الليلة"
 
+#. module: hotel_rate
 msgid "Occupancy Bands"
 msgstr "شرائح الإشغال"
 
+#. module: hotel_rate
 msgid "Pricing &amp; Conditions"
 msgstr "Pricing &amp; Conditions"
 
+#. module: hotel_rate
 msgid "Property"
 msgstr "الفندق / المنشأة"
 
+#. module: hotel_rate
 msgid "Rate Locked"
 msgstr "قفل السعر"
 
+#. module: hotel_rate
 msgid "Rate Multiplier"
 msgstr "مضاعف السعر"
 
+#. module: hotel_rate
 msgid "Rate Rules"
 msgstr "قواعد التسعير"
 
+#. module: hotel_rate
 msgid "Room Type"
 msgstr "نوع الغرفة"
 
+#. module: hotel_rate
 msgid "Rule Info"
 msgstr "معلومات قاعدة التسعير"
 
+#. module: hotel_rate
 msgid "Start Date"
 msgstr "تاريخ البدء"
 

@@ -16,201 +16,267 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
+#. module: hotel_base
 msgid "Address"
 msgstr "العنوان"
 
+#. module: hotel_base
 msgid "Admin Use"
 msgstr "استخدام إداري"
 
+#. module: hotel_base
 msgid "Agencies / Entities"
 msgstr "الوكالات / الجهات"
 
+#. module: hotel_base
 msgid "Amenities"
 msgstr "الخدمات المرافقة"
 
+#. module: hotel_base
 msgid "Amenities beyond the room type"
 msgstr "الخدمات الإضافية خارج نوع الغرفة Standard"
 
+#. module: hotel_base
 msgid "Base Nightly Price"
 msgstr "سعر الليلة الأساسي"
 
+#. module: hotel_base
 msgid "Business Day Start"
 msgstr "بداية يوم العمل"
 
+#. module: hotel_base
 msgid "Checked Out"
 msgstr "مغادر / مسجل خروج"
 
+#. module: hotel_base
 msgid "Clean"
 msgstr "نظيفة"
 
+#. module: hotel_base
 msgid "Configuration"
 msgstr "الإعدادات"
 
+#. module: hotel_base
 msgid "Counts toward availability and the occupancy denominator."
 msgstr "يحتسب ضمن الغرف الشاغرة ومقام الإشغال."
 
+#. module: hotel_base
 msgid "Date of Birth"
 msgstr "تاريخ الميلاد"
 
+#. module: hotel_base
 msgid "Default Agency / Entity"
 msgstr "الوكالة / الجهة الافتراضية"
 
+#. module: hotel_base
 msgid "Description"
 msgstr "الوصف"
 
+#. module: hotel_base
 msgid "Dirty"
 msgstr "غير نظيفة"
 
+#. module: hotel_base
 msgid "Drives the LYD vs foreign-currency pricing rule"
 msgstr "يتحكم في قاعدة تسعير العملة المحلية مقابل العملة الأجنبية"
 
+#. module: hotel_base
 msgid "Driving License"
 msgstr "رخصة قيادة"
 
+#. module: hotel_base
 msgid "Entity this guest is usually registered under. The"
 msgstr "الجهة التي يسجل تحتها النزيل غالباً."
 
+#. module: hotel_base
 msgid "Extra Amenities"
 msgstr "وسائل راحة إضافية"
 
+#. module: hotel_base
 msgid "Family Book"
 msgstr "كتيب العائلة"
 
+#. module: hotel_base
 msgid "Female"
 msgstr "أنثى"
 
+#. module: hotel_base
 msgid "Floor"
 msgstr "الطابق"
 
+#. module: hotel_base
 msgid "Floors"
 msgstr "الطوابق"
 
+#. module: hotel_base
 msgid "Gender"
 msgstr "الجنس"
 
+#. module: hotel_base
 msgid "Guests"
 msgstr "النزلاء"
 
+#. module: hotel_base
 msgid "Hotel"
 msgstr "الفندق"
 
+#. module: hotel_base
 msgid "Hotel Floor"
 msgstr "الطابق الفندقي"
 
+#. module: hotel_base
 msgid "Hotel Guest"
 msgstr "نزيل الفندق"
 
+#. module: hotel_base
 msgid "Hotel Property"
 msgstr "المنشأة الفندقية"
 
+#. module: hotel_base
 msgid "Hotel Room"
 msgstr "غرفة الفندق"
 
+#. module: hotel_base
 msgid "Hour at which the hotel business day rolls over."
 msgstr "الساعة التي ينتهي بها يوم العمل الفندقي ويبدأ يوم جديد."
 
+#. module: hotel_base
 msgid "Hours after the business day start during which checkout"
 msgstr "الساعات الممنوحة بعد بداية اليوم لتسجيل المغادرة بدون تكلفة إضافية"
 
+#. module: hotel_base
 msgid "Housekeeping Status"
 msgstr "حالة نظافة الغرفة"
 
+#. module: hotel_base
 msgid "ID Expiry"
 msgstr "تاريخ انتهاء الهوية"
 
+#. module: hotel_base
 msgid "ID Number"
 msgstr "رقم الهوية"
 
+#. module: hotel_base
 msgid "ID Type"
 msgstr "نوع الهوية"
 
+#. module: hotel_base
 msgid "Identification Document"
 msgstr "وثيقة الهوية"
 
+#. module: hotel_base
 msgid "Identity"
 msgstr "الهوية"
 
+#. module: hotel_base
 msgid "Inspected"
 msgstr "مفتشة ومفحوصة"
 
+#. module: hotel_base
 msgid "Is Agency / Entity"
 msgstr "هل هي وكالة / جهة؟"
 
+#. module: hotel_base
 msgid "Leave empty for a room type shared across all properties."
 msgstr "اتركه فارغاً لنوع غرفة مشترك في كل الفنادق."
 
+#. module: hotel_base
 msgid "Male"
 msgstr "ذكر"
 
+#. module: hotel_base
 msgid "National ID"
 msgstr "البطاقة الشخصية"
 
+#. module: hotel_base
 msgid "National Number"
 msgstr "الرقم الوطني"
 
+#. module: hotel_base
 msgid "Nationality"
 msgstr "الجنسية"
 
+#. module: hotel_base
 msgid "Occupancy"
 msgstr "الإشغال"
 
+#. module: hotel_base
 msgid "Occupied"
 msgstr "مشغولة"
 
+#. module: hotel_base
 msgid "Other"
 msgstr "أخرى"
 
+#. module: hotel_base
 msgid "Out of Order"
 msgstr "خارج الخدمة"
 
+#. module: hotel_base
 msgid "Passport"
 msgstr "جواز سفر"
 
+#. module: hotel_base
 msgid "Place of Birth"
 msgstr "مكان الميلاد"
 
+#. module: hotel_base
 msgid "Profession"
 msgstr "المهنة"
 
+#. module: hotel_base
 msgid "Properties"
 msgstr "الفنادق / المنشآت"
 
+#. module: hotel_base
 msgid "Rate Product"
 msgstr "منتج تسعير الغرفة"
 
+#. module: hotel_base
 msgid "Reserved"
 msgstr "محجوزة"
 
+#. module: hotel_base
 msgid "Room Amenity"
 msgstr "وسيلة راحة الغرفة"
 
+#. module: hotel_base
 msgid "Room Number"
 msgstr "رقم الغرفة"
 
+#. module: hotel_base
 msgid "Room Type"
 msgstr "نوع الغرفة"
 
+#. module: hotel_base
 msgid "Room Types"
 msgstr "أنواع الغرف"
 
+#. module: hotel_base
 msgid "Room reserved for hotel administration; excluded from"
 msgstr "غرفة محجوزة للاستخدام الإداري، مستبعدة من البيع والإشغال"
 
+#. module: hotel_base
 msgid "Rooms"
 msgstr "الغرف"
 
+#. module: hotel_base
 msgid "Set by an open room-impacting maintenance request. Removes"
 msgstr "يتم تفعيله تلقائياً بطلب صيانة للغرفة لسحبها من الغرف القابلة للبيع"
 
+#. module: hotel_base
 msgid "Short code used in references and reports."
 msgstr "كود اختصار مستخدم في المراجع والتقارير."
 
+#. module: hotel_base
 msgid "Vacant"
 msgstr "شاغرة"
 
+#. module: hotel_base
 msgid "You cannot delete property %s because it has active or completed reservations."
 msgstr "لا يمكنك حذف المنشأة %s نظراً لوجود حجوزات نشطة أو منتهية مرتبطة بها."
 
+#. module: hotel_base
 msgid "You cannot delete room %s because it has active reservations."
 msgstr "لا يمكنك حذف الغرفة %s نظراً لوجود حجوزات نشطة عليها."
 

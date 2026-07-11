@@ -16,144 +16,191 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
+#. module: hotel_folio
 msgid "Agency / Entity"
 msgstr "الوكالة / الجهة"
 
+#. module: hotel_folio
 msgid "Amount"
 msgstr "المبلغ"
 
+#. module: hotel_folio
 msgid "Amount Due"
 msgstr "المبلغ المستحق"
 
+#. module: hotel_folio
 msgid "Amount Paid"
 msgstr "المبلغ المدفوع"
 
+#. module: hotel_folio
 msgid "Billed To"
 msgstr "مفوتر إلى"
 
+#. module: hotel_folio
 msgid "Create Agency Invoice"
 msgstr "إنشاء فاتورة الوكالة"
 
+#. module: hotel_folio
 msgid "Create Guest Invoice"
 msgstr "إنشاء فاتورة النزيل"
 
+#. module: hotel_folio
 msgid "Date"
 msgstr "التاريخ"
 
+#. module: hotel_folio
 msgid "Description"
 msgstr "الوصف"
 
+#. module: hotel_folio
 msgid "Entity responsible for this specific charge line."
 msgstr "الجهة المسؤولة عن خط الفاتورة هذا."
 
+#. module: hotel_folio
 msgid "Financials"
 msgstr "المالية"
 
+#. module: hotel_folio
 msgid "Folio"
 msgstr "حساب النزيل / الفوليو"
 
+#. module: hotel_folio
 msgid "Folio Count"
 msgstr "عدد حسابات النزلاء"
 
+#. module: hotel_folio
 msgid "Folio Lines"
 msgstr "خطوط حساب النزيل"
 
+#. module: hotel_folio
 msgid "Folio Number"
 msgstr "رقم حساب النزيل"
 
+#. module: hotel_folio
 msgid "Folio Routing Rules"
 msgstr "قواعد توجيه الحسابات"
 
+#. module: hotel_folio
 msgid "Folios"
 msgstr "حسابات النزلاء / الفوليو"
 
+#. module: hotel_folio
 msgid "Guest"
 msgstr "النزيل / الضيف"
 
+#. module: hotel_folio
 msgid "Hotel Folio Ledger"
 msgstr "دفتر حسابات الفندق (الفوليو)"
 
+#. module: hotel_folio
 msgid "Hotel Folio Line"
 msgstr "خط حساب الفندق (الفوليو)"
 
+#. module: hotel_folio
 msgid "Hotel Folio Routing Rule"
 msgstr "قاعدة توجيه حسابات الفندق"
 
+#. module: hotel_folio
 msgid "Invoice"
 msgstr "فاتورة"
 
+#. module: hotel_folio
 msgid "Invoice Line"
 msgstr "خط الفاتورة"
 
+#. module: hotel_folio
 msgid "Invoices"
 msgstr "الفواتير"
 
+#. module: hotel_folio
 msgid "Ledger / Charges"
 msgstr "الدفتر / الرسوم والخدمات"
 
+#. module: hotel_folio
 msgid "New"
 msgstr "جديد"
 
+#. module: hotel_folio
 msgid "No uninvoiced lines found for this payee."
 msgstr "لا توجد خطوط غير مفوترة لهذا العميل لدفعها."
 
+#. module: hotel_folio
 msgid "Posted"
 msgstr "مرحل / مسجل"
 
+#. module: hotel_folio
 msgid "Product"
 msgstr "المنتج"
 
+#. module: hotel_folio
 msgid "Product Category"
 msgstr "فئة المنتج"
 
+#. module: hotel_folio
 msgid "Product category that triggers this routing rule."
 msgstr "فئة المنتج التي تفعل قاعدة التوجيه الفوليو هذه."
 
+#. module: hotel_folio
 msgid "Property"
 msgstr "الفندق / المنشأة"
 
+#. module: hotel_folio
 msgid "Quantity"
 msgstr "الكمية"
 
+#. module: hotel_folio
 msgid "Reservation"
 msgstr "الحجز"
 
+#. module: hotel_folio
 msgid "Route To"
 msgstr "توجيه الحساب إلى"
 
+#. module: hotel_folio
 msgid "Route to Agency"
 msgstr "توجيه إلى الوكالة / الجهة"
 
+#. module: hotel_folio
 msgid "Route to Guest"
 msgstr "توجيه إلى النزيل"
 
+#. module: hotel_folio
 msgid "Routing Details"
 msgstr "تفاصيل التوجيه للحسابات"
 
+#. module: hotel_folio
 msgid "Routing Rules"
 msgstr "قواعد توجيه حسابات الفوليو"
 
+#. module: hotel_folio
 msgid "Rule Info"
 msgstr "معلومات قاعدة التسعير"
 
+#. module: hotel_folio
 msgid "Specific Agency / Entity"
 msgstr "وكالة / جهة محددة"
 
+#. module: hotel_folio
 msgid "Stay Reference"
 msgstr "مرجع الإقامة"
 
+#. module: hotel_folio
 msgid "Taxes"
 msgstr "الضرائب"
 
+#. module: hotel_folio
 msgid "Total Charges"
 msgstr "إجمالي الرسوم والخدمات"
 
+#. module: hotel_folio
 msgid "Unit Price"
 msgstr "سعر الوحدة"
 
+#. module: hotel_folio
 msgid "You cannot delete a folio with posted or invoiced charges."
 msgstr "لا يمكنك حذف فوليو يحتوي على رسوم مرحلة أو مفوترة."
 
+#. module: hotel_folio
 msgid "You cannot delete a posted or invoiced folio line."
 msgstr "لا يمكنك حذف بند فوليو تم ترحيله أو فوترته."
 

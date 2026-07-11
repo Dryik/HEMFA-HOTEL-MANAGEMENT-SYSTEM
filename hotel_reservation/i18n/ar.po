@@ -16,135 +16,179 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
+#. module: hotel_reservation
 msgid "Agency / Entity"
 msgstr "الوكالة / الجهة"
 
+#. module: hotel_reservation
 msgid "Arrival"
 msgstr "الوصول"
 
+#. module: hotel_reservation
 msgid "Arrival Date"
 msgstr "تاريخ الوصول"
 
+#. module: hotel_reservation
 msgid "Arrivals Today"
 msgstr "الواصلون اليوم"
 
+#. module: hotel_reservation
 msgid "Assign a room before confirming."
 msgstr "يرجى تخصيص غرفة قبل تأكيد الحجز."
 
+#. module: hotel_reservation
 msgid "Cancel"
 msgstr "إلغاء"
 
+#. module: hotel_reservation
 msgid "Cancelled"
 msgstr "ملغي"
 
+#. module: hotel_reservation
 msgid "Check In"
 msgstr "تسجيل دخول"
 
+#. module: hotel_reservation
 msgid "Checked In"
 msgstr "داخل الفندق / مسجل دخول"
 
+#. module: hotel_reservation
 msgid "Checked Out"
 msgstr "مغادر / مسجل خروج"
 
+#. module: hotel_reservation
 msgid "Company / Entity"
 msgstr "الشركة / الجهة"
 
+#. module: hotel_reservation
 msgid "Confirm"
 msgstr "تأكيد"
 
+#. module: hotel_reservation
 msgid "Confirm Check Out"
 msgstr "تأكيد تسجيل الخروج"
 
+#. module: hotel_reservation
 msgid "Confirmed"
 msgstr "مؤكد"
 
+#. module: hotel_reservation
 msgid "Departure"
 msgstr "المغادرة"
 
+#. module: hotel_reservation
 msgid "Departures Today"
 msgstr "المغادرون اليوم"
 
+#. module: hotel_reservation
 msgid "Draft"
 msgstr "مسودة"
 
+#. module: hotel_reservation
 msgid "Family"
 msgstr "عائلي"
 
+#. module: hotel_reservation
 msgid "Front Desk"
 msgstr "مكتب الاستقبال"
 
+#. module: hotel_reservation
 msgid "Group"
 msgstr "مجموعة"
 
+#. module: hotel_reservation
 msgid "Guest"
 msgstr "النزيل / الضيف"
 
+#. module: hotel_reservation
 msgid "Hotel Reservation"
 msgstr "حجز الفندق"
 
+#. module: hotel_reservation
 msgid "In House"
 msgstr "نزلاء الفندق حالياً"
 
+#. module: hotel_reservation
 msgid "Individual"
 msgstr "فردي"
 
+#. module: hotel_reservation
 msgid "Internal notes..."
 msgstr "ملاحظات داخلية..."
 
+#. module: hotel_reservation
 msgid "New"
 msgstr "جديد"
 
+#. module: hotel_reservation
 msgid "Nightly Rate"
 msgstr "سعر الليلة"
 
+#. module: hotel_reservation
 msgid "No Show"
 msgstr "عدم حضور"
 
+#. module: hotel_reservation
 msgid "Only cancelled or no-show reservations can be reset."
 msgstr "يمكن فقط إعادة تهيئة الحجوزات الملغاة أو التي سجلت كعدم حضور."
 
+#. module: hotel_reservation
 msgid "Only confirmed reservations can be no-show."
 msgstr "يمكن فقط تسجيل عدم حضور للحجوزات المؤكدة."
 
+#. module: hotel_reservation
 msgid "Only confirmed reservations can check in."
 msgstr "يمكن فقط تسجيل الدخول للحجوزات المؤكدة."
 
+#. module: hotel_reservation
 msgid "Only draft or confirmed reservations can be cancelled."
 msgstr "يمكن فقط إلغاء الحجوزات المسودة أو المؤكدة."
 
+#. module: hotel_reservation
 msgid "Only draft reservations can be confirmed."
 msgstr "يمكن فقط تأكيد الحجوزات المسودة."
 
+#. module: hotel_reservation
 msgid "Only in-house reservations can check out."
 msgstr "يمكن فقط تسجيل المغادرة للنزلاء المقيمين فعلياً."
 
+#. module: hotel_reservation
 msgid "Pricing"
 msgstr "التسعير"
 
+#. module: hotel_reservation
 msgid "Reservation Number"
 msgstr "رقم الحجز"
 
+#. module: hotel_reservation
 msgid "Reservation Planning"
 msgstr "مخطط الحجوزات"
 
+#. module: hotel_reservation
 msgid "Reservations"
 msgstr "الحجوزات"
 
+#. module: hotel_reservation
 msgid "Reset to Draft"
 msgstr "إعادة إلى مسودة"
 
+#. module: hotel_reservation
 msgid "Room"
 msgstr "الغرفة"
 
+#. module: hotel_reservation
 msgid "Status"
 msgstr "الحالة"
 
+#. module: hotel_reservation
 msgid "Stay"
 msgstr "الحجز والإقامة"
 
+#. module: hotel_reservation
 msgid "Trip"
 msgstr "الرحلة / الزيارة"
 
+#. module: hotel_reservation
 msgid "You can only delete draft or cancelled reservations."
 msgstr "يمكنك فقط حذف الحجوزات في حالة مسودة أو ملغاة."
 

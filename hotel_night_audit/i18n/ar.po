@@ -16,93 +16,123 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
+#. module: hotel_night_audit
 msgid "Already Charged"
 msgstr "تم المحاسبة بالفعل"
 
+#. module: hotel_night_audit
 msgid "Amount Posted"
 msgstr "المبلغ المسجل"
 
+#. module: hotel_night_audit
 msgid "Audit"
 msgstr "التدقيق"
 
+#. module: hotel_night_audit
 msgid "Audit Action"
 msgstr "إجراء التدقيق"
 
+#. module: hotel_night_audit
 msgid "Audit Date"
 msgstr "تاريخ التدقيق"
 
+#. module: hotel_night_audit
 msgid "Audit Details"
 msgstr "تفاصيل التدقيق"
 
+#. module: hotel_night_audit
 msgid "Audit Parameters"
 msgstr "معايير التدقيق"
 
+#. module: hotel_night_audit
 msgid "Audit Reference"
 msgstr "مرجع التدقيق"
 
+#. module: hotel_night_audit
 msgid "Completed"
 msgstr "مكتمل"
 
+#. module: hotel_night_audit
 msgid "Currency"
 msgstr "العملة"
 
+#. module: hotel_night_audit
 msgid "Current Business Date"
 msgstr "تاريخ العمل الحالي"
 
+#. module: hotel_night_audit
 msgid "Draft"
 msgstr "مسودة"
 
+#. module: hotel_night_audit
 msgid "Folio"
 msgstr "حساب النزيل / الفوليو"
 
+#. module: hotel_night_audit
 msgid "Hotel Night Audit"
 msgstr "التدقيق الليلي للفندق"
 
+#. module: hotel_night_audit
 msgid "Hotel Night Audit Detail Line"
 msgstr "تفاصيل التدقيق الليلي للفندق"
 
+#. module: hotel_night_audit
 msgid "New"
 msgstr "جديد"
 
+#. module: hotel_night_audit
 msgid "Night Audit"
 msgstr "التدقيق الليلي"
 
+#. module: hotel_night_audit
 msgid "Night Audits"
 msgstr "التدقيق الليلي"
 
+#. module: hotel_night_audit
 msgid "No Show Rollover"
 msgstr "ترحيل عدم الحضور"
 
+#. module: hotel_night_audit
 msgid "Operational business date being closed."
 msgstr "تاريخ العمل الفندقي الجاري إغلاقه بالتدقيق الليلي."
 
+#. module: hotel_night_audit
 msgid "Property"
 msgstr "الفندق / المنشأة"
 
+#. module: hotel_night_audit
 msgid "Reservation"
 msgstr "الحجز"
 
+#. module: hotel_night_audit
 msgid "Results"
 msgstr "النتائج"
 
+#. module: hotel_night_audit
 msgid "Revenue Posted"
 msgstr "الإيرادات المسجلة والملغاة"
 
+#. module: hotel_night_audit
 msgid "Room Charge - %s"
 msgstr "رسوم الغرفة - %s"
 
+#. module: hotel_night_audit
 msgid "Room Night Charged"
 msgstr "ليلة غرفة محتسبة"
 
+#. module: hotel_night_audit
 msgid "Run By"
 msgstr "تشغيل بواسطة"
 
+#. module: hotel_night_audit
 msgid "Run Night Audit"
 msgstr "بدء التدقيق الليلي"
 
+#. module: hotel_night_audit
 msgid "This night audit is already completed."
 msgstr "تم إكمال هذا التدقيق الليلي بالفعل."
 
+#. module: hotel_night_audit
 msgid "You cannot delete a completed night audit record."
 msgstr "لا يمكنك حذف سجل تدقيق ليلي مكتمل."
 

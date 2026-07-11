@@ -16,108 +16,143 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
+#. module: hotel_frontdesk_session
 msgid "Amount"
 msgstr "المبلغ"
 
+#. module: hotel_frontdesk_session
 msgid "Are you sure you want to close this cashier session? This will lock transactions and calculate differences."
 msgstr "هل أنت متأكد من رغبتك في إغلاق جلسة الصندوق هذه؟ سيتم قفل المعاملات واحتساب الفروقات."
 
+#. module: hotel_frontdesk_session
 msgid "Cash Verification Summary"
 msgstr "ملخص مطابقة النقدية"
 
+#. module: hotel_frontdesk_session
 msgid "Cashier"
 msgstr "أمين الصندوق / موظف الاستقبال"
 
+#. module: hotel_frontdesk_session
 msgid "Cashier Sessions"
 msgstr "جلسات الاستقبال والصندوق"
 
+#. module: hotel_frontdesk_session
 msgid "Close Session"
 msgstr "إغلاق الجلسة"
 
+#. module: hotel_frontdesk_session
 msgid "Closed"
 msgstr "مغلقة"
 
+#. module: hotel_frontdesk_session
 msgid "Closed Time"
 msgstr "وقت الإغلاق"
 
+#. module: hotel_frontdesk_session
 msgid "Closing Cash Control"
 msgstr "مطابقة النقدية عند الإغلاق"
 
+#. module: hotel_frontdesk_session
 msgid "Closing Cash Count"
 msgstr "جرد النقدية عند الإغلاق"
 
+#. module: hotel_frontdesk_session
 msgid "Closing Count"
 msgstr "عد الإغلاق"
 
+#. module: hotel_frontdesk_session
 msgid "Company Currency"
 msgstr "عملة الشركة"
 
+#. module: hotel_frontdesk_session
 msgid "Currency"
 msgstr "العملة"
 
+#. module: hotel_frontdesk_session
 msgid "Difference"
 msgstr "الفارق"
 
+#. module: hotel_frontdesk_session
 msgid "Front Desk Cashier Session"
 msgstr "جلسة صندوق الاستقبال"
 
+#. module: hotel_frontdesk_session
 msgid "Front Desk Sessions"
 msgstr "جلسات صندوق الاستقبال"
 
+#. module: hotel_frontdesk_session
 msgid "New"
 msgstr "جديد"
 
+#. module: hotel_frontdesk_session
 msgid "Open"
 msgstr "مفتوحة"
 
+#. module: hotel_frontdesk_session
 msgid "Opened Time"
 msgstr "وقت الفتح"
 
+#. module: hotel_frontdesk_session
 msgid "Opening Cash Control"
 msgstr "مطابقة النقدية عند الفتح"
 
+#. module: hotel_frontdesk_session
 msgid "Opening Cash Count"
 msgstr "جرد النقدية عند الفتح"
 
+#. module: hotel_frontdesk_session
 msgid "Opening Count"
 msgstr "عد الفتح"
 
+#. module: hotel_frontdesk_session
 msgid "Please define the closing cash count before closing the session."
 msgstr "الرجاء إدخال قيمة جرد النقدية قبل إغلاق الجلسة."
 
+#. module: hotel_frontdesk_session
 msgid "Property"
 msgstr "الفندق / المنشأة"
 
+#. module: hotel_frontdesk_session
 msgid "Session"
 msgstr "الجلسة"
 
+#. module: hotel_frontdesk_session
 msgid "Session Cash Entry"
 msgstr "إدخال نقدية الجلسة"
 
+#. module: hotel_frontdesk_session
 msgid "Session Info"
 msgstr "معلومات الجلسة"
 
+#. module: hotel_frontdesk_session
 msgid "Session Reference"
 msgstr "مرجع الجلسة"
 
+#. module: hotel_frontdesk_session
 msgid "This session is already closed."
 msgstr "هذه الجلسة مغلقة بالفعل."
 
+#. module: hotel_frontdesk_session
 msgid "Timeframes"
 msgstr "المدد الزمنية"
 
+#. module: hotel_frontdesk_session
 msgid "Total Closing Balance"
 msgstr "إجمالي رصيد الإغلاق"
 
+#. module: hotel_frontdesk_session
 msgid "Total Opening Balance"
 msgstr "إجمالي رصيد الفتح"
 
+#. module: hotel_frontdesk_session
 msgid "Total Transactions"
 msgstr "إجمالي المعاملات والدفعات"
 
+#. module: hotel_frontdesk_session
 msgid "Type"
 msgstr "النوع"
 
+#. module: hotel_frontdesk_session
 msgid "You cannot delete a closed front desk session."
 msgstr "لا يمكنك حذف جلسة استقبال مغلقة."
 
