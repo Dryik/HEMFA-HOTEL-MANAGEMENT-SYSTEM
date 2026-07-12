@@ -106,6 +106,15 @@ class TestHotelFrontdeskSession(TransactionCase):
             }
         )
         self.env.flush_all()
+        # create_date is the transaction start timestamp (Postgres
+        # now()), which predates the wall-clock date_opened by however
+        # long the test phase has been running. Pin it inside the
+        # session window so the compute is deterministic.
+        self.env.cr.execute(
+            "UPDATE account_payment SET create_date = %s WHERE id = %s",
+            (session.date_opened, payment.id),
+        )
+        payment.invalidate_recordset()
         session._compute_balances()
         session.invalidate_recordset(["total_transactions"])
         self.assertEqual(session.total_transactions, 100.0)

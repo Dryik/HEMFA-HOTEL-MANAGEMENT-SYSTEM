@@ -66,6 +66,17 @@ class TestRestrictedServices(TransactionCase):
                 ],
             }
         )
+        # Odoo 19 has_group checks real membership even for the test
+        # superuser, so overrides need an actual supervisor user.
+        cls.supervisor_user = cls.env["res.users"].create(
+            {
+                "name": "FO Supervisor",
+                "login": "supervisor_restricted_test",
+                "group_ids": [
+                    (4, cls.env.ref("hotel_base.group_hotel_fo_supervisor").id)
+                ],
+            }
+        )
 
         cls.checkin = fields.Datetime.now().replace(
             hour=12, minute=0, second=0, microsecond=0
@@ -110,8 +121,7 @@ class TestRestrictedServices(TransactionCase):
                 "restriction_type": "blocked",
             }
         )
-        # Test env user is the superuser, which passes has_group.
-        line = folio.with_context(
+        line = folio.with_user(self.supervisor_user).with_context(
             service_override_reason="Manager approved minibar"
         ).add_charge(self.soda)
         self.assertEqual(line.amount, 5.0)

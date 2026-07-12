@@ -33,6 +33,17 @@ class TestHotelMaintenance(TransactionCase):
                 ],
             }
         )
+        # Odoo 19 has_group checks real membership even for the test
+        # superuser, so verification needs an actual manager user.
+        cls.manager = cls.env["res.users"].create(
+            {
+                "name": "Hotel Manager",
+                "login": "manager_maintenance_test",
+                "group_ids": [
+                    (4, cls.env.ref("hotel_base.group_hotel_manager").id)
+                ],
+            }
+        )
 
     def _request(self, **overrides):
         vals = {
@@ -57,7 +68,7 @@ class TestHotelMaintenance(TransactionCase):
         self.assertTrue(req.technician_id)
         req.action_done()
         self.assertEqual(req.state, "done")
-        req.action_verify()
+        req.with_user(self.manager).action_verify()
         self.assertEqual(req.state, "verified")
 
     def test_blocking_request_takes_room_out_of_order(self):
@@ -74,7 +85,7 @@ class TestHotelMaintenance(TransactionCase):
         req.action_done()
         self.assertTrue(self.room.out_of_order)
 
-        req.action_verify()
+        req.with_user(self.manager).action_verify()
         self.assertFalse(self.room.out_of_order)
         self.assertTrue(self.room.is_sellable)
 
@@ -94,7 +105,7 @@ class TestHotelMaintenance(TransactionCase):
 
         first.action_start()
         first.action_done()
-        first.action_verify()
+        first.with_user(self.manager).action_verify()
         # Second request is still open, room must remain blocked.
         self.assertTrue(self.room.out_of_order)
 
@@ -143,7 +154,8 @@ class TestHotelMaintenance(TransactionCase):
         with self.assertRaises(UserError):
             req.action_start()  # must be confirmed first
         with self.assertRaises(UserError):
-            req.action_verify()  # must be done first
+            # As manager, so the state guard (not the group check) fires.
+            req.with_user(self.manager).action_verify()  # must be done first
         req.action_confirm()
         with self.assertRaises(UserError):
             req.action_confirm()  # already confirmed

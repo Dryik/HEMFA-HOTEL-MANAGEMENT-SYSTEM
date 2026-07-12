@@ -155,10 +155,13 @@ Runtime testing happens on the Odoo.sh dev branch (no local Odoo install).
 8. **`groups_id` on `res.users`**: Odoo 19 field is `group_ids` (not `groups_id`). Create users with `group_ids` or assign groups via `res.groups.write({'user_ids': [(4, user_id)]})`.
 9. **`total_transactions` stored compute returns 0**: When calling stored compute methods directly, flush + invalidate_recordset before reading to ensure cache coherence.
 10. **`<group expand="0" string="Group By">` in search views**: Odoo 19 RelaxNG rejects `expand` (cascades into misleading "extra content: field" errors). Use a plain `<group>` of `<filter>` elements — see hotel_housekeeping search view for the valid pattern.
+11. **`has_group()` is False for the test superuser**: Odoo 19 checks real group membership with no superuser shortcut, and the test runner's `__system__` user is in no hotel group. Any test exercising a `has_group`-gated action must create a user with the right `group_ids` and call `with_user()`.
+12. **`report_action()` returns the layout configurator**: for an admin on a company with no `external_report_layout_id`, `ir.actions.report.report_action(docs)` returns the document-layout act_window instead of the report. Call `report_action(docs, config=False)`.
+13. **`create_date` is the transaction start timestamp**: Postgres `now()` is frozen at transaction start, so in tests `create_date` predates any wall-clock `fields.Datetime.now()` value captured during the test. Never compare them; pin `create_date` via SQL UPDATE when a compute filters on it.
 
 ## Odoo 19 Source Reference
 
-Full Odoo 19 Enterprise source is at `odoo-19.0+e.20260711/` (gitignored, local dev reference only). Key locations:
+Full Odoo 19 Enterprise source is at `../odoo-19.0+e.20260712/` (sibling of the repo, local dev reference only — ALWAYS check it before guessing an Odoo API or view external ID). Key locations:
 - `odoo/orm/models.py` — ORM model base class
 - `odoo/orm/fields.py` — All field types
 - `odoo/orm/decorators.py` — `@api` decorators

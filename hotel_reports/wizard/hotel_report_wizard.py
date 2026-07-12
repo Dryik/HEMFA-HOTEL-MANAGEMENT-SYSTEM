@@ -66,6 +66,9 @@ class HotelReportWizard(models.TransientModel):
 
     def action_print(self):
         self.ensure_one()
+        # config=False: without it, an admin on a company that has not
+        # configured its document layout gets the layout-configurator
+        # act_window instead of the report.
         return self.env.ref(
             "hotel_reports.action_report_daily_movement"
-        ).report_action(self)
+        ).report_action(self, config=False)
