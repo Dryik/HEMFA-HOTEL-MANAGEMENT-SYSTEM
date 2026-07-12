@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hotel_report_wizard_frontdesk,hotel.report.wizard frontdesk,model_hotel_report_wizard,hotel_base.group_hotel_frontdesk,1,1,1,1

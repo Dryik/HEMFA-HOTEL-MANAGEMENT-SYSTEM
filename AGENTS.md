@@ -28,10 +28,10 @@ Deployment target: Odoo.sh (dev / staging / production branches).
 | `hotel_night_audit` | 2a | implemented | Daily rollover: room-night posting, no-shows, occupancy snapshot |
 | `hotel_frontdesk_session` | 2a | implemented | Cashier shift sessions, multi-currency cash counts |
 | `hotel_housekeeping` | 3 | implemented | Cleaning tasks, dirty/clean/inspected flow, discrepancy wizard |
-| `hotel_maintenance` | 3 | skeleton | Custom maintenance workflow (not yet implemented) |
-| `hotel_restricted_services` | 2b | skeleton | Per-guest service blocklist (not yet implemented) |
-| `hotel_pos_room_charge` | 4 | skeleton | POS charge-to-room (not yet implemented) |
-| `hotel_reports` | 5 | skeleton | Arabic QWeb PDF + XLSX reports (not yet implemented) |
+| `hotel_maintenance` | 3 | implemented | Maintenance workflow: report → confirm → work → verify, room out-of-order blocking |
+| `hotel_restricted_services` | 2b | implemented | Per-stay service blocks/limits, entity daily ceilings, supervisor override via `service_override_reason` context |
+| `hotel_pos_room_charge` | 4 | implemented | `is_room_charge` payment method posts POS orders to the in-house folio (server-side hook) |
+| `hotel_reports` | 5 | implemented (v1) | Daily movement wizard: arrivals/departures/in-house/security QWeb PDF; XLSX + debtor/discrepancy reports pending |
 
 ## Key Field Name Conventions
 
@@ -42,6 +42,9 @@ Deployment target: Odoo.sh (dev / staging / production branches).
 - `hotel.frontdesk.session`: States are `opened`, `closed`.
 - `hotel.night.audit`: States are `draft`, `done`.
 - `hotel.housekeeping.task`: States are `new`, `cleaning`, `cleaned`, `cancel`.
+- `hotel.maintenance.request`: States are `new`, `confirmed`, `in_progress`, `done`, `verified`, `cancel`; blocking starts at `confirmed`, verify needs `group_hotel_manager`.
+- `hotel.service.restriction`: `restriction_type` is `blocked` or `limited` (with `daily_limit` / `stay_limit`); enforcement lives in `hotel.folio.add_charge`.
+- `hotel.entity.service.ceiling`: per-agency `daily_limit`, empty `category_id` = all services.
 
 ## Dependency Graph
 
@@ -54,10 +57,10 @@ hotel_base (foundation)
   │     └── hotel_folio (auto-created on confirm)
   │           ├── hotel_frontdesk_session (cashier shifts)
   │           ├── hotel_night_audit (nightly rollover)
-  │           ├── hotel_restricted_services (skeleton)
-  │           │     └── hotel_pos_room_charge (skeleton)
-  │           └── hotel_reports (skeleton)
-  └── hotel_maintenance (skeleton)
+  │           ├── hotel_restricted_services (charge validation)
+  │           │     └── hotel_pos_room_charge (+ point_of_sale)
+  │           └── hotel_reports (+ hotel_housekeeping)
+  └── hotel_maintenance (room out-of-order driver)
 ```
 
 ## Odoo 19 Breaking Changes — MUST FOLLOW
@@ -126,7 +129,11 @@ hotel_base (foundation)
 | `hotel_night_audit` | 4 tests |
 | `hotel_frontdesk_session` | 4 tests |
 | `hotel_housekeeping` | 7 tests |
-| **Total** | **43 tests** |
+| `hotel_restricted_services` | 7 tests |
+| `hotel_maintenance` | 10 tests |
+| `hotel_pos_room_charge` | 7 tests |
+| `hotel_reports` | 5 tests |
+| **Total** | **72 tests** |
 
 ## Local Checks
 
