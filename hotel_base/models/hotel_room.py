@@ -60,9 +60,9 @@ class HotelRoom(models.Model):
         "the room from sellable inventory.",
     )
     admin_use = fields.Boolean(
-        string="Admin Use",
+        string="House Use",
         tracking=True,
-        help="Room reserved for hotel administration; excluded from "
+        help="Room reserved for hotel / staff use; excluded from "
         "sellable inventory and occupancy percentages.",
     )
     is_sellable = fields.Boolean(

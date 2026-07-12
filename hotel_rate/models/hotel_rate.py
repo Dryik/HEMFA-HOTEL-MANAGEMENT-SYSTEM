@@ -89,11 +89,22 @@ class HotelRateOccupancyBand(models.Model):
     min_occupancy = fields.Integer(string="Min Occupancy (%)", required=True)
     max_occupancy = fields.Integer(string="Max Occupancy (%)", required=True)
     multiplier = fields.Float(
-        string="Rate Multiplier",
+        string="Rate Factor (1.0 = no change)",
         required=True,
         default=1.0,
-        help="Multiplication factor to apply to the nightly rate (e.g. 1.20 for +20% price).",
+        help="Multiplication factor applied to the nightly rate "
+        "(e.g. 1.20 = +20%, 0.90 = −10%).",
     )
+    adjustment_pct = fields.Float(
+        string="Adjustment %",
+        compute="_compute_adjustment_pct",
+        help="Percentage markup or discount implied by the rate factor.",
+    )
+
+    @api.depends("multiplier")
+    def _compute_adjustment_pct(self):
+        for band in self:
+            band.adjustment_pct = (band.multiplier - 1.0) * 100.0
 
     _occupancy_range_check = models.Constraint(
         "CHECK (max_occupancy >= min_occupancy AND min_occupancy >= 0 AND max_occupancy <= 100)",

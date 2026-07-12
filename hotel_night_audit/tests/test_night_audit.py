@@ -103,6 +103,13 @@ class TestHotelNightAudit(TransactionCase):
         # Check rolled business date
         self.assertEqual(self.property.current_business_date, self.business_date + timedelta(days=1))
 
+        # Audit detail lines expose room and guest for the tape review.
+        posted_line = audit.line_ids.filtered(lambda l: l.status == "posted")
+        self.assertTrue(posted_line)
+        self.assertEqual(posted_line.room_id, self.room1)
+        self.assertEqual(posted_line.partner_id, self.guest)
+        self.assertTrue(audit._fields.get("message_ids"))
+
     def test_night_audit_already_charged_skipped(self):
         res_checked_in = self._reservation(self.room1)
         res_checked_in.action_confirm()

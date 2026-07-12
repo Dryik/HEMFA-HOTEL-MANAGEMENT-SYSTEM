@@ -160,3 +160,28 @@ class TestHotelFolio(TransactionCase):
         self.assertFalse(any(line.is_posted for line in folio2.line_ids))
         folio2.line_ids[0].unlink()
         folio2.unlink()
+
+    def test_folio_is_open(self):
+        res = self._reservation()
+        res.action_confirm()
+        folio = res.folio_ids[0]
+        # Confirmed stay with no balance is still open (stay active).
+        self.assertTrue(folio.is_open)
+        self.assertEqual(folio.property_id, self.property)
+
+        res.action_check_in()
+        folio.add_charge(self.burger, qty=1.0)
+        self.assertTrue(folio.is_open)
+        self.assertEqual(folio.amount_due, 15.0)
+
+        res.action_check_out()
+        # Checked out with balance still due remains open.
+        self.assertTrue(folio.is_open)
+
+        # Zero out the due amount by matching paid to total without invoices:
+        # mark amount_paid via a posted invoice residual of zero is complex;
+        # simulate settlement by clearing the charge line for this unit test.
+        folio.line_ids.unlink()
+        folio.invalidate_recordset()
+        self.assertEqual(folio.amount_due, 0.0)
+        self.assertFalse(folio.is_open)

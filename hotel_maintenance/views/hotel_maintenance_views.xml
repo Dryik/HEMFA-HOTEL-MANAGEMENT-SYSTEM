@@ -1,5 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="hotel_maintenance_request_view_kanban" model="ir.ui.view">
+        <field name="name">hotel.maintenance.request.kanban</field>
+        <field name="model">hotel.maintenance.request</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column" records_draggable="false">
+                <field name="name"/>
+                <field name="room_id"/>
+                <field name="location"/>
+                <field name="description"/>
+                <field name="priority"/>
+                <field name="blocks_room"/>
+                <field name="technician_id"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex flex-column h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="fw-bold text-primary"><field name="name"/></span>
+                                <field name="priority" widget="priority"/>
+                            </div>
+                            <div class="mb-1">
+                                <strong><field name="room_id"/></strong>
+                                <span t-if="!record.room_id.raw_value" class="text-muted">
+                                    <field name="location"/>
+                                </span>
+                            </div>
+                            <div class="text-truncate mb-2">
+                                <field name="description"/>
+                            </div>
+                            <div class="mt-auto d-flex align-items-center justify-content-between">
+                                <field name="technician_id" widget="many2one_avatar_user"/>
+                                <span t-if="record.blocks_room.raw_value" class="badge text-bg-danger">OOO</span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="hotel_maintenance_request_view_list" model="ir.ui.view">
         <field name="name">hotel.maintenance.request.list</field>
         <field name="model">hotel.maintenance.request</field>
@@ -35,10 +75,12 @@
                         groups="hotel_base.group_hotel_maintenance"/>
                     <button name="action_done" type="object" string="Mark Done"
                         class="btn-primary" invisible="state != 'in_progress'"
-                        groups="hotel_base.group_hotel_maintenance"/>
+                        groups="hotel_base.group_hotel_maintenance"
+                        confirm="Are you sure you want to mark this maintenance request as done?"/>
                     <button name="action_verify" type="object" string="Verify"
                         class="btn-primary" invisible="state != 'done'"
-                        groups="hotel_base.group_hotel_manager"/>
+                        groups="hotel_base.group_hotel_manager"
+                        confirm="Are you sure you want to verify this maintenance request as complete?"/>
                     <button name="action_cancel" type="object" string="Cancel"
                         invisible="state in ('verified', 'cancel')"/>
                     <button name="action_reset_new" type="object" string="Reset to New"
@@ -96,6 +138,8 @@
                              ('state', 'in', ('confirmed', 'in_progress', 'done'))]"/>
                 <filter string="Urgent" name="urgent"
                     domain="[('priority', '=', '3')]"/>
+                <separator/>
+                <filter string="My Tasks" name="my_tasks" domain="[('technician_id', '=', uid)]"/>
                 <group>
                     <filter string="Status" name="group_state"
                         context="{'group_by': 'state'}"/>
@@ -111,7 +155,7 @@
     <record id="hotel_maintenance_request_action" model="ir.actions.act_window">
         <field name="name">Maintenance Requests</field>
         <field name="res_model">hotel.maintenance.request</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="context">{'search_default_open': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">

@@ -1,6 +1,8 @@
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component, onMounted, onWillStart, onWillUnmount, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+
+const REFRESH_INTERVAL_MS = 60_000;
 
 export class HotelDashboard extends Component {
     static template = "hotel_board.HotelDashboard";
@@ -10,7 +12,17 @@ export class HotelDashboard extends Component {
         this.orm = useService("orm");
         this.action = useService("action");
         this.state = useState({ data: null });
+        this._refreshTimer = null;
         onWillStart(() => this.loadData());
+        onMounted(() => {
+            this._refreshTimer = setInterval(() => this.loadData(), REFRESH_INTERVAL_MS);
+        });
+        onWillUnmount(() => {
+            if (this._refreshTimer) {
+                clearInterval(this._refreshTimer);
+                this._refreshTimer = null;
+            }
+        });
     }
 
     async loadData() {

@@ -116,6 +116,8 @@
                                 readonly="state not in ('draft', 'confirmed')"/>
                             <field name="amount_total"/>
                             <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Actual Times">
                             <field name="actual_checkin"/>
                             <field name="actual_checkout"/>
                         </group>
@@ -150,6 +152,12 @@
                 <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
                 <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
                 <filter string="In House" name="in_house" domain="[('state', '=', 'checked_in')]"/>
+                <filter string="Checked Out" name="checked_out" domain="[('state', '=', 'checked_out')]"/>
+                <filter string="Checked Out Today" name="checked_out_today"
+                    domain="[('state', '=', 'checked_out'),
+                             ('actual_checkout', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0, 0, 0))),
+                             ('actual_checkout', '&lt;=', datetime.datetime.combine(context_today(), datetime.time(23, 59, 59)))]"/>
+                <filter string="No Show" name="no_show" domain="[('state', '=', 'no_show')]"/>
                 <group>
                     <filter string="Room" name="group_room" context="{'group_by': 'room_id'}"/>
                     <filter string="Guest" name="group_guest" context="{'group_by': 'partner_id'}"/>

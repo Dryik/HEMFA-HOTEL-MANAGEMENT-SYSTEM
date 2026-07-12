@@ -166,7 +166,7 @@ class TestHotelRate(TransactionCase):
 
     def test_occupancy_band_multiplier(self):
         # Create occupancy band: 50% to 100% occupancy multiplies price by 1.5
-        self.env["hotel.rate.occupancy.band"].create(
+        band = self.env["hotel.rate.occupancy.band"].create(
             {
                 "name": "High Occupancy Band",
                 "property_id": self.property.id,
@@ -175,6 +175,7 @@ class TestHotelRate(TransactionCase):
                 "multiplier": 1.5,
             }
         )
+        self.assertAlmostEqual(band.adjustment_pct, 50.0)
 
         # Confirm first reservation to occupy room 1 (making occupancy 50% because we have 2 sellable rooms)
         res1 = self._reservation(self.guest_libyan, self.room1, state="draft")

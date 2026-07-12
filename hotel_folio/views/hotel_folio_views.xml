@@ -5,14 +5,19 @@
         <field name="name">hotel.folio.list</field>
         <field name="model">hotel.folio</field>
         <field name="arch" type="xml">
-            <list string="Folios">
+            <list string="Folios"
+                  decoration-success="not is_open"
+                  decoration-warning="is_open and amount_due &gt; 0">
                 <field name="name"/>
                 <field name="reservation_id"/>
                 <field name="partner_id"/>
                 <field name="agency_id"/>
+                <field name="property_id" optional="hide"/>
+                <field name="reservation_state" optional="show" widget="badge"/>
                 <field name="amount_total"/>
                 <field name="amount_paid"/>
                 <field name="amount_due"/>
+                <field name="is_open" widget="boolean"/>
                 <field name="currency_id" column_invisible="True"/>
             </list>
         </field>
@@ -28,8 +33,11 @@
                         class="btn-primary" context="{'partner_id': partner_id}"/>
                     <button name="action_create_invoice" type="object" string="Create Agency Invoice"
                         class="btn-secondary" invisible="not agency_id" context="{'partner_id': agency_id}"/>
+                    <field name="is_open" invisible="1"/>
                 </header>
                 <sheet>
+                    <widget name="web_ribbon" title="Closed" bg_color="text-bg-success" invisible="is_open"/>
+                    <widget name="web_ribbon" title="Open" bg_color="text-bg-info" invisible="not is_open"/>
                     <div class="oe_title">
                         <h1><field name="name"/></h1>
                     </div>
@@ -38,11 +46,14 @@
                             <field name="reservation_id"/>
                             <field name="partner_id"/>
                             <field name="agency_id"/>
+                            <field name="property_id"/>
+                            <field name="reservation_state"/>
                         </group>
                         <group string="Financials">
                             <field name="amount_total"/>
                             <field name="amount_paid"/>
                             <field name="amount_due"/>
+                            <field name="is_open"/>
                             <field name="currency_id" invisible="1"/>
                         </group>
                     </group>
@@ -55,15 +66,26 @@
                                     <field name="name"/>
                                     <field name="qty"/>
                                     <field name="price_unit"/>
-                                    <field name="tax_ids" widget="many2many_tags"/>
-                                    <field name="payee_partner_id"/>
+                                    <field name="tax_ids" widget="many2many_tags" readonly="is_posted"/>
+                                    <field name="payee_partner_id" readonly="is_posted"/>
                                     <field name="amount"/>
                                     <field name="is_posted" readonly="1"/>
                                 </list>
                             </field>
                         </page>
                         <page string="Invoices">
-                            <field name="invoice_ids" widget="many2many"/>
+                            <field name="invoice_ids">
+                                <list create="0" delete="0">
+                                    <field name="name"/>
+                                    <field name="invoice_date"/>
+                                    <field name="partner_id"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="payment_state" widget="badge"/>
+                                    <field name="amount_total"/>
+                                    <field name="amount_residual"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </list>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
@@ -72,10 +94,39 @@
         </field>
     </record>
 
+    <record id="hotel_folio_view_search" model="ir.ui.view">
+        <field name="name">hotel.folio.search</field>
+        <field name="model">hotel.folio</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="agency_id"/>
+                <field name="reservation_id"/>
+                <field name="property_id"/>
+                <filter string="Open Folios" name="open" domain="[('is_open', '=', True)]"/>
+                <filter string="Closed Folios" name="closed" domain="[('is_open', '=', False)]"/>
+                <filter string="Balance Due" name="balance_due" domain="[('amount_due', '&gt;', 0)]"/>
+                <separator/>
+                <filter string="Today" name="today"
+                    domain="[('create_date', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                             ('create_date', '&lt;', (context_today() + timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
+                    <filter string="Guest" name="group_guest" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Agency" name="group_agency" context="{'group_by': 'agency_id'}"/>
+                    <filter string="Stay Status" name="group_res_state" context="{'group_by': 'reservation_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="hotel_folio_action" model="ir.actions.act_window">
         <field name="name">Folios</field>
         <field name="res_model">hotel.folio</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hotel_folio_view_search"/>
+        <field name="context">{'search_default_open': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">No folios created yet</p>
             <p>Folios track all guest charges, routed billing, and linked Odoo invoices.</p>

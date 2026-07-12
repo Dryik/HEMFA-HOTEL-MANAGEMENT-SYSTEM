@@ -110,7 +110,7 @@
                     <div class="col-6 col-md-3">
                         <div class="o_hotel_card o_hotel_clickable p-3"
                              t-on-click="() => this.openRooms('')">
-                            <div class="o_hotel_kpi_label">Admin Use</div>
+                            <div class="o_hotel_kpi_label">House Use</div>
                             <div class="o_hotel_kpi text-muted">
                                 <t t-esc="state.data.admin_use"/>
                             </div>

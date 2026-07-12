@@ -22,6 +22,10 @@
         <field name="model">hotel.room</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <field name="occupancy_state" widget="statusbar" statusbar_visible="vacant,occupied"/>
+                    <field name="hk_status" widget="statusbar"/>
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <h1><field name="name" placeholder="e.g. 101"/></h1>
@@ -91,6 +95,7 @@
                 <filter string="Vacant" name="vacant" domain="[('occupancy_state', '=', 'vacant')]"/>
                 <filter string="Occupied" name="occupied" domain="[('occupancy_state', '=', 'occupied')]"/>
                 <filter string="Dirty" name="dirty" domain="[('hk_status', '=', 'dirty')]"/>
+                <filter string="Inspected" name="inspected" domain="[('hk_status', '=', 'inspected')]"/>
                 <filter string="Out of Order" name="ooo" domain="[('out_of_order', '=', True)]"/>
                 <group>
                     <filter string="Floor" name="group_floor" context="{'group_by': 'floor_id'}"/>

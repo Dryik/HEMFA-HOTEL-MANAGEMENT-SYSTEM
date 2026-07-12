@@ -1,5 +1,6 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.float_utils import float_is_zero
 
 
 class HotelFolio(models.Model):
@@ -35,6 +36,18 @@ class HotelFolio(models.Model):
         readonly=True,
         string="Agency / Entity",
     )
+    property_id = fields.Many2one(
+        related="reservation_id.property_id",
+        store=True,
+        readonly=True,
+        string="Property",
+    )
+    reservation_state = fields.Selection(
+        related="reservation_id.state",
+        store=True,
+        readonly=True,
+        string="Stay Status",
+    )
     line_ids = fields.One2many(
         "hotel.folio.line", "folio_id", string="Folio Lines"
     )
@@ -61,8 +74,15 @@ class HotelFolio(models.Model):
         store=True,
         readonly=True,
     )
+    is_open = fields.Boolean(
+        string="Open",
+        compute="_compute_is_open",
+        store=True,
+        help="Open while the stay is active or the folio still has a balance due.",
+    )
 
-    @api.depends("line_ids.amount", "invoice_ids.amount_total", "invoice_ids.payment_state")
+    @api.depends("line_ids.amount", "invoice_ids.amount_total", "invoice_ids.payment_state",
+                 "invoice_ids.amount_residual")
     def _compute_totals(self):
         for folio in self:
             folio.amount_total = sum(folio.line_ids.mapped("amount"))
@@ -75,6 +95,16 @@ class HotelFolio(models.Model):
                 (inv.amount_total - inv.amount_residual) for inv in posted_invoices
             )
             folio.amount_due = folio.amount_total - folio.amount_paid
+
+    @api.depends("reservation_id.state", "amount_due", "currency_id")
+    def _compute_is_open(self):
+        closed_states = ("checked_out", "cancelled", "no_show")
+        for folio in self:
+            res_closed = folio.reservation_id.state in closed_states
+            precision = folio.currency_id.rounding if folio.currency_id else 0.01
+            settled = float_is_zero(folio.amount_due, precision_rounding=precision)
+            # Closed only when the stay is finished and nothing is due.
+            folio.is_open = not (res_closed and settled)
 
     @api.model_create_multi
     def create(self, vals_list):

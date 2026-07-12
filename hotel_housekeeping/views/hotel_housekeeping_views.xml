@@ -59,7 +59,7 @@
                 <header>
                     <button name="action_start" string="Start Cleaning" type="object" class="btn-primary" invisible="state != 'new'"/>
                     <button name="action_complete" string="Mark Cleaned" type="object" class="btn-primary" invisible="state != 'cleaning'"/>
-                    <button name="action_cancel" string="Cancel" type="object" class="btn-secondary" invisible="state == 'cleaned'"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-secondary" invisible="state in ('cleaned', 'cancel')"/>
                     <field name="state" widget="statusbar" statusbar_visible="new,cleaning,cleaned"/>
                 </header>
                 <sheet>

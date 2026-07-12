@@ -30,7 +30,7 @@
                             <field name="name"/>
                             <field name="property_id"/>
                             <field name="room_type_id"/>
-                            <field name="sequence"/>
+                            <field name="sequence" string="Priority"/>
                         </group>
                         <group string="Pricing &amp; Conditions">
                             <field name="date_start"/>
@@ -45,10 +45,27 @@
         </field>
     </record>
 
+    <record id="hotel_rate_rule_view_search" model="ir.ui.view">
+        <field name="name">hotel.rate.rule.search</field>
+        <field name="model">hotel.rate.rule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="room_type_id"/>
+                <filter string="Active" name="active" domain="[('date_end', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter string="Room Type" name="group_room_type" context="{'group_by': 'room_type_id'}"/>
+                    <filter string="Guest Type" name="group_guest" context="{'group_by': 'guest_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="hotel_rate_rule_action" model="ir.actions.act_window">
         <field name="name">Rate Rules</field>
         <field name="res_model">hotel.rate.rule</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hotel_rate_rule_view_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Define seasonal rate rules</p>
             <p>Seasonal rules let you override base prices for specific dates or guest nationalities.</p>
@@ -66,6 +83,7 @@
                 <field name="min_occupancy"/>
                 <field name="max_occupancy"/>
                 <field name="multiplier"/>
+                <field name="adjustment_pct" optional="show"/>
             </list>
         </field>
     </record>
@@ -82,9 +100,23 @@
                         <field name="min_occupancy"/>
                         <field name="max_occupancy"/>
                         <field name="multiplier"/>
+                        <field name="adjustment_pct"/>
                     </group>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="hotel_rate_occupancy_band_view_search" model="ir.ui.view">
+        <field name="name">hotel.rate.occupancy.band.search</field>
+        <field name="model">hotel.rate.occupancy.band</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <group>
+                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
+                </group>
+            </search>
         </field>
     </record>
 
@@ -92,6 +124,7 @@
         <field name="name">Occupancy Bands</field>
         <field name="res_model">hotel.rate.occupancy.band</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hotel_rate_occupancy_band_view_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Define occupancy-based price bands</p>
             <p>Occupancy bands let you adjust room prices dynamically based on the percentage of occupied rooms.</p>

@@ -6,6 +6,7 @@ from odoo.exceptions import UserError
 class HotelNightAudit(models.Model):
     _name = "hotel.night.audit"
     _description = "Hotel Night Audit"
+    _inherit = ["mail.thread"]
     _order = "date desc, id desc"
 
     name = fields.Char(string="Audit Reference", required=True, readonly=True, default=lambda self: _("New"))
@@ -13,23 +14,29 @@ class HotelNightAudit(models.Model):
         "hotel.property",
         string="Property",
         required=True,
+        tracking=True,
         default=lambda self: self.env["hotel.property"].search([], limit=1),
     )
     date = fields.Date(
         string="Audit Date",
         required=True,
         readonly=True,
+        tracking=True,
         help="Operational business date being closed.",
     )
     state = fields.Selection(
         [("draft", "Draft"), ("done", "Completed")],
         default="draft",
         readonly=True,
+        tracking=True,
     )
     run_user_id = fields.Many2one("res.users", string="Run By", readonly=True)
-    occupancy_pct = fields.Float(string="Occupancy Rate (%)", readonly=True)
+    occupancy_pct = fields.Float(string="Occupancy Rate (%)", readonly=True, tracking=True)
     revenue_posted = fields.Monetary(
-        string="Revenue Posted", readonly=True, currency_field="currency_id"
+        string="Revenue Posted",
+        readonly=True,
+        tracking=True,
+        currency_field="currency_id",
     )
     currency_id = fields.Many2one(
         "res.currency",
@@ -214,6 +221,18 @@ class HotelNightAuditLine(models.Model):
         "hotel.night.audit", string="Audit", required=True, ondelete="cascade"
     )
     reservation_id = fields.Many2one("hotel.reservation", string="Reservation")
+    room_id = fields.Many2one(
+        related="reservation_id.room_id",
+        string="Room",
+        store=True,
+        readonly=True,
+    )
+    partner_id = fields.Many2one(
+        related="reservation_id.partner_id",
+        string="Guest",
+        store=True,
+        readonly=True,
+    )
     folio_id = fields.Many2one("hotel.folio", string="Folio")
     amount_posted = fields.Monetary(
         string="Amount Posted", currency_field="currency_id"

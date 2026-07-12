@@ -32,7 +32,7 @@ class HotelReservation(models.Model):
             "name": _("Folios"),
             "type": "ir.actions.act_window",
             "res_model": "hotel.folio",
-            "view_mode": "tree,form",
+            "view_mode": "list,form",
             "domain": [("reservation_id", "=", self.id)],
             "context": {"default_reservation_id": self.id},
         }
