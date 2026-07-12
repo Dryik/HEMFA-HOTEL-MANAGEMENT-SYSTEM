@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hotel_service_restriction_frontdesk,hotel.service.restriction frontdesk,model_hotel_service_restriction,hotel_base.group_hotel_frontdesk,1,1,1,1
+access_hotel_service_restriction_manager,hotel.service.restriction manager,model_hotel_service_restriction,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_entity_service_ceiling_frontdesk,hotel.entity.service.ceiling frontdesk,model_hotel_entity_service_ceiling,hotel_base.group_hotel_frontdesk,1,0,0,0
+access_hotel_entity_service_ceiling_supervisor,hotel.entity.service.ceiling supervisor,model_hotel_entity_service_ceiling,hotel_base.group_hotel_fo_supervisor,1,1,1,1
+access_hotel_entity_service_ceiling_manager,hotel.entity.service.ceiling manager,model_hotel_entity_service_ceiling,hotel_base.group_hotel_manager,1,1,1,1
