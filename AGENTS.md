@@ -154,6 +154,7 @@ Runtime testing happens on the Odoo.sh dev branch (no local Odoo install).
 7. **Missing `@tagged` on test class**: All test classes need `@tagged('post_install', '-at_install')`.
 8. **`groups_id` on `res.users`**: Odoo 19 field is `group_ids` (not `groups_id`). Create users with `group_ids` or assign groups via `res.groups.write({'user_ids': [(4, user_id)]})`.
 9. **`total_transactions` stored compute returns 0**: When calling stored compute methods directly, flush + invalidate_recordset before reading to ensure cache coherence.
+10. **`<group expand="0" string="Group By">` in search views**: Odoo 19 RelaxNG rejects `expand` (cascades into misleading "extra content: field" errors). Use a plain `<group>` of `<filter>` elements — see hotel_housekeeping search view for the valid pattern.
 
 ## Odoo 19 Source Reference
 
