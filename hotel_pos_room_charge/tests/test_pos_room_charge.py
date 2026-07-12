@@ -47,10 +47,18 @@ class TestPosRoomCharge(TransactionCase):
         cls.room_charge_method = cls.env["pos.payment.method"].create(
             {"name": "Room Charge", "is_room_charge": True}
         )
+        # Register every method before open_ui(): payment methods
+        # cannot be modified on a config while a session is open.
+        cls.cash_method = cls.env["pos.payment.method"].create(
+            {"name": "Test Cash", "is_room_charge": False}
+        )
         cls.pos_config = cls.env["pos.config"].create(
             {
                 "name": "Hotel Restaurant POS",
-                "payment_method_ids": [(4, cls.room_charge_method.id)],
+                "payment_method_ids": [
+                    (4, cls.room_charge_method.id),
+                    (4, cls.cash_method.id),
+                ],
             }
         )
         cls.pos_config.open_ui()
@@ -133,11 +141,6 @@ class TestPosRoomCharge(TransactionCase):
 
     def test_split_payment_rejected(self):
         self._checked_in_reservation()
-        cash_method = self.env["pos.payment.method"].create(
-            {"name": "Test Cash", "is_room_charge": False}
-        )
-        # pos.payment validates its method against the session config.
-        self.pos_config.write({"payment_method_ids": [(4, cash_method.id)]})
         order = self._pos_order(partner=self.guest)
         # Replace half the room-charge amount with a cash payment.
         room_payment = order.payment_ids[0]
@@ -145,7 +148,7 @@ class TestPosRoomCharge(TransactionCase):
         self.env["pos.payment"].create(
             {
                 "pos_order_id": order.id,
-                "payment_method_id": cash_method.id,
+                "payment_method_id": self.cash_method.id,
                 "amount": 12.5,
             }
         )
