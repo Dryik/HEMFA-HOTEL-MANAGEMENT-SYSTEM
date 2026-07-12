@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hotel_maintenance_request_frontdesk,hotel.maintenance.request frontdesk,model_hotel_maintenance_request,hotel_base.group_hotel_frontdesk,1,1,1,0
+access_hotel_maintenance_request_housekeeping,hotel.maintenance.request housekeeping,model_hotel_maintenance_request,hotel_base.group_hotel_housekeeping,1,1,1,0
+access_hotel_maintenance_request_maintenance,hotel.maintenance.request maintenance,model_hotel_maintenance_request,hotel_base.group_hotel_maintenance,1,1,1,0
+access_hotel_maintenance_request_manager,hotel.maintenance.request manager,model_hotel_maintenance_request,hotel_base.group_hotel_manager,1,1,1,1
