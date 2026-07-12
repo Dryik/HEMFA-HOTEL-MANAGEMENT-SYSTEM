@@ -17,266 +17,435 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_property__address_id
 msgid "Address"
 msgstr "العنوان"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_room__admin_use
 msgid "Admin Use"
 msgstr "استخدام إداري"
 
 #. module: hotel_base
+#: model:ir.ui.menu,name:hotel_base.menu_hotel_agencies
+#: model:ir.actions.act_window,name:hotel_base.hotel_agency_action
 msgid "Agencies / Entities"
 msgstr "الوكالات / الجهات"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_room_type__amenity_ids
+#: model:ir.actions.act_window,name:hotel_base.hotel_amenity_action
+#: model:ir.ui.menu,name:hotel_base.menu_hotel_config_amenity
 msgid "Amenities"
 msgstr "الخدمات المرافقة"
 
 #. module: hotel_base
-msgid "Amenities beyond the room type"
-msgstr "الخدمات الإضافية خارج نوع الغرفة Standard"
+#: model:ir.model.fields,help:hotel_base.field_hotel_room__amenity_ids
+msgid "Amenities beyond the room type's standard set."
+msgstr "الخدمات الإضافية خارج المجموعة الأساسية لنوع الغرفة."
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_room_type__base_price
 msgid "Base Nightly Price"
 msgstr "سعر الليلة الأساسي"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_property__day_start_hour
 msgid "Business Day Start"
 msgstr "بداية يوم العمل"
 
 #. module: hotel_base
+#: model:res.groups,name:hotel_base.group_hotel_cashier
+msgid "Cashier"
+msgstr "أمين الصندوق / موظف الاستقبال"
+
+#. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_room__occupancy_state__checkout
 msgid "Checked Out"
 msgstr "مغادر / مسجل خروج"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_room__hk_status__clean
 msgid "Clean"
 msgstr "نظيفة"
 
 #. module: hotel_base
+#: model:ir.ui.menu,name:hotel_base.menu_hotel_config
 msgid "Configuration"
 msgstr "الإعدادات"
 
 #. module: hotel_base
+#: model:ir.model.fields,help:hotel_base.field_hotel_room__is_sellable
 msgid "Counts toward availability and the occupancy denominator."
 msgstr "يحتسب ضمن الغرف الشاغرة ومقام الإشغال."
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_res_partner__guest_birthdate
 msgid "Date of Birth"
 msgstr "تاريخ الميلاد"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_res_partner__hotel_agency_id
 msgid "Default Agency / Entity"
 msgstr "الوكالة / الجهة الافتراضية"
 
 #. module: hotel_base
+#: model:ir.model.fields,help:hotel_base.field_hotel_room_type__base_price
+msgid "Default nightly rate before seasonal, agency and occupancy adjustments (hotel_rate)."
+msgstr "السعر الافتراضي لليلة قبل التسويات الموسمية والوكالات ونسب الإشغال (hotel_rate)."
+
+#. module: hotel_base
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_type_view_form
 msgid "Description"
 msgstr "الوصف"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_room__hk_status__dirty
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_search
 msgid "Dirty"
 msgstr "غير نظيفة"
 
 #. module: hotel_base
-msgid "Drives the LYD vs foreign-currency pricing rule"
-msgstr "يتحكم في قاعدة تسعير العملة المحلية مقابل العملة الأجنبية"
+#: model:ir.model.fields,help:hotel_base.field_res_partner__guest_nationality_id
+msgid "Drives the LYD vs foreign-currency pricing rule (hotel_rate)."
+msgstr "يتحكم في قاعدة تسعير العملة المحلية مقابل العملة الأجنبية (hotel_rate)."
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__res_partner__guest_id_type__driving_license
 msgid "Driving License"
 msgstr "رخصة قيادة"
 
 #. module: hotel_base
-msgid "Entity this guest is usually registered under. The"
-msgstr "الجهة التي يسجل تحتها النزيل غالباً."
+#: model:ir.model.fields,help:hotel_base.field_res_partner__hotel_agency_id
+msgid "Entity this guest is usually registered under. The reservation can override it per stay."
+msgstr "الجهة التي يسجل تحتها النزيل غالباً، ويمكن للحجز تجاوزها لكل إقامة."
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_room__amenity_ids
 msgid "Extra Amenities"
 msgstr "وسائل راحة إضافية"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__res_partner__guest_id_type__family_book
 msgid "Family Book"
 msgstr "كتيب العائلة"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__res_partner__guest_gender__female
 msgid "Female"
 msgstr "أنثى"
 
 #. module: hotel_base
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_search
 msgid "Floor"
 msgstr "الطابق"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_property__floor_ids
+#: model:ir.actions.act_window,name:hotel_base.hotel_floor_action
+#: model:ir.ui.menu,name:hotel_base.menu_hotel_config_floor
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_property_view_form
 msgid "Floors"
 msgstr "الطوابق"
 
 #. module: hotel_base
+#: model:res.groups,name:hotel_base.group_hotel_frontdesk
+msgid "Front Desk"
+msgstr "مكتب الاستقبال"
+
+#. module: hotel_base
+#: model:res.groups,name:hotel_base.group_hotel_fo_supervisor
+msgid "Front Office Supervisor"
+msgstr "مشرف المكتب الأمامي"
+
+#. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_res_partner__guest_gender
 msgid "Gender"
 msgstr "الجنس"
 
 #. module: hotel_base
+#: model:ir.ui.menu,name:hotel_base.menu_hotel_guests
+#: model:ir.actions.act_window,name:hotel_base.hotel_guest_action
 msgid "Guests"
 msgstr "النزلاء"
 
 #. module: hotel_base
+#: model:ir.ui.menu,name:hotel_base.menu_hotel_root
 msgid "Hotel"
 msgstr "الفندق"
 
 #. module: hotel_base
+#: model:ir.model,name:hotel_base.model_hotel_floor
 msgid "Hotel Floor"
 msgstr "الطابق الفندقي"
 
 #. module: hotel_base
+#: model:res.groups.privilege,name:hotel_base.privilege_hotel_front_office
+msgid "Hotel Front Office"
+msgstr "المكتب الأمامي للفندق"
+
+#. module: hotel_base
+#: model_terms:ir.ui.view,arch_db:hotel_base.res_partner_view_form_hotel
 msgid "Hotel Guest"
 msgstr "نزيل الفندق"
 
 #. module: hotel_base
+#: model:res.groups.privilege,name:hotel_base.privilege_hotel_housekeeping
+msgid "Hotel Housekeeping"
+msgstr "التدبير الفندقي"
+
+#. module: hotel_base
+#: model:res.groups.privilege,name:hotel_base.privilege_hotel_maintenance
+msgid "Hotel Maintenance"
+msgstr "صيانة الفندق"
+
+#. module: hotel_base
+#: model:ir.module.category,name:hotel_base.module_category_hotel
+msgid "Hotel Management"
+msgstr "إدارة الفندق"
+
+#. module: hotel_base
+#: model:ir.model,name:hotel_base.model_hotel_property
 msgid "Hotel Property"
 msgstr "المنشأة الفندقية"
 
 #. module: hotel_base
+#: model:ir.model,name:hotel_base.model_hotel_room
 msgid "Hotel Room"
 msgstr "غرفة الفندق"
 
 #. module: hotel_base
-msgid "Hour at which the hotel business day rolls over."
-msgstr "الساعة التي ينتهي بها يوم العمل الفندقي ويبدأ يوم جديد."
+#: model:ir.model.fields,help:hotel_base.field_hotel_property__day_start_hour
+msgid "Hour at which the hotel business day rolls over. A stay is charged per business day from this hour to the same hour the next calendar day."
+msgstr "الساعة التي يتم عندها تدوير يوم العمل الفندقي؛ تحتسب الإقامة لكل يوم عمل من هذه الساعة حتى الساعة نفسها من اليوم التالي."
 
 #. module: hotel_base
-msgid "Hours after the business day start during which checkout"
-msgstr "الساعات الممنوحة بعد بداية اليوم لتسجيل المغادرة بدون تكلفة إضافية"
+#: model:ir.model.fields,help:hotel_base.field_hotel_property__late_checkout_grace_hours
+msgid "Hours after the business day start during which checkout incurs no late charge."
+msgstr "الساعات الممنوحة بعد بداية يوم العمل لتسجيل المغادرة بدون رسوم تأخير."
 
 #. module: hotel_base
+#: model:res.groups,name:hotel_base.group_hotel_housekeeping
+msgid "Housekeeping"
+msgstr "التدبير الفندقي"
+
+#. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_room__hk_status
 msgid "Housekeeping Status"
 msgstr "حالة نظافة الغرفة"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_res_partner__guest_id_expiry
 msgid "ID Expiry"
 msgstr "تاريخ انتهاء الهوية"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_res_partner__guest_id_number
 msgid "ID Number"
 msgstr "رقم الهوية"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_res_partner__guest_id_type
 msgid "ID Type"
 msgstr "نوع الهوية"
 
 #. module: hotel_base
+#: model_terms:ir.ui.view,arch_db:hotel_base.res_partner_view_form_hotel
 msgid "Identification Document"
 msgstr "وثيقة الهوية"
 
 #. module: hotel_base
+#: model_terms:ir.ui.view,arch_db:hotel_base.res_partner_view_form_hotel
 msgid "Identity"
 msgstr "الهوية"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_room__hk_status__inspected
 msgid "Inspected"
 msgstr "مفتشة ومفحوصة"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_res_partner__is_hotel_agency
 msgid "Is Agency / Entity"
 msgstr "هل هي وكالة / جهة؟"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_property__late_checkout_grace_hours
+msgid "Late Checkout Grace (hours)"
+msgstr "مهلة تسجيل المغادرة المتأخر (بالساعات)"
+
+#. module: hotel_base
+#: model:ir.model.fields,help:hotel_base.field_hotel_room_type__property_id
 msgid "Leave empty for a room type shared across all properties."
 msgstr "اتركه فارغاً لنوع غرفة مشترك في كل الفنادق."
 
 #. module: hotel_base
+#: model:ir.model.fields,help:hotel_base.field_res_partner__guest_national_number
+msgid "Libyan national number (الرقم الوطني)."
+msgstr "الرقم الوطني الليبي."
+
+#. module: hotel_base
+#: model:res.groups,name:hotel_base.group_hotel_maintenance
+msgid "Maintenance"
+msgstr "الصيانة"
+
+#. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__res_partner__guest_gender__male
 msgid "Male"
 msgstr "ذكر"
 
 #. module: hotel_base
+#: model:res.groups,name:hotel_base.group_hotel_manager
+msgid "Manager"
+msgstr "المدير"
+
+#. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__res_partner__guest_id_type__national_id
 msgid "National ID"
 msgstr "البطاقة الشخصية"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_res_partner__guest_national_number
 msgid "National Number"
 msgstr "الرقم الوطني"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_res_partner__guest_nationality_id
 msgid "Nationality"
 msgstr "الجنسية"
 
 #. module: hotel_base
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_search
 msgid "Occupancy"
 msgstr "الإشغال"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_room__occupancy_state__occupied
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_search
 msgid "Occupied"
 msgstr "مشغولة"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__res_partner__guest_id_type__other
 msgid "Other"
 msgstr "أخرى"
 
 #. module: hotel_base
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_search
 msgid "Out of Order"
 msgstr "خارج الخدمة"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__res_partner__guest_id_type__passport
 msgid "Passport"
 msgstr "جواز سفر"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_res_partner__guest_birthplace
 msgid "Place of Birth"
 msgstr "مكان الميلاد"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_res_partner__guest_profession
 msgid "Profession"
 msgstr "المهنة"
 
 #. module: hotel_base
+#: model:ir.ui.menu,name:hotel_base.menu_hotel_config_property
+#: model:ir.actions.act_window,name:hotel_base.hotel_property_action
 msgid "Properties"
 msgstr "الفنادق / المنشآت"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_room_type__product_id
 msgid "Rate Product"
 msgstr "منتج تسعير الغرفة"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_room__occupancy_state__reserved
 msgid "Reserved"
 msgstr "محجوزة"
 
 #. module: hotel_base
+#: model:ir.model,name:hotel_base.model_hotel_amenity
 msgid "Room Amenity"
 msgstr "وسيلة راحة الغرفة"
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_room__name
 msgid "Room Number"
 msgstr "رقم الغرفة"
 
 #. module: hotel_base
+#: model:ir.model,name:hotel_base.model_hotel_room_type
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_search
 msgid "Room Type"
 msgstr "نوع الغرفة"
 
 #. module: hotel_base
+#: model:ir.ui.menu,name:hotel_base.menu_hotel_config_room_type
+#: model:ir.actions.act_window,name:hotel_base.hotel_room_type_action
 msgid "Room Types"
 msgstr "أنواع الغرف"
 
 #. module: hotel_base
-msgid "Room reserved for hotel administration; excluded from"
-msgstr "غرفة محجوزة للاستخدام الإداري، مستبعدة من البيع والإشغال"
+#: model:ir.model.fields,help:hotel_base.field_hotel_room__admin_use
+msgid "Room reserved for hotel administration; excluded from sellable inventory and occupancy percentages."
+msgstr "غرفة محجوزة للاستخدام الإداري، مستبعدة من الغرف القابلة للبيع ونسب الإشغال."
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_floor__room_ids
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_property__room_ids
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_room_type__room_ids
+#: model:ir.ui.menu,name:hotel_base.menu_hotel_rooms
+#: model:ir.actions.act_window,name:hotel_base.hotel_room_action
 msgid "Rooms"
 msgstr "الغرف"
 
 #. module: hotel_base
-msgid "Set by an open room-impacting maintenance request. Removes"
-msgstr "يتم تفعيله تلقائياً بطلب صيانة للغرفة لسحبها من الغرف القابلة للبيع"
+#: model:ir.model.fields,help:hotel_base.field_hotel_property__sellable_room_count
+msgid "Rooms available for sale: excludes out-of-order and admin-use rooms. Denominator for occupancy-based pricing."
+msgstr "الغرف القابلة للبيع: باستثناء غرف خارج الخدمة والاستخدام الإداري؛ وهي مقام حساب التسعير حسب الإشغال."
 
 #. module: hotel_base
+#: model:ir.model.fields,help:hotel_base.field_hotel_room_type__product_id
+msgid "Service product carrying the base price, taxes and income account for this room type. Created automatically if empty."
+msgstr "الخدمة التي تحمل السعر الأساسي والضرائب وحساب الإيراد لهذا النوع من الغرف. تنشأ تلقائياً إذا تركت فارغة."
+
+#. module: hotel_base
+#: model:ir.model.fields,help:hotel_base.field_hotel_room__out_of_order
+msgid "Set by an open room-impacting maintenance request. Removes the room from sellable inventory."
+msgstr "يتم تفعيله بطلب صيانة مفتوح يؤثر على الغرفة؛ يسحب الغرفة من الغرف القابلة للبيع."
+
+#. module: hotel_base
+#: model:ir.model.fields,help:hotel_base.field_hotel_property__code
 msgid "Short code used in references and reports."
 msgstr "كود اختصار مستخدم في المراجع والتقارير."
 
 #. module: hotel_base
+#: model:ir.model.fields,help:hotel_base.field_res_partner__is_hotel_agency
+msgid "Travel agency, company or government entity (جهة) that can be billed for its guests and hold advance balances."
+msgstr "وكالة سفر أو شركة أو جهة حكومية يمكن فوترة نزلائها عليها والاحتفاظ بأرصدة مقدمة لها."
+
+#. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_room__occupancy_state__vacant
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_search
 msgid "Vacant"
 msgstr "شاغرة"
 
 #. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_property.py:0
 msgid "You cannot delete property %s because it has active or completed reservations."
-msgstr "لا يمكنك حذف المنشأة %s نظراً لوجود حجوزات نشطة أو منتهية مرتبطة بها."
+msgstr "لا يمكن حذف المنشأة %s لوجود حجوزات نشطة أو مكتملة عليها."
 
 #. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_room.py:0
 msgid "You cannot delete room %s because it has active reservations."
-msgstr "لا يمكنك حذف الغرفة %s نظراً لوجود حجوزات نشطة عليها."
+msgstr "لا يمكن حذف الغرفة %s لوجود حجوزات نشطة عليها."
 
+#. module: hotel_base
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_form
+msgid "e.g. 101"
+msgstr "مثال: 101"

@@ -1,0 +1,183 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* hotel_restricted_services
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-11 12:00+0000\n"
+"PO-Revision-Date: 2026-07-11 12:00+0000\n"
+"Last-Translator: Antigravity <antigravity@gemini.google>\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: hotel_restricted_services
+#. odoo-python
+#: code:addons/hotel_restricted_services/models/hotel_folio.py:0
+msgid "%(violation)s\nOverriding a service restriction requires the Front Office Supervisor role."
+msgstr "%(violation)s\nتجاوز قيد الخدمة يتطلب صلاحية مشرف المكتب الأمامي."
+
+#. module: hotel_restricted_services
+#. odoo-python
+#: code:addons/hotel_restricted_services/models/hotel_folio.py:0
+msgid "%(violation)s\nOverriding an entity ceiling requires the Front Office Supervisor role."
+msgstr "%(violation)s\nتجاوز سقف الجهة يتطلب صلاحية مشرف المكتب الأمامي."
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_entity_service_ceiling__partner_id
+msgid "Agency / Entity"
+msgstr "الوكالة / الجهة"
+
+#. module: hotel_restricted_services
+#. odoo-python
+#: code:addons/hotel_restricted_services/models/hotel_folio.py:0
+msgid "All Services"
+msgstr "كل الخدمات"
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields.selection,name:hotel_restricted_services.selection__hotel_service_restriction__restriction_type__limited
+msgid "Allowed with Limit"
+msgstr "مسموحة بحد أقصى"
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields.selection,name:hotel_restricted_services.selection__hotel_service_restriction__restriction_type__blocked
+msgid "Blocked"
+msgstr "محظورة"
+
+#. module: hotel_restricted_services
+#: model_terms:ir.actions.act_window,help:hotel_restricted_services.hotel_entity_service_ceiling_action
+msgid "Ceilings cap what may be billed to an agency or company per guest per day. Front desk needs a supervisor override to exceed them."
+msgstr ""
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,help:hotel_restricted_services.field_hotel_service_restriction__category_id
+msgid "Charges whose product belongs to this category (or a child of it) are restricted."
+msgstr "تقيد الرسوم التي ينتمي منتجها إلى هذه الفئة أو إحدى فئاتها الفرعية."
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_service_restriction__daily_limit
+msgid "Daily Limit"
+msgstr "الحد اليومي"
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_entity_service_ceiling__daily_limit
+msgid "Daily Limit per Guest"
+msgstr "الحد اليومي لكل نزيل"
+
+#. module: hotel_restricted_services
+#. odoo-python
+#: code:addons/hotel_restricted_services/models/hotel_folio.py:0
+msgid "Daily ceiling of %(limit)s for entity %(entity)s (%(category)s) exceeded: %(billed)s billed today on this folio."
+msgstr "تم تجاوز السقف اليومي %(limit)s للجهة %(entity)s (%(category)s): تمت فوترة %(billed)s اليوم على هذا الفوليو."
+
+#. module: hotel_restricted_services
+#. odoo-python
+#: code:addons/hotel_restricted_services/models/hotel_folio.py:0
+msgid "Daily limit of %(limit)s for '%(category)s' exceeded (already charged %(charged)s, new charge %(amount)s)."
+msgstr "تم تجاوز الحد اليومي %(limit)s لفئة '%(category)s' (المحمل سابقاً %(charged)s، والرسم الجديد %(amount)s)."
+
+#. module: hotel_restricted_services
+#: model_terms:ir.actions.act_window,help:hotel_restricted_services.hotel_entity_service_ceiling_action
+msgid "Define per-entity daily charge ceilings"
+msgstr "تحديد سقوف يومية للرسوم لكل جهة"
+
+#. module: hotel_restricted_services
+#: model:ir.model,name:hotel_restricted_services.model_hotel_entity_service_ceiling
+msgid "Entity Service Ceiling"
+msgstr "سقف خدمات الجهة"
+
+#. module: hotel_restricted_services
+#: model:ir.ui.menu,name:hotel_restricted_services.menu_hotel_config_entity_ceilings
+#: model:ir.actions.act_window,name:hotel_restricted_services.hotel_entity_service_ceiling_action
+msgid "Entity Service Ceilings"
+msgstr "سقوف خدمات الجهات"
+
+#. module: hotel_restricted_services
+#: model:ir.model,name:hotel_restricted_services.model_hotel_service_restriction
+msgid "Guest Service Restriction"
+msgstr "قيد خدمة النزيل"
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,help:hotel_restricted_services.field_hotel_entity_service_ceiling__category_id
+msgid "Leave empty to apply the ceiling to all services."
+msgstr "اتركه فارغاً لتطبيق السقف على كل الخدمات."
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,help:hotel_restricted_services.field_hotel_entity_service_ceiling__daily_limit
+msgid "Maximum billed to the entity per guest folio per calendar day. Zero means no daily limit."
+msgstr "أقصى ما يفوتر على الجهة لكل فوليو نزيل في اليوم؛ الصفر يعني بلا حد يومي."
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,help:hotel_restricted_services.field_hotel_service_restriction__stay_limit
+msgid "Maximum charge total for the whole stay for this category. Zero means no stay limit."
+msgstr "أقصى إجمالي رسوم لكامل الإقامة لهذه الفئة؛ الصفر يعني بلا حد للإقامة."
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,help:hotel_restricted_services.field_hotel_service_restriction__daily_limit
+msgid "Maximum charge total per calendar day for this category. Zero means no daily limit."
+msgstr "أقصى إجمالي رسوم في اليوم لهذه الفئة؛ الصفر يعني بلا حد يومي."
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_service_restriction__note
+msgid "Reason / Note"
+msgstr "السبب / ملاحظة"
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_service_restriction__reservation_id
+msgid "Reservation"
+msgstr "الحجز"
+
+#. module: hotel_restricted_services
+#: model_terms:ir.ui.view,arch_db:hotel_restricted_services.hotel_reservation_view_form_restrictions
+msgid "Restricted Services"
+msgstr "الخدمات المقيدة"
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_service_restriction__restriction_type
+msgid "Restriction"
+msgstr "القيد"
+
+#. module: hotel_restricted_services
+#. odoo-python
+#: code:addons/hotel_restricted_services/models/hotel_folio.py:0
+msgid "Service '%(category)s' is blocked for guest %(guest)s on this stay."
+msgstr "الخدمة '%(category)s' محظورة على النزيل %(guest)s في هذه الإقامة."
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_service_restriction__category_id
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_entity_service_ceiling__category_id
+msgid "Service Category"
+msgstr "فئة الخدمة"
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_res_partner__service_ceiling_ids
+#: model_terms:ir.ui.view,arch_db:hotel_restricted_services.res_partner_view_form_service_ceilings
+msgid "Service Ceilings"
+msgstr "سقوف الخدمات"
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_reservation__service_restriction_ids
+msgid "Service Restrictions"
+msgstr "قيود الخدمات"
+
+#. module: hotel_restricted_services
+#. odoo-python
+#: code:addons/hotel_restricted_services/models/hotel_folio.py:0
+msgid "Service restriction overridden by %(user)s for %(product)s (%(amount)s). Reason: %(reason)s"
+msgstr "تم تجاوز قيد الخدمة بواسطة %(user)s للمنتج %(product)s (%(amount)s). السبب: %(reason)s"
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_service_restriction__stay_limit
+msgid "Stay Limit"
+msgstr "حد الإقامة"
+
+#. module: hotel_restricted_services
+#. odoo-python
+#: code:addons/hotel_restricted_services/models/hotel_folio.py:0
+msgid "Stay limit of %(limit)s for '%(category)s' exceeded (already charged %(charged)s, new charge %(amount)s)."
+msgstr "تم تجاوز حد الإقامة %(limit)s لفئة '%(category)s' (المحمل سابقاً %(charged)s، والرسم الجديد %(amount)s)."

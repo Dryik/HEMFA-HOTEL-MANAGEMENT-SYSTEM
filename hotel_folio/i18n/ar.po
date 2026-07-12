@@ -17,190 +17,284 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__agency_id
 msgid "Agency / Entity"
 msgstr "الوكالة / الجهة"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__amount
 msgid "Amount"
 msgstr "المبلغ"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__amount_due
 msgid "Amount Due"
 msgstr "المبلغ المستحق"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__amount_paid
 msgid "Amount Paid"
 msgstr "المبلغ المدفوع"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__payee_partner_id
 msgid "Billed To"
 msgstr "مفوتر إلى"
 
 #. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
 msgid "Create Agency Invoice"
 msgstr "إنشاء فاتورة الوكالة"
 
 #. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
 msgid "Create Guest Invoice"
 msgstr "إنشاء فاتورة النزيل"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__date
 msgid "Date"
 msgstr "التاريخ"
 
 #. module: hotel_folio
+#: model_terms:ir.actions.act_window,help:hotel_folio.hotel_folio_routing_rule_action
+msgid "Define charge routing rules"
+msgstr "حدد قواعد توجيه الرسوم"
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__name
 msgid "Description"
 msgstr "الوصف"
 
 #. module: hotel_folio
+#: model:ir.model.fields,help:hotel_folio.field_hotel_folio_line__payee_partner_id
 msgid "Entity responsible for this specific charge line."
 msgstr "الجهة المسؤولة عن خط الفاتورة هذا."
 
 #. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
 msgid "Financials"
 msgstr "المالية"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__folio_id
 msgid "Folio"
 msgstr "حساب النزيل / الفوليو"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_reservation__folio_count
 msgid "Folio Count"
 msgstr "عدد حسابات النزلاء"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__line_ids
 msgid "Folio Lines"
 msgstr "خطوط حساب النزيل"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__name
 msgid "Folio Number"
 msgstr "رقم حساب النزيل"
 
 #. module: hotel_folio
+#: model:ir.ui.menu,name:hotel_folio.menu_hotel_config_folio_routing
+#: model:ir.actions.act_window,name:hotel_folio.hotel_folio_routing_rule_action
 msgid "Folio Routing Rules"
 msgstr "قواعد توجيه الحسابات"
 
 #. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation.py:0
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_reservation__folio_ids
+#: model:ir.ui.menu,name:hotel_folio.menu_hotel_folios
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_list
+#: model:ir.actions.act_window,name:hotel_folio.hotel_folio_action
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_reservation_view_form_inherit_folio
 msgid "Folios"
 msgstr "حسابات النزلاء / الفوليو"
 
 #. module: hotel_folio
+#: model_terms:ir.actions.act_window,help:hotel_folio.hotel_folio_action
+msgid "Folios track all guest charges, routed billing, and linked Odoo invoices."
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__partner_id
 msgid "Guest"
 msgstr "النزيل / الضيف"
 
 #. module: hotel_folio
+#: model:ir.sequence,name:hotel_folio.seq_hotel_folio
+msgid "Hotel Folio"
+msgstr "فوليو الفندق"
+
+#. module: hotel_folio
+#: model:ir.model,name:hotel_folio.model_hotel_folio
 msgid "Hotel Folio Ledger"
 msgstr "دفتر حسابات الفندق (الفوليو)"
 
 #. module: hotel_folio
+#: model:ir.model,name:hotel_folio.model_hotel_folio_line
 msgid "Hotel Folio Line"
 msgstr "خط حساب الفندق (الفوليو)"
 
 #. module: hotel_folio
+#: model:ir.model,name:hotel_folio.model_hotel_folio_routing_rule
 msgid "Hotel Folio Routing Rule"
 msgstr "قاعدة توجيه حسابات الفندق"
 
 #. module: hotel_folio
+#: model:ir.model.fields,help:hotel_folio.field_hotel_folio_line__is_posted
+msgid "If checked, the charge is locked (e.g. invoiced or processed by night audit)."
+msgstr "عند التفعيل، تكون الرسوم مقفلة (مفوترة أو مرحلة بالتدقيق الليلي)."
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "Invoice"
 msgstr "فاتورة"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__invoice_line_id
 msgid "Invoice Line"
 msgstr "خط الفاتورة"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__invoice_ids
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
 msgid "Invoices"
 msgstr "الفواتير"
 
 #. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
 msgid "Ledger / Charges"
 msgstr "الدفتر / الرسوم والخدمات"
 
 #. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "New"
 msgstr "جديد"
 
 #. module: hotel_folio
+#: model_terms:ir.actions.act_window,help:hotel_folio.hotel_folio_action
+msgid "No folios created yet"
+msgstr "لا توجد فوليوهات بعد"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "No uninvoiced lines found for this payee."
 msgstr "لا توجد خطوط غير مفوترة لهذا العميل لدفعها."
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__is_posted
 msgid "Posted"
 msgstr "مرحل / مسجل"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__product_id
 msgid "Product"
 msgstr "المنتج"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_routing_rule__category_id
 msgid "Product Category"
 msgstr "فئة المنتج"
 
 #. module: hotel_folio
+#: model:ir.model.fields,help:hotel_folio.field_hotel_folio_routing_rule__category_id
 msgid "Product category that triggers this routing rule."
 msgstr "فئة المنتج التي تفعل قاعدة التوجيه الفوليو هذه."
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_routing_rule__property_id
 msgid "Property"
 msgstr "الفندق / المنشأة"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__qty
 msgid "Quantity"
 msgstr "الكمية"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__reservation_id
 msgid "Reservation"
 msgstr "الحجز"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_routing_rule__routing_type
 msgid "Route To"
 msgstr "توجيه الحساب إلى"
 
 #. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_routing_rule__routing_type__agency
 msgid "Route to Agency"
 msgstr "توجيه إلى الوكالة / الجهة"
 
 #. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_routing_rule__routing_type__guest
 msgid "Route to Guest"
 msgstr "توجيه إلى النزيل"
 
 #. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_routing_rule_view_form
 msgid "Routing Details"
 msgstr "تفاصيل التوجيه للحسابات"
 
 #. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_routing_rule_view_list
 msgid "Routing Rules"
 msgstr "قواعد توجيه حسابات الفوليو"
 
 #. module: hotel_folio
+#: model_terms:ir.actions.act_window,help:hotel_folio.hotel_folio_routing_rule_action
+msgid "Routing rules automatically direct charges of specific product categories (like room charges) to either the guest or agency folios."
+msgstr ""
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_routing_rule_view_form
 msgid "Rule Info"
 msgstr "معلومات قاعدة التسعير"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_routing_rule__agency_id
 msgid "Specific Agency / Entity"
 msgstr "وكالة / جهة محددة"
 
 #. module: hotel_folio
+#: model:ir.model.fields,help:hotel_folio.field_hotel_folio_routing_rule__agency_id
+msgid "Specific agency to route to. If left empty, routes to the reservation's agency."
+msgstr "الوكالة المحددة للتوجيه. إذا تركت فارغة يتم التوجيه لوكالة الحجز."
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
 msgid "Stay Reference"
 msgstr "مرجع الإقامة"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__tax_ids
 msgid "Taxes"
 msgstr "الضرائب"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__amount_total
 msgid "Total Charges"
 msgstr "إجمالي الرسوم والخدمات"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__price_unit
 msgid "Unit Price"
 msgstr "سعر الوحدة"
 
 #. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "You cannot delete a folio with posted or invoiced charges."
-msgstr "لا يمكنك حذف فوليو يحتوي على رسوم مرحلة أو مفوترة."
+msgstr "لا يمكن حذف فوليو يحتوي على رسوم مرحلة أو مفوترة."
 
 #. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "You cannot delete a posted or invoiced folio line."
-msgstr "لا يمكنك حذف بند فوليو تم ترحيله أو فوترته."
-
+msgstr "لا يمكن حذف سطر فوليو مرحل أو مفوتر."

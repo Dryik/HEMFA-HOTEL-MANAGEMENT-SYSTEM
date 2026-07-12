@@ -17,6 +17,71 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Admin Use"
+msgstr "استخدام إداري"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Arrivals Today"
+msgstr "الواصلون اليوم"
+
+#. module: hotel_board
+#: model:ir.ui.menu,name:hotel_board.menu_hotel_dashboard
 msgid "Dashboard"
 msgstr "لوحة التحكم"
 
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Departures Today"
+msgstr "المغادرون اليوم"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Front Desk"
+msgstr "مكتب الاستقبال"
+
+#. module: hotel_board
+#: model:ir.actions.client,name:hotel_board.action_hotel_dashboard
+msgid "Front Desk Dashboard"
+msgstr "لوحة مكتب الاستقبال"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "In House"
+msgstr "نزلاء الفندق حالياً"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Occupancy"
+msgstr "الإشغال"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Out of Order"
+msgstr "خارج الخدمة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Reserved Rooms"
+msgstr "الغرف المحجوزة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Vacant Clean"
+msgstr "شاغرة نظيفة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Vacant Dirty"
+msgstr "شاغرة غير نظيفة"

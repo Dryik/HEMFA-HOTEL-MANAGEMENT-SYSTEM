@@ -1,0 +1,67 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* hotel_pos_room_charge
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-11 12:00+0000\n"
+"PO-Revision-Date: 2026-07-11 12:00+0000\n"
+"Last-Translator: Antigravity <antigravity@gemini.google>\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: hotel_pos_room_charge
+#. odoo-python
+#: code:addons/hotel_pos_room_charge/models/pos_order.py:0
+msgid "%(guest)s has no in-house reservation. Room charges are only allowed for checked-in guests."
+msgstr "لا يوجد حجز مقيم للنزيل %(guest)s؛ التحميل على الغرفة متاح فقط للنزلاء المسجلين دخولاً."
+
+#. module: hotel_pos_room_charge
+#: model:ir.model.fields,field_description:hotel_pos_room_charge.field_pos_payment_method__is_room_charge
+msgid "Charge to Room"
+msgstr "تحميل على الغرفة"
+
+#. module: hotel_pos_room_charge
+#: model:ir.model.fields,field_description:hotel_pos_room_charge.field_hotel_folio_line__pos_order_id
+msgid "POS Order"
+msgstr "طلب نقطة البيع"
+
+#. module: hotel_pos_room_charge
+#. odoo-python
+#: code:addons/hotel_pos_room_charge/models/pos_order.py:0
+msgid "POS order %(order)s charged to room (%(amount)s, %(count)s lines)."
+msgstr "تم تحميل طلب نقطة البيع %(order)s على الغرفة (%(amount)s، %(count)s سطور)."
+
+#. module: hotel_pos_room_charge
+#: model:ir.model.fields,help:hotel_pos_room_charge.field_hotel_folio_line__pos_order_id
+msgid "POS order this charge came from, for the room-charge receipt and department reports."
+msgstr "طلب نقطة البيع مصدر هذا الرسم، لإيصال تحميل الغرفة وتقارير الأقسام."
+
+#. module: hotel_pos_room_charge
+#. odoo-python
+#: code:addons/hotel_pos_room_charge/models/pos_order.py:0
+msgid "Reservation %(reservation)s has no folio to charge."
+msgstr "الحجز %(reservation)s لا يملك فوليو للتحميل عليه."
+
+#. module: hotel_pos_room_charge
+#. odoo-python
+#: code:addons/hotel_pos_room_charge/models/pos_order.py:0
+msgid "Room charge must cover the whole order. Mixed payments (part cash, part room) are not supported."
+msgstr "يجب أن يغطي التحميل على الغرفة كامل الطلب؛ الدفع المختلط (جزء نقدي وجزء على الغرفة) غير مدعوم."
+
+#. module: hotel_pos_room_charge
+#. odoo-python
+#: code:addons/hotel_pos_room_charge/models/pos_order.py:0
+msgid "Select the hotel guest as the order's customer before charging to a room."
+msgstr "اختر نزيل الفندق كعميل للطلب قبل التحميل على الغرفة."
+
+#. module: hotel_pos_room_charge
+#: model:ir.model.fields,help:hotel_pos_room_charge.field_pos_payment_method__is_room_charge
+msgid "Settling with this method posts the order to the in-house guest's folio instead of collecting money at the POS. The order's customer must be a checked-in hotel guest."
+msgstr "التسوية بهذه الطريقة ترحل الطلب إلى فوليو النزيل المقيم بدلاً من تحصيل النقود في نقطة البيع؛ ويجب أن يكون عميل الطلب نزيلاً مسجلاً دخوله."

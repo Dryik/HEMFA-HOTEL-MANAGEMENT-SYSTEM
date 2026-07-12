@@ -17,178 +17,276 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. module: hotel_reservation
+#: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__agency_id
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "Agency / Entity"
 msgstr "الوكالة / الجهة"
 
 #. module: hotel_reservation
+#: model:ir.actions.act_window,name:hotel_reservation.action_hotel_reservation_list
+msgid "All Reservations"
+msgstr "كل الحجوزات"
+
+#. module: hotel_reservation
+#: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__checkin_date
 msgid "Arrival"
 msgstr "الوصول"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "Arrival Date"
 msgstr "تاريخ الوصول"
 
 #. module: hotel_reservation
+#: model:ir.ui.menu,name:hotel_reservation.menu_hotel_arrivals_today
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
+#: model:ir.actions.act_window,name:hotel_reservation.action_hotel_arrivals_today
 msgid "Arrivals Today"
 msgstr "الواصلون اليوم"
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "Assign a room before confirming."
 msgstr "يرجى تخصيص غرفة قبل تأكيد الحجز."
 
 #. module: hotel_reservation
+#: model:ir.model.fields,help:hotel_reservation.field_hotel_reservation__agency_id
+msgid "Bill-to entity (جهة) this stay is registered under."
+msgstr "الجهة المسؤول عن دفع الفاتورة المسجل تحتها هذا الحجز."
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Cancel"
 msgstr "إلغاء"
 
 #. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__cancelled
 msgid "Cancelled"
 msgstr "ملغي"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Check In"
 msgstr "تسجيل دخول"
 
 #. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__checked_in
 msgid "Checked In"
 msgstr "داخل الفندق / مسجل دخول"
 
 #. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__checked_out
 msgid "Checked Out"
 msgstr "مغادر / مسجل خروج"
 
 #. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__accommodation_type__company
 msgid "Company / Entity"
 msgstr "الشركة / الجهة"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Confirm"
 msgstr "تأكيد"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Confirm Check Out"
 msgstr "تأكيد تسجيل الخروج"
 
 #. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__confirmed
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "Confirmed"
 msgstr "مؤكد"
 
 #. module: hotel_reservation
+#: model_terms:ir.actions.act_window,help:hotel_reservation.action_hotel_reservation
+msgid "Create the first reservation"
+msgstr "أنشئ أول حجز"
+
+#. module: hotel_reservation
+#: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__checkout_date
 msgid "Departure"
 msgstr "المغادرة"
 
 #. module: hotel_reservation
+#: model:ir.ui.menu,name:hotel_reservation.menu_hotel_departures_today
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
+#: model:ir.actions.act_window,name:hotel_reservation.action_hotel_departures_today
 msgid "Departures Today"
 msgstr "المغادرون اليوم"
 
 #. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__draft
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "Draft"
 msgstr "مسودة"
 
 #. module: hotel_reservation
+#: model_terms:ir.actions.act_window,help:hotel_reservation.action_hotel_reservation
+msgid "Drag on the timeline to book a room, or hit New."
+msgstr "اسحب على الخط الزمني لحجز غرفة أو اضغط جديد."
+
+#. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__accommodation_type__family
 msgid "Family"
 msgstr "عائلي"
 
 #. module: hotel_reservation
+#: model:ir.ui.menu,name:hotel_reservation.menu_hotel_frontdesk
 msgid "Front Desk"
 msgstr "مكتب الاستقبال"
 
 #. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__accommodation_type__group
 msgid "Group"
 msgstr "مجموعة"
 
 #. module: hotel_reservation
+#: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__partner_id
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "Guest"
 msgstr "النزيل / الضيف"
 
 #. module: hotel_reservation
+#: model:ir.sequence,name:hotel_reservation.seq_hotel_reservation
+#: model:ir.model,name:hotel_reservation.model_hotel_reservation
 msgid "Hotel Reservation"
 msgstr "حجز الفندق"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "In House"
 msgstr "نزلاء الفندق حالياً"
 
 #. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__accommodation_type__individual
 msgid "Individual"
 msgstr "فردي"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Internal notes..."
 msgstr "ملاحظات داخلية..."
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "New"
 msgstr "جديد"
 
 #. module: hotel_reservation
+#: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__rate_night
 msgid "Nightly Rate"
 msgstr "سعر الليلة"
 
 #. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__no_show
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "No Show"
 msgstr "عدم حضور"
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "Only cancelled or no-show reservations can be reset."
 msgstr "يمكن فقط إعادة تهيئة الحجوزات الملغاة أو التي سجلت كعدم حضور."
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "Only confirmed reservations can be no-show."
 msgstr "يمكن فقط تسجيل عدم حضور للحجوزات المؤكدة."
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "Only confirmed reservations can check in."
 msgstr "يمكن فقط تسجيل الدخول للحجوزات المؤكدة."
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "Only draft or confirmed reservations can be cancelled."
 msgstr "يمكن فقط إلغاء الحجوزات المسودة أو المؤكدة."
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "Only draft reservations can be confirmed."
 msgstr "يمكن فقط تأكيد الحجوزات المسودة."
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "Only in-house reservations can check out."
 msgstr "يمكن فقط تسجيل المغادرة للنزلاء المقيمين فعلياً."
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Pricing"
 msgstr "التسعير"
 
 #. module: hotel_reservation
+#: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__name
 msgid "Reservation Number"
 msgstr "رقم الحجز"
 
 #. module: hotel_reservation
+#: model:ir.ui.menu,name:hotel_reservation.menu_hotel_reservation_planning
 msgid "Reservation Planning"
 msgstr "مخطط الحجوزات"
 
 #. module: hotel_reservation
+#: model:ir.ui.menu,name:hotel_reservation.menu_hotel_reservation_all
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_gantt
+#: model:ir.actions.act_window,name:hotel_reservation.action_hotel_reservation
 msgid "Reservations"
 msgstr "الحجوزات"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Reset to Draft"
 msgstr "إعادة إلى مسودة"
 
 #. module: hotel_reservation
+#: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__room_id
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "Room"
 msgstr "الغرفة"
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
+msgid "Room %(room)s is already booked between %(checkin)s and %(checkout)s."
+msgstr "الغرفة %(room)s محجوزة بالفعل بين %(checkin)s و %(checkout)s."
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
+msgid "Room %(room)s is out of order or reserved for administration."
+msgstr "الغرفة %(room)s خارج الخدمة أو محجوزة للإدارة."
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "Status"
 msgstr "الحالة"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Stay"
 msgstr "الحجز والإقامة"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Trip"
 msgstr "الرحلة / الزيارة"
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "You can only delete draft or cancelled reservations."
-msgstr "يمكنك فقط حذف الحجوزات في حالة مسودة أو ملغاة."
-
+msgstr "يمكن فقط حذف الحجوزات المسودة أو الملغاة."

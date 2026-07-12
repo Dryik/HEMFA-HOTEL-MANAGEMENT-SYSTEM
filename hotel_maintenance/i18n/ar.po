@@ -1,0 +1,313 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* hotel_maintenance
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-11 12:00+0000\n"
+"PO-Revision-Date: 2026-07-11 12:00+0000\n"
+"Last-Translator: Antigravity <antigravity@gemini.google>\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "A request can only block a room when a room is set."
+msgstr "لا يمكن للطلب حجب غرفة إلا عند تحديد غرفة."
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "A verified request cannot be cancelled."
+msgstr "لا يمكن إلغاء طلب معتمد."
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
+msgid "Blocking a Room"
+msgstr "تحجب غرفة"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__blocks_room
+msgid "Blocks Room"
+msgstr "يحجب الغرفة عن البيع"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__state__cancel
+msgid "Cancelled"
+msgstr "ملغي"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Confirm"
+msgstr "تأكيد"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__state__confirmed
+msgid "Confirmed"
+msgstr "مؤكد"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__date_confirmed
+msgid "Confirmed On"
+msgstr "تاريخ التأكيد"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Describe the problem..."
+msgstr "صف المشكلة..."
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__state__done
+msgid "Done"
+msgstr "منجز"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__date_done
+msgid "Done On"
+msgstr "تاريخ الإنجاز"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__request_source__guest
+msgid "Guest"
+msgstr "النزيل / الضيف"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,help:hotel_maintenance.field_hotel_maintenance_request__reporter_partner_id
+msgid "Guest who reported the problem, when the source is a guest."
+msgstr "النزيل الذي أبلغ عن المشكلة عندما يكون مصدر البلاغ نزيلاً."
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Handling"
+msgstr "المعالجة"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__priority__2
+msgid "High"
+msgstr "مرتفع"
+
+#. module: hotel_maintenance
+#: model:ir.sequence,name:hotel_maintenance.seq_hotel_maintenance_request
+#: model:ir.model,name:hotel_maintenance.model_hotel_maintenance_request
+msgid "Hotel Maintenance Request"
+msgstr "طلب صيانة الفندق"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__request_source__housekeeping
+msgid "Housekeeping"
+msgstr "التدبير الفندقي"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__state__in_progress
+msgid "In Progress"
+msgstr "قيد التنفيذ"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__request_source__inspection
+msgid "Inspection"
+msgstr "التفتيش"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,help:hotel_maintenance.field_hotel_maintenance_request__room_id
+msgid "Leave empty for common areas; use Location instead."
+msgstr "اتركه فارغاً للمناطق العامة واستخدم حقل الموقع بدلاً منه."
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__priority__0
+msgid "Low"
+msgstr "منخفض"
+
+#. module: hotel_maintenance
+#: model:ir.ui.menu,name:hotel_maintenance.menu_hotel_maintenance
+msgid "Maintenance"
+msgstr "الصيانة"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_room__maintenance_request_ids
+#: model:ir.actions.act_window,name:hotel_maintenance.hotel_maintenance_request_action
+msgid "Maintenance Requests"
+msgstr "طلبات الصيانة"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Mark Done"
+msgstr "إنهاء العمل"
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__state__new
+msgid "New"
+msgstr "جديد"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__priority__1
+msgid "Normal"
+msgstr "عادي"
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Only a manager can verify a maintenance request."
+msgstr "يمكن للمدير فقط اعتماد طلب الصيانة."
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Only cancelled requests can be reset to new."
+msgstr "يمكن فقط إعادة الطلبات الملغاة إلى جديد."
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Only confirmed requests can be started."
+msgstr "يمكن فقط بدء الطلبات المؤكدة."
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Only done requests can be verified."
+msgstr "يمكن فقط اعتماد الطلبات المنجزة."
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Only in-progress requests can be marked done."
+msgstr "يمكن فقط إنهاء الطلبات قيد التنفيذ."
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Only new or cancelled maintenance requests can be deleted."
+msgstr "يمكن فقط حذف طلبات الصيانة الجديدة أو الملغاة."
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Only new requests can be confirmed."
+msgstr "يمكن فقط تأكيد الطلبات الجديدة."
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
+msgid "Open"
+msgstr "مفتوحة"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Problem"
+msgstr "المشكلة"
+
+#. module: hotel_maintenance
+#: model_terms:ir.actions.act_window,help:hotel_maintenance.hotel_maintenance_request_action
+msgid "Report a maintenance problem"
+msgstr "الإبلاغ عن مشكلة صيانة"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__request_source
+msgid "Reported By"
+msgstr "جهة التبليغ"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__reporter_partner_id
+msgid "Reporting Guest"
+msgstr "النزيل المبلغ"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__name
+msgid "Request Reference"
+msgstr "مرجع الطلب"
+
+#. module: hotel_maintenance
+#: model_terms:ir.actions.act_window,help:hotel_maintenance.hotel_maintenance_request_action
+msgid "Requests flow from reporting through confirmation, technician work and manager verification. A request that blocks the room removes it from sale until it is verified."
+msgstr ""
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Reset to New"
+msgstr "إعادة إلى جديد"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__room_id
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
+msgid "Room"
+msgstr "الغرفة"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__request_source__staff
+msgid "Staff"
+msgstr "الموظفون"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Start Work"
+msgstr "بدء العمل"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__date_started
+msgid "Started On"
+msgstr "تاريخ البدء"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
+msgid "Status"
+msgstr "الحالة"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__technician_id
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
+msgid "Technician"
+msgstr "الفني"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,help:hotel_maintenance.field_hotel_maintenance_request__blocks_room
+msgid "The room cannot be sold while this request is open. Confirming the request takes the room out of order; verification returns it to service."
+msgstr "لا يمكن بيع الغرفة أثناء فتح هذا الطلب؛ تأكيد الطلب يخرج الغرفة من الخدمة والاعتماد يعيدها."
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__priority__3
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
+msgid "Urgent"
+msgstr "عاجل"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__state__verified
+msgid "Verified"
+msgstr "معتمد"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__date_verified
+msgid "Verified On"
+msgstr "تاريخ الاعتماد"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Verify"
+msgstr "اعتماد"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,help:hotel_maintenance.field_hotel_maintenance_request__resolution_notes
+msgid "What the technician actually did."
+msgstr "ما قام به الفني فعلياً."
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "What was done to fix it..."
+msgstr "ما تم عمله لإصلاحها..."
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,help:hotel_maintenance.field_hotel_maintenance_request__location
+msgid "Where the problem is when it is not inside a room (lobby, kitchen, elevator...)."
+msgstr "مكان المشكلة عندما لا تكون داخل غرفة (البهو، المطبخ، المصعد...)."

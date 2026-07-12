@@ -17,78 +17,153 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_rule__guest_type__all
 msgid "All Nationalities"
 msgstr "كل الجنسيات"
 
 #. module: hotel_rate
-msgid "Applies this rate depending on the guest"
-msgstr "يطبق هذا السعر حسب جنسية النزيل"
+#: model:ir.model.fields,help:hotel_rate.field_hotel_rate_rule__guest_type
+msgid "Applies this rate depending on the guest's nationality."
+msgstr "يطبق هذا السعر حسب جنسية النزيل."
 
 #. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__currency_id
 msgid "Currency"
 msgstr "العملة"
 
 #. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_occupancy_band_action
+msgid "Define occupancy-based price bands"
+msgstr "حدد شرائح أسعار حسب الإشغال"
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_rule_action
+msgid "Define seasonal rate rules"
+msgstr "حدد قواعد أسعار موسمية"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__date_end
 msgid "End Date"
 msgstr "تاريخ الانتهاء"
 
 #. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_rule__guest_type__foreign
 msgid "Foreigner"
 msgstr "أجنبي"
 
 #. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__guest_type
 msgid "Guest Nationality Type"
 msgstr "نوع جنسية النزيل"
 
 #. module: hotel_rate
+#: model:ir.model,name:hotel_rate.model_hotel_rate_occupancy_band
 msgid "Hotel Rate Occupancy Band"
 msgstr "شريحة إشغال الأسعار"
 
 #. module: hotel_rate
+#: model:ir.model,name:hotel_rate.model_hotel_rate_rule
 msgid "Hotel Rate Rule"
 msgstr "قاعدة تسعير الفندق"
 
 #. module: hotel_rate
+#: model:ir.model.fields,help:hotel_rate.field_hotel_reservation__rate_locked
+msgid "If checked, nightly rate will not be updated automatically by seasonal pricing or occupancy bands."
+msgstr "عند التفعيل، لن يتغير سعر الليلة تلقائياً بالمواسم أو شرائح الإشغال."
+
+#. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_rule__guest_type__local
 msgid "Libyan National"
 msgstr "نزيل ليبي"
 
 #. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_occupancy_band__max_occupancy
+msgid "Max Occupancy (%)"
+msgstr "الحد الأقصى للإشغال (%)"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_occupancy_band__min_occupancy
+msgid "Min Occupancy (%)"
+msgstr "الحد الأدنى للإشغال (%)"
+
+#. module: hotel_rate
+#: model:ir.model.fields,help:hotel_rate.field_hotel_rate_occupancy_band__multiplier
+msgid "Multiplication factor to apply to the nightly rate (e.g. 1.20 for +20% price)."
+msgstr "معامل الضرب المطبق على سعر الليلة (مثال: 1.20 لزيادة 20% في السعر)."
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__rate_price
 msgid "Nightly Rate"
 msgstr "سعر الليلة"
 
 #. module: hotel_rate
+#: model:ir.ui.menu,name:hotel_rate.menu_hotel_config_occupancy_bands
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_occupancy_band_view_list
+#: model:ir.actions.act_window,name:hotel_rate.hotel_rate_occupancy_band_action
 msgid "Occupancy Bands"
 msgstr "شرائح الإشغال"
 
 #. module: hotel_rate
-msgid "Pricing &amp; Conditions"
-msgstr "Pricing &amp; Conditions"
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_occupancy_band_action
+msgid "Occupancy bands let you adjust room prices dynamically based on the percentage of occupied rooms."
+msgstr ""
 
 #. module: hotel_rate
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_rule_view_form
+msgid "Pricing & Conditions"
+msgstr "التسعير والشروط"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__property_id
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_occupancy_band__property_id
 msgid "Property"
 msgstr "الفندق / المنشأة"
 
 #. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_reservation__rate_locked
 msgid "Rate Locked"
 msgstr "قفل السعر"
 
 #. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_occupancy_band__multiplier
 msgid "Rate Multiplier"
 msgstr "مضاعف السعر"
 
 #. module: hotel_rate
+#: model:ir.ui.menu,name:hotel_rate.menu_hotel_config_rates
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_rule_view_list
+#: model:ir.actions.act_window,name:hotel_rate.hotel_rate_rule_action
 msgid "Rate Rules"
 msgstr "قواعد التسعير"
 
 #. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__room_type_id
 msgid "Room Type"
 msgstr "نوع الغرفة"
 
 #. module: hotel_rate
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_rule_view_form
 msgid "Rule Info"
 msgstr "معلومات قاعدة التسعير"
 
 #. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_rule_action
+msgid "Seasonal rules let you override base prices for specific dates or guest nationalities."
+msgstr ""
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__date_start
 msgid "Start Date"
 msgstr "تاريخ البدء"
 
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_rate.py:0
+msgid "This occupancy band overlaps with an existing band: %(overlap)s"
+msgstr "تتداخل هذه الشريحة مع شريحة موجودة: %(overlap)s"
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_rate.py:0
+msgid "This rate rule overlaps with an existing rate rule: %(overlap)s"
+msgstr "تتداخل قاعدة التسعير هذه مع قاعدة موجودة: %(overlap)s"

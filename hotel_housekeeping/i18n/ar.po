@@ -1,0 +1,313 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* hotel_housekeeping
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-11 12:00+0000\n"
+"PO-Revision-Date: 2026-07-11 12:00+0000\n"
+"Last-Translator: Antigravity <antigravity@gemini.google>\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_discrepancy_wizard_view_form
+msgid "Apply Changes"
+msgstr "تطبيق التغييرات"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_discrepancy_wizard_view_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__state__cancel
+msgid "Cancelled"
+msgstr "ملغي"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__fo_occupancy__checkout
+msgid "Checked Out"
+msgstr "مغادر / مسجل خروج"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__hk_status__clean
+msgid "Clean"
+msgstr "نظيفة"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__state__cleaned
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_search
+msgid "Cleaned"
+msgstr "منظفة"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__cleaner_id
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_search
+msgid "Cleaner"
+msgstr "عامل النظافة"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__state__cleaning
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_search
+msgid "Cleaning"
+msgstr "جاري التنظيف"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard_line__hk_status
+msgid "Cleaning Status"
+msgstr "حالة التنظيف"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__date_completed
+msgid "Completed"
+msgstr "مكتمل"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__hk_status__dirty
+msgid "Dirty"
+msgstr "غير نظيفة"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard__line_ids
+msgid "Discrepancy Lines"
+msgstr "سطور الفروقات"
+
+#. module: hotel_housekeeping
+#: model:ir.ui.menu,name:hotel_housekeeping.menu_hotel_housekeeping_discrepancy
+msgid "Discrepancy Reconciliation"
+msgstr "مطابقة الفروقات"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard_line__is_discrepancy
+msgid "Discrepancy?"
+msgstr "فرق؟"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form
+msgid "Enter notes about room cleaning details, amenities replaced, or issues found..."
+msgstr "أدخل ملاحظات عن تفاصيل تنظيف الغرفة أو المستلزمات المستبدلة أو المشاكل المكتشفة..."
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard_line__fo_occupancy
+msgid "FO Status"
+msgstr "حالة المكتب الأمامي"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__priority__2
+msgid "High"
+msgstr "مرتفع"
+
+#. module: hotel_housekeeping
+#: model:ir.ui.menu,name:hotel_housekeeping.menu_hotel_housekeeping_root
+msgid "Housekeeping"
+msgstr "التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.model,name:hotel_housekeeping.model_hotel_housekeeping_task
+msgid "Housekeeping Cleaning Task"
+msgstr "مهمة تنظيف التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_discrepancy_wizard_view_form
+msgid "Housekeeping Discrepancy Reconciliation"
+msgstr "مطابقة فروقات التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.model,name:hotel_housekeeping.model_hotel_housekeeping_discrepancy_wizard_line
+msgid "Housekeeping Discrepancy Reconciliation Line"
+msgstr "سطر مطابقة فروقات التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.model,name:hotel_housekeeping.model_hotel_housekeeping_discrepancy_wizard
+msgid "Housekeeping Discrepancy Reconciliation Wizard"
+msgstr "معالج مطابقة فروقات التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.actions.act_window,name:hotel_housekeeping.hotel_housekeeping_discrepancy_wizard_action
+msgid "Housekeeping Discrepancy Report"
+msgstr "تقرير فروقات التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard_line__hk_occupancy
+msgid "Housekeeping Physical Occupancy"
+msgstr "الإشغال الفعلي حسب التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form
+msgid "Housekeeping Task"
+msgstr "مهمة التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.sequence,name:hotel_housekeeping.seq_hotel_housekeeping_task
+msgid "Housekeeping Task Sequence"
+msgstr "تسلسل مهام التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.ui.menu,name:hotel_housekeeping.menu_hotel_housekeeping_tasks
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_list
+#: model:ir.actions.act_window,name:hotel_housekeeping.hotel_housekeeping_task_action
+msgid "Housekeeping Tasks"
+msgstr "مهام التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__hk_status__inspected
+msgid "Inspected"
+msgstr "مفتشة ومفحوصة"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__priority__0
+msgid "Low"
+msgstr "منخفض"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form
+msgid "Mark Cleaned"
+msgstr "تحديد كمنظفة"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_search
+msgid "My Tasks"
+msgstr "مهامي"
+
+#. module: hotel_housekeeping
+#. odoo-python
+#: code:addons/hotel_housekeeping/models/hotel_housekeeping_task.py:0
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__state__new
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_search
+msgid "New"
+msgstr "جديد"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.actions.act_window,help:hotel_housekeeping.hotel_housekeeping_task_action
+msgid "No housekeeping tasks found."
+msgstr "لا توجد مهام تدبير فندقي."
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__priority__1
+msgid "Normal"
+msgstr "عادي"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__notes
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form
+msgid "Notes"
+msgstr "ملاحظات"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__fo_occupancy__occupied
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__hk_occupancy__occupied
+msgid "Occupied"
+msgstr "مشغولة"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__priority
+msgid "Priority"
+msgstr "الأولوية"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_search
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard__property_id
+msgid "Property"
+msgstr "الفندق / المنشأة"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__fo_occupancy__reserved
+msgid "Reserved"
+msgstr "محجوزة"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_discrepancy_wizard_view_form
+msgid "Review physical occupancy reported by housekeeping against front-office reservation status. Adjust the cleaning status directly if needed."
+msgstr ""
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__room_id
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_search
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard_line__room_id
+msgid "Room"
+msgstr "الغرفة"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form
+msgid "Room Details"
+msgstr "تفاصيل الغرفة"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.actions.act_window,help:hotel_housekeeping.hotel_housekeeping_task_action
+msgid "Rooms marked as 'dirty' will automatically create tasks, or you can create tasks manually."
+msgstr ""
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form
+msgid "Start Cleaning"
+msgstr "بدء التنظيف"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__date_start
+msgid "Started"
+msgstr "بدأت"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__state
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_search
+msgid "Status"
+msgstr "الحالة"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__name
+msgid "Task Reference"
+msgstr "مرجع المهمة"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form
+msgid "Timings"
+msgstr "التوقيتات"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__priority__3
+msgid "Urgent"
+msgstr "عاجل"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__fo_occupancy__vacant
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__hk_occupancy__vacant
+msgid "Vacant"
+msgstr "شاغرة"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard_line__wizard_id
+msgid "Wizard"
+msgstr "معالج"
+
+#. module: hotel_housekeeping
+#. odoo-python
+#: code:addons/hotel_housekeeping/models/hotel_housekeeping_task.py:0
+msgid "You can only delete housekeeping tasks that are new or cancelled."
+msgstr "يمكن فقط حذف مهام التنظيف الجديدة أو الملغاة."
+
+#. module: hotel_housekeeping
+#. odoo-python
+#: code:addons/hotel_housekeeping/models/hotel_housekeeping_task.py:0
+msgid "You can only mark a task as cleaned when it is in cleaning state."
+msgstr "يمكن تحديد المهمة كمنظفة فقط عندما تكون قيد التنظيف."
+
+#. module: hotel_housekeeping
+#. odoo-python
+#: code:addons/hotel_housekeeping/models/hotel_housekeeping_task.py:0
+msgid "You can only start a new task."
+msgstr "يمكن بدء المهام الجديدة فقط."
+
+#. module: hotel_housekeeping
+#. odoo-python
+#: code:addons/hotel_housekeeping/models/hotel_housekeeping_task.py:0
+msgid "You cannot cancel a task that is already cleaned."
+msgstr "لا يمكن إلغاء مهمة تم تنظيفها بالفعل."

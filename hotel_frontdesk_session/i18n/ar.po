@@ -17,142 +17,196 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session_cash__amount
 msgid "Amount"
 msgstr "المبلغ"
 
 #. module: hotel_frontdesk_session
+#: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_form
 msgid "Are you sure you want to close this cashier session? This will lock transactions and calculate differences."
 msgstr "هل أنت متأكد من رغبتك في إغلاق جلسة الصندوق هذه؟ سيتم قفل المعاملات واحتساب الفروقات."
 
 #. module: hotel_frontdesk_session
+#: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_form
 msgid "Cash Verification Summary"
 msgstr "ملخص مطابقة النقدية"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__user_id
 msgid "Cashier"
 msgstr "أمين الصندوق / موظف الاستقبال"
 
 #. module: hotel_frontdesk_session
+#: model:ir.ui.menu,name:hotel_frontdesk_session.menu_hotel_frontdesk_sessions
 msgid "Cashier Sessions"
 msgstr "جلسات الاستقبال والصندوق"
 
 #. module: hotel_frontdesk_session
+#: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_form
 msgid "Close Session"
 msgstr "إغلاق الجلسة"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields.selection,name:hotel_frontdesk_session.selection__hotel_frontdesk_session__state__closed
 msgid "Closed"
 msgstr "مغلقة"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__date_closed
 msgid "Closed Time"
 msgstr "وقت الإغلاق"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__closing_balance_ids
 msgid "Closing Cash Control"
 msgstr "مطابقة النقدية عند الإغلاق"
 
 #. module: hotel_frontdesk_session
+#: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_form
 msgid "Closing Cash Count"
 msgstr "جرد النقدية عند الإغلاق"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields.selection,name:hotel_frontdesk_session.selection__hotel_frontdesk_session_cash__type__closing
 msgid "Closing Count"
 msgstr "عد الإغلاق"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__currency_id
 msgid "Company Currency"
 msgstr "عملة الشركة"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session_cash__currency_id
 msgid "Currency"
 msgstr "العملة"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__difference
 msgid "Difference"
 msgstr "الفارق"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model,name:hotel_frontdesk_session.model_hotel_frontdesk_session
 msgid "Front Desk Cashier Session"
 msgstr "جلسة صندوق الاستقبال"
 
 #. module: hotel_frontdesk_session
+#: model:ir.sequence,name:hotel_frontdesk_session.seq_hotel_frontdesk_session
+msgid "Front Desk Session"
+msgstr "جلسة مكتب الاستقبال"
+
+#. module: hotel_frontdesk_session
+#: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_list
+#: model:ir.actions.act_window,name:hotel_frontdesk_session.hotel_frontdesk_session_action
 msgid "Front Desk Sessions"
 msgstr "جلسات صندوق الاستقبال"
 
 #. module: hotel_frontdesk_session
+#: model_terms:ir.actions.act_window,help:hotel_frontdesk_session.hotel_frontdesk_session_action
+msgid "Front desk cashier sessions let receptionists perform cashier opening counts, track transactions, and execute shift closures."
+msgstr ""
+
+#. module: hotel_frontdesk_session
+#. odoo-python
+#: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "New"
 msgstr "جديد"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields.selection,name:hotel_frontdesk_session.selection__hotel_frontdesk_session__state__opened
 msgid "Open"
 msgstr "مفتوحة"
 
 #. module: hotel_frontdesk_session
+#: model_terms:ir.actions.act_window,help:hotel_frontdesk_session.hotel_frontdesk_session_action
+msgid "Open a new front desk session"
+msgstr "افتح جلسة استقبال جديدة"
+
+#. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__date_opened
 msgid "Opened Time"
 msgstr "وقت الفتح"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__opening_balance_ids
 msgid "Opening Cash Control"
 msgstr "مطابقة النقدية عند الفتح"
 
 #. module: hotel_frontdesk_session
+#: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_form
 msgid "Opening Cash Count"
 msgstr "جرد النقدية عند الفتح"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields.selection,name:hotel_frontdesk_session.selection__hotel_frontdesk_session_cash__type__opening
 msgid "Opening Count"
 msgstr "عد الفتح"
 
 #. module: hotel_frontdesk_session
+#. odoo-python
+#: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "Please define the closing cash count before closing the session."
 msgstr "الرجاء إدخال قيمة جرد النقدية قبل إغلاق الجلسة."
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__property_id
 msgid "Property"
 msgstr "الفندق / المنشأة"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session_cash__session_id
 msgid "Session"
 msgstr "الجلسة"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model,name:hotel_frontdesk_session.model_hotel_frontdesk_session_cash
 msgid "Session Cash Entry"
 msgstr "إدخال نقدية الجلسة"
 
 #. module: hotel_frontdesk_session
+#: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_form
 msgid "Session Info"
 msgstr "معلومات الجلسة"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__name
 msgid "Session Reference"
 msgstr "مرجع الجلسة"
 
 #. module: hotel_frontdesk_session
+#. odoo-python
+#: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "This session is already closed."
 msgstr "هذه الجلسة مغلقة بالفعل."
 
 #. module: hotel_frontdesk_session
+#: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_form
 msgid "Timeframes"
 msgstr "المدد الزمنية"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__total_closing_balance
 msgid "Total Closing Balance"
 msgstr "إجمالي رصيد الإغلاق"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__total_opening_balance
 msgid "Total Opening Balance"
 msgstr "إجمالي رصيد الفتح"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__total_transactions
 msgid "Total Transactions"
 msgstr "إجمالي المعاملات والدفعات"
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session_cash__type
 msgid "Type"
 msgstr "النوع"
 
 #. module: hotel_frontdesk_session
+#. odoo-python
+#: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "You cannot delete a closed front desk session."
-msgstr "لا يمكنك حذف جلسة استقبال مغلقة."
-
+msgstr "لا يمكن حذف جلسة استقبال مغلقة."

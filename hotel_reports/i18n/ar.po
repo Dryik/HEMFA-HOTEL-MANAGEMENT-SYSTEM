@@ -1,0 +1,156 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* hotel_reports
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-11 12:00+0000\n"
+"PO-Revision-Date: 2026-07-11 12:00+0000\n"
+"Last-Translator: Antigravity <antigravity@gemini.google>\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Agency / Entity"
+msgstr "الوكالة / الجهة"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Arrival"
+msgstr "الوصول"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__arrivals
+msgid "Arrivals"
+msgstr "الواصلون"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Birth Date"
+msgstr "تاريخ الميلاد"
+
+#. module: hotel_reports
+#: model:ir.model.fields,help:hotel_reports.field_hotel_report_wizard__date
+msgid "Business date the report covers."
+msgstr "تاريخ العمل الذي يغطيه التقرير."
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.hotel_report_wizard_view_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Coming From"
+msgstr "قادم من"
+
+#. module: hotel_reports
+#: model:ir.actions.report,name:hotel_reports.action_report_daily_movement
+msgid "Daily Movement Report"
+msgstr "تقرير الحركة اليومية"
+
+#. module: hotel_reports
+#: model:ir.model,name:hotel_reports.model_report_hotel_reports_report_daily_movement
+msgid "Daily Movement Report Renderer"
+msgstr ""
+
+#. module: hotel_reports
+#: model:ir.actions.act_window,name:hotel_reports.hotel_report_wizard_action
+msgid "Daily Reports"
+msgstr "التقارير اليومية"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Departure"
+msgstr "المغادرة"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__departures
+msgid "Departures"
+msgstr "المغادرون"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Guest"
+msgstr "النزيل / الضيف"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Heading To"
+msgstr "متجه إلى"
+
+#. module: hotel_reports
+#: model:ir.model,name:hotel_reports.model_hotel_report_wizard
+msgid "Hotel Daily Report Wizard"
+msgstr "معالج التقارير اليومية للفندق"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "ID Number"
+msgstr "رقم الهوية"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "ID Type"
+msgstr "نوع الهوية"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__inhouse
+msgid "In-House Guests"
+msgstr "النزلاء المقيمون"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Nationality"
+msgstr "الجنسية"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Nights"
+msgstr "الليالي"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.hotel_report_wizard_view_form
+msgid "Print"
+msgstr "طباعة"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Property:"
+msgstr "الفندق:"
+
+#. module: hotel_reports
+#: model:ir.ui.menu,name:hotel_reports.menu_hotel_reports
+msgid "Reports"
+msgstr "التقارير"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Reservation"
+msgstr "الحجز"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Room"
+msgstr "الغرفة"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__security
+msgid "Security / Police List"
+msgstr "قائمة الأمن / الجوازات"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+msgid "Total:"
+msgstr "الإجمالي:"

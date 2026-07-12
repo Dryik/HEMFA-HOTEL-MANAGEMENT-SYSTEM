@@ -17,122 +17,190 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields.selection,name:hotel_night_audit.selection__hotel_night_audit_line__status__skipped
 msgid "Already Charged"
 msgstr "تم المحاسبة بالفعل"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit_line__amount_posted
 msgid "Amount Posted"
 msgstr "المبلغ المسجل"
 
 #. module: hotel_night_audit
+#: model_terms:ir.ui.view,arch_db:hotel_night_audit.hotel_night_audit_view_form
+msgid "Are you sure you want to run the night audit? This will post room-night charges, close no-shows, and roll the operational business date forward."
+msgstr "هل أنت متأكد من تشغيل التدقيق الليلي؟ سيتم ترحيل رسوم الغرف وإغلاق حالات عدم الحضور وتدوير تاريخ العمل الفندقي."
+
+#. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit_line__audit_id
 msgid "Audit"
 msgstr "التدقيق"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit_line__status
 msgid "Audit Action"
 msgstr "إجراء التدقيق"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit__date
 msgid "Audit Date"
 msgstr "تاريخ التدقيق"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit__line_ids
+#: model_terms:ir.ui.view,arch_db:hotel_night_audit.hotel_night_audit_view_form
 msgid "Audit Details"
 msgstr "تفاصيل التدقيق"
 
 #. module: hotel_night_audit
+#: model_terms:ir.ui.view,arch_db:hotel_night_audit.hotel_night_audit_view_form
 msgid "Audit Parameters"
 msgstr "معايير التدقيق"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit__name
 msgid "Audit Reference"
 msgstr "مرجع التدقيق"
 
 #. module: hotel_night_audit
+#. odoo-python
+#: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
+msgid "Audit date %(audit_date)s does not match the property's current business date %(prop_date)s."
+msgstr "تاريخ التدقيق %(audit_date)s لا يطابق تاريخ العمل الحالي للمنشأة %(prop_date)s."
+
+#. module: hotel_night_audit
+#: model:ir.model.fields.selection,name:hotel_night_audit.selection__hotel_night_audit__state__done
 msgid "Completed"
 msgstr "مكتمل"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit__currency_id
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit_line__currency_id
 msgid "Currency"
 msgstr "العملة"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_property__current_business_date
 msgid "Current Business Date"
 msgstr "تاريخ العمل الحالي"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields.selection,name:hotel_night_audit.selection__hotel_night_audit__state__draft
 msgid "Draft"
 msgstr "مسودة"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit_line__folio_id
 msgid "Folio"
 msgstr "حساب النزيل / الفوليو"
 
 #. module: hotel_night_audit
+#: model:ir.sequence,name:hotel_night_audit.seq_hotel_night_audit
+#: model:ir.model,name:hotel_night_audit.model_hotel_night_audit
 msgid "Hotel Night Audit"
 msgstr "التدقيق الليلي للفندق"
 
 #. module: hotel_night_audit
+#: model:ir.model,name:hotel_night_audit.model_hotel_night_audit_line
 msgid "Hotel Night Audit Detail Line"
 msgstr "تفاصيل التدقيق الليلي للفندق"
 
 #. module: hotel_night_audit
+#. odoo-python
+#: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "New"
 msgstr "جديد"
 
 #. module: hotel_night_audit
+#: model:ir.ui.menu,name:hotel_night_audit.menu_hotel_night_audit
 msgid "Night Audit"
 msgstr "التدقيق الليلي"
 
 #. module: hotel_night_audit
+#: model_terms:ir.ui.view,arch_db:hotel_night_audit.hotel_night_audit_view_list
+#: model:ir.actions.act_window,name:hotel_night_audit.hotel_night_audit_action
 msgid "Night Audits"
 msgstr "التدقيق الليلي"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields.selection,name:hotel_night_audit.selection__hotel_night_audit_line__status__no_show
 msgid "No Show Rollover"
 msgstr "ترحيل عدم الحضور"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit__occupancy_pct
+msgid "Occupancy Rate (%)"
+msgstr "نسبة الإشغال (%)"
+
+#. module: hotel_night_audit
+#: model:ir.model.fields,help:hotel_night_audit.field_hotel_night_audit__date
 msgid "Operational business date being closed."
 msgstr "تاريخ العمل الفندقي الجاري إغلاقه بالتدقيق الليلي."
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit__property_id
 msgid "Property"
 msgstr "الفندق / المنشأة"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit_line__reservation_id
 msgid "Reservation"
 msgstr "الحجز"
 
 #. module: hotel_night_audit
+#: model_terms:ir.ui.view,arch_db:hotel_night_audit.hotel_night_audit_view_form
 msgid "Results"
 msgstr "النتائج"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit__revenue_posted
 msgid "Revenue Posted"
 msgstr "الإيرادات المسجلة والملغاة"
 
 #. module: hotel_night_audit
+#. odoo-python
+#: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Room Charge - %s"
 msgstr "رسوم الغرفة - %s"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields.selection,name:hotel_night_audit.selection__hotel_night_audit_line__status__posted
 msgid "Room Night Charged"
 msgstr "ليلة غرفة محتسبة"
 
 #. module: hotel_night_audit
+#: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit__run_user_id
 msgid "Run By"
 msgstr "تشغيل بواسطة"
 
 #. module: hotel_night_audit
+#: model_terms:ir.ui.view,arch_db:hotel_night_audit.hotel_night_audit_view_form
 msgid "Run Night Audit"
 msgstr "بدء التدقيق الليلي"
 
 #. module: hotel_night_audit
+#: model_terms:ir.actions.act_window,help:hotel_night_audit.hotel_night_audit_action
+msgid "Running the night audit closes the operational day, posts room night charges, and updates no-shows."
+msgstr ""
+
+#. module: hotel_night_audit
+#: model_terms:ir.actions.act_window,help:hotel_night_audit.hotel_night_audit_action
+msgid "Start the first night audit"
+msgstr "ابدأ أول تدقيق ليلي"
+
+#. module: hotel_night_audit
+#: model:ir.model.fields,help:hotel_night_audit.field_hotel_property__current_business_date
+msgid "The active operational business date for the hotel, rolled forward daily by the night audit."
+msgstr "تاريخ العمل الفندقي النشط، يتم تدويره يومياً بواسطة التدقيق الليلي."
+
+#. module: hotel_night_audit
+#. odoo-python
+#: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "This night audit is already completed."
 msgstr "تم إكمال هذا التدقيق الليلي بالفعل."
 
 #. module: hotel_night_audit
+#. odoo-python
+#: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "You cannot delete a completed night audit record."
-msgstr "لا يمكنك حذف سجل تدقيق ليلي مكتمل."
-
+msgstr "لا يمكن حذف سجل تدقيق ليلي مكتمل."
