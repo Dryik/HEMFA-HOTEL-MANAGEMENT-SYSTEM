@@ -136,6 +136,8 @@ class TestPosRoomCharge(TransactionCase):
         cash_method = self.env["pos.payment.method"].create(
             {"name": "Test Cash", "is_room_charge": False}
         )
+        # pos.payment validates its method against the session config.
+        self.pos_config.write({"payment_method_ids": [(4, cash_method.id)]})
         order = self._pos_order(partner=self.guest)
         # Replace half the room-charge amount with a cash payment.
         room_payment = order.payment_ids[0]
