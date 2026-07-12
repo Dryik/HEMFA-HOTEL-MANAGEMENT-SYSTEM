@@ -96,7 +96,7 @@
                              ('state', 'in', ('confirmed', 'in_progress', 'done'))]"/>
                 <filter string="Urgent" name="urgent"
                     domain="[('priority', '=', '3')]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Status" name="group_state"
                         context="{'group_by': 'state'}"/>
                     <filter string="Room" name="group_room"
