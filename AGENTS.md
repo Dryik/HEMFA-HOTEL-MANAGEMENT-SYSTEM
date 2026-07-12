@@ -158,6 +158,7 @@ Runtime testing happens on the Odoo.sh dev branch (no local Odoo install).
 11. **`has_group()` is False for the test superuser**: Odoo 19 checks real group membership with no superuser shortcut, and the test runner's `__system__` user is in no hotel group. Any test exercising a `has_group`-gated action must create a user with the right `group_ids` and call `with_user()`.
 12. **`report_action()` returns the layout configurator**: for an admin on a company with no `external_report_layout_id`, `ir.actions.report.report_action(docs)` returns the document-layout act_window instead of the report. Call `report_action(docs, config=False)`.
 13. **`create_date` is the transaction start timestamp**: Postgres `now()` is frozen at transaction start, so in tests `create_date` predates any wall-clock `fields.Datetime.now()` value captured during the test. Never compare them; pin `create_date` via SQL UPDATE when a compute filters on it.
+14. **PO entries without `#:` occurrence lines are silently dropped**: Odoo 19's `PoFileReader` (`odoo/tools/translate.py`) only yields translations from occurrence references (`model:...`, `model_terms:...`, `code:...`). Never hand-write ar.po files — export from the running instance (`odoo.tools.translate.trans_export` in `odoo-bin shell`), then run `translate_exported_po.py` to fill Arabic msgstr from its dictionary. msgids must byte-match the source strings (watch multi-line Python string concatenation).
 
 ## Odoo 19 Source Reference
 

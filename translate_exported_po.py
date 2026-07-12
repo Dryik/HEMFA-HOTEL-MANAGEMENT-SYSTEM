@@ -1,5 +1,16 @@
 import os
 import re
+import sys
+
+
+def po_escape(text):
+    """Escape a term for inclusion in a quoted PO msgid/msgstr."""
+    return (
+        text.replace("\\", "\\\\")
+        .replace('"', '\\"')
+        .replace("\n", "\\n")
+        .replace("\t", "\\t")
+    )
 
 TRANSLATIONS = {
     "Address": "العنوان",
@@ -9,12 +20,12 @@ TRANSLATIONS = {
     "All Nationalities": "كل الجنسيات",
     "Already Charged": "تم المحاسبة بالفعل",
     "Amenities": "الخدمات المرافقة",
-    "Amenities beyond the room type": "الخدمات الإضافية خارج نوع الغرفة Standard",
+    "Amenities beyond the room type's standard set.": "الخدمات الإضافية خارج المجموعة الأساسية لنوع الغرفة.",
     "Amount": "المبلغ",
     "Amount Due": "المبلغ المستحق",
     "Amount Paid": "المبلغ المدفوع",
     "Amount Posted": "المبلغ المسجل",
-    "Applies this rate depending on the guest": "يطبق هذا السعر حسب جنسية النزيل",
+    "Applies this rate depending on the guest's nationality.": "يطبق هذا السعر حسب جنسية النزيل.",
     "Are you sure you want to close this cashier session? This will lock transactions and calculate differences.": "هل أنت متأكد من رغبتك في إغلاق جلسة الصندوق هذه؟ سيتم قفل المعاملات واحتساب الفروقات.",
     "Are you sure you want to run the night audit? This will post room-night charges, close no-shows, and roll the operational business date forward.": "هل أنت متأكد من تشغيل التدقيق الليلي؟ سيتم ترحيل رسوم الغرف وإغلاق حالات عدم الحضور وتدوير تاريخ العمل الفندقي.",
     "Arrival": "الوصول",
@@ -62,18 +73,18 @@ TRANSLATIONS = {
     "Date": "التاريخ",
     "Date of Birth": "تاريخ الميلاد",
     "Default Agency / Entity": "الوكالة / الجهة الافتراضية",
-    "Default nightly rate before seasonal, agency and occupancy": "السعر الافتراضي لليلة قبل التسويات الموسمية والوكالات ونسب الإشغال",
+    "Default nightly rate before seasonal, agency and occupancy adjustments (hotel_rate).": "السعر الافتراضي لليلة قبل التسويات الموسمية والوكالات ونسب الإشغال (hotel_rate).",
     "Departure": "المغادرة",
     "Departures Today": "المغادرون اليوم",
     "Description": "الوصف",
     "Difference": "الفارق",
     "Dirty": "غير نظيفة",
     "Draft": "مسودة",
-    "Drives the LYD vs foreign-currency pricing rule": "يتحكم في قاعدة تسعير العملة المحلية مقابل العملة الأجنبية",
+    "Drives the LYD vs foreign-currency pricing rule (hotel_rate).": "يتحكم في قاعدة تسعير العملة المحلية مقابل العملة الأجنبية (hotel_rate).",
     "Driving License": "رخصة قيادة",
     "End Date": "تاريخ الانتهاء",
     "Entity responsible for this specific charge line.": "الجهة المسؤولة عن خط الفاتورة هذا.",
-    "Entity this guest is usually registered under. The": "الجهة التي يسجل تحتها النزيل غالباً.",
+    "Entity this guest is usually registered under. The reservation can override it per stay.": "الجهة التي يسجل تحتها النزيل غالباً، ويمكن للحجز تجاوزها لكل إقامة.",
     "Extra Amenities": "وسائل راحة إضافية",
     "Family": "عائلي",
     "Family Book": "كتيب العائلة",
@@ -109,8 +120,8 @@ TRANSLATIONS = {
     "Hotel Rate Rule": "قاعدة تسعير الفندق",
     "Hotel Reservation": "حجز الفندق",
     "Hotel Room": "غرفة الفندق",
-    "Hour at which the hotel business day rolls over.": "الساعة التي ينتهي بها يوم العمل الفندقي ويبدأ يوم جديد.",
-    "Hours after the business day start during which checkout": "الساعات الممنوحة بعد بداية اليوم لتسجيل المغادرة بدون تكلفة إضافية",
+    "Hour at which the hotel business day rolls over. A stay is charged per business day from this hour to the same hour the next calendar day.": "الساعة التي يتم عندها تدوير يوم العمل الفندقي؛ تحتسب الإقامة لكل يوم عمل من هذه الساعة حتى الساعة نفسها من اليوم التالي.",
+    "Hours after the business day start during which checkout incurs no late charge.": "الساعات الممنوحة بعد بداية يوم العمل لتسجيل المغادرة بدون رسوم تأخير.",
     "Housekeeping Status": "حالة نظافة الغرفة",
     "ID Expiry": "تاريخ انتهاء الهوية",
     "ID Number": "رقم الهوية",
@@ -196,9 +207,9 @@ TRANSLATIONS = {
     "Room Number": "رقم الغرفة",
     "Room Type": "نوع الغرفة",
     "Room Types": "أنواع الغرف",
-    "Room reserved for hotel administration; excluded from": "غرفة محجوزة للاستخدام الإداري، مستبعدة من البيع والإشغال",
+    "Room reserved for hotel administration; excluded from sellable inventory and occupancy percentages.": "غرفة محجوزة للاستخدام الإداري، مستبعدة من الغرف القابلة للبيع ونسب الإشغال.",
     "Rooms": "الغرف",
-    "Rooms available for sale: excludes out-of-order and": "الغرف القابلة للبيع (باستثناء خارج الخدمة والاستخدام الإداري)",
+    "Rooms available for sale: excludes out-of-order and admin-use rooms. Denominator for occupancy-based pricing.": "الغرف القابلة للبيع: باستثناء غرف خارج الخدمة والاستخدام الإداري؛ وهي مقام حساب التسعير حسب الإشغال.",
     "Route To": "توجيه الحساب إلى",
     "Route to Agency": "توجيه إلى الوكالة / الجهة",
     "Route to Guest": "توجيه إلى النزيل",
@@ -207,15 +218,15 @@ TRANSLATIONS = {
     "Rule Info": "معلومات قاعدة التسعير",
     "Run By": "تشغيل بواسطة",
     "Run Night Audit": "بدء التدقيق الليلي",
-    "Service product carrying the base price, taxes and income": "الخدمة التي تحمل السعر الأساسي والضرائب وحسابات الإيراد لهذا النوع من الغرف",
+    "Service product carrying the base price, taxes and income account for this room type. Created automatically if empty.": "الخدمة التي تحمل السعر الأساسي والضرائب وحساب الإيراد لهذا النوع من الغرف. تنشأ تلقائياً إذا تركت فارغة.",
     "Session": "الجلسة",
     "Session Cash Entry": "إدخال نقدية الجلسة",
     "Session Info": "معلومات الجلسة",
     "Session Reference": "مرجع الجلسة",
-    "Set by an open room-impacting maintenance request. Removes": "يتم تفعيله تلقائياً بطلب صيانة للغرفة لسحبها من الغرف القابلة للبيع",
+    "Set by an open room-impacting maintenance request. Removes the room from sellable inventory.": "يتم تفعيله بطلب صيانة مفتوح يؤثر على الغرفة؛ يسحب الغرفة من الغرف القابلة للبيع.",
     "Short code used in references and reports.": "كود اختصار مستخدم في المراجع والتقارير.",
     "Specific Agency / Entity": "وكالة / جهة محددة",
-    "Specific agency to route to. If left empty, routes to the reservation": "الوكالة المحددة للتوجيه. إذا تركت فارغة يتم التوجيه لوكالة الحجز",
+    "Specific agency to route to. If left empty, routes to the reservation's agency.": "الوكالة المحددة للتوجيه. إذا تركت فارغة يتم التوجيه لوكالة الحجز.",
     "Start Date": "تاريخ البدء",
     "Status": "الحالة",
     "Stay": "الحجز والإقامة",
@@ -229,7 +240,7 @@ TRANSLATIONS = {
     "Total Closing Balance": "إجمالي رصيد الإغلاق",
     "Total Opening Balance": "إجمالي رصيد الفتح",
     "Total Transactions": "إجمالي المعاملات والدفعات",
-    "Travel agency, company or government entity (جهة) that can": "وكالة سفر، شركة أو جهة حكومية يمكن تحميل الحسابات عليها",
+    "Travel agency, company or government entity (جهة) that can be billed for its guests and hold advance balances.": "وكالة سفر أو شركة أو جهة حكومية يمكن فوترة نزلائها عليها والاحتفاظ بأرصدة مقدمة لها.",
     "Trip": "الرحلة / الزيارة",
     "Type": "النوع",
     "Unit Price": "سعر الوحدة",
@@ -263,6 +274,94 @@ TRANSLATIONS = {
     "type": "النوع",
     "vacant": "شاغرة"
 }
+
+# Terms for the modules implemented after the original dictionary:
+# hotel_maintenance, hotel_restricted_services, hotel_pos_room_charge,
+# hotel_reports.
+TRANSLATIONS.update({
+    # hotel_maintenance
+    "Maintenance": "الصيانة",
+    "Maintenance Requests": "طلبات الصيانة",
+    "Hotel Maintenance Request": "طلب صيانة الفندق",
+    "Request Reference": "مرجع الطلب",
+    "Reported By": "جهة التبليغ",
+    "Reporting Guest": "النزيل المبلغ",
+    "Guest who reported the problem, when the source is a guest.": "النزيل الذي أبلغ عن المشكلة عندما يكون مصدر البلاغ نزيلاً.",
+    "Blocks Room": "يحجب الغرفة عن البيع",
+    "Technician": "الفني",
+    "Location": "الموقع",
+    "Problem": "المشكلة",
+    "Handling": "المعالجة",
+    "Start Work": "بدء العمل",
+    "Mark Done": "إنهاء العمل",
+    "Verify": "اعتماد",
+    "Reset to New": "إعادة إلى جديد",
+    "Confirmed On": "تاريخ التأكيد",
+    "Started On": "تاريخ البدء",
+    "Done On": "تاريخ الإنجاز",
+    "Verified On": "تاريخ الاعتماد",
+    "In Progress": "قيد التنفيذ",
+    "Done": "منجز",
+    "Verified": "معتمد",
+    "Staff": "الموظفون",
+    "Housekeeping": "التدبير الفندقي",
+    "Inspection": "التفتيش",
+    "Urgent": "عاجل",
+    "High": "مرتفع",
+    "Normal": "عادي",
+    "Low": "منخفض",
+    "Priority": "الأولوية",
+    "Open": "مفتوحة",
+    "Blocking a Room": "تحجب غرفة",
+    "What the technician actually did.": "ما قام به الفني فعلياً.",
+    "Describe the problem...": "صف المشكلة...",
+    "What was done to fix it...": "ما تم عمله لإصلاحها...",
+    "Report a maintenance problem": "الإبلاغ عن مشكلة صيانة",
+    "Leave empty for common areas; use Location instead.": "اتركه فارغاً للمناطق العامة واستخدم حقل الموقع بدلاً منه.",
+    "Where the problem is when it is not inside a room (lobby, kitchen, elevator...).": "مكان المشكلة عندما لا تكون داخل غرفة (البهو، المطبخ، المصعد...).",
+    "The room cannot be sold while this request is open. Confirming the request takes the room out of order; verification returns it to service.": "لا يمكن بيع الغرفة أثناء فتح هذا الطلب؛ تأكيد الطلب يخرج الغرفة من الخدمة والاعتماد يعيدها.",
+    # hotel_restricted_services
+    "Restricted Services": "الخدمات المقيدة",
+    "Restricted Services and Ceilings": "الخدمات المقيدة والسقوف",
+    "Guest Service Restriction": "قيد خدمة النزيل",
+    "Entity Service Ceiling": "سقف خدمات الجهة",
+    "Entity Service Ceilings": "سقوف خدمات الجهات",
+    "Service Ceilings": "سقوف الخدمات",
+    "Service Category": "فئة الخدمة",
+    "Service Restrictions": "قيود الخدمات",
+    "Restriction": "القيد",
+    "Blocked": "محظورة",
+    "Allowed with Limit": "مسموحة بحد أقصى",
+    "Daily Limit": "الحد اليومي",
+    "Stay Limit": "حد الإقامة",
+    "Daily Limit per Guest": "الحد اليومي لكل نزيل",
+    "Reason / Note": "السبب / ملاحظة",
+    "Leave empty to apply the ceiling to all services.": "اتركه فارغاً لتطبيق السقف على كل الخدمات.",
+    "Define per-entity daily charge ceilings": "تحديد سقوف يومية للرسوم لكل جهة",
+    "All Services": "كل الخدمات",
+    # hotel_pos_room_charge
+    "Charge to Room": "تحميل على الغرفة",
+    "POS Order": "طلب نقطة البيع",
+    "Room Charge": "رسوم على الغرفة",
+    # hotel_reports
+    "Daily Reports": "التقارير اليومية",
+    "Daily Movement Report": "تقرير الحركة اليومية",
+    "Hotel Daily Report Wizard": "معالج التقارير اليومية للفندق",
+    "Arrivals": "الواصلون",
+    "Departures": "المغادرون",
+    "In-House Guests": "النزلاء المقيمون",
+    "Security / Police List": "قائمة الأمن / الجوازات",
+    "Business date the report covers.": "تاريخ العمل الذي يغطيه التقرير.",
+    "Print": "طباعة",
+    "Report Type": "نوع التقرير",
+    "Birth Date": "تاريخ الميلاد",
+    "Coming From": "قادم من",
+    "Heading To": "متجه إلى",
+    "Trip Number": "رقم الرحلة",
+    "Total:": "الإجمالي:",
+    "Property:": "الفندق:",
+    "reservations": "حجوزات",
+})
 
 header_template = """# Translation of Odoo Server.
 # This file contains the translation of the following module:
@@ -346,9 +445,9 @@ def parse_po_file(filepath):
     return entries
 
 def main():
-    po_path = "/tmp/ar.po"
+    po_path = sys.argv[1] if len(sys.argv) > 1 else "/tmp/ar.po"
     if not os.path.exists(po_path):
-        print("Error: /tmp/ar.po does not exist. Please run Odoo translation export first!")
+        print(f"Error: {po_path} does not exist. Please run Odoo translation export first!")
         return
 
     print(f"Reading and parsing {po_path}...")
@@ -383,7 +482,7 @@ def main():
     user_src_dir = "/home/odoo/src/user"
     if not os.path.exists(user_src_dir):
         # Fallback to local workspace if run locally
-        user_src_dir = r"c:\prototypes\HEMFA-HOTEL-MANAGEMENT-SYSTEM"
+        user_src_dir = os.path.dirname(os.path.abspath(__file__))
 
     for module, entries in module_entries.items():
         module_dir = os.path.join(user_src_dir, module)
@@ -396,18 +495,33 @@ def main():
         po_output_path = os.path.join(po_output_dir, "ar.po")
 
         po_lines = []
+        untranslated = []
         for entry in entries:
             msgid = entry["msgid"]
-            msgstr = TRANSLATIONS.get(msgid, msgid) # translate using dictionary
-            
+            # PO reads an entry's msgid with \" and \\ unescaped; the
+            # dictionary stores plain text, so unescape before lookup.
+            plain_msgid = (
+                msgid.replace('\\"', '"').replace("\\\\", "\\")
+            )
+            # Empty msgstr = untranslated (falls back to English);
+            # never write the English source as a fake translation.
+            msgstr = TRANSLATIONS.get(plain_msgid, "")
+            if not msgstr:
+                untranslated.append(plain_msgid)
+
             # format the record block
             block = []
             block.append(f"#. module: {module}")
             for occ in entry["occurrences"]:
                 block.append(f"#: {occ}")
             block.append(f'msgid "{msgid}"')
-            block.append(f'msgstr "{msgstr}"')
+            block.append(f'msgstr "{po_escape(msgstr)}"')
             po_lines.append("\n".join(block))
+
+        if untranslated:
+            print(f"  [{module}] {len(untranslated)} untranslated terms:")
+            for term in untranslated:
+                print(f"    - {term}")
 
         with open(po_output_path, "w", encoding="utf-8") as f:
             f.write(header_template.format(module_name=module))
