@@ -46,6 +46,7 @@ class TestRestrictedServices(TransactionCase):
                 "type": "consu",
                 "list_price": 5.0,
                 "categ_id": cls.minibar_categ.id,
+                "taxes_id": [(6, 0, [])],
             }
         )
         cls.dinner = cls.env["product.product"].create(
@@ -54,6 +55,7 @@ class TestRestrictedServices(TransactionCase):
                 "type": "consu",
                 "list_price": 40.0,
                 "categ_id": cls.restaurant_categ.id,
+                "taxes_id": [(6, 0, [])],
             }
         )
 

@@ -115,7 +115,6 @@ class TestHotelFrontdeskSession(TransactionCase):
         self.assertEqual(payment.hotel_property_id, self.property)
         self.assertEqual(payment.hotel_frontdesk_session_id, session)
         self.assertIn(payment.state, ("in_process", "paid"))
-        session._compute_balances()
         session.invalidate_recordset(["total_transactions"])
         self.assertEqual(session.total_transactions, 100.0)
 
