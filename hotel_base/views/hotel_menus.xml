@@ -3,6 +3,7 @@
     <menuitem id="menu_hotel_root"
         name="Hotel"
         sequence="15"
+        web_icon="hotel_base,static/description/icon.png"
         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_maintenance,hotel_base.group_hotel_fb,hotel_base.group_hotel_accountant"/>
 
     <menuitem id="menu_hotel_rooms"
