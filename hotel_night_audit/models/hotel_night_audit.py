@@ -191,7 +191,9 @@ class HotelNightAudit(models.Model):
                 folio = self.env["hotel.folio"].create(
                     {"reservation_id": reservation.id}
                 )
-            source_key = f"night_audit:{prop.id}:{self.date}:{reservation.id}"
+            source_key = (
+                f"night_audit:{prop.id}:{self.date}:{reservation.id}:{self.id}"
+            )
             existing = self.env["hotel.folio.line"].search(
                 [("source_key", "=", source_key)], limit=1
             )
