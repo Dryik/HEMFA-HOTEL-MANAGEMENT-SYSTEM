@@ -113,6 +113,14 @@ class TestHotelFolio(TransactionCase):
         self.assertTrue(folio.name.startswith("FOLIO/"))
         self.assertEqual(folio.partner_id, self.guest)
 
+    def test_new_folio_totals_are_safe_before_reservation_selection(self):
+        folio = self.env["hotel.folio"].new({})
+
+        self.assertFalse(folio.currency_id)
+        self.assertEqual(folio.amount_due, 0.0)
+        self.assertEqual(folio.amount_paid, 0.0)
+        self.assertTrue(folio.is_open)
+
     def test_add_charges(self):
         res = self._reservation()
         res.action_confirm()
