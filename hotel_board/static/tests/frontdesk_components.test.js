@@ -132,7 +132,10 @@ function planningWindow() {
                 is_business_date: false,
             },
         ],
-        filters: { applied: {}, options: {} },
+        filters: {
+            applied: {},
+            options: { floors: [{ id: 1, name: "First Floor" }] },
+        },
         legend: { reservation_states: [], primary: [], housekeeping: [], alerts: [] },
         floors: [
             {
