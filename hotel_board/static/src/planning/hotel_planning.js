@@ -465,6 +465,10 @@ export class HotelPlanning extends Component {
         return Array.isArray(value) && value.length ? String(value[0]) : "";
     }
 
+    isFilterOptionSelected(option, name) {
+        return String(this.optionValue(option)) === this.singleFilterValue(name);
+    }
+
     onFilterSelect(event, name, numeric = false) {
         const value = event.target.value;
         this.state.filters[name] = value ? [numeric ? Number(value) : value] : [];
