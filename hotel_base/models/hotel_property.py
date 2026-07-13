@@ -164,7 +164,10 @@ class HotelProperty(models.Model):
         business_date = fields.Date.to_date(business_date)
         if not business_date:
             raise ValidationError(_("A valid business date is required."))
-        return super(HotelProperty, self).write(
+        # This private helper is reached only after the night-audit workflow
+        # has enforced its supervisor/manager role and locked the property.
+        # The rollover itself must bypass the manager-only configuration ACL.
+        return super(HotelProperty, self.sudo()).write(
             {"current_business_date": business_date}
         )
 
