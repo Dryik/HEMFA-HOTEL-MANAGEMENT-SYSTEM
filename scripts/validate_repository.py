@@ -67,9 +67,30 @@ def check_xml(errors: list[str]) -> None:
     for addon in ADDONS:
         for path in addon.rglob("*.xml"):
             try:
-                ElementTree.parse(path)
+                tree = ElementTree.parse(path)
             except Exception as exc:  # pragma: no cover - CI diagnostic
                 fail(errors, f"XML parse failed for {path.relative_to(ROOT)}: {exc}")
+                continue
+
+            for element in tree.iter():
+                if element.tag == "xpath" and re.search(
+                    r"@\s*string\b", element.get("expr", "")
+                ):
+                    fail(
+                        errors,
+                        f"{path.relative_to(ROOT)}: inherited views may not select "
+                        "elements by their translated string attribute",
+                    )
+                if (
+                    element.tag != "xpath"
+                    and element.get("position")
+                    and "string" in element.attrib
+                ):
+                    fail(
+                        errors,
+                        f"{path.relative_to(ROOT)}: inherited view locators may not "
+                        "use their translated string attribute",
+                    )
 
 
 def check_local_xml_references(errors: list[str]) -> None:
