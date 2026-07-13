@@ -108,7 +108,7 @@
                                 <option value="" t-att-selected="!singleFilterValue('floor_ids')">All floors</option>
                                 <option t-foreach="state.data.filters.options.floors || []" t-as="option"
                                     t-key="optionValue(option)" t-att-value="optionValue(option)"
-                                    t-att-selected="String(optionValue(option)) === singleFilterValue('floor_ids')">
+                                    t-att-selected="isFilterOptionSelected(option, 'floor_ids')">
                                     <t t-esc="optionLabel(option)"/>
                                 </option>
                             </select>
@@ -120,7 +120,7 @@
                                 <option value="" t-att-selected="!singleFilterValue('room_type_ids')">All room types</option>
                                 <option t-foreach="state.data.filters.options.room_types || []" t-as="option"
                                     t-key="optionValue(option)" t-att-value="optionValue(option)"
-                                    t-att-selected="String(optionValue(option)) === singleFilterValue('room_type_ids')">
+                                    t-att-selected="isFilterOptionSelected(option, 'room_type_ids')">
                                     <t t-esc="optionLabel(option)"/>
                                 </option>
                             </select>
@@ -132,7 +132,7 @@
                                 <option value="" t-att-selected="!singleFilterValue('room_statuses')">All room statuses</option>
                                 <option t-foreach="state.data.filters.options.room_statuses || []" t-as="option"
                                     t-key="optionValue(option)" t-att-value="optionValue(option)"
-                                    t-att-selected="String(optionValue(option)) === singleFilterValue('room_statuses')">
+                                    t-att-selected="isFilterOptionSelected(option, 'room_statuses')">
                                     <t t-esc="optionLabel(option)"/>
                                 </option>
                             </select>
@@ -144,7 +144,7 @@
                                 <option value="" t-att-selected="!singleFilterValue('hk_statuses')">All housekeeping states</option>
                                 <option t-foreach="state.data.filters.options.housekeeping_statuses || []" t-as="option"
                                     t-key="optionValue(option)" t-att-value="optionValue(option)"
-                                    t-att-selected="String(optionValue(option)) === singleFilterValue('hk_statuses')">
+                                    t-att-selected="isFilterOptionSelected(option, 'hk_statuses')">
                                     <t t-esc="optionLabel(option)"/>
                                 </option>
                             </select>
@@ -156,7 +156,7 @@
                                 <option value="" t-att-selected="!singleFilterValue('reservation_states')">All planning states</option>
                                 <option t-foreach="state.data.filters.options.reservation_states || []" t-as="option"
                                     t-key="optionValue(option)" t-att-value="optionValue(option)"
-                                    t-att-selected="String(optionValue(option)) === singleFilterValue('reservation_states')">
+                                    t-att-selected="isFilterOptionSelected(option, 'reservation_states')">
                                     <t t-esc="optionLabel(option)"/>
                                 </option>
                             </select>
@@ -168,7 +168,7 @@
                                 <option value="" t-att-selected="!singleFilterValue('agency_ids')">All agencies</option>
                                 <option t-foreach="state.data.filters.options.agencies || []" t-as="option"
                                     t-key="optionValue(option)" t-att-value="optionValue(option)"
-                                    t-att-selected="String(optionValue(option)) === singleFilterValue('agency_ids')">
+                                    t-att-selected="isFilterOptionSelected(option, 'agency_ids')">
                                     <t t-esc="optionLabel(option)"/>
                                 </option>
                             </select>
@@ -180,7 +180,7 @@
                                 <option value="" t-att-selected="!singleFilterValue('group_ids')">All groups</option>
                                 <option t-foreach="state.data.filters.options.groups || []" t-as="option"
                                     t-key="optionValue(option)" t-att-value="optionValue(option)"
-                                    t-att-selected="String(optionValue(option)) === singleFilterValue('group_ids')">
+                                    t-att-selected="isFilterOptionSelected(option, 'group_ids')">
                                     <t t-esc="optionLabel(option)"/>
                                 </option>
                             </select>
