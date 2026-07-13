@@ -76,6 +76,7 @@ class TestHotelGuestServices(TransactionCase):
             )
         request.action_end()
         self.assertEqual(request.state, "ended")
+        self.assertGreater(request.end_at, request.start_at)
         with self.assertRaises(UserError):
             request.write({"note": "Changed"})
 

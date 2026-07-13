@@ -51,6 +51,17 @@ class TestHotelReservation(TransactionCase):
                 "default_hotel_property_id": cls.property.id,
             }
         )
+        cls.frontdesk_user = cls.env["res.users"].create(
+            {
+                "name": "Reservation Test Front Desk",
+                "login": "reservation_test_frontdesk",
+                "group_ids": [
+                    (4, cls.env.ref("hotel_base.group_hotel_frontdesk").id)
+                ],
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
+            }
+        )
         cls.housekeeper = cls.env["res.users"].create(
             {
                 "name": "Reservation Security Housekeeper",

@@ -71,6 +71,7 @@ class TestHotelFolio(TransactionCase):
                 "type": "consu",
                 "list_price": 15.0,
                 "categ_id": cls.room_service_categ.id,
+                "taxes_id": [(6, 0, [])],
             }
         )
         cls.laundry = cls.env["product.product"].create(
@@ -79,6 +80,7 @@ class TestHotelFolio(TransactionCase):
                 "type": "service",
                 "list_price": 10.0,
                 "categ_id": cls.other_categ.id,
+                "taxes_id": [(6, 0, [])],
             }
         )
 

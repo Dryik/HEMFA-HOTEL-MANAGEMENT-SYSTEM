@@ -18,7 +18,8 @@
             <form>
                 <header>
                     <button name="action_mark_claimed" type="object" string="Mark Claimed"
-                        class="btn-primary" invisible="state != 'found' or not claimant_id"/>
+                        class="btn-primary" invisible="state != 'found' or not claimant_id"
+                        groups="hotel_base.group_hotel_frontdesk"/>
                     <button name="action_dispose" type="object" string="Dispose"
                         invisible="state != 'found'" groups="hotel_base.group_hotel_manager"/>
                     <field name="state" widget="statusbar"/>
