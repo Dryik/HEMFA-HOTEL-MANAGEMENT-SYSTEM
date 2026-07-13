@@ -381,7 +381,7 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
         reservation_model = (
             self.env["hotel.reservation"].sudo().with_context(hotel_migration=True)
         )
-        reservation_model.create(
+        stale_arrival = reservation_model.create(
             {
                 "partner_id": self.guest.id,
                 "property_id": self.property.id,
@@ -392,7 +392,7 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
                 "state": "confirmed",
             }
         )
-        reservation_model.create(
+        stale_departure = reservation_model.create(
             {
                 "partner_id": self.guest.id,
                 "property_id": self.property.id,
@@ -405,16 +405,41 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
             }
         )
 
-        snapshot = self.workspace.get_workspace_snapshot(
-            self.property.id, self.business_date
-        )
-        attention_keys = {item["key"] for item in snapshot["attention"]["items"]}
-        self.assertNotIn("late_arrivals", attention_keys)
-        self.assertNotIn("overdue_departures", attention_keys)
+        # Freeze the snapshot after today's arrival cutoff. The class fixture
+        # contains a legitimate late arrival for the selected day, so this
+        # test must assert that the historical records are excluded instead
+        # of assuming that the whole queue is empty.
+        now = self.start + timedelta(hours=1)
+        with patch.object(fields.Datetime, "now", return_value=now):
+            snapshot = self.workspace.get_workspace_snapshot(
+                self.property.id, self.business_date
+            )
+            future = self.workspace.get_workspace_snapshot(
+                self.property.id, self.business_date + timedelta(days=7)
+            )
 
-        future = self.workspace.get_workspace_snapshot(
-            self.property.id, self.business_date + timedelta(days=7)
+        attention = {
+            item["key"]: item for item in snapshot["attention"]["items"]
+        }
+        late_action = attention["late_arrivals"]["action"]
+        late_ids = set(
+            self.env[late_action["res_model"]].search(late_action["domain"]).ids
         )
+        self.assertIn(self.reserved.id, late_ids)
+        self.assertNotIn(stale_arrival.id, late_ids)
+
+        overdue_action = attention.get("overdue_departures", {}).get("action")
+        overdue_ids = (
+            set(
+                self.env[overdue_action["res_model"]]
+                .search(overdue_action["domain"])
+                .ids
+            )
+            if overdue_action
+            else set()
+        )
+        self.assertNotIn(stale_departure.id, overdue_ids)
+
         future_keys = {item["key"] for item in future["attention"]["items"]}
         self.assertNotIn("late_arrivals", future_keys)
         self.assertNotIn("overdue_departures", future_keys)
