@@ -1,4 +1,5 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class HotelReservation(models.Model):
@@ -32,7 +33,7 @@ class HotelReservation(models.Model):
             base_price = rtype.base_price
             checkin_date = rec.checkin_date
             if checkin_date:
-                checkin_date_only = checkin_date.date()
+                checkin_date_only = rec.property_id.get_business_date(checkin_date)
                 guest_nationality = rec.guest_nationality_id.code
 
                 domain = [
@@ -99,4 +100,14 @@ class HotelReservation(models.Model):
 
     def action_confirm(self):
         super().action_confirm()
-        self.write({"rate_locked": True})
+        self._set_confirmed_rate_lock()
+
+    def _set_confirmed_rate_lock(self):
+        return super(HotelReservation, self).write({"rate_locked": True})
+
+    def write(self, vals):
+        if "rate_locked" in vals and not (
+            self.env.su and self.env.context.get("hotel_migration")
+        ):
+            raise UserError(_("Confirmed-rate locking is controlled by hotel workflows."))
+        return super().write(vals)

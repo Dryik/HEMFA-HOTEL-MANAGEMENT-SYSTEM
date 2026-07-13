@@ -51,7 +51,9 @@ class TestHotelFrontdeskSession(TransactionCase):
                 }
             )
 
-        cls.partner = cls.env["res.partner"].create({"name": "Session Guest"})
+        cls.partner = cls.env["res.partner"].create(
+            {"name": "Session Guest", "is_hotel_guest": True}
+        )
 
         cls.cash_journal = cls.env["account.journal"].search([("type", "=", "cash")], limit=1)
         if not cls.cash_journal:
@@ -67,16 +69,14 @@ class TestHotelFrontdeskSession(TransactionCase):
             {
                 "name": "Test Cashier",
                 "login": "tcashier",
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
             }
         )
 
         # Assign groups via res.groups user_ids
-        group_fd = cls.env.ref("hotel_base.group_hotel_frontdesk")
-        group_fd.write({"user_ids": [(4, cls.cashier.id)]})
-
-        invoice_group = cls.env.ref("account.group_account_invoice", raise_if_not_found=False)
-        if invoice_group:
-            invoice_group.write({"user_ids": [(4, cls.cashier.id)]})
+        group_cashier = cls.env.ref("hotel_base.group_hotel_cashier")
+        group_cashier.write({"user_ids": [(4, cls.cashier.id)]})
 
     def test_session_lifecycle(self):
         # 1. Open session
@@ -84,8 +84,8 @@ class TestHotelFrontdeskSession(TransactionCase):
             {
                 "property_id": self.property.id,
                 "opening_balance_ids": [
-                    (0, 0, {"currency_id": self.company_currency.id, "amount": 200.0, "type": "opening"}),
-                    (0, 0, {"currency_id": self.foreign_currency.id, "amount": 50.0, "type": "opening"}), # 50 Foreign = 250 Company
+                    (0, 0, {"currency_id": self.company_currency.id, "journal_id": self.cash_journal.id, "amount": 200.0, "type": "opening"}),
+                    (0, 0, {"currency_id": self.foreign_currency.id, "journal_id": self.cash_journal.id, "amount": 50.0, "type": "opening"}), # 50 Foreign = 250 Company
                 ]
             }
         )
@@ -95,29 +95,34 @@ class TestHotelFrontdeskSession(TransactionCase):
 
         # 2. Register a payment transaction during the session
         # Mock payment creation by the cashier
-        payment = self.env["account.payment"].with_user(self.cashier).create(
+        wizard = self.env["hotel.cashier.payment.wizard"].with_user(
+            self.cashier
+        ).create(
             {
-                "payment_type": "inbound",
-                "partner_type": "customer",
+                "session_id": session.id,
+                "property_id": self.property.id,
                 "partner_id": self.partner.id,
                 "amount": 100.0,
                 "currency_id": self.company_currency.id,
                 "journal_id": self.cash_journal.id,
+                "payment_type": "inbound",
+                "purpose": "guest_deposit",
             }
         )
-        self.env.flush_all()
-        # create_date is the transaction start timestamp (Postgres
-        # now()), which predates the wall-clock date_opened by however
-        # long the test phase has been running. Pin it inside the
-        # session window so the compute is deterministic.
-        self.env.cr.execute(
-            "UPDATE account_payment SET create_date = %s WHERE id = %s",
-            (session.date_opened, payment.id),
-        )
-        payment.invalidate_recordset()
+        wizard.action_post_payment()
+        payment = session.payment_ids
+        self.assertEqual(len(payment), 1)
+        self.assertEqual(payment.hotel_property_id, self.property)
+        self.assertEqual(payment.hotel_frontdesk_session_id, session)
+        self.assertIn(payment.state, ("in_process", "paid"))
         session._compute_balances()
         session.invalidate_recordset(["total_transactions"])
         self.assertEqual(session.total_transactions, 100.0)
+
+        with self.assertRaises(UserError):
+            session.write({"state": "closed"})
+        with self.assertRaises(UserError):
+            session.with_context(hotel_close_session=True).write({"state": "closed"})
 
         # 3. Closing cash count & close session
         # Let's say cashier counts 550.0 Company Currency units at the end of the day (450 opening + 100 transactions)
@@ -127,7 +132,7 @@ class TestHotelFrontdeskSession(TransactionCase):
 
         session.write({
             "closing_balance_ids": [
-                (0, 0, {"currency_id": self.company_currency.id, "amount": 550.0, "type": "closing"}),
+                (0, 0, {"currency_id": self.company_currency.id, "journal_id": self.cash_journal.id, "amount": 550.0, "type": "closing"}),
             ]
         })
         
@@ -149,3 +154,20 @@ class TestHotelFrontdeskSession(TransactionCase):
         )
         self.assertEqual(session2.state, "opened")
         session2.unlink()
+
+    def test_today_filter_uses_odoo_datetime(self):
+        arch = self.env.ref(
+            "hotel_frontdesk_session.hotel_frontdesk_session_view_search"
+        ).arch_db
+        self.assertIn("datetime.timedelta(days=1)", arch)
+        self.assertNotIn("+ timedelta(days=1)", arch)
+
+    def test_session_opening_metadata_cannot_be_forged(self):
+        with self.assertRaises(UserError):
+            self.env["hotel.frontdesk.session"].with_user(self.cashier).create(
+                {
+                    "property_id": self.property.id,
+                    "name": "FORGED-SESSION",
+                    "date_opened": fields.Datetime.now() - timedelta(days=7),
+                }
+            )

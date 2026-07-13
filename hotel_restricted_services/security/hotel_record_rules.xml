@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_hotel_service_restriction_assigned_property" model="ir.rule">
+        <field name="name">Service restrictions in assigned hotel properties</field>
+        <field name="model_id" ref="model_hotel_service_restriction"/>
+        <field name="domain_force">[('reservation_id.property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk')), (4, ref('hotel_base.group_hotel_fb')), (4, ref('hotel_base.group_hotel_accountant'))]"/>
+    </record>
+    <record id="rule_hotel_entity_ceiling_assigned_property" model="ir.rule">
+        <field name="name">Entity ceilings in assigned hotel properties</field>
+        <field name="model_id" ref="model_hotel_entity_service_ceiling"/>
+        <field name="domain_force">[('property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk')), (4, ref('hotel_base.group_hotel_fb')), (4, ref('hotel_base.group_hotel_accountant'))]"/>
+    </record>
+    <record id="rule_hotel_restriction_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all service restrictions</field><field name="model_id" ref="model_hotel_service_restriction"/>
+        <field name="domain_force">[(1, '=', 1)]</field><field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_hotel_ceiling_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all entity ceilings</field><field name="model_id" ref="model_hotel_entity_service_ceiling"/>
+        <field name="domain_force">[(1, '=', 1)]</field><field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+</odoo>

@@ -41,6 +41,39 @@ class TestHotelNightAudit(TransactionCase):
         cls.guest = cls.env["res.partner"].create(
             {"name": "Audit Guest", "is_hotel_guest": True}
         )
+        cls.frontdesk_user = cls.env["res.users"].create(
+            {
+                "name": "Audit Front Desk",
+                "login": "audit_frontdesk_test",
+                "group_ids": [
+                    (4, cls.env.ref("hotel_base.group_hotel_frontdesk").id)
+                ],
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
+            }
+        )
+        cls.supervisor_user = cls.env["res.users"].create(
+            {
+                "name": "Audit Supervisor",
+                "login": "audit_supervisor_test",
+                "group_ids": [
+                    (4, cls.env.ref("hotel_base.group_hotel_fo_supervisor").id)
+                ],
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
+            }
+        )
+        cls.manager_user = cls.env["res.users"].create(
+            {
+                "name": "Audit Manager",
+                "login": "audit_manager_test",
+                "group_ids": [
+                    (4, cls.env.ref("hotel_base.group_hotel_manager").id)
+                ],
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
+            }
+        )
 
         cls.business_date = cls.property.current_business_date
         cls.checkin = fields.Datetime.to_datetime(cls.business_date).replace(
@@ -61,6 +94,9 @@ class TestHotelNightAudit(TransactionCase):
             }
         )
 
+    def _run_audit(self, audit):
+        return audit.with_user(self.supervisor_user).action_run_audit()
+
     def test_night_audit_rollover(self):
         # 1. Create a stay that is checked in
         res_checked_in = self._reservation(self.room1)
@@ -80,8 +116,13 @@ class TestHotelNightAudit(TransactionCase):
         self.assertEqual(audit.date, self.business_date)
         self.assertEqual(audit.state, "draft")
 
+        with self.assertRaises(UserError):
+            audit.write({"state": "done"})
+        with self.assertRaises(UserError):
+            audit.with_context(hotel_audit_write=True).write({"state": "done"})
+
         # 4. Run night audit
-        audit.action_run_audit()
+        self._run_audit(audit)
 
         # 5. Assertions
         # Check audit values
@@ -97,6 +138,13 @@ class TestHotelNightAudit(TransactionCase):
         self.assertEqual(room_charge.name, f"Room Charge - {self.business_date}")
         self.assertTrue(room_charge.is_posted)
 
+        # The operational audit lock remains immutable, but an accountant can
+        # still transfer the charge to the native draft invoice exactly once.
+        invoice_action = folio.action_create_invoice()
+        invoice = self.env["account.move"].browse(invoice_action["res_id"])
+        self.assertEqual(room_charge.invoice_line_id.move_id, invoice)
+        self.assertEqual(room_charge.lock_state, "accounting")
+
         # Check no-show status
         self.assertEqual(res_no_show.state, "no_show")
 
@@ -110,31 +158,36 @@ class TestHotelNightAudit(TransactionCase):
         self.assertEqual(posted_line.partner_id, self.guest)
         self.assertTrue(audit._fields.get("message_ids"))
 
-    def test_night_audit_already_charged_skipped(self):
+    def test_night_audit_duplicate_rejected_and_reversal_reruns(self):
         res_checked_in = self._reservation(self.room1)
         res_checked_in.action_confirm()
         res_checked_in.action_check_in()
 
         # Run first audit
         audit1 = self.env["hotel.night.audit"].create({"property_id": self.property.id})
-        audit1.action_run_audit()
+        self._run_audit(audit1)
 
-        # Create a second audit for the same day (force same date to test skip, usually property rolls date, so we'll mock it)
-        # Roll back business date on property to re-run for same date
-        self.property.current_business_date = self.business_date
-        audit2 = self.env["hotel.night.audit"].create({"property_id": self.property.id})
-        
-        audit2.action_run_audit()
-        # Should not charge again
-        self.assertEqual(audit2.revenue_posted, 0.0)
-        
-        # Verify folio has only 1 charge
+        # A second active audit for the same property/date is rejected.
+        self.property._set_business_date(self.business_date)
+        with self.assertRaises(UserError):
+            self.env["hotel.night.audit"].create({"property_id": self.property.id})
+
+        audit1.with_user(self.manager_user).action_reverse("Correction test")
+        self.assertEqual(audit1.state, "reversed")
+        audit2 = self.env["hotel.night.audit"].create(
+            {"property_id": self.property.id}
+        )
+        self._run_audit(audit2)
+        self.assertEqual(audit2.state, "done")
+
+        # Original, exact reversal, and rerun are all retained.
         folio = res_checked_in.folio_ids[0]
-        self.assertEqual(len(folio.line_ids), 1)
+        self.assertEqual(len(folio.line_ids), 3)
+        self.assertEqual(sum(folio.line_ids.mapped("amount_total")), 180.0)
 
     def test_night_audit_unlink_restricted(self):
         audit = self.env["hotel.night.audit"].create({"property_id": self.property.id})
-        audit.action_run_audit()
+        self._run_audit(audit)
         self.assertEqual(audit.state, "done")
         with self.assertRaises(UserError):
             audit.unlink()
@@ -143,3 +196,19 @@ class TestHotelNightAudit(TransactionCase):
         self.assertEqual(audit_draft.state, "draft")
         audit_draft.unlink()
 
+    def test_frontdesk_cannot_run_night_audit(self):
+        audit = self.env["hotel.night.audit"].create(
+            {"property_id": self.property.id}
+        )
+        with self.assertRaises(UserError):
+            audit.with_user(self.frontdesk_user).action_run_audit()
+        self.assertEqual(audit.state, "draft")
+
+    def test_audit_identity_cannot_be_forged(self):
+        with self.assertRaises(UserError):
+            self.env["hotel.night.audit"].with_user(self.supervisor_user).create(
+                {
+                    "property_id": self.property.id,
+                    "name": "FORGED-AUDIT",
+                }
+            )

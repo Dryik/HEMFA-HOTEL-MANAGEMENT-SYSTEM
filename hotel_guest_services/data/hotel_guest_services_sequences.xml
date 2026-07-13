@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_hotel_lost_found" model="ir.sequence">
+        <field name="name">Hotel Lost and Found</field><field name="code">hotel.lost.found</field>
+        <field name="prefix">LAF/%(year)s/</field><field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_hotel_wakeup_call" model="ir.sequence">
+        <field name="name">Hotel Wake-up Call</field><field name="code">hotel.wakeup.call</field>
+        <field name="prefix">WUC/%(year)s/</field><field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

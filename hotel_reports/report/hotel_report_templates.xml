@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="action_report_daily_movement" model="ir.actions.report">
-        <field name="name">Daily Movement Report</field>
+        <field name="name">Hotel Operational Report</field>
         <field name="model">hotel.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">hotel_reports.report_daily_movement</field>
@@ -13,76 +13,37 @@
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
                 <t t-call="web.external_layout">
-                    <t t-set="reservations" t-value="reservations_for[doc.id]"/>
-                    <!-- dir=auto lets Arabic guest names and headers
-                         render RTL while Latin content stays LTR. -->
-                    <div class="page" dir="auto">
-                        <h2>
-                            <t t-if="doc.report_type == 'arrivals'">Arrivals</t>
-                            <t t-elif="doc.report_type == 'departures'">Departures</t>
-                            <t t-elif="doc.report_type == 'inhouse'">In-House Guests</t>
-                            <t t-else="">Security / Police List</t>
-                            — <span t-field="doc.date"/>
-                        </h2>
-                        <p>
-                            <strong>Property:</strong>
-                            <span t-field="doc.property_id.name"/>
-                        </p>
-
-                        <table class="table table-sm o_main_table">
+                    <t t-set="payload" t-value="payloads[doc.id]"/>
+                    <div class="page" t-att-dir="'rtl' if payload['rtl'] else 'ltr'"
+                        style="font-family: 'DejaVu Sans', sans-serif;">
+                        <h2 class="text-center"><t t-out="payload['title']"/></h2>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span><strong>Property / الفندق:</strong> <t t-out="payload['property']"/></span>
+                            <span><strong>Date / التاريخ:</strong> <t t-out="payload['date']"/></span>
+                        </div>
+                        <table class="table table-sm table-bordered o_main_table">
                             <thead>
                                 <tr>
-                                    <th>Room</th>
-                                    <th>Guest</th>
-                                    <th>Nationality</th>
-                                    <t t-if="doc.report_type == 'security'">
-                                        <th>ID Type</th>
-                                        <th>ID Number</th>
-                                        <th>Birth Date</th>
-                                        <th>Coming From</th>
-                                        <th>Heading To</th>
-                                    </t>
-                                    <t t-else="">
-                                        <th>Reservation</th>
-                                        <th>Arrival</th>
-                                        <th>Departure</th>
-                                        <th>Nights</th>
-                                        <th>Agency / Entity</th>
-                                    </t>
+                                    <th t-foreach="payload['columns']" t-as="column">
+                                        <t t-out="column[1]"/>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr t-foreach="reservations" t-as="res">
-                                    <!-- t-out, not t-field: room, nationality
-                                         and agency may be empty and t-field
-                                         fails on empty records. -->
-                                    <td><span t-out="res.room_id.name or ''"/></td>
-                                    <td><span t-field="res.partner_id.name"/></td>
-                                    <td><span t-out="res.guest_nationality_id.name or ''"/></td>
-                                    <t t-if="doc.report_type == 'security'">
-                                        <td><span t-field="res.partner_id.guest_id_type"/></td>
-                                        <td><span t-field="res.partner_id.guest_id_number"/></td>
-                                        <td><span t-field="res.partner_id.guest_birthdate"/></td>
-                                        <td><span t-field="res.coming_from"/></td>
-                                        <td><span t-field="res.heading_to"/></td>
-                                    </t>
-                                    <t t-else="">
-                                        <td><span t-field="res.name"/></td>
-                                        <td><span t-field="res.checkin_date"
-                                                 t-options='{"format": "yyyy-MM-dd HH:mm"}'/></td>
-                                        <td><span t-field="res.checkout_date"
-                                                 t-options='{"format": "yyyy-MM-dd HH:mm"}'/></td>
-                                        <td><span t-field="res.nights"/></td>
-                                        <td><span t-out="res.agency_id.name or ''"/></td>
-                                    </t>
+                                <tr t-foreach="payload['rows']" t-as="row">
+                                    <td t-foreach="payload['columns']" t-as="column">
+                                        <t t-out="doc._western(row.get(column[0], ''))"/>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
-
-                        <p>
-                            <strong>Total:</strong>
-                            <t t-out="len(reservations)"/> reservations
-                        </p>
+                        <div t-if="payload['summary']" class="mt-3">
+                            <p t-foreach="payload['summary']" t-as="item" class="mb-1">
+                                <strong><t t-out="item[0]"/>:</strong>
+                                <t t-out="doc._western(item[1])"/>
+                            </p>
+                        </div>
+                        <p t-else=""><strong>Total / الإجمالي:</strong> <t t-out="doc._western(len(payload['rows']))"/></p>
                     </div>
                 </t>
             </t>

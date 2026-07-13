@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from odoo import fields
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -194,6 +194,8 @@ class TestHotelRate(TransactionCase):
         # Confirm lock
         res.action_confirm()
         self.assertTrue(res.rate_locked)
+        with self.assertRaises(UserError):
+            res.write({"rate_locked": False})
 
         # Create a seasonal rate rule of 250.0
         start_date = fields.Date.today()

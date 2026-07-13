@@ -29,6 +29,8 @@
                         </group>
                         <group>
                             <field name="day_start_hour" widget="float_time"/>
+                            <field name="timezone"/>
+                            <field name="current_business_date"/>
                             <field name="late_checkout_grace_hours" widget="float_time"/>
                             <field name="room_count"/>
                             <field name="sellable_room_count"/>
@@ -42,6 +44,22 @@
                                     <field name="name"/>
                                 </list>
                             </field>
+                        </page>
+                        <page string="Stay Policies" name="stay_policies">
+                            <group>
+                                <group string="Cancellation">
+                                    <field name="cancellation_policy"/>
+                                    <field name="cancellation_grace_hours"/>
+                                    <field name="cancellation_fee_value"
+                                        invisible="cancellation_policy in ('none', 'first_night')"/>
+                                </group>
+                                <group string="No-show">
+                                    <field name="no_show_policy"/>
+                                    <field name="no_show_grace_hours"/>
+                                    <field name="no_show_fee_value"
+                                        invisible="no_show_policy in ('none', 'first_night')"/>
+                                </group>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>

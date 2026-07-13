@@ -44,8 +44,35 @@ class TestPosRoomCharge(TransactionCase):
             }
         )
 
+        cls.clearing_account = cls.env["account.account"].create(
+            {
+                "name": "POS Room Charge Clearing Test",
+                "code": "TSTPCC",
+                "account_type": "asset_receivable",
+                "reconcile": True,
+            }
+        )
+        cls.transfer_journal = cls.env["account.journal"].create(
+            {
+                "name": "POS Room Charge Transfer Test",
+                "type": "general",
+                "code": "PRCT",
+            }
+        )
+        cls.property.write(
+            {
+                "room_charge_clearing_account_id": cls.clearing_account.id,
+                "room_charge_journal_id": cls.transfer_journal.id,
+            }
+        )
+
         cls.room_charge_method = cls.env["pos.payment.method"].create(
-            {"name": "Room Charge", "is_room_charge": True}
+            {
+                "name": "Room Charge",
+                "is_room_charge": True,
+                "hotel_property_id": cls.property.id,
+                "receivable_account_id": cls.clearing_account.id,
+            }
         )
         # Register every method before open_ui(): payment methods
         # cannot be modified on a config while a session is open.
@@ -59,10 +86,37 @@ class TestPosRoomCharge(TransactionCase):
                     (4, cls.room_charge_method.id),
                     (4, cls.cash_method.id),
                 ],
+                "hotel_property_id": cls.property.id,
             }
         )
         cls.pos_config.open_ui()
         cls.session = cls.pos_config.current_session_id
+
+        cls.other_property = cls.env["hotel.property"].create(
+            {"name": "Other POS Test Hotel", "code": "OPH"}
+        )
+        cls.other_pos_config = cls.env["pos.config"].create(
+            {
+                "name": "Other Hotel Restaurant POS",
+                "hotel_property_id": cls.other_property.id,
+            }
+        )
+        cls.other_room_charge_method = cls.env["pos.payment.method"].create(
+            {
+                "name": "Other Room Charge",
+                "is_room_charge": False,
+                "hotel_property_id": cls.other_property.id,
+            }
+        )
+        cls.fb_user = cls.env["res.users"].create(
+            {
+                "name": "Property F&B User",
+                "login": "property_fb_pos_test",
+                "group_ids": [(4, cls.env.ref("hotel_base.group_hotel_fb").id)],
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
+            }
+        )
 
         cls.checkin = fields.Datetime.now().replace(
             hour=12, minute=0, second=0, microsecond=0
@@ -117,6 +171,16 @@ class TestPosRoomCharge(TransactionCase):
         )
         return order
 
+    def test_fb_pos_records_are_property_scoped(self):
+        configs = self.env["pos.config"].with_user(self.fb_user).search([])
+        self.assertIn(self.pos_config, configs)
+        self.assertNotIn(self.other_pos_config, configs)
+
+        methods = self.env["pos.payment.method"].with_user(self.fb_user).search([])
+        self.assertIn(self.room_charge_method, methods)
+        self.assertIn(self.cash_method, methods)
+        self.assertNotIn(self.other_room_charge_method, methods)
+
     def test_room_charge_posts_to_folio(self):
         reservation = self._checked_in_reservation()
         folio = reservation.folio_ids[0]
@@ -128,6 +192,12 @@ class TestPosRoomCharge(TransactionCase):
         self.assertEqual(len(charged), 1)
         self.assertEqual(charged.amount, 25.0)
         self.assertEqual(charged.payee_partner_id, self.guest)
+        self.assertFalse(charged.invoiceable)
+        self.assertEqual(charged.lock_state, "pos")
+        self.assertEqual(charged.accounting_move_id.state, "posted")
+        self.assertEqual(order.hotel_room_charge_move_id, charged.accounting_move_id)
+        with self.assertRaises(UserError):
+            charged.write({"pos_order_id": False, "pos_order_line_id": False})
 
     def test_room_charge_is_idempotent(self):
         reservation = self._checked_in_reservation()
@@ -163,6 +233,7 @@ class TestPosRoomCharge(TransactionCase):
 
     def test_room_charge_rejects_checked_out_guest(self):
         reservation = self._checked_in_reservation()
+        reservation.checkout_balance_override_reason = "POS checkout test"
         reservation.action_check_out()
         order = self._pos_order(partner=self.guest)
         with self.assertRaises(UserError):

@@ -31,6 +31,8 @@ class TestHotelMaintenance(TransactionCase):
                 "group_ids": [
                     (4, cls.env.ref("hotel_base.group_hotel_maintenance").id)
                 ],
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
             }
         )
         # Odoo 19 has_group checks real membership even for the test
@@ -42,6 +44,8 @@ class TestHotelMaintenance(TransactionCase):
                 "group_ids": [
                     (4, cls.env.ref("hotel_base.group_hotel_manager").id)
                 ],
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
             }
         )
 
@@ -167,3 +171,37 @@ class TestHotelMaintenance(TransactionCase):
             req.unlink()
         req.action_cancel()
         req.unlink()
+
+    def test_verified_request_is_immutable(self):
+        req = self._request()
+        req.action_confirm()
+        req.action_start()
+        req.action_done()
+        req.with_user(self.manager).action_verify()
+        with self.assertRaises(UserError):
+            req.with_user(self.manager).write({"resolution_notes": "Changed"})
+
+    def test_state_cannot_bypass_actions(self):
+        req = self._request()
+        with self.assertRaises(UserError):
+            req.write({"state": "verified"})
+        with self.assertRaises(UserError):
+            req.with_context(hotel_maintenance_transition=True).write(
+                {"state": "verified"}
+            )
+
+    def test_requests_are_property_scoped(self):
+        other_property = self.env["hotel.property"].create(
+            {"name": "Other Maintenance Hotel", "code": "OMH"}
+        )
+        hidden_request = self.env["hotel.maintenance.request"].create(
+            {
+                "property_id": other_property.id,
+                "location": "Lobby",
+                "description": "Hidden request",
+            }
+        )
+        visible = self.env["hotel.maintenance.request"].with_user(
+            self.technician
+        ).search([])
+        self.assertNotIn(hidden_request, visible)

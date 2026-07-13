@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hotel_lost_found_frontdesk,hotel.lost.found frontdesk,model_hotel_lost_found,hotel_base.group_hotel_frontdesk,1,1,1,0
+access_hotel_lost_found_housekeeping,hotel.lost.found housekeeping,model_hotel_lost_found,hotel_base.group_hotel_housekeeping,1,0,1,0
+access_hotel_lost_found_manager,hotel.lost.found manager,model_hotel_lost_found,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_dnd_frontdesk,hotel.do.not.disturb frontdesk,model_hotel_do_not_disturb,hotel_base.group_hotel_frontdesk,1,1,1,0
+access_hotel_dnd_housekeeping,hotel.do.not.disturb housekeeping,model_hotel_do_not_disturb,hotel_base.group_hotel_housekeeping,1,0,0,0
+access_hotel_dnd_manager,hotel.do.not.disturb manager,model_hotel_do_not_disturb,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_wakeup_frontdesk,hotel.wakeup.call frontdesk,model_hotel_wakeup_call,hotel_base.group_hotel_frontdesk,1,1,1,0
+access_hotel_wakeup_manager,hotel.wakeup.call manager,model_hotel_wakeup_call,hotel_base.group_hotel_manager,1,1,1,1

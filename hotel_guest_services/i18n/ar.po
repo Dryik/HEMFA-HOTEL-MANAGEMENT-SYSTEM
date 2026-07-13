@@ -1,0 +1,285 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* hotel_guest_services
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-11 12:00+0000\n"
+"PO-Revision-Date: 2026-07-11 12:00+0000\n"
+"Last-Translator: Antigravity <antigravity@gemini.google>\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "A disposal reason is required for a found item."
+msgstr ""
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_do_not_disturb__state__active
+msgid "Active"
+msgstr ""
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_dnd_view_form
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_do_not_disturb__state__cancelled
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_wakeup_call__state__cancelled
+msgid "Cancelled"
+msgstr "ملغي"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_lost_found__state__claimed
+msgid "Claimed"
+msgstr "تم التسليم"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields,field_description:hotel_guest_services.field_hotel_lost_found__claimant_id
+msgid "Claimed By"
+msgstr "تم التسليم إلى"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_wakeup_call__state__completed
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_form
+msgid "Completed"
+msgstr "مكتملة"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "Completed wake-up calls are immutable."
+msgstr ""
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "Completed wake-up calls cannot be deleted."
+msgstr ""
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "DND end time must be after its start time."
+msgstr ""
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_dnd_property
+msgid "DND requests in assigned properties"
+msgstr "طلبات عدم الإزعاج في المنشآت المخصصة"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "DND status can only be changed through its actions."
+msgstr ""
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "DND status must change through its actions."
+msgstr ""
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_lost_found_view_form
+msgid "Dispose"
+msgstr "إتلاف"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_lost_found__state__disposed
+msgid "Disposed"
+msgstr "تم الإتلاف"
+
+#. module: hotel_guest_services
+#: model:ir.ui.menu,name:hotel_guest_services.menu_hotel_dnd
+#: model:ir.actions.act_window,name:hotel_guest_services.hotel_dnd_action
+msgid "Do Not Disturb"
+msgstr "عدم الإزعاج"
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_dnd_view_form
+msgid "End DND"
+msgstr "إنهاء عدم الإزعاج"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_do_not_disturb__state__ended
+msgid "Ended"
+msgstr ""
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "Ended DND requests are immutable."
+msgstr ""
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "Ended DND requests cannot be deleted."
+msgstr ""
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_lost_found__state__found
+msgid "Found"
+msgstr "موجود"
+
+#. module: hotel_guest_services
+#: model:ir.ui.menu,name:hotel_guest_services.menu_hotel_guest_services
+msgid "Guest Services"
+msgstr "خدمات النزلاء"
+
+#. module: hotel_guest_services
+#: model:ir.model,name:hotel_guest_services.model_hotel_do_not_disturb
+msgid "Hotel Do Not Disturb Request"
+msgstr "طلب عدم إزعاج"
+
+#. module: hotel_guest_services
+#: model:ir.sequence,name:hotel_guest_services.seq_hotel_lost_found
+msgid "Hotel Lost and Found"
+msgstr ""
+
+#. module: hotel_guest_services
+#: model:ir.model,name:hotel_guest_services.model_hotel_lost_found
+msgid "Hotel Lost and Found Item"
+msgstr "سجل مفقودات وموجودات الفندق"
+
+#. module: hotel_guest_services
+#: model:ir.sequence,name:hotel_guest_services.seq_hotel_wakeup_call
+#: model:ir.model,name:hotel_guest_services.model_hotel_wakeup_call
+msgid "Hotel Wake-up Call"
+msgstr "مكالمة إيقاظ الفندق"
+
+#. module: hotel_guest_services
+#: model:ir.ui.menu,name:hotel_guest_services.menu_hotel_lost_found
+#: model:ir.actions.act_window,name:hotel_guest_services.hotel_lost_found_action
+msgid "Lost and Found"
+msgstr "المفقودات والموجودات"
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_lost_found_property
+msgid "Lost and found in assigned properties"
+msgstr "المفقودات والموجودات في المنشآت المخصصة"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "Lost-and-found status can only be changed through its actions."
+msgstr ""
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "Lost-and-found status must change through its actions."
+msgstr ""
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_lost_found_view_form
+msgid "Mark Claimed"
+msgstr "تحديد كمسلم"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_wakeup_call__state__missed
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_form
+msgid "Missed"
+msgstr "فائتة"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "New"
+msgstr "جديد"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "Resolved lost-and-found records are immutable."
+msgstr ""
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "Resolved lost-and-found records cannot be deleted."
+msgstr ""
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_wakeup_call__state__scheduled
+msgid "Scheduled"
+msgstr "مجدولة"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "Select a claimant on a currently found item."
+msgstr ""
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_dnd_system_unrestricted
+msgid "System administrators: all DND requests"
+msgstr ""
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_lost_found_system_unrestricted
+msgid "System administrators: all lost and found"
+msgstr ""
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_wakeup_system_unrestricted
+msgid "System administrators: all wake-up calls"
+msgstr ""
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "The DND request and stay must use the same property."
+msgstr ""
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "The room must belong to the selected property."
+msgstr ""
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "The stay must belong to the selected property."
+msgstr ""
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "The wake-up call and stay must use the same property."
+msgstr ""
+
+#. module: hotel_guest_services
+#: model:ir.ui.menu,name:hotel_guest_services.menu_hotel_wakeup
+#: model:ir.actions.act_window,name:hotel_guest_services.hotel_wakeup_call_action
+msgid "Wake-up Calls"
+msgstr "مكالمات الإيقاظ"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "Wake-up call status can only be changed through its actions."
+msgstr ""
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
+msgid "Wake-up call status must change through its actions."
+msgstr ""
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_wakeup_property
+msgid "Wake-up calls in assigned properties"
+msgstr "مكالمات الإيقاظ في المنشآت المخصصة"

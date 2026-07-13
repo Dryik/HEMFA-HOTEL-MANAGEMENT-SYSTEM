@@ -32,6 +32,8 @@ class TestHotelHousekeeping(TransactionCase):
             "login": "cleaner_bob",
             "email": "bob@example.com",
             "group_ids": [(6, 0, [cls.env.ref("hotel_base.group_hotel_housekeeping").id])],
+            "hotel_property_ids": [(6, 0, [cls.property.id])],
+            "default_hotel_property_id": cls.property.id,
         })
 
     def test_task_lifecycle(self):
@@ -135,3 +137,45 @@ class TestHotelHousekeeping(TransactionCase):
         task.action_complete()
         with self.assertRaises(UserError):
             task.action_cancel()
+
+    def test_completed_task_is_immutable(self):
+        task = self.env["hotel.housekeeping.task"].create({
+            "room_id": self.room.id,
+        })
+        task.action_start()
+        task.action_complete()
+        with self.assertRaises(UserError):
+            task.write({"notes": "Changed after completion"})
+
+    def test_state_cannot_bypass_actions(self):
+        task = self.env["hotel.housekeeping.task"].create({
+            "room_id": self.room.id,
+        })
+        with self.assertRaises(UserError):
+            task.write({"state": "cleaned"})
+        with self.assertRaises(UserError):
+            task.with_context(hotel_housekeeping_transition=True).write(
+                {"state": "cleaned"}
+            )
+
+    def test_tasks_are_property_scoped(self):
+        other_property = self.env["hotel.property"].create(
+            {"name": "Other Housekeeping Hotel", "code": "OHH"}
+        )
+        other_floor = self.env["hotel.floor"].create(
+            {"name": "Other Floor", "property_id": other_property.id}
+        )
+        other_room = self.env["hotel.room"].create(
+            {
+                "name": "OH101",
+                "floor_id": other_floor.id,
+                "room_type_id": self.room_type.id,
+            }
+        )
+        hidden_task = self.env["hotel.housekeeping.task"].create(
+            {"room_id": other_room.id}
+        )
+        visible = self.env["hotel.housekeeping.task"].with_user(
+            self.cleaner
+        ).search([])
+        self.assertNotIn(hidden_task, visible)

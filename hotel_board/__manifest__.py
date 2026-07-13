@@ -1,7 +1,7 @@
 {
     "name": "Hotel Front Desk Dashboard",
     "summary": "Live KPI dashboard and room board for the front desk",
-    "version": "19.0.1.0.0",
+    "version": "19.0.2.0.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",

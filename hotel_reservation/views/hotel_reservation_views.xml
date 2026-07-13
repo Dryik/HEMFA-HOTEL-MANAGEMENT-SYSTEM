@@ -80,6 +80,8 @@
                     <button name="action_reset_draft" type="object" string="Reset to Draft"
                         invisible="state not in ('cancelled', 'no_show')"
                         groups="hotel_base.group_hotel_fo_supervisor"/>
+                    <button name="action_open_available_rooms" type="object"
+                        string="Available Rooms" invisible="state not in ('draft', 'confirmed')"/>
                     <field name="state" widget="statusbar"
                         statusbar_visible="draft,confirmed,checked_in,checked_out"/>
                 </header>
@@ -92,6 +94,7 @@
                             <field name="partner_id"/>
                             <field name="guest_nationality_id"/>
                             <field name="agency_id"/>
+                            <field name="group_id"/>
                             <field name="accommodation_type"/>
                             <field name="adults"/>
                             <field name="children"/>
@@ -122,6 +125,20 @@
                             <field name="actual_checkout"/>
                         </group>
                     </group>
+                    <notebook>
+                        <page string="Amendments">
+                            <field name="amendment_ids" readonly="1">
+                                <list create="0" delete="0">
+                                    <field name="name"/>
+                                    <field name="amendment_type"/>
+                                    <field name="effective_date"/>
+                                    <field name="requested_by_id"/>
+                                    <field name="approved_by_id"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
                     <group>
                         <field name="notes" placeholder="Internal notes..."/>
                     </group>
@@ -141,22 +158,16 @@
                 <field name="room_id"/>
                 <field name="agency_id"/>
                 <filter string="Arrivals Today" name="arrivals_today"
-                    domain="[('state', '=', 'confirmed'),
-                             ('checkin_date', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0, 0, 0))),
-                             ('checkin_date', '&lt;=', datetime.datetime.combine(context_today(), datetime.time(23, 59, 59)))]"/>
+                    domain="[('state', '=', 'confirmed'), ('checkin_business_date', '=', context_today())]"/>
                 <filter string="Departures Today" name="departures_today"
-                    domain="[('state', '=', 'checked_in'),
-                             ('checkout_date', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0, 0, 0))),
-                             ('checkout_date', '&lt;=', datetime.datetime.combine(context_today(), datetime.time(23, 59, 59)))]"/>
+                    domain="[('state', '=', 'checked_in'), ('checkout_business_date', '=', context_today())]"/>
                 <separator/>
                 <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
                 <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
                 <filter string="In House" name="in_house" domain="[('state', '=', 'checked_in')]"/>
                 <filter string="Checked Out" name="checked_out" domain="[('state', '=', 'checked_out')]"/>
                 <filter string="Checked Out Today" name="checked_out_today"
-                    domain="[('state', '=', 'checked_out'),
-                             ('actual_checkout', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0, 0, 0))),
-                             ('actual_checkout', '&lt;=', datetime.datetime.combine(context_today(), datetime.time(23, 59, 59)))]"/>
+                    domain="[('state', '=', 'checked_out'), ('actual_checkout_business_date', '=', context_today())]"/>
                 <filter string="No Show" name="no_show" domain="[('state', '=', 'no_show')]"/>
                 <group>
                     <filter string="Room" name="group_room" context="{'group_by': 'room_id'}"/>
