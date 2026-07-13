@@ -1,7 +1,7 @@
 {
     "name": "Hotel Housekeeping",
     "summary": "Cleaning tasks, dirty/clean/inspected flow, discrepancy report",
-    "version": "19.0.2.0.0",
+    "version": "19.0.3.0.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",

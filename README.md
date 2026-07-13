@@ -22,7 +22,7 @@ phase acceptance documents under `docs/` for the locked production design.
 | `hotel_maintenance` | 4 | implemented | Room blocking and manager-verified immutable completion |
 | `hotel_guest_services` | 4 | implemented | Lost-and-found, DND, and wake-up calls |
 | `hotel_pos_room_charge` | 3 | implemented | Discount/tax parity, idempotent folio lines and clearing-to-receivable transfer |
-| `hotel_board` | 5 | implemented | Property/date color room board with resilient 60-second refresh |
+| `hotel_board` | 5 | implemented | Front Desk composition workspace with operational Dashboard and complete-room Planning tape |
 | `hotel_reports` | 6 | implemented | Bilingual PDF/XLSX operational, finance, audit and consolidated folio reports |
 | `l10n_ly_hemfa` | 3 | blocked at signed finance gate | Reserved localization addon; intentionally non-installable until approved account/tax templates arrive |
 
@@ -40,7 +40,7 @@ phase acceptance documents under `docs/` for the locked production design.
 python scripts/validate_repository.py
 ```
 
-The repository currently contains 98 tagged test methods across 13 addon test
+The repository currently contains 120 tagged test methods across 13 addon test
 suites. Runtime installation, upgrade, and tagged tests run on Odoo.sh; GitHub
 Actions performs database-free static checks. See `docs/release_workflow.md`.
 

@@ -22,7 +22,7 @@ Deployment target: Odoo.sh (dev / staging / production branches).
 |---|---|---|---|
 | `hotel_base` | 1 | done | Properties, floors, room types, rooms, amenities, guest/agency partner extensions |
 | `hotel_reservation` | 4 | implemented | Shared availability, physical occupancy, amendments, groups and rooming lists |
-| `hotel_board` | 5 | implemented | Property/date color room board and live operational KPIs |
+| `hotel_board` | 5 | implemented | Front Desk composition workspace, operational KPIs, attention queues and complete-room Planning tape |
 | `hotel_folio` | 3 | implemented (finance approval pending) | Tax-aware folio, native accounting, deposits/advances, FX, credits/reversals |
 | `hotel_rate` | 5 | implemented | Deterministic seasonal/occupancy pricing and confirmed-rate lock |
 | `hotel_night_audit` | 5 | implemented | Concurrency lock, audited-date charges, immutable KPI snapshots and reversal |
@@ -52,7 +52,6 @@ Deployment target: Odoo.sh (dev / staging / production branches).
 ```
 hotel_base (foundation)
   ├── hotel_reservation (booking engine)
-  │     ├── hotel_board (dashboard KPIs)
   │     ├── hotel_rate (dynamic pricing override)
   │     ├── hotel_housekeeping (auto-triggered on checkout)
   │     ├── hotel_guest_services (lost/found, DND, wake-up)
@@ -62,7 +61,10 @@ hotel_base (foundation)
   │           ├── hotel_restricted_services (charge validation)
   │           │     └── hotel_pos_room_charge (+ point_of_sale)
   │           └── hotel_reports (+ hotel_housekeeping)
-  └── hotel_maintenance (room out-of-order driver)
+  ├── hotel_maintenance (room out-of-order driver)
+  └── hotel_board (Front Desk composition layer)
+        └── reservation, folio, cashier, audit, housekeeping,
+              maintenance, guest-service and report operations
 ```
 
 ## Odoo 19 Breaking Changes — MUST FOLLOW
@@ -124,19 +126,20 @@ hotel_base (foundation)
 
 | Module | Tests |
 |---|---|
-| `hotel_base` | 10 tests |
+| `hotel_base` | 11 tests |
+| `hotel_board` | 11 tests |
 | `hotel_reservation` | 15 tests |
-| `hotel_folio` | 9 tests |
+| `hotel_folio` | 10 tests |
 | `hotel_rate` | 6 tests |
 | `hotel_night_audit` | 5 tests |
-| `hotel_frontdesk_session` | 3 tests |
-| `hotel_guest_services` | 3 tests |
+| `hotel_frontdesk_session` | 5 tests |
+| `hotel_guest_services` | 5 tests |
 | `hotel_housekeeping` | 10 tests |
 | `hotel_restricted_services` | 7 tests |
 | `hotel_maintenance` | 13 tests |
-| `hotel_pos_room_charge` | 8 tests |
-| `hotel_reports` | 9 tests |
-| **Total** | **98 tests** |
+| `hotel_pos_room_charge` | 9 tests |
+| `hotel_reports` | 13 tests |
+| **Total** | **120 tests** |
 
 ## Local Checks
 

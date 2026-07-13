@@ -36,5 +36,8 @@
         <field name="res_model">hotel.housekeeping.discrepancy.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
+        <field name="context">{
+            'default_property_id': context.get('hotel_property_id'),
+        }</field>
     </record>
 </odoo>

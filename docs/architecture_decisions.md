@@ -14,6 +14,14 @@ Baseline: commit `3879640` on Odoo 19 Enterprise.
 - Existing document sequences continue from verified legacy maxima.
 - Legacy imports are idempotent and atomic: any structured row reject rolls back the complete run.
 - Arabic reports use Western digits. XLSX output uses the bundled `xlsxwriter` package.
+- Reception uses Arabic RTL by default while room numbers, dates, references, and
+  monetary values remain Western-digit operational identifiers.
+- `hotel_board` is the final staff-workspace composition addon. Its Dashboard and
+  Planning APIs aggregate authoritative records without storing a second copy of
+  hotel state.
+- The primary reservation planner is a complete-room Owl inventory tape. Native
+  Gantt remains a read-only fallback; reservation and housekeeping state changes
+  must use their audited server actions rather than drag-and-drop.
 - Initial performance acceptance covers 500 rooms and 50 concurrent users.
 
 ## Explicit deferrals
