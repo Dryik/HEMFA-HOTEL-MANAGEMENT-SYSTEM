@@ -38,6 +38,7 @@
                     <field name="state" widget="statusbar" statusbar_visible="opened,closed"/>
                 </header>
                 <sheet>
+                    <field name="company_id" invisible="1"/>
                     <div class="oe_title">
                         <h1><field name="name"/></h1>
                     </div>

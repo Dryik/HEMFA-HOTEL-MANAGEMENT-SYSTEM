@@ -57,6 +57,7 @@ TRANSLATIONS = {
     "Closing Cash Control": "مطابقة النقدية عند الإغلاق",
     "Closing Cash Count": "جرد النقدية عند الإغلاق",
     "Closing Count": "عد الإغلاق",
+    "Company": "الشركة",
     "Company / Entity": "الشركة / الجهة",
     "Company Currency": "عملة الشركة",
     "Completed": "مكتمل",

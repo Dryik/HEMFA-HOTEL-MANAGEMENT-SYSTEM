@@ -221,6 +221,11 @@ msgid "Collect Payment"
 msgstr ""
 
 #. module: hotel_frontdesk_session
+#: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: hotel_frontdesk_session
 #: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__currency_id
 msgid "Company Currency"
 msgstr "عملة الشركة"
