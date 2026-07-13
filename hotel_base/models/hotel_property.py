@@ -112,10 +112,16 @@ class HotelProperty(models.Model):
             return user.default_hotel_property_id
         if assigned:
             return assigned.sorted("name")[:1]
-        # Superuser-mode installation, migrations, and tests need a deterministic
-        # fallback; normal users without assignments intentionally get no default.
-        if self.env.su:
-            return self.search([("company_id", "in", self.env.companies.ids)], limit=1)
+        # Superuser-mode jobs and technical administrators have unrestricted
+        # property access, so keep the clean-database dashboard usable before an
+        # explicit default is configured. Normal hotel users still require an
+        # assigned property.
+        if self.env.su or user.has_group("base.group_system"):
+            return self.search(
+                [("company_id", "in", self.env.companies.ids)],
+                order="name, id",
+                limit=1,
+            )
         return self.browse()
 
     def _day_start_parts(self):

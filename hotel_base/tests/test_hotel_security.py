@@ -125,6 +125,10 @@ class TestHotelPropertySecurity(TransactionCase):
         properties = self.env["hotel.property"].with_user(self.system_admin).search([])
         self.assertIn(self.property_a, properties)
         self.assertIn(self.property_b, properties)
+        default_property = self.env["hotel.property"].with_user(
+            self.system_admin
+        )._get_default_property()
+        self.assertIn(default_property, properties)
 
     def test_identity_fields_are_field_group_protected(self):
         values = self.guest.with_user(self.frontdesk).read(["guest_id_number"])
