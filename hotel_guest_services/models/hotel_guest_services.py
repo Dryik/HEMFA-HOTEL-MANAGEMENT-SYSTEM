@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
@@ -162,9 +164,10 @@ class HotelDoNotDisturb(models.Model):
                 raise ValidationError(_("DND end time must be after its start time."))
 
     def action_end(self):
-        self.filtered(lambda request: request.state == "active")._write_transition(
-            {"state": "ended", "end_at": fields.Datetime.now()}
-        )
+        now = fields.Datetime.now()
+        for request in self.filtered(lambda record: record.state == "active"):
+            end_at = max(now, request.start_at + timedelta(seconds=1))
+            request._write_transition({"state": "ended", "end_at": end_at})
         return True
 
     def action_cancel(self):
