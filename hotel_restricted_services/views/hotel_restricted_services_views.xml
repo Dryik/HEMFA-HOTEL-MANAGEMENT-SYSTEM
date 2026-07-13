@@ -6,25 +6,22 @@
         <field name="model">hotel.reservation</field>
         <field name="inherit_id" ref="hotel_reservation.hotel_reservation_view_form"/>
         <field name="arch" type="xml">
-            <!-- The base reservation form has no notebook; add one. -->
-            <xpath expr="//sheet" position="inside">
-                <notebook>
-                    <page string="Restricted Services" name="restricted_services"
-                          groups="hotel_base.group_hotel_frontdesk">
-                        <field name="service_restriction_ids">
-                            <list editable="bottom">
-                                <field name="category_id"/>
-                                <field name="restriction_type"/>
-                                <field name="daily_limit"
-                                       invisible="restriction_type == 'blocked'"/>
-                                <field name="stay_limit"
-                                       invisible="restriction_type == 'blocked'"/>
-                                <field name="note"/>
-                                <field name="currency_id" column_invisible="True"/>
-                            </list>
-                        </field>
-                    </page>
-                </notebook>
+            <xpath expr="//sheet/notebook[1]" position="inside">
+                <page string="Restricted Services" name="restricted_services"
+                      groups="hotel_base.group_hotel_frontdesk">
+                    <field name="service_restriction_ids">
+                        <list editable="bottom">
+                            <field name="category_id"/>
+                            <field name="restriction_type"/>
+                            <field name="daily_limit"
+                                   invisible="restriction_type == 'blocked'"/>
+                            <field name="stay_limit"
+                                   invisible="restriction_type == 'blocked'"/>
+                            <field name="note"/>
+                            <field name="currency_id" column_invisible="True"/>
+                        </list>
+                    </field>
+                </page>
             </xpath>
         </field>
     </record>
@@ -88,6 +85,6 @@
         name="Entity Service Ceilings"
         parent="hotel_base.menu_hotel_config"
         action="hotel_entity_service_ceiling_action"
-        sequence="60"
+        sequence="65"
         groups="hotel_base.group_hotel_fo_supervisor"/>
 </odoo>

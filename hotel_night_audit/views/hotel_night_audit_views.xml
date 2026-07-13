@@ -104,6 +104,7 @@
             <search>
                 <field name="name"/>
                 <field name="property_id"/>
+                <field name="date"/>
                 <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
                 <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
                 <group>
@@ -119,6 +120,12 @@
         <field name="res_model">hotel.night.audit</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="hotel_night_audit_view_search"/>
+        <field name="context">{
+            'search_default_property_id': context.get('hotel_property_id'),
+            'search_default_date': context.get('hotel_business_date'),
+            'default_property_id': context.get('hotel_property_id'),
+            'default_date': context.get('hotel_business_date'),
+        }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Start the first night audit</p>
             <p>Running the night audit closes the operational day, posts room night charges, and updates no-shows.</p>

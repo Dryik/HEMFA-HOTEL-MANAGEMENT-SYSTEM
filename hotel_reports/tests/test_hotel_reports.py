@@ -31,10 +31,7 @@ class TestHotelReports(TransactionCase):
             ]
         )
         cls.guests = cls.env["res.partner"].create(
-            [
-                {"name": f"Report Guest {i}", "is_hotel_guest": True}
-                for i in range(1, 4)
-            ]
+            [{"name": f"Report Guest {i}", "is_hotel_guest": True} for i in range(1, 4)]
         )
         cls.today_noon = fields.Datetime.now().replace(
             hour=12, minute=0, second=0, microsecond=0
@@ -54,9 +51,16 @@ class TestHotelReports(TransactionCase):
             {
                 "name": "Report Front Desk",
                 "login": "report_frontdesk",
-                "group_ids": [
-                    (4, cls.env.ref("hotel_base.group_hotel_frontdesk").id)
-                ],
+                "group_ids": [(4, cls.env.ref("hotel_base.group_hotel_frontdesk").id)],
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
+            }
+        )
+        cls.accountant = cls.env["res.users"].create(
+            {
+                "name": "Report Accountant",
+                "login": "report_accountant",
+                "group_ids": [(4, cls.env.ref("hotel_base.group_hotel_accountant").id)],
                 "hotel_property_ids": [(6, 0, [cls.property.id])],
                 "default_hotel_property_id": cls.property.id,
             }
@@ -88,9 +92,7 @@ class TestHotelReports(TransactionCase):
         arriving = self._reservation(self.rooms[0], self.guests[0])
         arriving.action_confirm()
         # Tomorrow's arrival must not appear today.
-        future = self._reservation(
-            self.rooms[1], self.guests[1], offset_days=1
-        )
+        future = self._reservation(self.rooms[1], self.guests[1], offset_days=1)
         future.action_confirm()
 
         wizard = self._wizard("arrivals")
@@ -132,9 +134,38 @@ class TestHotelReports(TransactionCase):
         wizard = self._wizard("arrivals")
         action = wizard.action_print()
         self.assertEqual(action["type"], "ir.actions.report")
-        self.assertEqual(
-            action["report_name"], "hotel_reports.report_daily_movement"
-        )
+        self.assertEqual(action["report_name"], "hotel_reports.report_daily_movement")
+
+    def test_print_dispatches_to_report_family_and_paper_format(self):
+        cases = {
+            "arrivals": (
+                "hotel_reports.report_daily_movement",
+                "Portrait",
+                "operations",
+            ),
+            "security": (
+                "hotel_reports.report_landscape_detail",
+                "Landscape",
+                "landscape",
+            ),
+            "night_audit": (
+                "hotel_reports.report_financial_summary",
+                "Portrait",
+                "financial",
+            ),
+        }
+        for report_type, (report_name, orientation, family) in cases.items():
+            wizard = self._wizard(report_type)
+            action = wizard.action_print()
+            report = self.env["ir.actions.report"]._get_report_from_name(report_name)
+            payload = wizard._get_report_payload()
+            self.assertEqual(action["report_name"], report_name)
+            self.assertEqual(report.paperformat_id.orientation, orientation)
+            self.assertEqual(payload["family"], family)
+            self.assertEqual(
+                round(sum(payload["column_widths"].values())),
+                100,
+            )
 
     def test_renderer_values(self):
         reservation = self._reservation(self.rooms[0], self.guests[0])
@@ -143,7 +174,94 @@ class TestHotelReports(TransactionCase):
         values = self.env[
             "report.hotel_reports.report_daily_movement"
         ]._get_report_values(wizard.ids)
-        self.assertIn(reservation, values["reservations_for"][wizard.id])
+        self.assertEqual(
+            values["payloads"][wizard.id]["rows"][0]["reservation"],
+            reservation.name,
+        )
+
+    def test_housekeeper_can_render_discrepancy_without_reservation_access(self):
+        discrepancy = self._wizard("discrepancy")
+        values = (
+            self.env["report.hotel_reports.report_daily_movement"]
+            .with_user(self.housekeeper)
+            ._get_report_values(discrepancy.ids)
+        )
+        self.assertEqual(
+            values["payloads"][discrepancy.id]["title"], "Housekeeping Discrepancy"
+        )
+
+    def test_movement_datetimes_use_the_property_timezone(self):
+        reservation = self._reservation(self.rooms[0], self.guests[0])
+        reservation.action_confirm()
+        wizard = self._wizard("arrivals")
+        expected = fields.Datetime.context_timestamp(
+            wizard.with_context(tz=self.property.timezone),
+            reservation.checkin_date,
+        ).strftime("%d/%m/%Y %H:%M")
+        payload = wizard._get_report_payload()
+        self.assertEqual(payload["rows"][0]["arrival"], expected)
+
+    def test_accountant_finance_reports_use_property_scoped_safe_sources(self):
+        agency = self.env["res.partner"].create(
+            {
+                "name": "Report Agency",
+                "is_hotel_agency": True,
+                "hotel_property_ids": [(6, 0, [self.property.id])],
+            }
+        )
+        payment = self.env["account.payment"].create(
+            {
+                "amount": 40.0,
+                "date": fields.Date.today(),
+                "payment_type": "inbound",
+                "partner_type": "customer",
+                "partner_id": agency.id,
+                "currency_id": self.property.company_id.currency_id.id,
+                "hotel_property_id": self.property.id,
+                "hotel_payment_purpose": "agency_advance",
+            }
+        )
+        payment.action_post()
+
+        reservation = self._reservation(self.rooms[0], self.guests[0])
+        reservation.action_confirm()
+        folio = reservation.folio_ids[0]
+        product = self.env["product.product"].create(
+            {
+                "name": "Report POS Charge",
+                "type": "service",
+                "list_price": 18.0,
+                "taxes_id": [(6, 0, [])],
+            }
+        )
+        line = folio._add_workflow_charge(
+            product,
+            price_unit=18.0,
+            date=self.today_noon,
+            source_type="pos",
+            source_reference="POS/SAFE/001",
+            source_key="report-pos-safe-001",
+        )
+
+        advance_payload = (
+            self._wizard("agency_advances")
+            .with_user(self.accountant)
+            ._get_report_payload()
+        )
+        advance_row = next(
+            row for row in advance_payload["rows"] if row["payment"] == payment.name
+        )
+        self.assertEqual(advance_row["agency"], agency.name)
+
+        pos_payload = (
+            self._wizard("pos_room_charges")
+            .with_user(self.accountant)
+            ._get_report_payload()
+        )
+        pos_row = next(
+            row for row in pos_payload["rows"] if row["description"] == line.name
+        )
+        self.assertEqual(pos_row["pos_receipt"], "POS/SAFE/001")
 
     def test_western_digits_preserve_zero(self):
         wizard = self._wizard("occupancy")

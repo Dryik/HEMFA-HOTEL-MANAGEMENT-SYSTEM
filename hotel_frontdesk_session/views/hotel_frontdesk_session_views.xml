@@ -123,6 +123,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
+                <field name="property_id"/>
                 <field name="user_id"/>
                 <filter string="Open" name="open" domain="[('state', '=', 'opened')]"/>
                 <filter string="Closed" name="closed" domain="[('state', '=', 'closed')]"/>
@@ -132,6 +133,7 @@
                              ('date_opened', '&lt;', (context_today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
                 <filter string="My Sessions" name="my_sessions" domain="[('user_id', '=', uid)]"/>
                 <group>
+                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
                     <filter string="Cashier" name="group_user" context="{'group_by': 'user_id'}"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
                 </group>
@@ -144,6 +146,10 @@
         <field name="res_model">hotel.frontdesk.session</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="hotel_frontdesk_session_view_search"/>
+        <field name="context">{
+            'search_default_property_id': context.get('hotel_property_id'),
+            'default_property_id': context.get('hotel_property_id'),
+        }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Open a new front desk session</p>
             <p>Front desk cashier sessions let receptionists perform cashier opening counts, track transactions, and execute shift closures.</p>

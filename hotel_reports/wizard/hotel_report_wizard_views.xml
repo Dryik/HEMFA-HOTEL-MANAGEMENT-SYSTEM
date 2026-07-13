@@ -25,10 +25,14 @@
     </record>
 
     <record id="hotel_report_wizard_action" model="ir.actions.act_window">
-        <field name="name">Daily Reports</field>
+        <field name="name">Hotel Reports</field>
         <field name="res_model">hotel.report.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
+        <field name="context">{
+            'default_property_id': context.get('hotel_property_id'),
+            'default_date': context.get('hotel_business_date'),
+        }</field>
     </record>
 
     <menuitem id="menu_hotel_reports"

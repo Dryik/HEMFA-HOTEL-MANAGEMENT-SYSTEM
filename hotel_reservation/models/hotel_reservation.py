@@ -517,6 +517,13 @@ class HotelReservation(models.Model):
     @api.model
     def get_dashboard_data(self, property_id=None, business_date=None):
         """KPI payload for the front-desk dashboard (hotel_board)."""
+        # One-release compatibility shim.  ``hotel_reservation`` remains
+        # independently installable, so keep the former implementation below
+        # as a fallback when ``hotel_board`` is not installed yet.
+        if "hotel.frontdesk.workspace" in self.env:
+            return self.env[
+                "hotel.frontdesk.workspace"
+            ].get_legacy_dashboard_data(property_id, business_date)
         prop = (
             self.env["hotel.property"].browse(property_id).exists()
             if property_id

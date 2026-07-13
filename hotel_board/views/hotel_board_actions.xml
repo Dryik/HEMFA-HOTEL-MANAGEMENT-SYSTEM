@@ -5,11 +5,93 @@
         <field name="tag">hotel_board.dashboard</field>
     </record>
 
-    <!-- Sequence 5: first item under the Hotel app, so the dashboard
-         is the landing screen. -->
+    <record id="action_hotel_planning" model="ir.actions.client">
+        <field name="name">Planning</field>
+        <field name="tag">hotel_board.planning</field>
+    </record>
+
     <menuitem id="menu_hotel_dashboard"
         name="Dashboard"
-        parent="hotel_base.menu_hotel_root"
+        parent="hotel_reservation.menu_hotel_frontdesk"
         action="action_hotel_dashboard"
-        sequence="5"/>
+        sequence="5"
+        groups="hotel_base.group_hotel_frontdesk"/>
+
+    <!-- Make the purpose-built inventory tape the primary planning entry point. -->
+    <record id="hotel_reservation.menu_hotel_reservation_planning" model="ir.ui.menu">
+        <field name="name">Planning</field>
+        <field name="action" ref="action_hotel_planning"/>
+        <field name="sequence">10</field>
+        <field name="groups_id" eval="[(6, 0, [ref('hotel_base.group_hotel_frontdesk')])]"/>
+    </record>
+
+    <!-- Front Desk workflow order. Each child keeps the security groups from
+         its defining addon; only its information architecture changes here. -->
+    <record id="hotel_reservation.menu_hotel_arrivals_today" model="ir.ui.menu">
+        <field name="sequence">20</field>
+    </record>
+    <record id="hotel_reservation.menu_hotel_departures_today" model="ir.ui.menu">
+        <field name="sequence">30</field>
+    </record>
+    <record id="hotel_reservation.menu_hotel_reservation_all" model="ir.ui.menu">
+        <field name="sequence">40</field>
+    </record>
+    <record id="hotel_reservation.menu_hotel_reservation_groups" model="ir.ui.menu">
+        <field name="sequence">50</field>
+    </record>
+    <record id="hotel_folio.menu_hotel_folios" model="ir.ui.menu">
+        <field name="parent_id" ref="hotel_reservation.menu_hotel_frontdesk"/>
+        <field name="sequence">60</field>
+    </record>
+    <record id="hotel_reservation.menu_hotel_reservation_amendments" model="ir.ui.menu">
+        <field name="sequence">70</field>
+    </record>
+    <record id="hotel_frontdesk_session.menu_hotel_frontdesk_sessions" model="ir.ui.menu">
+        <field name="parent_id" ref="hotel_reservation.menu_hotel_frontdesk"/>
+        <field name="sequence">80</field>
+    </record>
+    <record id="hotel_night_audit.menu_hotel_night_audit" model="ir.ui.menu">
+        <field name="parent_id" ref="hotel_reservation.menu_hotel_frontdesk"/>
+        <field name="sequence">90</field>
+    </record>
+
+    <!-- Consolidate non-front-desk operational queues. -->
+    <menuitem id="menu_hotel_operations"
+        name="Operations"
+        parent="hotel_base.menu_hotel_root"
+        sequence="20"/>
+    <record id="hotel_housekeeping.menu_hotel_housekeeping_root" model="ir.ui.menu">
+        <field name="parent_id" ref="menu_hotel_operations"/>
+        <field name="sequence">10</field>
+    </record>
+    <record id="hotel_maintenance.menu_hotel_maintenance" model="ir.ui.menu">
+        <field name="parent_id" ref="menu_hotel_operations"/>
+        <field name="sequence">20</field>
+    </record>
+    <record id="hotel_guest_services.menu_hotel_dnd" model="ir.ui.menu">
+        <field name="parent_id" ref="menu_hotel_operations"/>
+        <field name="sequence">30</field>
+    </record>
+    <record id="hotel_guest_services.menu_hotel_wakeup" model="ir.ui.menu">
+        <field name="parent_id" ref="menu_hotel_operations"/>
+        <field name="sequence">40</field>
+    </record>
+    <record id="hotel_guest_services.menu_hotel_lost_found" model="ir.ui.menu">
+        <field name="parent_id" ref="menu_hotel_operations"/>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- Keep secondary areas stable and remove root-level sequence collisions. -->
+    <record id="hotel_base.menu_hotel_rooms" model="ir.ui.menu">
+        <field name="sequence">30</field>
+    </record>
+    <record id="hotel_base.menu_hotel_guests" model="ir.ui.menu">
+        <field name="sequence">40</field>
+    </record>
+    <record id="hotel_base.menu_hotel_agencies" model="ir.ui.menu">
+        <field name="sequence">50</field>
+    </record>
+    <record id="hotel_base.menu_hotel_agency_commissions" model="ir.ui.menu">
+        <field name="sequence">60</field>
+    </record>
 </odoo>

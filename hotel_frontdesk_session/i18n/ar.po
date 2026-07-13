@@ -20,43 +20,43 @@ msgstr ""
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/wizard/hotel_cashier_payment_wizard.py:0
 msgid "A cashier can collect payments only in their own session."
-msgstr ""
+msgstr "لا يمكن لأمين الصندوق تحصيل المدفوعات إلا في جلسته."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "A cashier can have only one open session per property."
-msgstr ""
+msgstr "لا يمكن لأمين الصندوق امتلاك أكثر من جلسة مفتوحة واحدة لكل منشأة."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "A cashier can open only their own session."
-msgstr ""
+msgstr "لا يمكن لأمين الصندوق فتح سوى جلسته."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "A cashier can operate only their own open session."
-msgstr ""
+msgstr "لا يمكن لأمين الصندوق العمل إلا على جلسته المفتوحة."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/account_payment.py:0
 msgid "A draft payment cannot be linked to a closed session."
-msgstr ""
+msgstr "لا يمكن ربط دفعة مسودة بجلسة مغلقة."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/account_payment.py:0
 msgid "A payment cannot be linked to a closed cashier session."
-msgstr ""
+msgstr "لا يمكن ربط دفعة بجلسة صندوق مغلقة."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/account_payment.py:0
 msgid "A payment cannot be moved out of a closed cashier session."
-msgstr ""
+msgstr "لا يمكن نقل دفعة من جلسة صندوق مغلقة."
 
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields.selection,name:hotel_frontdesk_session.selection__hotel_cashier_payment_wizard__purpose__agency_advance
@@ -92,18 +92,18 @@ msgstr "ملخص مطابقة النقدية"
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "Cash counts cannot be added to a closed session."
-msgstr ""
+msgstr "لا يمكن إضافة جرد نقدي إلى جلسة مغلقة."
 
 #. module: hotel_frontdesk_session
 #: model:ir.rule,name:hotel_frontdesk_session.rule_hotel_frontdesk_cash_assigned_property
 msgid "Cash counts in assigned hotel properties"
-msgstr ""
+msgstr "عمليات الجرد النقدي في المنشآت الفندقية المخصصة"
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "Cash counts on a closed session are immutable."
-msgstr ""
+msgstr "عمليات الجرد النقدي في الجلسة المغلقة غير قابلة للتغيير."
 
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__user_id
@@ -114,12 +114,12 @@ msgstr "أمين الصندوق / موظف الاستقبال"
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields,field_description:hotel_frontdesk_session.field_account_payment__hotel_frontdesk_session_id
 msgid "Cashier Session"
-msgstr ""
+msgstr "جلسة الصندوق"
 
 #. module: hotel_frontdesk_session
 #: model:ir.model,name:hotel_frontdesk_session.model_hotel_frontdesk_session_reconciliation
 msgid "Cashier Session Journal and Currency Reconciliation"
-msgstr ""
+msgstr "مطابقة دفتر وعملة جلسة الصندوق"
 
 #. module: hotel_frontdesk_session
 #: model:ir.ui.menu,name:hotel_frontdesk_session.menu_hotel_frontdesk_sessions
@@ -130,35 +130,35 @@ msgstr "جلسات الاستقبال والصندوق"
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "Cashier identity, opening timestamp, and closure values are assigned by the session workflow."
-msgstr ""
+msgstr "يعيّن سير عمل الجلسة هوية أمين الصندوق ووقت الفتح وقيم الإغلاق."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "Cashier reconciliation snapshots can only be created at closure."
-msgstr ""
+msgstr "لا يمكن إنشاء لقطات مطابقة الصندوق إلا عند الإغلاق."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "Cashier reconciliation snapshots require an open session."
-msgstr ""
+msgstr "تتطلب لقطات مطابقة الصندوق جلسة مفتوحة."
 
 #. module: hotel_frontdesk_session
 #: model:ir.rule,name:hotel_frontdesk_session.rule_hotel_frontdesk_reconciliation_assigned_property
 msgid "Cashier reconciliations in assigned hotel properties"
-msgstr ""
+msgstr "مطابقات الصندوق في المنشآت الفندقية المخصصة"
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "Cashier sessions can only be closed through the close action."
-msgstr ""
+msgstr "لا يمكن إغلاق جلسات الصندوق إلا من خلال إجراء الإغلاق."
 
 #. module: hotel_frontdesk_session
 #: model:ir.rule,name:hotel_frontdesk_session.rule_hotel_frontdesk_session_assigned_property
 msgid "Cashier sessions in assigned hotel properties"
-msgstr ""
+msgstr "جلسات الصندوق في المنشآت الفندقية المخصصة"
 
 #. module: hotel_frontdesk_session
 #: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_form
@@ -180,13 +180,13 @@ msgstr "وقت الإغلاق"
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "Closed cashier sessions are immutable."
-msgstr ""
+msgstr "جلسات الصندوق المغلقة غير قابلة للتغيير."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "Closed-session reconciliation snapshots are immutable."
-msgstr ""
+msgstr "لقطات مطابقة الجلسة المغلقة غير قابلة للتغيير."
 
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__closing_balance_ids
@@ -206,19 +206,19 @@ msgstr "عد الإغلاق"
 #. module: hotel_frontdesk_session
 #: model:ir.model,name:hotel_frontdesk_session.model_hotel_cashier_payment_wizard
 msgid "Collect Hotel Cashier Payment"
-msgstr ""
+msgstr "تحصيل دفعة صندوق الفندق"
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 #: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_cashier_payment_wizard_view_form
 msgid "Collect Hotel Payment"
-msgstr ""
+msgstr "تحصيل دفعة الفندق"
 
 #. module: hotel_frontdesk_session
 #: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_form
 msgid "Collect Payment"
-msgstr ""
+msgstr "تحصيل دفعة"
 
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__company_id
@@ -239,7 +239,7 @@ msgstr "العملة"
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/wizard/hotel_cashier_payment_wizard.py:0
 msgid "Deposits, advances, and settlements must be inbound payments."
-msgstr ""
+msgstr "يجب أن تكون الدفعات المقدمة والسلف والتسويات مدفوعات واردة."
 
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__difference
@@ -270,7 +270,7 @@ msgstr "جلسات صندوق الاستقبال"
 #. module: hotel_frontdesk_session
 #: model_terms:ir.actions.act_window,help:hotel_frontdesk_session.hotel_frontdesk_session_action
 msgid "Front desk cashier sessions let receptionists perform cashier opening counts, track transactions, and execute shift closures."
-msgstr ""
+msgstr "تتيح جلسات صندوق مكتب الاستقبال للموظفين إجراء جرد الفتح، وتتبع المعاملات، وتنفيذ إغلاق الورديات."
 
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields.selection,name:hotel_frontdesk_session.selection__hotel_cashier_payment_wizard__purpose__guest_deposit
@@ -295,7 +295,7 @@ msgstr "اليومية / الدرج"
 #. module: hotel_frontdesk_session
 #: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_search
 msgid "My Sessions"
-msgstr ""
+msgstr "جلساتي"
 
 #. module: hotel_frontdesk_session
 #. odoo-python
@@ -308,13 +308,13 @@ msgstr "جديد"
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 #: code:addons/hotel_frontdesk_session/wizard/hotel_cashier_payment_wizard.py:0
 msgid "Only a cashier can collect a session payment."
-msgstr ""
+msgstr "يمكن لأمين الصندوق فقط تحصيل دفعة الجلسة."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "Only an open session can rebuild reconciliation snapshots."
-msgstr ""
+msgstr "لا يمكن إعادة بناء لقطات المطابقة إلا لجلسة مفتوحة."
 
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields.selection,name:hotel_frontdesk_session.selection__hotel_frontdesk_session__state__opened
@@ -351,31 +351,31 @@ msgstr "عد الفتح"
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/wizard/hotel_cashier_payment_wizard.py:0
 msgid "Payment %(payment)s posted by %(user)s for %(amount)s %(currency)s."
-msgstr ""
+msgstr "رحّل %(user)s الدفعة %(payment)s بمبلغ %(amount)s %(currency)s."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/wizard/hotel_cashier_payment_wizard.py:0
 msgid "Payment amount must be greater than zero."
-msgstr ""
+msgstr "يجب أن يكون مبلغ الدفعة أكبر من صفر."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/account_payment.py:0
 msgid "Payment and cashier session must use the same company."
-msgstr ""
+msgstr "يجب أن تستخدم الدفعة وجلسة الصندوق الشركة نفسها."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/account_payment.py:0
 msgid "Payment and cashier session must use the same property."
-msgstr ""
+msgstr "يجب أن تستخدم الدفعة وجلسة الصندوق المنشأة نفسها."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/wizard/hotel_cashier_payment_wizard.py:0
 msgid "Payment and session must use the same property."
-msgstr ""
+msgstr "يجب أن تستخدم الدفعة والجلسة المنشأة نفسها."
 
 #. module: hotel_frontdesk_session
 #: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_form
@@ -387,7 +387,7 @@ msgstr "الدفعات"
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 #: code:addons/hotel_frontdesk_session/wizard/hotel_cashier_payment_wizard.py:0
 msgid "Payments can only be collected in an open session."
-msgstr ""
+msgstr "لا يمكن تحصيل المدفوعات إلا في جلسة مفتوحة."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
@@ -398,13 +398,13 @@ msgstr "الرجاء إدخال قيمة جرد النقدية قبل إغلاق
 #. module: hotel_frontdesk_session
 #: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_cashier_payment_wizard_view_form
 msgid "Post Payment"
-msgstr ""
+msgstr "ترحيل الدفعة"
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "Post or remove every linked draft payment before closing."
-msgstr ""
+msgstr "رحّل أو أزل كل دفعة مسودة مرتبطة قبل الإغلاق."
 
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__payment_ids
@@ -413,13 +413,14 @@ msgstr "الدفعات المرحلة"
 
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__property_id
+#: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_search
 msgid "Property"
 msgstr "الفندق / المنشأة"
 
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields.selection,name:hotel_frontdesk_session.selection__hotel_cashier_payment_wizard__payment_type__inbound
 msgid "Receipt"
-msgstr ""
+msgstr "مقبوضات"
 
 #. module: hotel_frontdesk_session
 #: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_form
@@ -429,25 +430,25 @@ msgstr "المطابقة"
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields.selection,name:hotel_frontdesk_session.selection__hotel_cashier_payment_wizard__payment_type__outbound
 msgid "Refund / Payout"
-msgstr ""
+msgstr "استرداد / صرف"
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/wizard/hotel_cashier_payment_wizard.py:0
 msgid "Refunds and payouts must be outbound payments."
-msgstr ""
+msgstr "يجب أن تكون المبالغ المستردة والمدفوعات المصروفة مدفوعات صادرة."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/migrations/19.0.2.0.0/post-migrate.py:0
 msgid "Resolve duplicate open cashier sessions before upgrading: %(details)s"
-msgstr ""
+msgstr "عالج جلسات الصندوق المفتوحة المكررة قبل الترقية: %(details)s"
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/wizard/hotel_cashier_payment_wizard.py:0
 msgid "Select a folio for settlements and refunds."
-msgstr ""
+msgstr "حدد فوليو للتسويات والمبالغ المستردة."
 
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session_cash__session_id
@@ -477,17 +478,17 @@ msgstr "الحالة"
 #. module: hotel_frontdesk_session
 #: model:ir.rule,name:hotel_frontdesk_session.rule_hotel_cash_system_unrestricted
 msgid "System administrators: all cash counts"
-msgstr ""
+msgstr "مديرو النظام: كل عمليات الجرد النقدي"
 
 #. module: hotel_frontdesk_session
 #: model:ir.rule,name:hotel_frontdesk_session.rule_hotel_reconciliation_system_unrestricted
 msgid "System administrators: all cashier reconciliations"
-msgstr ""
+msgstr "مديرو النظام: كل مطابقات الصندوق"
 
 #. module: hotel_frontdesk_session
 #: model:ir.rule,name:hotel_frontdesk_session.rule_hotel_session_system_unrestricted
 msgid "System administrators: all cashier sessions"
-msgstr ""
+msgstr "مديرو النظام: كل جلسات الصندوق"
 
 #. module: hotel_frontdesk_session
 #. odoo-python
@@ -499,19 +500,19 @@ msgstr "يجب أن تستخدم الدفعة والفوليو العملة نف
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/wizard/hotel_cashier_payment_wizard.py:0
 msgid "The payment folio must belong to the session property."
-msgstr ""
+msgstr "يجب أن ينتمي فوليو الدفعة إلى منشأة الجلسة."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/wizard/hotel_cashier_payment_wizard.py:0
 msgid "The payment journal must belong to the property company."
-msgstr ""
+msgstr "يجب أن ينتمي دفتر الدفع إلى شركة المنشأة."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
 #: code:addons/hotel_frontdesk_session/models/hotel_frontdesk_session.py:0
 msgid "The reconciliation snapshot belongs to another session."
-msgstr ""
+msgstr "تنتمي لقطة المطابقة إلى جلسة أخرى."
 
 #. module: hotel_frontdesk_session
 #. odoo-python
@@ -527,7 +528,7 @@ msgstr "المدد الزمنية"
 #. module: hotel_frontdesk_session
 #: model_terms:ir.ui.view,arch_db:hotel_frontdesk_session.hotel_frontdesk_session_view_search
 msgid "Today"
-msgstr ""
+msgstr "اليوم"
 
 #. module: hotel_frontdesk_session
 #: model:ir.model.fields,field_description:hotel_frontdesk_session.field_hotel_frontdesk_session__total_closing_balance

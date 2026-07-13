@@ -5,25 +5,56 @@
         <field name="name">hotel.housekeeping.task.view.kanban</field>
         <field name="model">hotel.housekeeping.task</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="state" class="o_kanban_small_column" records_draggable="true">
+            <kanban default_group_by="state" class="o_kanban_small_column" records_draggable="false">
                 <field name="id"/>
                 <field name="name"/>
                 <field name="room_id"/>
+                <field name="property_id"/>
                 <field name="cleaner_id"/>
                 <field name="priority"/>
+                <field name="date_start"/>
+                <field name="date_completed"/>
                 <field name="state"/>
                 <templates>
                     <t t-name="card">
                         <div class="d-flex flex-column h-100">
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="fw-bold fs-5 text-primary"><field name="name"/></span>
+                                <field name="state" widget="badge"/>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <strong class="fs-4 text-dark"><field name="room_id"/></strong>
                                 <field name="priority" widget="priority"/>
                             </div>
-                            <div class="mb-2">
-                                <strong class="fs-4 text-dark"><field name="room_id"/></strong>
+                            <div class="small text-muted mb-1">
+                                <i class="fa fa-building-o me-1" aria-hidden="true"/>
+                                <field name="property_id"/>
                             </div>
-                            <div class="mt-auto d-flex align-items-center justify-content-between">
-                                <span class="text-muted"><field name="cleaner_id"/></span>
+                            <div class="small mb-1">
+                                <i class="fa fa-user me-1 text-muted" aria-hidden="true"/>
+                                <t t-if="record.cleaner_id.raw_value">
+                                    <field name="cleaner_id"/>
+                                </t>
+                                <span t-else="" class="text-warning">Unassigned</span>
+                            </div>
+                            <div t-if="record.date_start.raw_value" class="small text-muted mb-1">
+                                <span>Started:</span>
+                                <field name="date_start"/>
+                            </div>
+                            <div t-if="record.date_completed.raw_value" class="small text-success mb-1">
+                                <span>Completed:</span>
+                                <field name="date_completed"/>
+                            </div>
+                            <div class="mt-auto pt-2 d-flex flex-wrap gap-1 border-top">
+                                <button t-if="record.state.raw_value == 'new'"
+                                    name="action_start" type="object" string="Start Cleaning"
+                                    class="btn btn-primary btn-sm"/>
+                                <button t-if="record.state.raw_value == 'cleaning'"
+                                    name="action_complete" type="object" string="Mark Cleaned"
+                                    class="btn btn-primary btn-sm"/>
+                                <button t-if="record.state.raw_value in ['new', 'cleaning']"
+                                    name="action_cancel" type="object" string="Cancel"
+                                    class="btn btn-outline-secondary btn-sm"/>
                             </div>
                         </div>
                     </t>
@@ -103,12 +134,14 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
+                <field name="property_id"/>
                 <field name="room_id"/>
                 <field name="cleaner_id"/>
                 <filter string="New" name="new" domain="[('state', '=', 'new')]"/>
                 <filter string="Cleaning" name="cleaning" domain="[('state', '=', 'cleaning')]"/>
                 <filter string="Cleaned" name="cleaned" domain="[('state', '=', 'cleaned')]"/>
                 <separator/>
+                <filter string="Open Tasks" name="open_tasks" domain="[('state', 'in', ('new', 'cleaning'))]"/>
                 <filter string="My Tasks" name="my_tasks" domain="[('cleaner_id', '=', uid)]"/>
                 <group>
                     <filter string="Room" name="group_by_room" context="{'group_by': 'room_id'}"/>
@@ -126,6 +159,11 @@
         <field name="res_model">hotel.housekeeping.task</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="search_view_id" ref="hotel_housekeeping_task_view_search"/>
+        <field name="context">{
+            'search_default_open_tasks': 1,
+            'search_default_property_id': context.get('hotel_property_id'),
+            'default_property_id': context.get('hotel_property_id'),
+        }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 No housekeeping tasks found.

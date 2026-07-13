@@ -21,6 +21,22 @@ REPORT_TYPES = [
     ("folio_statement", "Consolidated Folio Statement"),
 ]
 
+REPORT_FAMILIES = {
+    "security": "landscape",
+    "debtors": "landscape",
+    "agency_advances": "landscape",
+    "pos_room_charges": "landscape",
+    "folio_statement": "landscape",
+    "cashier_close": "financial",
+    "night_audit": "financial",
+}
+
+REPORT_ACTIONS = {
+    "operations": "hotel_reports.action_report_daily_movement",
+    "landscape": "hotel_reports.action_report_landscape_detail",
+    "financial": "hotel_reports.action_report_financial_summary",
+}
+
 ARABIC = {
     "Arrivals": "الوصول",
     "Departures": "المغادرة",
@@ -126,6 +142,57 @@ class HotelReportWizard(models.TransientModel):
     def _label(self, english):
         return ARABIC.get(english, english) if self.language == "ar" else english
 
+    def _report_family(self):
+        self.ensure_one()
+        return REPORT_FAMILIES.get(self.report_type, "operations")
+
+    @staticmethod
+    def _column_widths(columns):
+        wide_columns = {"guest", "agency", "description", "accounting"}
+        compact_columns = {
+            "room",
+            "nights",
+            "rooms",
+            "occupied",
+            "occupancy",
+            "adr",
+            "revpar",
+            "revenue",
+            "tax",
+            "untaxed",
+            "total",
+            "paid",
+            "due",
+            "available",
+            "counted",
+            "difference",
+            "currency",
+        }
+        weights = {
+            key: 1.5 if key in wide_columns else 0.72 if key in compact_columns else 1.0
+            for key, _label in columns
+        }
+        total = sum(weights.values()) or 1.0
+        return {
+            key: round(weight * 100.0 / total, 2) for key, weight in weights.items()
+        }
+
+    def _currency_summary(self, rows, measures):
+        summary = []
+        currencies = sorted(
+            {row.get("currency") for row in rows if row.get("currency")}
+        )
+        for currency in currencies:
+            currency_rows = [row for row in rows if row.get("currency") == currency]
+            for key, label in measures:
+                summary.append(
+                    (
+                        f"{self._label(label)} ({currency})",
+                        sum(row.get(key, 0.0) or 0.0 for row in currency_rows),
+                    )
+                )
+        return summary
+
     def _check_report_access(self):
         self.ensure_one()
         user = self.env.user
@@ -169,6 +236,16 @@ class HotelReportWizard(models.TransientModel):
             str.maketrans("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹", "01234567890123456789")
         )
 
+    def _operational_datetime(self, value):
+        """Format a UTC timestamp in the selected property's timezone."""
+        if not value:
+            return ""
+        local_value = fields.Datetime.context_timestamp(
+            self.with_context(tz=self.property_id.timezone),
+            fields.Datetime.to_datetime(value),
+        )
+        return self._western(local_value.strftime("%d/%m/%Y %H:%M"))
+
     def _movement_payload(self):
         reservations = self._get_reservations()
         security = self.report_type == "security"
@@ -201,7 +278,9 @@ class HotelReportWizard(models.TransientModel):
                     {
                         "id_type": reservation.partner_id.guest_id_type or "",
                         "id_number": reservation.partner_id.guest_id_number or "",
-                        "birthdate": self._western(reservation.partner_id.guest_birthdate),
+                        "birthdate": self._western(
+                            reservation.partner_id.guest_birthdate
+                        ),
                         "coming_from": reservation.coming_from or "",
                         "heading_to": reservation.heading_to or "",
                     }
@@ -210,8 +289,10 @@ class HotelReportWizard(models.TransientModel):
                 row.update(
                     {
                         "reservation": reservation.name,
-                        "arrival": self._western(reservation.checkin_date),
-                        "departure": self._western(reservation.checkout_date),
+                        "arrival": self._operational_datetime(reservation.checkin_date),
+                        "departure": self._operational_datetime(
+                            reservation.checkout_date
+                        ),
                         "nights": reservation.nights,
                         "agency": reservation.agency_id.name or "",
                     }
@@ -227,30 +308,147 @@ class HotelReportWizard(models.TransientModel):
         if self.report_type in ("arrivals", "departures", "inhouse", "security"):
             columns, rows = self._movement_payload()
         elif self.report_type == "occupancy":
-            columns = [("date", "Date"), ("rooms", "Rooms"), ("occupied", "Occupied"), ("occupancy", "Occupancy"), ("adr", "ADR"), ("revpar", "RevPAR")]
+            columns = [
+                ("date", "Date"),
+                ("rooms", "Rooms"),
+                ("occupied", "Occupied"),
+                ("occupancy", "Occupancy"),
+                ("adr", "ADR"),
+                ("revpar", "RevPAR"),
+                ("currency", "Currency"),
+            ]
             audits = self.env["hotel.night.audit"].search(
-                [("property_id", "=", self.property_id.id), ("date", "=", self.date), ("state", "=", "done")]
+                [
+                    ("property_id", "=", self.property_id.id),
+                    ("date", "=", self.date),
+                    ("state", "=", "done"),
+                ]
             )
             rows = [
-                {"date": self._western(audit.date), "rooms": audit.sellable_room_count, "occupied": audit.occupied_room_count, "occupancy": audit.occupancy_pct, "adr": audit.adr, "revpar": audit.revpar}
+                {
+                    "date": self._western(audit.date),
+                    "rooms": audit.sellable_room_count,
+                    "occupied": audit.occupied_room_count,
+                    "occupancy": audit.occupancy_pct,
+                    "adr": audit.adr,
+                    "revpar": audit.revpar,
+                    "currency": audit.currency_id.name,
+                }
                 for audit in audits
             ]
+            if rows:
+                summary = [
+                    (self._label("Rooms"), sum(row["rooms"] for row in rows)),
+                    (self._label("Occupied"), sum(row["occupied"] for row in rows)),
+                ]
         elif self.report_type == "debtors":
-            columns = [("folio", "Folio"), ("guest", "Guest"), ("agency", "Agency / Entity"), ("total", "Total"), ("paid", "Paid"), ("due", "Due"), ("currency", "Currency")]
-            folios = self.env["hotel.folio"].search([("property_id", "=", self.property_id.id), ("amount_due", "!=", 0.0)])
-            rows = [{"folio": folio.name, "guest": folio.partner_id.name, "agency": folio.agency_id.name or "", "total": folio.amount_total, "paid": folio.amount_paid, "due": folio.amount_due, "currency": folio.currency_id.name} for folio in folios]
+            columns = [
+                ("folio", "Folio"),
+                ("guest", "Guest"),
+                ("agency", "Agency / Entity"),
+                ("total", "Total"),
+                ("paid", "Paid"),
+                ("due", "Due"),
+                ("currency", "Currency"),
+            ]
+            folios = self.env["hotel.folio"].search(
+                [("property_id", "=", self.property_id.id), ("amount_due", "!=", 0.0)]
+            )
+            rows = [
+                {
+                    "folio": folio.name,
+                    "guest": folio.partner_id.name,
+                    "agency": folio.agency_id.name or "",
+                    "total": folio.amount_total,
+                    "paid": folio.amount_paid,
+                    "due": folio.amount_due,
+                    "currency": folio.currency_id.name,
+                }
+                for folio in folios
+            ]
+            summary = self._currency_summary(
+                rows, (("total", "Total"), ("paid", "Paid"), ("due", "Due"))
+            )
         elif self.report_type == "cashier_close":
-            columns = [("cashier", "Cashier"), ("journal", "Journal"), ("currency", "Currency"), ("transactions", "Transactions"), ("counted", "Counted"), ("difference", "Difference")]
+            columns = [
+                ("cashier", "Cashier"),
+                ("journal", "Journal"),
+                ("currency", "Currency"),
+                ("transactions", "Transactions"),
+                ("counted", "Counted"),
+                ("difference", "Difference"),
+            ]
             start, end = self._day_window()
-            snapshots = self.env["hotel.frontdesk.session.reconciliation"].search([("session_id.property_id", "=", self.property_id.id), ("session_id.state", "=", "closed"), ("session_id.date_closed", ">=", start), ("session_id.date_closed", "<", end)])
-            rows = [{"cashier": item.session_id.user_id.name, "journal": item.journal_id.name, "currency": item.currency_id.name, "transactions": item.transaction_amount, "counted": item.counted_amount, "difference": item.difference} for item in snapshots]
+            snapshots = self.env["hotel.frontdesk.session.reconciliation"].search(
+                [
+                    ("session_id.property_id", "=", self.property_id.id),
+                    ("session_id.state", "=", "closed"),
+                    ("session_id.date_closed", ">=", start),
+                    ("session_id.date_closed", "<", end),
+                ]
+            )
+            rows = [
+                {
+                    "cashier": item.session_id.user_id.name,
+                    "journal": item.journal_id.name,
+                    "currency": item.currency_id.name,
+                    "transactions": item.transaction_amount,
+                    "counted": item.counted_amount,
+                    "difference": item.difference,
+                }
+                for item in snapshots
+            ]
+            summary = self._currency_summary(
+                rows,
+                (
+                    ("transactions", "Transactions"),
+                    ("counted", "Counted"),
+                    ("difference", "Difference"),
+                ),
+            )
         elif self.report_type == "night_audit":
-            columns = [("date", "Date"), ("rooms", "Rooms"), ("occupied", "Occupied"), ("revenue", "Revenue"), ("tax", "Tax"), ("adr", "ADR"), ("revpar", "RevPAR")]
-            audits = self.env["hotel.night.audit"].search([("property_id", "=", self.property_id.id), ("date", "=", self.date), ("state", "in", ("done", "reversed"))])
-            rows = [{"date": self._western(audit.date), "rooms": audit.sellable_room_count, "occupied": audit.occupied_room_count, "revenue": audit.revenue_posted, "tax": audit.tax_posted, "adr": audit.adr, "revpar": audit.revpar} for audit in audits]
+            columns = [
+                ("date", "Date"),
+                ("rooms", "Rooms"),
+                ("occupied", "Occupied"),
+                ("revenue", "Revenue"),
+                ("tax", "Tax"),
+                ("adr", "ADR"),
+                ("revpar", "RevPAR"),
+                ("currency", "Currency"),
+            ]
+            audits = self.env["hotel.night.audit"].search(
+                [
+                    ("property_id", "=", self.property_id.id),
+                    ("date", "=", self.date),
+                    ("state", "in", ("done", "reversed")),
+                ]
+            )
+            rows = [
+                {
+                    "date": self._western(audit.date),
+                    "rooms": audit.sellable_room_count,
+                    "occupied": audit.occupied_room_count,
+                    "revenue": audit.revenue_posted,
+                    "tax": audit.tax_posted,
+                    "adr": audit.adr,
+                    "revpar": audit.revpar,
+                    "currency": audit.currency_id.name,
+                }
+                for audit in audits
+            ]
+            summary = self._currency_summary(
+                rows, (("revenue", "Revenue"), ("tax", "Tax"))
+            )
         elif self.report_type == "discrepancy":
-            columns = [("room", "Room"), ("fo_status", "FO Status"), ("housekeeping", "Housekeeping")]
-            rooms = self.env["hotel.room"].search([("property_id", "=", self.property_id.id)])
+            columns = [
+                ("room", "Room"),
+                ("fo_status", "FO Status"),
+                ("housekeeping", "Housekeeping"),
+            ]
+            rooms = self.env["hotel.room"].search(
+                [("property_id", "=", self.property_id.id)]
+            )
             rows = [
                 {
                     "room": room.name,
@@ -258,28 +456,97 @@ class HotelReportWizard(models.TransientModel):
                     "housekeeping": room.hk_status,
                 }
                 for room in rooms
-                if (
-                    room.occupancy_state == "occupied"
-                    and room.hk_status == "clean"
-                )
-                or (
-                    room.occupancy_state != "occupied"
-                    and room.hk_status == "dirty"
-                )
+                if (room.occupancy_state == "occupied" and room.hk_status == "clean")
+                or (room.occupancy_state != "occupied" and room.hk_status == "dirty")
             ]
         elif self.report_type == "agency_advances":
-            columns = [("payment", "Payment"), ("agency", "Agency / Entity"), ("total", "Total"), ("available", "Available"), ("currency", "Currency")]
-            payments = self.env["account.payment"].search([("hotel_property_id", "=", self.property_id.id), ("hotel_payment_purpose", "=", "agency_advance"), ("state", "in", ("in_process", "paid"))])
-            rows = [{"payment": payment.name, "agency": payment.partner_id.name, "total": payment.amount, "available": payment.hotel_available_advance, "currency": payment.currency_id.name} for payment in payments if payment.hotel_available_advance]
+            columns = [
+                ("payment", "Payment"),
+                ("agency", "Agency / Entity"),
+                ("total", "Total"),
+                ("available", "Available"),
+                ("currency", "Currency"),
+            ]
+            # The report role is checked above and the elevated query remains
+            # constrained to the already record-rule-checked property and the
+            # single hotel payment purpose. This avoids requiring broad access
+            # to accounting payments merely to print the approved summary.
+            payments = (
+                self.env["account.payment"]
+                .sudo()
+                .search(
+                    [
+                        ("hotel_property_id", "=", self.property_id.id),
+                        ("hotel_payment_purpose", "=", "agency_advance"),
+                        ("state", "in", ("in_process", "paid")),
+                    ]
+                )
+            )
+            rows = [
+                {
+                    "payment": payment.name,
+                    "agency": payment.partner_id.name,
+                    "total": payment.amount,
+                    "available": payment.hotel_available_advance,
+                    "currency": payment.currency_id.name,
+                }
+                for payment in payments
+                if payment.hotel_available_advance
+            ]
+            summary = self._currency_summary(
+                rows, (("total", "Total"), ("available", "Available"))
+            )
         elif self.report_type == "pos_room_charges":
-            columns = [("date", "Date"), ("folio", "Folio"), ("guest", "Guest"), ("pos_receipt", "POS Receipt"), ("description", "Description"), ("untaxed", "Untaxed"), ("tax", "Tax"), ("total", "Total"), ("currency", "Currency")]
+            columns = [
+                ("date", "Date"),
+                ("folio", "Folio"),
+                ("guest", "Guest"),
+                ("pos_receipt", "POS Receipt"),
+                ("description", "Description"),
+                ("untaxed", "Untaxed"),
+                ("tax", "Tax"),
+                ("total", "Total"),
+                ("currency", "Currency"),
+            ]
             start, end = self._day_window()
-            lines = self.env["hotel.folio.line"].search([("folio_id.property_id", "=", self.property_id.id), ("source_type", "=", "pos"), ("date", ">=", start), ("date", "<", end)])
-            rows = [{"date": self._western(line.date), "folio": line.folio_id.name, "guest": line.folio_id.partner_id.name, "pos_receipt": line.pos_order_id.name, "description": line.name, "untaxed": line.amount_untaxed, "tax": line.amount_tax, "total": line.amount_total, "currency": line.currency_id.name} for line in lines]
+            lines = self.env["hotel.folio.line"].search(
+                [
+                    ("folio_id.property_id", "=", self.property_id.id),
+                    ("source_type", "=", "pos"),
+                    ("date", ">=", start),
+                    ("date", "<", end),
+                ]
+            )
+            rows = [
+                {
+                    "date": self._operational_datetime(line.date),
+                    "folio": line.folio_id.name,
+                    "guest": line.folio_id.partner_id.name,
+                    "pos_receipt": line.source_reference or "",
+                    "description": line.name,
+                    "untaxed": line.amount_untaxed,
+                    "tax": line.amount_tax,
+                    "total": line.amount_total,
+                    "currency": line.currency_id.name,
+                }
+                for line in lines
+            ]
+            summary = self._currency_summary(
+                rows, (("untaxed", "Untaxed"), ("tax", "Tax"), ("total", "Total"))
+            )
         else:
             if not self.folio_id:
                 raise UserError(_("Select a folio for the consolidated statement."))
-            columns = [("date", "Date"), ("source", "Source"), ("description", "Description"), ("accounting", "Accounting"), ("untaxed", "Untaxed"), ("tax", "Tax"), ("total", "Total"), ("currency", "Currency")]
+            columns = [
+                ("date", "Date"),
+                ("source", "Source"),
+                ("description", "Description"),
+                ("accounting", "Accounting"),
+                ("untaxed", "Untaxed"),
+                ("tax", "Tax"),
+                ("total", "Total"),
+                ("currency", "Currency"),
+            ]
             for line in self.folio_id.line_ids:
                 accounting_move = (
                     line.invoice_line_id.move_id or line.accounting_move_id
@@ -320,7 +587,9 @@ class HotelReportWizard(models.TransientModel):
                         "currency": payment.currency_id.name,
                     }
                 )
-            rows.sort(key=lambda row: (row["date"], row["accounting"], row["description"]))
+            rows.sort(
+                key=lambda row: (row["date"], row["accounting"], row["description"])
+            )
             summary = [
                 (self._label("Total"), self.folio_id.amount_total),
                 (self._label("Invoiced / Transferred"), self.folio_id.amount_invoiced),
@@ -331,8 +600,10 @@ class HotelReportWizard(models.TransientModel):
         return {
             "title": self._label(title),
             "columns": [(key, self._label(label)) for key, label in columns],
+            "column_widths": self._column_widths(columns),
             "rows": rows,
             "rtl": self.language == "ar",
+            "family": self._report_family(),
             "property": self.property_id.display_name,
             "date": self._western(self.date),
             "summary": summary,
@@ -341,9 +612,8 @@ class HotelReportWizard(models.TransientModel):
     def action_print(self):
         self.ensure_one()
         self._check_report_access()
-        return self.env.ref("hotel_reports.action_report_daily_movement").report_action(
-            self, config=False
-        )
+        action_xmlid = REPORT_ACTIONS[self._report_family()]
+        return self.env.ref(action_xmlid).report_action(self, config=False)
 
     def action_export_xlsx(self):
         self.ensure_one()
@@ -362,8 +632,12 @@ class HotelReportWizard(models.TransientModel):
         worksheet = workbook.add_worksheet("Report")
         if payload["rtl"]:
             worksheet.right_to_left()
-        title_format = workbook.add_format({"bold": True, "font_size": 16, "align": "center"})
-        header_format = workbook.add_format({"bold": True, "bg_color": "#D9EAF7", "border": 1})
+        title_format = workbook.add_format(
+            {"bold": True, "font_size": 16, "align": "center"}
+        )
+        header_format = workbook.add_format(
+            {"bold": True, "bg_color": "#D9EAF7", "border": 1}
+        )
         money_format = workbook.add_format(
             {"num_format": "[$-409]#,##0.000", "border": 1}
         )
@@ -381,10 +655,14 @@ class HotelReportWizard(models.TransientModel):
                 if isinstance(value, (int, float)) and not isinstance(value, bool):
                     worksheet.write_number(row_index, column, value, money_format)
                 else:
-                    worksheet.write(row_index, column, self._western(value), cell_format)
+                    worksheet.write(
+                        row_index, column, self._western(value), cell_format
+                    )
         summary_row = 5 + len(payload["rows"])
         for offset, (label, value) in enumerate(payload["summary"]):
-            worksheet.write(summary_row + offset, 0, self._western(label), header_format)
+            worksheet.write(
+                summary_row + offset, 0, self._western(label), header_format
+            )
             worksheet.write_number(summary_row + offset, 1, value, money_format)
         workbook.close()
         return output.getvalue()

@@ -1,5 +1,6 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.tools import frozendict
 
 
 class ResUsers(models.Model):
@@ -36,3 +37,26 @@ class ResUsers(models.Model):
                 raise ValidationError(
                     _("The default hotel property must be one of the allowed properties.")
                 )
+
+    @api.model
+    def context_get(self):
+        """Seed hotel actions with the user's authoritative default workspace."""
+        context = dict(super().context_get())
+        user = self.env.user
+        if not (self.env.su or user.has_group("base.group_user")):
+            return frozendict(context)
+        prop = user.default_hotel_property_id
+        if (
+            prop
+            and prop in user.hotel_property_ids
+            and prop.company_id in self.env.companies
+        ):
+            context.update(
+                {
+                    "hotel_property_id": prop.id,
+                    "hotel_business_date": fields.Date.to_string(
+                        prop.current_business_date or prop.get_business_date()
+                    ),
+                }
+            )
+        return frozendict(context)
