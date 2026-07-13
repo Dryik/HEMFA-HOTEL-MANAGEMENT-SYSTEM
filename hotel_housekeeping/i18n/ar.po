@@ -51,6 +51,7 @@ msgstr "منظفة"
 
 #. module: hotel_housekeeping
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__cleaner_id
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_kanban
 #: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_search
 msgid "Cleaner"
 msgstr "عامل النظافة"
@@ -259,6 +260,7 @@ msgid "Priority"
 msgstr "الأولوية"
 
 #. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_kanban
 #: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_search
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard__property_id
 msgid "Property"
