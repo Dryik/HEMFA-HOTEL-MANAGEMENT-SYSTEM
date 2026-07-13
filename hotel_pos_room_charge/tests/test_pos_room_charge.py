@@ -181,6 +181,14 @@ class TestPosRoomCharge(TransactionCase):
         self.assertIn(self.cash_method, methods)
         self.assertNotIn(self.other_room_charge_method, methods)
 
+    def test_pos_config_view_uses_stable_title_anchor(self):
+        parent_arch = self.env.ref("point_of_sale.pos_config_view_form").arch_db
+        inherited_arch = self.env.ref(
+            "hotel_pos_room_charge.pos_config_view_form_hotel_property"
+        ).arch_db
+        self.assertIn('id="title"', parent_arch)
+        self.assertIn("//div[@id='title']", inherited_arch)
+
     def test_room_charge_posts_to_folio(self):
         reservation = self._checked_in_reservation()
         folio = reservation.folio_ids[0]
