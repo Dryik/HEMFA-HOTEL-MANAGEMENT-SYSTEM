@@ -162,6 +162,11 @@ class TestHotelFrontdeskSession(TransactionCase):
         self.assertIn("datetime.timedelta(days=1)", arch)
         self.assertNotIn("+ timedelta(days=1)", arch)
 
+    def test_cash_journal_domain_uses_simple_parent_company(self):
+        domain = self.env["hotel.frontdesk.session.cash"]._fields["journal_id"].domain
+        self.assertIn("parent.company_id", domain)
+        self.assertNotIn("parent.property_id.company_id", domain)
+
     def test_session_opening_metadata_cannot_be_forged(self):
         with self.assertRaises(UserError):
             self.env["hotel.frontdesk.session"].with_user(self.cashier).create(

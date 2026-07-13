@@ -42,6 +42,10 @@ FORBIDDEN_PATTERNS = {
     "Odoo web expressions expose timedelta as datetime.timedelta": re.compile(
         r"context_today\(\)\s*\+\s*timedelta\("
     ),
+    "Odoo view domains cannot traverse composed parent fields": re.compile(
+        r"\bdomain\s*=\s*[\"'][^\r\n>]*"
+        r"\bparent\.[A-Za-z_]\w*\.[A-Za-z_]\w*"
+    ),
 }
 
 

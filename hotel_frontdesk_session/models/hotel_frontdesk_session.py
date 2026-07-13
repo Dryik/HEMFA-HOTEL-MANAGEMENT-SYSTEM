@@ -24,6 +24,12 @@ class HotelFrontdeskSession(models.Model):
         required=True,
         default=lambda self: self.env["hotel.property"]._get_default_property(),
     )
+    company_id = fields.Many2one(
+        "res.company",
+        related="property_id.company_id",
+        string="Company",
+        readonly=True,
+    )
     state = fields.Selection(
         [("opened", "Open"), ("closed", "Closed")],
         default="opened",
@@ -353,7 +359,7 @@ class HotelFrontdeskSessionCash(models.Model):
         "account.journal",
         string="Journal / Drawer",
         required=True,
-        domain="[('company_id', '=', parent.property_id.company_id), ('type', 'in', ('cash', 'bank'))]",
+        domain="[('company_id', '=', parent.company_id), ('type', 'in', ('cash', 'bank'))]",
     )
     amount = fields.Monetary(
         string="Amount", required=True, currency_field="currency_id"
