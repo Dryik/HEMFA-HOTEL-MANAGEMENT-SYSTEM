@@ -167,6 +167,15 @@ class TestHotelFrontdeskSession(TransactionCase):
         self.assertIn("parent.company_id", domain)
         self.assertNotIn("parent.property_id.company_id", domain)
 
+    def test_session_action_uses_declared_search_view(self):
+        action = self.env.ref(
+            "hotel_frontdesk_session.hotel_frontdesk_session_action"
+        )
+        search_view = self.env.ref(
+            "hotel_frontdesk_session.hotel_frontdesk_session_view_search"
+        )
+        self.assertEqual(action.search_view_id, search_view)
+
     def test_session_opening_metadata_cannot_be_forged(self):
         with self.assertRaises(UserError):
             self.env["hotel.frontdesk.session"].with_user(self.cashier).create(

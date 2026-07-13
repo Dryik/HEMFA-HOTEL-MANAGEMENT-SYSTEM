@@ -136,18 +136,42 @@ def check_local_xml_references(errors: list[str]) -> None:
 
     ref_pattern = re.compile(r"\bref\(\s*['\"]([^'\"]+)['\"]\s*\)")
     for path, addon_name, tree in parsed:
-        for element in tree.iter():
+        elements = list(tree.iter())
+        positions = {
+            element.get("id"): index
+            for index, element in enumerate(elements)
+            if element.tag in id_tags and element.get("id")
+        }
+
+        def references(element) -> list[str]:
+            result = []
             if element.get("ref"):
-                verify(path, addon_name, element.get("ref"))
+                result.append(element.get("ref"))
             if element.tag == "menuitem":
                 for attribute in ("action", "parent"):
                     if element.get(attribute):
-                        verify(path, addon_name, element.get(attribute))
+                        result.append(element.get(attribute))
             if element.get("groups"):
-                for reference in element.get("groups").split(","):
-                    verify(path, addon_name, reference)
-            for reference in ref_pattern.findall(element.get("eval", "")):
+                result.extend(element.get("groups").split(","))
+            result.extend(ref_pattern.findall(element.get("eval", "")))
+            return result
+
+        for index, element in enumerate(elements):
+            for reference in references(element):
                 verify(path, addon_name, reference)
+                normalized = reference.strip().lstrip("!")
+                if "." in normalized:
+                    owner, xmlid = normalized.split(".", 1)
+                    if owner != addon_name:
+                        continue
+                else:
+                    xmlid = normalized
+                if xmlid in positions and positions[xmlid] > index:
+                    fail(
+                        errors,
+                        f"{path.relative_to(ROOT)}: forward XML reference "
+                        f"{reference}; define the target before it is used",
+                    )
 
 
 def load_manifest(path: Path, errors: list[str]) -> dict:
