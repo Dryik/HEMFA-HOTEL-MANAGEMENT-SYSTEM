@@ -24,6 +24,7 @@ class TestHotelNightAudit(TransactionCase):
         cls.room_type = cls.env["hotel.room.type"].create(
             {"name": "Audit Double Room", "base_price": 180.0}
         )
+        cls.room_type.product_id.write({"taxes_id": [(6, 0, [])]})
         cls.room1 = cls.env["hotel.room"].create(
             {
                 "name": "R301",

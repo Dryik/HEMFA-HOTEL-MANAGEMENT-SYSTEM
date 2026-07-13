@@ -41,6 +41,7 @@ class TestPosRoomCharge(TransactionCase):
                 "list_price": 25.0,
                 "categ_id": cls.restaurant_categ.id,
                 "available_in_pos": True,
+                "taxes_id": [(6, 0, [])],
             }
         )
 
@@ -99,6 +100,7 @@ class TestPosRoomCharge(TransactionCase):
             {
                 "name": "Other Hotel Restaurant POS",
                 "hotel_property_id": cls.other_property.id,
+                "payment_method_ids": [(6, 0, [cls.cash_method.id])],
             }
         )
         cls.other_room_charge_method = cls.env["pos.payment.method"].create(
