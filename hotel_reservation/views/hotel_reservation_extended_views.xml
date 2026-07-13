@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hotel_reservation_amendment_view_list" model="ir.ui.view">
+        <field name="name">hotel.reservation.amendment.list</field>
+        <field name="model">hotel.reservation.amendment</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="reservation_id"/>
+                <field name="property_id"/>
+                <field name="amendment_type"/>
+                <field name="effective_date"/>
+                <field name="requested_by_id"/>
+                <field name="approved_by_id"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hotel_reservation_amendment_view_form" model="ir.ui.view">
+        <field name="name">hotel.reservation.amendment.form</field>
+        <field name="model">hotel.reservation.amendment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_apply" type="object" string="Approve and Apply"
+                        class="btn-primary" invisible="state != 'draft'"
+                        groups="hotel_base.group_hotel_fo_supervisor"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="reservation_id" readonly="state != 'draft'"/>
+                            <field name="property_id"/>
+                            <field name="amendment_type" readonly="state != 'draft'"/>
+                            <field name="effective_date" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="requested_by_id"/>
+                            <field name="approved_by_id"/>
+                            <field name="approved_at"/>
+                        </group>
+                    </group>
+                    <group string="New Values" invisible="state != 'draft'">
+                        <field name="new_room_id" invisible="amendment_type != 'room_move'"/>
+                        <field name="new_checkin_date" invisible="amendment_type not in ('early_checkin', 'day_use')"/>
+                        <field name="new_checkout_date" invisible="amendment_type not in ('extend', 'shorten', 'late_checkout', 'day_use')"/>
+                        <field name="new_rate_night" invisible="amendment_type != 'reprice'"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="reason"/>
+                    </group>
+                    <group string="Audit Snapshot" invisible="state != 'applied'">
+                        <field name="reason" readonly="1"/>
+                        <field name="before_values" widget="json"/>
+                        <field name="after_values" widget="json"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hotel_reservation_amendment_action" model="ir.actions.act_window">
+        <field name="name">Reservation Amendments</field>
+        <field name="res_model">hotel.reservation.amendment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="hotel_reservation_group_view_list" model="ir.ui.view">
+        <field name="name">hotel.reservation.group.list</field>
+        <field name="model">hotel.reservation.group</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="group_partner_id"/>
+                <field name="agency_id"/>
+                <field name="property_id"/>
+                <field name="checkin_date"/>
+                <field name="checkout_date"/>
+                <field name="requested_room_count"/>
+                <field name="allocated_room_count"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hotel_reservation_group_view_form" model="ir.ui.view">
+        <field name="name">hotel.reservation.group.form</field>
+        <field name="model">hotel.reservation.group</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_allocate_available" type="object"
+                        string="Allocate Available Rooms" class="btn-secondary"
+                        invisible="state != 'draft'"/>
+                    <button name="action_confirm" type="object" string="Confirm Block"
+                        class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                        invisible="state == 'cancelled'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="property_id" readonly="state != 'draft'"/>
+                            <field name="group_partner_id" readonly="state != 'draft'"/>
+                            <field name="agency_id" readonly="state != 'draft'"/>
+                            <field name="billing_partner_id" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="checkin_date" readonly="state != 'draft'"/>
+                            <field name="checkout_date" readonly="state != 'draft'"/>
+                            <field name="requested_room_count"/>
+                            <field name="allocated_room_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Requested Rooms">
+                            <field name="allocation_line_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="room_type_id"/>
+                                    <field name="requested_qty"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Rooming List">
+                            <field name="member_ids" readonly="state == 'cancelled'">
+                                <list create="0" delete="0">
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                    <field name="room_type_id"/>
+                                    <field name="room_id"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hotel_reservation_group_action" model="ir.actions.act_window">
+        <field name="name">Group / Block Reservations</field>
+        <field name="res_model">hotel.reservation.group</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_hotel_reservation_groups" name="Group Reservations"
+        parent="menu_hotel_frontdesk" action="hotel_reservation_group_action" sequence="22"/>
+    <menuitem id="menu_hotel_reservation_amendments" name="Reservation Amendments"
+        parent="menu_hotel_frontdesk" action="hotel_reservation_amendment_action" sequence="24"/>
+</odoo>

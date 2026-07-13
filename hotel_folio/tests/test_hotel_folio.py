@@ -33,6 +33,28 @@ class TestHotelFolio(TransactionCase):
         cls.agency = cls.env["res.partner"].create(
             {"name": "Agency Libya Travel", "is_hotel_agency": True}
         )
+        cls.frontdesk_user = cls.env["res.users"].create(
+            {
+                "name": "Folio Front Desk",
+                "login": "folio_frontdesk_test",
+                "group_ids": [
+                    (4, cls.env.ref("hotel_base.group_hotel_frontdesk").id)
+                ],
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
+            }
+        )
+        cls.manager_user = cls.env["res.users"].create(
+            {
+                "name": "Folio Manager",
+                "login": "folio_manager_test",
+                "group_ids": [
+                    (4, cls.env.ref("hotel_base.group_hotel_manager").id)
+                ],
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
+            }
+        )
 
         # Create product categories
         cls.room_service_categ = cls.env["product.category"].create(
@@ -98,6 +120,91 @@ class TestHotelFolio(TransactionCase):
         self.assertEqual(line1.amount, 30.0)
         self.assertEqual(line1.payee_partner_id, self.guest)
         self.assertEqual(folio.amount_total, 30.0)
+        with self.assertRaises(UserError):
+            line1.write({"source_type": "pos", "source_key": "pos:forged"})
+        with self.assertRaises(UserError):
+            folio.add_charge(
+                self.burger,
+                source_type="pos",
+                source_key="pos:forged",
+            )
+
+    def test_tax_discount_and_invoice_totals_match(self):
+        tax = self.env["account.tax"].create(
+            {
+                "name": "Hotel Test VAT 10%",
+                "amount": 10.0,
+                "type_tax_use": "sale",
+                "company_id": self.property.company_id.id,
+            }
+        )
+        reservation = self._reservation()
+        reservation.action_confirm()
+        folio = reservation.folio_ids[0]
+        line = folio.add_charge(
+            self.burger,
+            qty=2.0,
+            discount=10.0,
+            tax_ids=tax.ids,
+        )
+        self.assertAlmostEqual(line.amount_untaxed, 27.0)
+        self.assertAlmostEqual(line.amount_tax, 2.7)
+        self.assertAlmostEqual(line.amount_total, 29.7)
+        self.assertAlmostEqual(line.amount, line.amount_total)
+
+        action = folio.action_create_invoice()
+        invoice = self.env["account.move"].browse(action["res_id"])
+        self.assertAlmostEqual(invoice.amount_untaxed, folio.amount_untaxed)
+        self.assertAlmostEqual(invoice.amount_tax, folio.amount_tax)
+        self.assertAlmostEqual(invoice.amount_total, folio.amount_total)
+
+    def test_manual_fx_requires_reason_and_records_approver(self):
+        foreign = self.env["res.currency"].with_context(active_test=False).search(
+            [("id", "!=", self.env.company.currency_id.id)], limit=1
+        )
+        self.assertTrue(foreign)
+        foreign.active = True
+        reservation = self._reservation()
+        reservation.currency_id = foreign
+        reservation.action_confirm()
+        folio = reservation.folio_ids[0]
+        folio.add_charge(self.burger, qty=1.0)
+        action = folio.action_create_invoice()
+        invoice = self.env["account.move"].browse(action["res_id"])
+        old_rate = invoice.invoice_currency_rate
+
+        with self.assertRaises(UserError):
+            invoice.with_user(self.manager_user).write(
+                {"invoice_currency_rate": old_rate * 1.05}
+            )
+
+        with self.assertRaises(UserError):
+            self.env["hotel.manual.fx.wizard"].with_user(
+                self.manager_user
+            ).create(
+                {
+                    "move_id": invoice.id,
+                    "new_rate": old_rate * 1.1,
+                    "reason": " ",
+                }
+            ).action_apply()
+
+        wizard = self.env["hotel.manual.fx.wizard"].with_user(
+            self.manager_user
+        ).create(
+            {
+                "move_id": invoice.id,
+                "new_rate": old_rate * 1.1,
+                "reason": "Approved front-desk contract rate",
+            }
+        )
+        wizard.action_apply()
+        self.assertAlmostEqual(invoice.invoice_currency_rate, old_rate * 1.1)
+        self.assertEqual(invoice.hotel_manual_fx_user_id, self.manager_user)
+        self.assertEqual(
+            invoice.hotel_manual_fx_reason,
+            "Approved front-desk contract rate",
+        )
 
     def test_routing_rules(self):
         # Create a routing rule: route room service to the agency
@@ -123,6 +230,45 @@ class TestHotelFolio(TransactionCase):
         line_guest = folio.add_charge(self.laundry, qty=1.0)
         self.assertEqual(line_guest.payee_partner_id, self.guest)
 
+    def test_due_uses_linked_native_receivable_residuals(self):
+        reservation = self._reservation()
+        reservation.action_confirm()
+        folio = reservation.folio_ids[0]
+        folio.add_charge(self.burger, qty=2.0)
+
+        payment = self.env["account.payment"].create(
+            {
+                "amount": 10.0,
+                "date": fields.Date.today(),
+                "payment_type": "inbound",
+                "partner_type": "customer",
+                "partner_id": self.guest.id,
+                "currency_id": folio.currency_id.id,
+                "hotel_property_id": self.property.id,
+                "hotel_folio_id": folio.id,
+                "hotel_payment_purpose": "guest_deposit",
+            }
+        )
+        payment.action_post()
+        with self.assertRaises(UserError):
+            payment.write({"hotel_folio_id": False})
+        folio._compute_totals()
+        self.assertAlmostEqual(folio.amount_total, 30.0)
+        self.assertAlmostEqual(folio.amount_paid, 10.0)
+        self.assertAlmostEqual(folio.amount_due, 20.0)
+
+        action = folio.action_create_invoice()
+        invoice = self.env["account.move"].browse(action["res_id"])
+        invoice.action_post()
+        receivable_lines = (invoice | payment.move_id).line_ids.filtered(
+            lambda line: line.account_id.account_type == "asset_receivable"
+        )
+        receivable_lines.reconcile()
+        folio._compute_totals()
+        self.assertAlmostEqual(folio.amount_invoiced, 30.0)
+        self.assertAlmostEqual(folio.amount_paid, 10.0)
+        self.assertAlmostEqual(folio.amount_due, 20.0)
+
     def test_invoicing(self):
         res = self._reservation()
         res.action_confirm()
@@ -131,6 +277,9 @@ class TestHotelFolio(TransactionCase):
         folio.add_charge(self.burger, qty=1.0)
         folio.add_charge(self.laundry, qty=2.0)
         self.assertEqual(folio.amount_total, 35.0)
+
+        with self.assertRaises(UserError):
+            folio.with_user(self.frontdesk_user).action_create_invoice()
 
         # Create Guest Invoice
         action = folio.action_create_invoice()
@@ -146,11 +295,37 @@ class TestHotelFolio(TransactionCase):
         with self.assertRaises(UserError):
             folio.unlink()
         with self.assertRaises(UserError):
+            folio.write({"name": "FORGED-FOLIO"})
+        with self.assertRaises(UserError):
+            folio.write({"invoice_ids": [(5, 0, 0)]})
+        with self.assertRaises(UserError):
             folio.line_ids[0].unlink()
 
         # Trying to invoice again should raise error since there are no uninvoiced lines
         with self.assertRaises(UserError):
             folio.action_create_invoice()
+
+        posted_line = folio.line_ids[0]
+        with self.assertRaises(UserError):
+            posted_line.write({"qty": 99.0})
+        with self.assertRaises(UserError):
+            posted_line.write({"is_posted": False, "lock_state": "unlocked"})
+        with self.assertRaises(UserError):
+            posted_line.with_user(self.manager_user).with_context(
+                hotel_financial_reversal=True, hotel_migration=True
+            ).write({"qty": 98.0})
+        with self.assertRaises(UserError):
+            posted_line.with_user(self.frontdesk_user).action_reverse("Not authorized")
+
+        reversal = posted_line.with_user(self.manager_user).action_reverse(
+            "Incorrect charge"
+        )
+        self.assertEqual(reversal.reversal_of_id, posted_line)
+        self.assertEqual(reversal.amount, -posted_line.amount)
+        self.assertTrue(reversal.is_posted)
+        self.assertEqual(reversal.reversed_by_id, self.manager_user)
+        with self.assertRaises(UserError):
+            posted_line.with_user(self.manager_user).action_reverse("Duplicate")
 
         # A non-posted folio and line should be deletable
         res2 = self._reservation(offset_days=5)
@@ -174,6 +349,7 @@ class TestHotelFolio(TransactionCase):
         self.assertTrue(folio.is_open)
         self.assertEqual(folio.amount_due, 15.0)
 
+        res.checkout_balance_override_reason = "Approved test checkout balance"
         res.action_check_out()
         # Checked out with balance still due remains open.
         self.assertTrue(folio.is_open)
@@ -185,3 +361,8 @@ class TestHotelFolio(TransactionCase):
         folio.invalidate_recordset()
         self.assertEqual(folio.amount_due, 0.0)
         self.assertFalse(folio.is_open)
+
+    def test_folio_today_filter_uses_odoo_datetime(self):
+        arch = self.env.ref("hotel_folio.hotel_folio_view_search").arch_db
+        self.assertIn("datetime.timedelta(days=1)", arch)
+        self.assertNotIn("+ timedelta(days=1)", arch)

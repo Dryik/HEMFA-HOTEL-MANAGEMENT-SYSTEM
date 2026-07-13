@@ -21,17 +21,18 @@ Deployment target: Odoo.sh (dev / staging / production branches).
 | Module | Phase | Status | Purpose |
 |---|---|---|---|
 | `hotel_base` | 1 | done | Properties, floors, room types, rooms, amenities, guest/agency partner extensions |
-| `hotel_reservation` | 1 | done (core) | Reservation lifecycle, Gantt tape chart, calendar, availability constraint |
-| `hotel_board` | 1 | done (v1) | Front-desk KPI dashboard (Owl 2) |
-| `hotel_folio` | 1-2 | implemented | Folio ledger, charge routing, deposits, invoicing |
-| `hotel_rate` | 2a | implemented | Seasonal rates, occupancy bands, nationality pricing, rate lock |
-| `hotel_night_audit` | 2a | implemented | Daily rollover: room-night posting, no-shows, occupancy snapshot |
-| `hotel_frontdesk_session` | 2a | implemented | Cashier shift sessions, multi-currency cash counts |
-| `hotel_housekeeping` | 3 | implemented | Cleaning tasks, dirty/clean/inspected flow, discrepancy wizard |
-| `hotel_maintenance` | 3 | implemented | Maintenance workflow: report → confirm → work → verify, room out-of-order blocking |
-| `hotel_restricted_services` | 2b | implemented | Per-stay service blocks/limits, entity daily ceilings, supervisor override via `service_override_reason` context |
-| `hotel_pos_room_charge` | 4 | implemented | `is_room_charge` payment method posts POS orders to the in-house folio (server-side hook) |
-| `hotel_reports` | 5 | implemented (v1) | Daily movement wizard: arrivals/departures/in-house/security QWeb PDF; XLSX + debtor/discrepancy reports pending |
+| `hotel_reservation` | 4 | implemented | Shared availability, physical occupancy, amendments, groups and rooming lists |
+| `hotel_board` | 5 | implemented | Property/date color room board and live operational KPIs |
+| `hotel_folio` | 3 | implemented (finance approval pending) | Tax-aware folio, native accounting, deposits/advances, FX, credits/reversals |
+| `hotel_rate` | 5 | implemented | Deterministic seasonal/occupancy pricing and confirmed-rate lock |
+| `hotel_night_audit` | 5 | implemented | Concurrency lock, audited-date charges, immutable KPI snapshots and reversal |
+| `hotel_frontdesk_session` | 3 | implemented | Explicit posted payments and per-journal/currency immutable close |
+| `hotel_housekeeping` | 4 | implemented | Cleaning/discrepancy workflow with immutable completion |
+| `hotel_maintenance` | 4 | implemented | Maintenance workflow and verified immutable room-block release |
+| `hotel_guest_services` | 4 | implemented | Lost-and-found, DND and wake-up calls |
+| `hotel_restricted_services` | 3 | implemented | Property/business-day aggregate ceilings with row locking |
+| `hotel_pos_room_charge` | 3 | implemented | Idempotent discounted/taxed folio transfer from clearing to receivable |
+| `hotel_reports` | 6 | implemented | Bilingual PDF/XLSX operational, finance, audit and folio reports |
 
 ## Key Field Name Conventions
 
@@ -54,6 +55,7 @@ hotel_base (foundation)
   │     ├── hotel_board (dashboard KPIs)
   │     ├── hotel_rate (dynamic pricing override)
   │     ├── hotel_housekeeping (auto-triggered on checkout)
+  │     ├── hotel_guest_services (lost/found, DND, wake-up)
   │     └── hotel_folio (auto-created on confirm)
   │           ├── hotel_frontdesk_session (cashier shifts)
   │           ├── hotel_night_audit (nightly rollover)
@@ -122,23 +124,24 @@ hotel_base (foundation)
 
 | Module | Tests |
 |---|---|
-| `hotel_base` | 4 tests |
-| `hotel_reservation` | 11 tests |
-| `hotel_folio` | 6 tests |
-| `hotel_rate` | 7 tests |
-| `hotel_night_audit` | 4 tests |
-| `hotel_frontdesk_session` | 4 tests |
-| `hotel_housekeeping` | 7 tests |
+| `hotel_base` | 10 tests |
+| `hotel_reservation` | 15 tests |
+| `hotel_folio` | 9 tests |
+| `hotel_rate` | 6 tests |
+| `hotel_night_audit` | 5 tests |
+| `hotel_frontdesk_session` | 3 tests |
+| `hotel_guest_services` | 3 tests |
+| `hotel_housekeeping` | 10 tests |
 | `hotel_restricted_services` | 7 tests |
-| `hotel_maintenance` | 10 tests |
-| `hotel_pos_room_charge` | 7 tests |
-| `hotel_reports` | 5 tests |
-| **Total** | **72 tests** |
+| `hotel_maintenance` | 13 tests |
+| `hotel_pos_room_charge` | 8 tests |
+| `hotel_reports` | 9 tests |
+| **Total** | **98 tests** |
 
 ## Local Checks
 
-```
-python -m py_compile $(git ls-files '*.py')
+```powershell
+python scripts/validate_repository.py
 ```
 
 Runtime testing happens on the Odoo.sh dev branch (no local Odoo install).

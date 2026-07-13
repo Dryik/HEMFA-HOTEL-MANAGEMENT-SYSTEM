@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_move_view_form_hotel" model="ir.ui.view">
+        <field name="name">account.move.form.hotel</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_hotel_manual_fx" type="object"
+                    string="Manual FX" groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"
+                    invisible="state != 'draft' or move_type not in ('out_invoice', 'out_refund') or not hotel_property_id"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_currency_rate']" position="after">
+                <field name="hotel_property_id"/>
+                        <field name="hotel_folio_id" domain="[('property_id', '=', hotel_property_id)]"/>
+                <field name="hotel_reservation_group_id"/>
+                <field name="hotel_manual_fx_reason" readonly="1" invisible="not hotel_manual_fx_reason"/>
+                <field name="hotel_manual_fx_user_id" readonly="1" invisible="not hotel_manual_fx_user_id"/>
+                <field name="hotel_manual_fx_at" readonly="1" invisible="not hotel_manual_fx_at"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="account_payment_view_form_hotel" model="ir.ui.view">
+        <field name="name">account.payment.form.hotel</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='main_group']" position="after">
+                <group string="Hotel References">
+                    <field name="hotel_payment_purpose" readonly="state != 'draft'"/>
+                    <field name="hotel_property_id" readonly="state != 'draft'"
+                        required="hotel_payment_purpose != 'standard'"/>
+                    <field name="hotel_folio_id" readonly="state != 'draft'"
+                        domain="[('property_id', '=', hotel_property_id)]"/>
+                    <field name="hotel_available_advance" readonly="1"
+                        invisible="hotel_payment_purpose not in ('guest_deposit', 'agency_advance')"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hotel_property_view_form_finance" model="ir.ui.view">
+        <field name="name">hotel.property.form.finance</field>
+        <field name="model">hotel.property</field>
+        <field name="inherit_id" ref="hotel_base.hotel_property_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Finance" groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager">
+                    <group>
+                        <field name="room_charge_clearing_account_id"/>
+                        <field name="room_charge_journal_id"/>
+                        <field name="deposit_journal_id"/>
+                        <field name="advance_journal_id"/>
+                        <field name="cancellation_fee_product_id"/>
+                        <field name="no_show_fee_product_id"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

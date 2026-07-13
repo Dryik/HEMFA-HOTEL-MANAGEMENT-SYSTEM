@@ -69,7 +69,13 @@ msgstr "حالة التنظيف"
 #. module: hotel_housekeeping
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__date_completed
 msgid "Completed"
-msgstr "مكتمل"
+msgstr "مكتملة"
+
+#. module: hotel_housekeeping
+#. odoo-python
+#: code:addons/hotel_housekeeping/models/hotel_housekeeping_task.py:0
+msgid "Completed or cancelled housekeeping tasks are immutable. Create a new task for follow-up work."
+msgstr ""
 
 #. module: hotel_housekeeping
 #: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__hk_status__dirty
@@ -157,6 +163,33 @@ msgstr "تسلسل مهام التدبير الفندقي"
 #: model:ir.actions.act_window,name:hotel_housekeeping.hotel_housekeeping_task_action
 msgid "Housekeeping Tasks"
 msgstr "مهام التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_wizard_line_assigned_property
+msgid "Housekeeping discrepancy lines in assigned properties"
+msgstr ""
+
+#. module: hotel_housekeeping
+#: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_wizard_assigned_property
+msgid "Housekeeping discrepancy wizard in assigned properties"
+msgstr ""
+
+#. module: hotel_housekeeping
+#. odoo-python
+#: code:addons/hotel_housekeeping/models/hotel_housekeeping_task.py:0
+msgid "Housekeeping status can only be changed through its actions."
+msgstr ""
+
+#. module: hotel_housekeeping
+#: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_task_assigned_property
+msgid "Housekeeping tasks in assigned hotel properties"
+msgstr ""
+
+#. module: hotel_housekeeping
+#. odoo-python
+#: code:addons/hotel_housekeeping/models/hotel_housekeeping_task.py:0
+msgid "Housekeeping tasks must change status through their actions."
+msgstr ""
 
 #. module: hotel_housekeeping
 #: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__hk_status__inspected
@@ -261,6 +294,21 @@ msgstr "بدأت"
 #: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_search
 msgid "Status"
 msgstr "الحالة"
+
+#. module: hotel_housekeeping
+#: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_line_system_unrestricted
+msgid "System administrators: all discrepancy lines"
+msgstr ""
+
+#. module: hotel_housekeeping
+#: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_wizard_system_unrestricted
+msgid "System administrators: all discrepancy wizards"
+msgstr ""
+
+#. module: hotel_housekeeping
+#: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_task_system_unrestricted
+msgid "System administrators: all housekeeping tasks"
+msgstr ""
 
 #. module: hotel_housekeeping
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__name

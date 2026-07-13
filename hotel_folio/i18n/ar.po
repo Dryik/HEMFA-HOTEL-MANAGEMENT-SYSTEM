@@ -17,14 +17,124 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "%(purpose)s %(payment)s allocated to invoice %(invoice)s by %(user)s."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "A POS lock requires its posted room-charge accounting transfer."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "A folio with financial activity cannot be reassigned."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "A guest deposit requires a hotel guest."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "A hotel property is required for hotel payments."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "A night-audit lock requires an untransferred room-night line."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "A reason is required for a manual FX change."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "A reversal line cannot be reversed again."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "A reversal reason is required."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "A valid immutable workflow source is required."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "A valid unlocked workflow charge is required."
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__lock_state__accounting
+msgid "Accounting"
+msgstr "القيد المحاسبي"
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__accounting_move_id
+msgid "Accounting Transfer"
+msgstr ""
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_search
+msgid "Agency"
+msgstr ""
+
+#. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__agency_id
 msgid "Agency / Entity"
 msgstr "الوكالة / الجهة"
 
 #. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__account_payment__hotel_payment_purpose__agency_advance
+msgid "Agency Advance"
+msgstr "دفعة جهة مقدمة"
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_property__advance_journal_id
+msgid "Agency Advance Journal"
+msgstr "يومية دفعات الجهات المقدمة"
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_allocate_advance_wizard_view_form
+msgid "Allocate"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_allocate_advance_wizard_view_form
+msgid "Allocate Deposit / Advance"
+msgstr "تخصيص عربون / دفعة مقدمة"
+
+#. module: hotel_folio
+#: model:ir.model,name:hotel_folio.model_hotel_allocate_advance_wizard
+msgid "Allocate Hotel Deposit or Agency Advance"
+msgstr ""
+
+#. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__amount
-msgid "Amount"
-msgstr "المبلغ"
+msgid "Amount (Deprecated)"
+msgstr ""
 
 #. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__amount_due
@@ -37,9 +147,96 @@ msgid "Amount Paid"
 msgstr "المبلغ المدفوع"
 
 #. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "An agency advance requires an agency or entity."
+msgstr ""
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_manual_fx_wizard_view_form
+msgid "Apply"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_manual_fx_wizard_view_form
+msgid "Approve Manual FX Rate"
+msgstr "اعتماد سعر الصرف اليدوي"
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_account_payment__hotel_available_advance
+msgid "Available Advance"
+msgstr "الرصيد المقدم المتاح"
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_search
+msgid "Balance Due"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_reservation__checkout_balance_override_reason
+msgid "Balance Override Reason"
+msgstr "سبب تجاوز الرصيد"
+
+#. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__payee_partner_id
 msgid "Billed To"
 msgstr "مفوتر إلى"
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_manual_fx_wizard_view_form
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_allocate_advance_wizard_view_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__source_type__stay_policy
+msgid "Cancellation / No-show Policy"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_property__cancellation_fee_product_id
+msgid "Cancellation Fee Product"
+msgstr "منتج رسم الإلغاء"
+
+#. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__account_payment__hotel_payment_purpose__payout
+msgid "Cash Payout"
+msgstr "صرف نقدي"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Charge %(line)s reversed by %(user)s. Reason: %(reason)s"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation.py:0
+msgid "Checkout with balance %(amount)s approved by %(user)s. Reason: %(reason)s"
+msgstr ""
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
+msgid "Closed"
+msgstr "مغلقة"
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_search
+msgid "Closed Folios"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,help:hotel_folio.field_hotel_folio_line__amount
+msgid "Compatibility alias for Total; use amount_total in new integrations."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation.py:0
+msgid "Configure the %(policy)s fee product before enabling this policy."
+msgstr ""
 
 #. module: hotel_folio
 #: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
@@ -47,9 +244,20 @@ msgid "Create Agency Invoice"
 msgstr "إنشاء فاتورة الوكالة"
 
 #. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_reservation_group_view_form_folio
+msgid "Create Group Invoice"
+msgstr "إنشاء فاتورة مجموعة"
+
+#. module: hotel_folio
 #: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
 msgid "Create Guest Invoice"
 msgstr "إنشاء فاتورة النزيل"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
+msgid "Create a separate group invoice for each folio currency."
+msgstr ""
 
 #. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__date
@@ -62,14 +270,58 @@ msgid "Define charge routing rules"
 msgstr "حدد قواعد توجيه الرسوم"
 
 #. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "Deposits, advances, and settlements must be inbound payments."
+msgstr ""
+
+#. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__name
 msgid "Description"
 msgstr "الوصف"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__discount
+msgid "Discount (%)"
+msgstr "الخصم (%)"
+
+#. module: hotel_folio
 #: model:ir.model.fields,help:hotel_folio.field_hotel_folio_line__payee_partner_id
 msgid "Entity responsible for this specific charge line."
 msgstr "الجهة المسؤولة عن خط الفاتورة هذا."
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "Every hotel finance journal must belong to the property company."
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_account_move__hotel_manual_fx_user_id
+msgid "FX Approved By"
+msgstr ""
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_property_view_form_finance
+msgid "Finance"
+msgstr "المالية"
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_manual_fx_wizard_view_form
+msgid "Finance-approved reason…"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Financial lock and source links can only be changed by their hotel workflow."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Financial lock and source links can only be set by their hotel workflow."
+msgstr ""
 
 #. module: hotel_folio
 #: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
@@ -103,6 +355,51 @@ msgid "Folio Routing Rules"
 msgstr "قواعد توجيه الحسابات"
 
 #. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__account_payment__hotel_payment_purpose__folio_settlement
+msgid "Folio Settlement"
+msgstr "تسوية الفوليو"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Folio identity and accounting links can only be changed by their workflows."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Folio line source identity is immutable."
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.rule,name:hotel_folio.rule_hotel_folio_line_assigned_property
+msgid "Folio lines in assigned hotel properties"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Folio references are assigned by the hotel workflow."
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.rule,name:hotel_folio.rule_hotel_folio_routing_assigned_property
+msgid "Folio routing in assigned hotel properties"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "Folio settlements and refunds require a folio."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Folio taxes must belong to the hotel property company."
+msgstr ""
+
+#. module: hotel_folio
 #. odoo-python
 #: code:addons/hotel_folio/models/hotel_reservation.py:0
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_reservation__folio_ids
@@ -114,17 +411,62 @@ msgid "Folios"
 msgstr "حسابات النزلاء / الفوليو"
 
 #. module: hotel_folio
+#: model:ir.rule,name:hotel_folio.rule_hotel_folio_assigned_property
+msgid "Folios in assigned hotel properties"
+msgstr ""
+
+#. module: hotel_folio
 #: model_terms:ir.actions.act_window,help:hotel_folio.hotel_folio_action
 msgid "Folios track all guest charges, routed billing, and linked Odoo invoices."
 msgstr ""
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_reservation_amendment__generated_folio_line_ids
+msgid "Generated Folio Lines"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
+msgid "Group Invoice"
+msgstr ""
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_reservation_group_view_form_folio
+msgid "Group Invoices"
+msgstr "فواتير المجموعة"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
+msgid "Group invoice links can only be changed by the group invoice workflow."
+msgstr ""
+
+#. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__partner_id
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_search
 msgid "Guest"
 msgstr "النزيل / الضيف"
 
 #. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__account_payment__hotel_payment_purpose__guest_deposit
+msgid "Guest Deposit"
+msgstr "عربون النزيل"
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_property__deposit_journal_id
+msgid "Guest Deposit Journal"
+msgstr "يومية عربون النزيل"
+
+#. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__account_payment__hotel_payment_purpose__refund
+msgid "Guest Refund"
+msgstr "استرداد للنزيل"
+
+#. module: hotel_folio
 #: model:ir.sequence,name:hotel_folio.seq_hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_account_move__hotel_folio_id
+#: model:ir.model.fields,field_description:hotel_folio.field_account_payment__hotel_folio_id
 msgid "Hotel Folio"
 msgstr "فوليو الفندق"
 
@@ -144,6 +486,49 @@ msgid "Hotel Folio Routing Rule"
 msgstr "قاعدة توجيه حسابات الفندق"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_account_move__hotel_reservation_group_id
+msgid "Hotel Group Reservation"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model,name:hotel_folio.model_hotel_manual_fx_wizard
+msgid "Hotel Manual FX Approval"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_account_move__hotel_property_id
+#: model:ir.model.fields,field_description:hotel_folio.field_account_payment__hotel_property_id
+msgid "Hotel Property"
+msgstr "المنشأة الفندقية"
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.account_payment_view_form_hotel
+msgid "Hotel References"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.rule,name:hotel_folio.rule_hotel_account_move_assigned_property
+msgid "Hotel accounting documents in assigned properties"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "Hotel accounting references can only be changed by their workflows."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Hotel charges can only be linked to a draft customer invoice."
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.rule,name:hotel_folio.rule_hotel_account_payment_assigned_property
+msgid "Hotel payments in assigned properties"
+msgstr ""
+
+#. module: hotel_folio
 #: model:ir.model.fields,help:hotel_folio.field_hotel_folio_line__is_posted
 msgid "If checked, the charge is locked (e.g. invoiced or processed by night audit)."
 msgstr "عند التفعيل، تكون الرسوم مقفلة (مفوترة أو مرحلة بالتدقيق الليلي)."
@@ -160,6 +545,11 @@ msgid "Invoice Line"
 msgstr "خط الفاتورة"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__amount_invoiced
+msgid "Invoiced / Transferred"
+msgstr "المفوتر / المحول"
+
+#. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__invoice_ids
 #: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
 msgid "Invoices"
@@ -171,10 +561,54 @@ msgid "Ledger / Charges"
 msgstr "الدفتر / الرسوم والخدمات"
 
 #. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_reservation_view_form_checkout_balance
+msgid "Manager reason required when checking out with a balance…"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__source_type__manual
+msgid "Manual"
+msgstr ""
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.account_move_view_form_hotel
+msgid "Manual FX"
+msgstr "سعر صرف يدوي"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "Manual FX approved by %(user)s: %(old)s → %(new)s. Reason: %(reason)s"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "Manual FX can only be changed on a draft hotel invoice."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "Manual FX can only be changed on a draft invoice."
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__source_type__migration
+msgid "Migration"
+msgstr ""
+
+#. module: hotel_folio
 #. odoo-python
 #: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "New"
 msgstr "جديد"
+
+#. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__lock_state__night_audit
+msgid "Night Audit"
+msgstr "التدقيق الليلي"
 
 #. module: hotel_folio
 #: model_terms:ir.actions.act_window,help:hotel_folio.hotel_folio_action
@@ -183,14 +617,133 @@ msgstr "لا توجد فوليوهات بعد"
 
 #. module: hotel_folio
 #. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
+msgid "No invoiceable group folio lines are available."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
 #: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "No uninvoiced lines found for this payee."
 msgstr "لا توجد خطوط غير مفوترة لهذا العميل لدفعها."
 
 #. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "No unreconciled receivable balance is available to allocate."
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_property__no_show_fee_product_id
+msgid "No-show Fee Product"
+msgstr "منتج رسم عدم الحضور"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "Only a Hotel Accountant or Manager can approve manual FX."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
+msgid "Only a Hotel Accountant or Manager can create hotel invoices."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Only a Hotel Accountant or Manager can link hotel invoices."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Only a Hotel Manager can reverse a folio line."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Only a workflow reversal can receive a reversal accounting link."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Only posted folio lines can be reversed."
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__is_open
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
+msgid "Open"
+msgstr "مفتوحة"
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_search
+msgid "Open Folios"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,help:hotel_folio.field_hotel_folio__is_open
+msgid "Open while the stay is active or the folio still has a balance due."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Operational charge sources can only be assigned by their hotel workflows."
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__source_type__pos
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__lock_state__pos
+msgid "POS"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "Payment and invoice must belong to the same commercial partner."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "Payment and invoice must use the same company and currency."
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__payment_ids
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
+msgid "Payments / Advances"
+msgstr "الدفعات / المبالغ المقدمة"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Post an open folio invoice before allocating an advance."
+msgstr ""
+
+#. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__is_posted
 msgid "Posted"
 msgstr "مرحل / مسجل"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Posted folio lines are immutable. Create a manager reversal instead of editing the original charge."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "Posted hotel payment references are immutable."
+msgstr ""
 
 #. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__product_id
@@ -208,9 +761,17 @@ msgid "Product category that triggers this routing rule."
 msgstr "فئة المنتج التي تفعل قاعدة التوجيه الفوليو هذه."
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__property_id
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_routing_rule__property_id
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_search
 msgid "Property"
 msgstr "الفندق / المنشأة"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Provide exactly one reversal accounting document."
+msgstr ""
 
 #. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__qty
@@ -218,9 +779,74 @@ msgid "Quantity"
 msgstr "الكمية"
 
 #. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "Refunds and payouts must be outbound payments."
+msgstr ""
+
+#. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__reservation_id
 msgid "Reservation"
 msgstr "الحجز"
+
+#. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__source_type__amendment
+msgid "Reservation Amendment"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__source_type__reversal
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__lock_state__reversal
+msgid "Reversal"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__reversal_line_ids
+msgid "Reversal Lines"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__reversal_of_id
+msgid "Reversal Of"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Reversal of %(invoice)s: %(reason)s"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Reversal of %(line)s: %(reason)s"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Reversal of %(move)s: %(reason)s"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__reversed_by_id
+msgid "Reversed By"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__source_type__room_night
+msgid "Room Night"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_property__room_charge_clearing_account_id
+msgid "Room-charge Clearing Account"
+msgstr "حساب مقاصة التحميل على الغرفة"
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_property__room_charge_journal_id
+msgid "Room-charge Transfer Journal"
+msgstr "يومية تحويل التحميل على الغرفة"
 
 #. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_routing_rule__routing_type
@@ -258,6 +884,18 @@ msgid "Rule Info"
 msgstr "معلومات قاعدة التسعير"
 
 #. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Select a valid guest or routed payee."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation.py:0
+msgid "Settle the folio before checkout. A Hotel Manager may override a remaining balance only with a recorded reason."
+msgstr ""
+
+#. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_routing_rule__agency_id
 msgid "Specific Agency / Entity"
 msgstr "وكالة / جهة محددة"
@@ -268,14 +906,229 @@ msgid "Specific agency to route to. If left empty, routes to the reservation's a
 msgstr "الوكالة المحددة للتوجيه. إذا تركت فارغة يتم التوجيه لوكالة الحجز."
 
 #. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__account_payment__hotel_payment_purpose__standard
+msgid "Standard"
+msgstr ""
+
+#. module: hotel_folio
 #: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
 msgid "Stay Reference"
 msgstr "مرجع الإقامة"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__reservation_state
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_search
+msgid "Stay Status"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.rule,name:hotel_folio.rule_hotel_folio_line_system_unrestricted
+msgid "System administrators: all folio lines"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.rule,name:hotel_folio.rule_hotel_folio_system_unrestricted
+msgid "System administrators: all folios"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.rule,name:hotel_folio.rule_hotel_move_system_unrestricted
+msgid "System administrators: all hotel accounting documents"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.rule,name:hotel_folio.rule_hotel_payment_system_unrestricted
+msgid "System administrators: all hotel payments"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.rule,name:hotel_folio.rule_hotel_routing_system_unrestricted
+msgid "System administrators: all routing rules"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__amount_tax
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__amount_tax
+msgid "Tax"
+msgstr "الضريبة"
+
+#. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__tax_ids
 msgid "Taxes"
 msgstr "الضرائب"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "The POS source does not match this folio charge."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "The accounting document does not belong to this folio."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
+msgid "The accounting document does not belong to this group."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
+msgid "The amended stay requires a folio and room-rate product."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "The amendment source does not match this folio charge."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "The credit note does not match this folio reversal."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "The currency rate must be greater than zero."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "The generated invoice product does not match the folio charge."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "The generated invoice total does not match the folio charge."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "The group reservation must belong to the accounting document property."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "The hotel folio must belong to the accounting document property."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "The hotel property and accounting document must use the same company."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "The invoice and folio line must use the same currency."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "The invoice and folio line must use the same hotel property."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "The journal reversal does not match this folio reversal."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "The original transfer has no clearing account to reverse."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "The payment and folio must use the same property."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "The payment and hotel property must use the same company."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "The payment folio must belong to the selected property."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "The payment partner is not a guest or routed payee on this folio."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "The room-charge clearing account must be a reconcilable receivable account available to the property company."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "This advance is already allocated to another folio."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "This folio line has already been reversed."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "This folio line is already linked to accounting."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "This folio line is already locked."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "This payment has no available advance balance."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "This payment is already allocated to another folio."
+msgstr ""
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_search
+msgid "Today"
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__amount_total
+msgid "Total"
+msgstr "الإجمالي"
 
 #. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__amount_total
@@ -288,6 +1141,35 @@ msgid "Unit Price"
 msgstr "سعر الوحدة"
 
 #. module: hotel_folio
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__lock_state__unlocked
+msgid "Unlocked"
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Unsupported operational folio lock."
+msgstr ""
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__amount_untaxed
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__amount_untaxed
+msgid "Untaxed"
+msgstr "قبل الضريبة"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "Use the approved Hotel Manual FX wizard to change this rate."
+msgstr ""
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Workflow-generated invoice eligibility is immutable."
+msgstr ""
+
+#. module: hotel_folio
 #. odoo-python
 #: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "You cannot delete a folio with posted or invoiced charges."
@@ -298,3 +1180,8 @@ msgstr "لا يمكن حذف فوليو يحتوي على رسوم مرحلة أ
 #: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "You cannot delete a posted or invoiced folio line."
 msgstr "لا يمكن حذف سطر فوليو مرحل أو مفوتر."
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_reservation_group__invoice_ids
+msgid "hotel_reservation_group_invoice_rel"
+msgstr ""

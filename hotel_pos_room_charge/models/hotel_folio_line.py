@@ -13,3 +13,11 @@ class HotelFolioLine(models.Model):
         help="POS order this charge came from, for the room-charge "
         "receipt and department reports.",
     )
+    pos_order_line_id = fields.Many2one(
+        "pos.order.line", string="POS Order Line", readonly=True, copy=False, index=True
+    )
+
+    _pos_order_line_uniq = models.Constraint(
+        "unique (pos_order_line_id)",
+        "A POS order line can be transferred to a folio only once.",
+    )

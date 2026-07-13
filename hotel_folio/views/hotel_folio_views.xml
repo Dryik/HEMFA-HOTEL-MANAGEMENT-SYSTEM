@@ -15,6 +15,8 @@
                 <field name="property_id" optional="hide"/>
                 <field name="reservation_state" optional="show" widget="badge"/>
                 <field name="amount_total"/>
+                <field name="amount_tax" optional="hide"/>
+                <field name="amount_invoiced" optional="show"/>
                 <field name="amount_paid"/>
                 <field name="amount_due"/>
                 <field name="is_open" widget="boolean"/>
@@ -30,9 +32,14 @@
             <form>
                 <header>
                     <button name="action_create_invoice" type="object" string="Create Guest Invoice"
-                        class="btn-primary" context="{'partner_id': partner_id}"/>
+                        class="btn-primary" context="{'partner_id': partner_id}"
+                        groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
                     <button name="action_create_invoice" type="object" string="Create Agency Invoice"
-                        class="btn-secondary" invisible="not agency_id" context="{'partner_id': agency_id}"/>
+                        class="btn-secondary" invisible="not agency_id" context="{'partner_id': agency_id}"
+                        groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
+                    <button name="action_open_allocate_advance" type="object"
+                        string="Allocate Deposit / Advance" class="btn-secondary"
+                        groups="hotel_base.group_hotel_cashier,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
                     <field name="is_open" invisible="1"/>
                 </header>
                 <sheet>
@@ -50,7 +57,10 @@
                             <field name="reservation_state"/>
                         </group>
                         <group string="Financials">
+                            <field name="amount_untaxed"/>
+                            <field name="amount_tax"/>
                             <field name="amount_total"/>
+                            <field name="amount_invoiced"/>
                             <field name="amount_paid"/>
                             <field name="amount_due"/>
                             <field name="is_open"/>
@@ -66,10 +76,19 @@
                                     <field name="name"/>
                                     <field name="qty"/>
                                     <field name="price_unit"/>
+                                    <field name="discount"/>
                                     <field name="tax_ids" widget="many2many_tags" readonly="is_posted"/>
                                     <field name="payee_partner_id" readonly="is_posted"/>
-                                    <field name="amount"/>
+                                    <field name="amount_untaxed" optional="hide"/>
+                                    <field name="amount_tax" optional="show"/>
+                                    <field name="amount_total"/>
+                                    <field name="service_date" optional="hide"/>
+                                    <field name="source_type" optional="show"/>
+                                    <field name="source_reference" optional="hide"/>
+                                    <field name="invoiceable" optional="hide"/>
+                                    <field name="lock_state" optional="show"/>
                                     <field name="is_posted" readonly="1"/>
+                                    <field name="reversal_of_id" optional="hide" readonly="1"/>
                                 </list>
                             </field>
                         </page>
@@ -83,6 +102,23 @@
                                     <field name="payment_state" widget="badge"/>
                                     <field name="amount_total"/>
                                     <field name="amount_residual"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Payments / Advances"
+                            groups="hotel_base.group_hotel_cashier,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager">
+                            <field name="payment_ids">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                    <field name="hotel_payment_purpose"/>
+                                    <field name="payment_type"/>
+                                    <field name="journal_id"/>
+                                    <field name="amount"/>
+                                    <field name="hotel_available_advance" optional="show"/>
+                                    <field name="state" widget="badge"/>
                                     <field name="currency_id" column_invisible="True"/>
                                 </list>
                             </field>
@@ -110,7 +146,7 @@
                 <separator/>
                 <filter string="Today" name="today"
                     domain="[('create_date', '&gt;=', context_today().strftime('%Y-%m-%d')),
-                             ('create_date', '&lt;', (context_today() + timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                             ('create_date', '&lt;', (context_today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
                 <group>
                     <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
                     <filter string="Guest" name="group_guest" context="{'group_by': 'partner_id'}"/>

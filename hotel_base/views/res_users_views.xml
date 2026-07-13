@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_users_view_form_hotel_properties" model="ir.ui.view">
+        <field name="name">res.users.form.hotel.properties</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='access_rights']/group[@string='Roles']" position="after">
+                <group string="Hotel Properties" groups="base.group_system" invisible="share">
+                    <field name="hotel_property_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="default_hotel_property_id" options="{'no_create': True}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

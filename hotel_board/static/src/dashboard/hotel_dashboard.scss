@@ -41,4 +41,59 @@
         height: 1.5rem;
         border-radius: 0.75rem;
     }
+
+    .o_hotel_room_board {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+        gap: 0.75rem;
+    }
+
+    .o_hotel_room_tile {
+        min-height: 7.5rem;
+        border: 0;
+        border-radius: 0.75rem;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.85rem;
+        text-align: start;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+
+        &:hover {
+            filter: brightness(0.94);
+        }
+    }
+
+    .o_hotel_room_number {
+        font-size: 1.35rem;
+    }
+
+    .o_hotel_room_legend span::before {
+        content: "";
+        display: inline-block;
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 50%;
+        background: currentColor;
+        margin-inline-end: 0.3rem;
+    }
+
+    .o_status_vacant { color: #198754; }
+    .o_status_reserved { color: #0d6efd; }
+    .o_status_occupied { color: #6f42c1; }
+    .o_status_dirty { color: #dc3545; }
+    .o_status_out_of_order { color: #343a40; }
+    .o_status_house_use { color: #6c757d; }
+
+    .o_hotel_room_tile.o_status_vacant { background-color: #198754; }
+    .o_hotel_room_tile.o_status_reserved { background-color: #0d6efd; }
+    .o_hotel_room_tile.o_status_occupied { background-color: #6f42c1; }
+    .o_hotel_room_tile.o_status_dirty { background-color: #dc3545; }
+    .o_hotel_room_tile.o_status_out_of_order { background-color: #343a40; }
+    .o_hotel_room_tile.o_status_house_use { background-color: #6c757d; }
+
+    .o_hotel_room_tile[class*="o_status_"] {
+        color: #fff;
+    }
 }

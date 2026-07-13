@@ -29,6 +29,16 @@ msgid "A verified request cannot be cancelled."
 msgstr "لا يمكن إلغاء طلب معتمد."
 
 #. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Are you sure you want to mark this maintenance request as done?"
+msgstr ""
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Are you sure you want to verify this maintenance request as complete?"
+msgstr ""
+
+#. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
 msgid "Blocking a Room"
 msgstr "تحجب غرفة"
@@ -141,9 +151,31 @@ msgid "Maintenance Requests"
 msgstr "طلبات الصيانة"
 
 #. module: hotel_maintenance
+#: model:ir.rule,name:hotel_maintenance.rule_hotel_maintenance_assigned_property
+msgid "Maintenance requests in assigned hotel properties"
+msgstr ""
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Maintenance requests must change status through their actions."
+msgstr ""
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Maintenance status can only be changed through its actions."
+msgstr ""
+
+#. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
 msgid "Mark Done"
 msgstr "إنهاء العمل"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
+msgid "My Tasks"
+msgstr "مهامي"
 
 #. module: hotel_maintenance
 #. odoo-python
@@ -156,6 +188,11 @@ msgstr "جديد"
 #: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__priority__1
 msgid "Normal"
 msgstr "عادي"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_kanban
+msgid "OOO"
+msgstr ""
 
 #. module: hotel_maintenance
 #. odoo-python
@@ -266,6 +303,11 @@ msgid "Status"
 msgstr "الحالة"
 
 #. module: hotel_maintenance
+#: model:ir.rule,name:hotel_maintenance.rule_hotel_maintenance_system_unrestricted
+msgid "System administrators: all maintenance requests"
+msgstr ""
+
+#. module: hotel_maintenance
 #: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__technician_id
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
 msgid "Technician"
@@ -291,6 +333,12 @@ msgstr "معتمد"
 #: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__date_verified
 msgid "Verified On"
 msgstr "تاريخ الاعتماد"
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Verified maintenance requests are immutable. Create a new request for additional work."
+msgstr ""
 
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form

@@ -60,20 +60,20 @@ msgid "Charges whose product belongs to this category (or a child of it) are res
 msgstr "تقيد الرسوم التي ينتمي منتجها إلى هذه الفئة أو إحدى فئاتها الفرعية."
 
 #. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_entity_service_ceiling__daily_limit
+msgid "Daily Entity Limit"
+msgstr ""
+
+#. module: hotel_restricted_services
 #: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_service_restriction__daily_limit
 msgid "Daily Limit"
 msgstr "الحد اليومي"
 
 #. module: hotel_restricted_services
-#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_entity_service_ceiling__daily_limit
-msgid "Daily Limit per Guest"
-msgstr "الحد اليومي لكل نزيل"
-
-#. module: hotel_restricted_services
 #. odoo-python
 #: code:addons/hotel_restricted_services/models/hotel_folio.py:0
-msgid "Daily ceiling of %(limit)s for entity %(entity)s (%(category)s) exceeded: %(billed)s billed today on this folio."
-msgstr "تم تجاوز السقف اليومي %(limit)s للجهة %(entity)s (%(category)s): تمت فوترة %(billed)s اليوم على هذا الفوليو."
+msgid "Daily ceiling of %(limit)s for entity %(entity)s (%(category)s) exceeded: %(billed)s billed today across this property."
+msgstr ""
 
 #. module: hotel_restricted_services
 #. odoo-python
@@ -98,6 +98,11 @@ msgid "Entity Service Ceilings"
 msgstr "سقوف خدمات الجهات"
 
 #. module: hotel_restricted_services
+#: model:ir.rule,name:hotel_restricted_services.rule_hotel_entity_ceiling_assigned_property
+msgid "Entity ceilings in assigned hotel properties"
+msgstr ""
+
+#. module: hotel_restricted_services
 #: model:ir.model,name:hotel_restricted_services.model_hotel_service_restriction
 msgid "Guest Service Restriction"
 msgstr "قيد خدمة النزيل"
@@ -109,8 +114,8 @@ msgstr "اتركه فارغاً لتطبيق السقف على كل الخدما
 
 #. module: hotel_restricted_services
 #: model:ir.model.fields,help:hotel_restricted_services.field_hotel_entity_service_ceiling__daily_limit
-msgid "Maximum billed to the entity per guest folio per calendar day. Zero means no daily limit."
-msgstr "أقصى ما يفوتر على الجهة لكل فوليو نزيل في اليوم؛ الصفر يعني بلا حد يومي."
+msgid "Maximum billed to the entity across all folios in this property and hotel business day. Zero means no daily limit."
+msgstr ""
 
 #. module: hotel_restricted_services
 #: model:ir.model.fields,help:hotel_restricted_services.field_hotel_service_restriction__stay_limit
@@ -172,6 +177,11 @@ msgid "Service restriction overridden by %(user)s for %(product)s (%(amount)s). 
 msgstr "تم تجاوز قيد الخدمة بواسطة %(user)s للمنتج %(product)s (%(amount)s). السبب: %(reason)s"
 
 #. module: hotel_restricted_services
+#: model:ir.rule,name:hotel_restricted_services.rule_hotel_service_restriction_assigned_property
+msgid "Service restrictions in assigned hotel properties"
+msgstr ""
+
+#. module: hotel_restricted_services
 #: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_service_restriction__stay_limit
 msgid "Stay Limit"
 msgstr "حد الإقامة"
@@ -181,3 +191,19 @@ msgstr "حد الإقامة"
 #: code:addons/hotel_restricted_services/models/hotel_folio.py:0
 msgid "Stay limit of %(limit)s for '%(category)s' exceeded (already charged %(charged)s, new charge %(amount)s)."
 msgstr "تم تجاوز حد الإقامة %(limit)s لفئة '%(category)s' (المحمل سابقاً %(charged)s، والرسم الجديد %(amount)s)."
+
+#. module: hotel_restricted_services
+#: model:ir.rule,name:hotel_restricted_services.rule_hotel_ceiling_system_unrestricted
+msgid "System administrators: all entity ceilings"
+msgstr ""
+
+#. module: hotel_restricted_services
+#: model:ir.rule,name:hotel_restricted_services.rule_hotel_restriction_system_unrestricted
+msgid "System administrators: all service restrictions"
+msgstr ""
+
+#. module: hotel_restricted_services
+#. odoo-python
+#: code:addons/hotel_restricted_services/models/hotel_service_restriction.py:0
+msgid "The entity and property must belong to the same company."
+msgstr ""

@@ -17,6 +17,17 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "A Front Office Supervisor approval is required."
+msgstr ""
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
+msgid "Actual Times"
+msgstr ""
+
+#. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__agency_id
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "Agency / Entity"
@@ -26,6 +37,69 @@ msgstr "الوكالة / الجهة"
 #: model:ir.actions.act_window,name:hotel_reservation.action_hotel_reservation_list
 msgid "All Reservations"
 msgstr "كل الحجوزات"
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_group_view_form
+msgid "Allocate Available Rooms"
+msgstr "تخصيص الغرف المتاحة"
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Allocate at least one room before confirmation."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Amendment %(amendment)s applied by %(user)s. Reason: %(reason)s"
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Amendment approval fields can only be set by the apply action."
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__amendment_ids
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
+msgid "Amendments"
+msgstr "التعديلات"
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Amendments must be approved through the apply action."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "An amendment reason is required."
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_amendment__state__applied
+msgid "Applied"
+msgstr "مطبق"
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Applied reservation amendments are immutable."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Applied reservation amendments cannot be deleted."
+msgstr ""
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_form
+msgid "Approve and Apply"
+msgstr "اعتماد وتطبيق"
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__checkin_date
@@ -47,8 +121,26 @@ msgstr "الواصلون اليوم"
 #. module: hotel_reservation
 #. odoo-python
 #: code:addons/hotel_reservation/models/hotel_reservation.py:0
+msgid "Assign a default hotel property to your user."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "Assign a room before confirming."
 msgstr "يرجى تخصيص غرفة قبل تأكيد الحجز."
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_form
+msgid "Audit Snapshot"
+msgstr "لقطة التدقيق"
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
+msgid "Available Rooms"
+msgstr "الغرف المتاحة"
 
 #. module: hotel_reservation
 #: model:ir.model.fields,help:hotel_reservation.field_hotel_reservation__agency_id
@@ -56,12 +148,14 @@ msgid "Bill-to entity (جهة) this stay is registered under."
 msgstr "الجهة المسؤول عن دفع الفاتورة المسجل تحتها هذا الحجز."
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_group_view_form
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Cancel"
 msgstr "إلغاء"
 
 #. module: hotel_reservation
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__cancelled
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_group__state__cancelled
 msgid "Cancelled"
 msgstr "ملغي"
 
@@ -77,8 +171,14 @@ msgstr "داخل الفندق / مسجل دخول"
 
 #. module: hotel_reservation
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__checked_out
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "Checked Out"
 msgstr "مغادر / مسجل خروج"
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
+msgid "Checked Out Today"
+msgstr ""
 
 #. module: hotel_reservation
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__accommodation_type__company
@@ -91,20 +191,49 @@ msgid "Confirm"
 msgstr "تأكيد"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_group_view_form
+msgid "Confirm Block"
+msgstr "تأكيد الحصة"
+
+#. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Confirm Check Out"
 msgstr "تأكيد تسجيل الخروج"
 
 #. module: hotel_reservation
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__confirmed
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_group__state__confirmed
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "Confirmed"
 msgstr "مؤكد"
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
+msgid "Confirmed and in-house stays must be changed through an approved reservation amendment."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Confirmed or cancelled group reservations are immutable."
+msgstr ""
+
+#. module: hotel_reservation
 #: model_terms:ir.actions.act_window,help:hotel_reservation.action_hotel_reservation
 msgid "Create the first reservation"
 msgstr "أنشئ أول حجز"
+
+#. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_amendment__amendment_type__day_use
+msgid "Day Use"
+msgstr "استخدام نهاري"
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Day use requires both check-in and checkout times."
+msgstr ""
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__checkout_date
@@ -120,6 +249,8 @@ msgstr "المغادرون اليوم"
 
 #. module: hotel_reservation
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__draft
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_amendment__state__draft
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_group__state__draft
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "Draft"
 msgstr "مسودة"
@@ -128,6 +259,28 @@ msgstr "مسودة"
 #: model_terms:ir.actions.act_window,help:hotel_reservation.action_hotel_reservation
 msgid "Drag on the timeline to book a room, or hit New."
 msgstr "اسحب على الخط الزمني لحجز غرفة أو اضغط جديد."
+
+#. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_amendment__amendment_type__early_checkin
+msgid "Early Check-in"
+msgstr "دخول مبكر"
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Enter the amended check-in time."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Enter the amended checkout time."
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_amendment__amendment_type__extend
+msgid "Extend Stay"
+msgstr "تمديد الإقامة"
 
 #. module: hotel_reservation
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__accommodation_type__family
@@ -141,8 +294,57 @@ msgstr "مكتب الاستقبال"
 
 #. module: hotel_reservation
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__accommodation_type__group
+#: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation_group__group_partner_id
 msgid "Group"
 msgstr "مجموعة"
+
+#. module: hotel_reservation
+#: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__group_id
+msgid "Group / Block"
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.actions.act_window,name:hotel_reservation.hotel_reservation_group_action
+msgid "Group / Block Reservations"
+msgstr "حجوزات المجموعات / الحصص"
+
+#. module: hotel_reservation
+#: model:ir.model,name:hotel_reservation.model_hotel_reservation_group_allocation
+msgid "Group Reservation Room-type Allocation"
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.ui.menu,name:hotel_reservation.menu_hotel_reservation_groups
+msgid "Group Reservations"
+msgstr "حجوزات المجموعات"
+
+#. module: hotel_reservation
+#: model:ir.rule,name:hotel_reservation.rule_hotel_reservation_group_allocation_assigned_property
+msgid "Group allocations in assigned properties"
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Group reservation references are assigned by the workflow."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Group reservation status can only be changed through its actions."
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.rule,name:hotel_reservation.rule_hotel_reservation_group_assigned_property
+msgid "Group reservations in assigned properties"
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Group reservations must be confirmed through their action."
+msgstr ""
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__partner_id
@@ -152,10 +354,42 @@ msgid "Guest"
 msgstr "النزيل / الضيف"
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
+msgid "Guest counts cannot be negative."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
+msgid "Guest counts exceed the capacity of %(room_type)s."
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.model,name:hotel_reservation.model_hotel_reservation_group
+msgid "Hotel Group / Block Reservation"
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.sequence,name:hotel_reservation.seq_hotel_reservation_group
+msgid "Hotel Group Reservation"
+msgstr ""
+
+#. module: hotel_reservation
 #: model:ir.sequence,name:hotel_reservation.seq_hotel_reservation
 #: model:ir.model,name:hotel_reservation.model_hotel_reservation
 msgid "Hotel Reservation"
 msgstr "حجز الفندق"
+
+#. module: hotel_reservation
+#: model:ir.sequence,name:hotel_reservation.seq_hotel_reservation_amendment
+msgid "Hotel Reservation Amendment"
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.model,name:hotel_reservation.model_hotel_reservation_amendment
+msgid "Immutable Reservation Amendment"
+msgstr ""
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
@@ -173,10 +407,26 @@ msgid "Internal notes..."
 msgstr "ملاحظات داخلية..."
 
 #. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_amendment__amendment_type__late_checkout
+msgid "Late Checkout"
+msgstr "مغادرة متأخرة"
+
+#. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_amendment__amendment_type__reprice
+msgid "Manager Repricing"
+msgstr "إعادة التسعير بواسطة المدير"
+
+#. module: hotel_reservation
 #. odoo-python
 #: code:addons/hotel_reservation/models/hotel_reservation.py:0
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
 msgid "New"
 msgstr "جديد"
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_form
+msgid "New Values"
+msgstr "القيم الجديدة"
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__rate_night
@@ -186,14 +436,27 @@ msgstr "سعر الليلة"
 #. module: hotel_reservation
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__no_show
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "No Show"
 msgstr "عدم حضور"
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Only a Hotel Manager can approve repricing."
+msgstr ""
 
 #. module: hotel_reservation
 #. odoo-python
 #: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "Only cancelled or no-show reservations can be reset."
 msgstr "يمكن فقط إعادة تهيئة الحجوزات الملغاة أو التي سجلت كعدم حضور."
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Only confirmed or checked-in stays can be amended."
+msgstr ""
 
 #. module: hotel_reservation
 #. odoo-python
@@ -206,6 +469,24 @@ msgstr "يمكن فقط تسجيل عدم حضور للحجوزات المؤكد
 #: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "Only confirmed reservations can check in."
 msgstr "يمكن فقط تسجيل الدخول للحجوزات المؤكدة."
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Only draft group allocations can be changed."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Only draft group reservations can be deleted."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Only draft groups can allocate rooms."
+msgstr ""
 
 #. module: hotel_reservation
 #. odoo-python
@@ -231,6 +512,18 @@ msgid "Pricing"
 msgstr "التسعير"
 
 #. module: hotel_reservation
+#: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation_group__allocation_line_ids
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_group_view_form
+msgid "Requested Rooms"
+msgstr "الغرف المطلوبة"
+
+#. module: hotel_reservation
+#: model:ir.ui.menu,name:hotel_reservation.menu_hotel_reservation_amendments
+#: model:ir.actions.act_window,name:hotel_reservation.hotel_reservation_amendment_action
+msgid "Reservation Amendments"
+msgstr "تعديلات الحجوزات"
+
+#. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__name
 msgid "Reservation Number"
 msgstr "رقم الحجز"
@@ -241,11 +534,39 @@ msgid "Reservation Planning"
 msgstr "مخطط الحجوزات"
 
 #. module: hotel_reservation
+#: model:ir.rule,name:hotel_reservation.rule_hotel_reservation_amendment_assigned_property
+msgid "Reservation amendments in assigned properties"
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
+msgid "Reservation identity and actual stay times are assigned by the workflow."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
+msgid "Reservation status can only be changed through its workflow actions."
+msgstr ""
+
+#. module: hotel_reservation
 #: model:ir.ui.menu,name:hotel_reservation.menu_hotel_reservation_all
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_gantt
 #: model:ir.actions.act_window,name:hotel_reservation.action_hotel_reservation
 msgid "Reservations"
 msgstr "الحجوزات"
+
+#. module: hotel_reservation
+#: model:ir.rule,name:hotel_reservation.rule_hotel_reservation_assigned_property
+msgid "Reservations in assigned hotel properties"
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
+msgid "Reservations must enter confirmed and stay states through workflow actions."
+msgstr ""
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
@@ -260,15 +581,42 @@ msgstr "الغرفة"
 
 #. module: hotel_reservation
 #. odoo-python
-#: code:addons/hotel_reservation/models/hotel_reservation.py:0
-msgid "Room %(room)s is already booked between %(checkin)s and %(checkout)s."
-msgstr "الغرفة %(room)s محجوزة بالفعل بين %(checkin)s و %(checkout)s."
+#: code:addons/hotel_reservation/models/hotel_availability.py:0
+msgid "Room %(room)s is not available between %(checkin)s and %(checkout)s."
+msgstr ""
 
 #. module: hotel_reservation
 #. odoo-python
-#: code:addons/hotel_reservation/models/hotel_reservation.py:0
-msgid "Room %(room)s is out of order or reserved for administration."
-msgstr "الغرفة %(room)s خارج الخدمة أو محجوزة للإدارة."
+#: code:addons/hotel_reservation/models/hotel_availability.py:0
+msgid "Room %(room)s is not sellable."
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_amendment__amendment_type__room_move
+msgid "Room Move"
+msgstr "نقل الغرفة"
+
+#. module: hotel_reservation
+#: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation_group__member_ids
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_group_view_form
+msgid "Rooming List"
+msgstr "قائمة توزيع الغرف"
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Select the destination room."
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.model,name:hotel_reservation.model_hotel_availability_service
+msgid "Shared Hotel Room Availability Service"
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_amendment__amendment_type__shorten
+msgid "Shorten Stay"
+msgstr "تقصير الإقامة"
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
@@ -279,6 +627,62 @@ msgstr "الحالة"
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Stay"
 msgstr "الحجز والإقامة"
+
+#. module: hotel_reservation
+#: model:ir.rule,name:hotel_reservation.rule_hotel_amendment_system_unrestricted
+msgid "System administrators: all amendments"
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.rule,name:hotel_reservation.rule_hotel_group_allocation_system_unrestricted
+msgid "System administrators: all group allocations"
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.rule,name:hotel_reservation.rule_hotel_group_system_unrestricted
+msgid "System administrators: all group reservations"
+msgstr ""
+
+#. module: hotel_reservation
+#: model:ir.rule,name:hotel_reservation.rule_hotel_reservation_system_unrestricted
+msgid "System administrators: all reservations"
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "The amended rate cannot be negative."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
+msgid "The room must belong to the reservation property."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "The room type must be shared or belong to the group property."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
+msgid "The room type must be shared or belong to the reservation property."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation.py:0
+msgid "The selected room does not match the room type."
+msgstr ""
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "This amendment has already been applied."
+msgstr ""
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form

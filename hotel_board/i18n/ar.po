@@ -19,12 +19,6 @@ msgstr ""
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
-msgid "Admin Use"
-msgstr "استخدام إداري"
-
-#. module: hotel_board
-#. odoo-javascript
-#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
 msgid "Arrivals Today"
 msgstr "الواصلون اليوم"
 
@@ -42,6 +36,12 @@ msgstr "المغادرون اليوم"
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Dirty"
+msgstr "غير نظيفة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
 msgid "Front Desk"
 msgstr "مكتب الاستقبال"
 
@@ -49,6 +49,12 @@ msgstr "مكتب الاستقبال"
 #: model:ir.actions.client,name:hotel_board.action_hotel_dashboard
 msgid "Front Desk Dashboard"
 msgstr "لوحة مكتب الاستقبال"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "House Use"
+msgstr "استخدام الفندق"
 
 #. module: hotel_board
 #. odoo-javascript
@@ -65,14 +71,44 @@ msgstr "الإشغال"
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Occupied"
+msgstr "مشغولة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
 msgid "Out of Order"
 msgstr "خارج الخدمة"
 
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Reserved"
+msgstr "محجوزة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
 msgid "Reserved Rooms"
 msgstr "الغرف المحجوزة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Retry"
+msgstr "إعادة المحاولة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Room Board"
+msgstr "لوحة الغرف"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Vacant"
+msgstr "شاغرة"
 
 #. module: hotel_board
 #. odoo-javascript

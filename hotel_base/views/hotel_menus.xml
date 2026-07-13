@@ -3,7 +3,7 @@
     <menuitem id="menu_hotel_root"
         name="Hotel"
         sequence="15"
-        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_maintenance"/>
+        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_maintenance,hotel_base.group_hotel_fb,hotel_base.group_hotel_accountant"/>
 
     <menuitem id="menu_hotel_rooms"
         name="Rooms"
@@ -23,7 +23,14 @@
         parent="menu_hotel_root"
         action="hotel_agency_action"
         sequence="40"
-        groups="hotel_base.group_hotel_frontdesk"/>
+        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant"/>
+
+    <menuitem id="menu_hotel_agency_commissions"
+        name="Agency Commission Placeholders"
+        parent="menu_hotel_root"
+        action="hotel_agency_commission_action"
+        sequence="45"
+        groups="hotel_base.group_hotel_manager,hotel_base.group_hotel_accountant"/>
 
     <menuitem id="menu_hotel_config"
         name="Configuration"

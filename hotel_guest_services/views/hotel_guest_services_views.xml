@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hotel_lost_found_view_list" model="ir.ui.view">
+        <field name="name">hotel.lost.found.list</field>
+        <field name="model">hotel.lost.found</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/><field name="item_name"/><field name="property_id"/>
+                <field name="room_id"/><field name="found_at"/><field name="storage_location"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="hotel_lost_found_view_form" model="ir.ui.view">
+        <field name="name">hotel.lost.found.form</field>
+        <field name="model">hotel.lost.found</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_mark_claimed" type="object" string="Mark Claimed"
+                        class="btn-primary" invisible="state != 'found' or not claimant_id"/>
+                    <button name="action_dispose" type="object" string="Dispose"
+                        invisible="state != 'found'" groups="hotel_base.group_hotel_manager"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group><group>
+                        <field name="property_id"/><field name="room_id"/><field name="reservation_id"/>
+                        <field name="item_name"/><field name="description"/><field name="storage_location"/>
+                    </group><group>
+                        <field name="found_at"/><field name="found_by_id"/><field name="claimant_id"/>
+                        <field name="resolution_reason"/><field name="resolved_at"/><field name="resolved_by_id"/>
+                    </group></group>
+                </sheet><chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="hotel_lost_found_action" model="ir.actions.act_window">
+        <field name="name">Lost and Found</field><field name="res_model">hotel.lost.found</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="hotel_dnd_view_list" model="ir.ui.view">
+        <field name="name">hotel.do.not.disturb.list</field><field name="model">hotel.do.not.disturb</field>
+        <field name="arch" type="xml"><list>
+            <field name="property_id"/><field name="room_id"/><field name="reservation_id"/>
+            <field name="start_at"/><field name="end_at"/><field name="note"/><field name="state" widget="badge"/>
+        </list></field>
+    </record>
+    <record id="hotel_dnd_view_form" model="ir.ui.view">
+        <field name="name">hotel.do.not.disturb.form</field><field name="model">hotel.do.not.disturb</field>
+        <field name="arch" type="xml"><form><header>
+            <button name="action_end" type="object" string="End DND" class="btn-primary" invisible="state != 'active'"/>
+            <button name="action_cancel" type="object" string="Cancel" invisible="state != 'active'"/>
+            <field name="state" widget="statusbar"/>
+        </header><sheet><group>
+            <field name="property_id"/><field name="reservation_id"/><field name="room_id"/>
+            <field name="start_at"/><field name="end_at"/><field name="note"/>
+        </group></sheet></form></field>
+    </record>
+    <record id="hotel_dnd_action" model="ir.actions.act_window">
+        <field name="name">Do Not Disturb</field><field name="res_model">hotel.do.not.disturb</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="hotel_wakeup_call_view_list" model="ir.ui.view">
+        <field name="name">hotel.wakeup.call.list</field><field name="model">hotel.wakeup.call</field>
+        <field name="arch" type="xml"><list>
+            <field name="name"/><field name="property_id"/><field name="room_id"/>
+            <field name="reservation_id"/><field name="scheduled_at"/><field name="assigned_user_id"/>
+            <field name="state" widget="badge"/>
+        </list></field>
+    </record>
+    <record id="hotel_wakeup_call_view_form" model="ir.ui.view">
+        <field name="name">hotel.wakeup.call.form</field><field name="model">hotel.wakeup.call</field>
+        <field name="arch" type="xml"><form><header>
+            <button name="action_complete" type="object" string="Completed" class="btn-primary" invisible="state != 'scheduled'"/>
+            <button name="action_missed" type="object" string="Missed" invisible="state != 'scheduled'"/>
+            <button name="action_cancel" type="object" string="Cancel" invisible="state != 'scheduled'"/>
+            <field name="state" widget="statusbar"/>
+        </header><sheet><div class="oe_title"><h1><field name="name"/></h1></div><group>
+            <field name="property_id"/><field name="reservation_id"/><field name="room_id"/>
+            <field name="scheduled_at"/><field name="assigned_user_id"/>
+            <field name="completed_at"/><field name="completion_note"/>
+        </group></sheet><div class="oe_chatter"><field name="activity_ids"/></div></form></field>
+    </record>
+    <record id="hotel_wakeup_call_action" model="ir.actions.act_window">
+        <field name="name">Wake-up Calls</field><field name="res_model">hotel.wakeup.call</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_hotel_guest_services" name="Guest Services"
+        parent="hotel_base.menu_hotel_root" sequence="55"
+        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping"/>
+    <menuitem id="menu_hotel_lost_found" name="Lost and Found"
+        parent="menu_hotel_guest_services" action="hotel_lost_found_action" sequence="10"
+        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping"/>
+    <menuitem id="menu_hotel_dnd" name="Do Not Disturb"
+        parent="menu_hotel_guest_services" action="hotel_dnd_action" sequence="20"
+        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping"/>
+    <menuitem id="menu_hotel_wakeup" name="Wake-up Calls"
+        parent="menu_hotel_guest_services" action="hotel_wakeup_call_action" sequence="30"
+        groups="hotel_base.group_hotel_frontdesk"/>
+</odoo>

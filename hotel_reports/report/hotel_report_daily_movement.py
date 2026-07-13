@@ -15,4 +15,7 @@ class ReportDailyMovement(models.AbstractModel):
             "reservations_for": {
                 wizard.id: wizard._get_reservations() for wizard in wizards
             },
+            "payloads": {
+                wizard.id: wizard._get_report_payload() for wizard in wizards
+            },
         }

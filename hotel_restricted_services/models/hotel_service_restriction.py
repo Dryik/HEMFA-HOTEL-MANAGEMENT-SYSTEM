@@ -1,4 +1,5 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 RESTRICTION_TYPES = [
     ("blocked", "Blocked"),
@@ -95,22 +96,45 @@ class HotelEntityServiceCeiling(models.Model):
         index=True,
         domain=[("is_hotel_agency", "=", True)],
     )
+    property_id = fields.Many2one(
+        "hotel.property",
+        required=True,
+        index=True,
+        default=lambda self: self.env["hotel.property"]._get_default_property(),
+    )
     category_id = fields.Many2one(
         "product.category",
         string="Service Category",
         help="Leave empty to apply the ceiling to all services.",
     )
     daily_limit = fields.Monetary(
-        string="Daily Limit per Guest",
-        help="Maximum billed to the entity per guest folio per "
-        "calendar day. Zero means no daily limit.",
+        string="Daily Entity Limit",
+        help="Maximum billed to the entity across all folios in this property "
+        "and hotel business day. Zero means no daily limit.",
     )
     currency_id = fields.Many2one(
         "res.currency",
-        default=lambda self: self.env.company.currency_id,
+        related="property_id.company_id.currency_id",
+        store=True,
         readonly=True,
     )
     active = fields.Boolean(default=True)
+
+    _entity_property_category_uniq = models.Constraint(
+        "unique (partner_id, property_id, category_id)",
+        "Only one ceiling is allowed per entity, property, and service category.",
+    )
+
+    @api.constrains("partner_id", "property_id")
+    def _check_company_consistency(self):
+        for ceiling in self:
+            if (
+                ceiling.partner_id.company_id
+                and ceiling.partner_id.company_id != ceiling.property_id.company_id
+            ):
+                raise ValidationError(
+                    _("The entity and property must belong to the same company.")
+                )
 
     @api.depends("partner_id", "category_id")
     def _compute_display_name(self):

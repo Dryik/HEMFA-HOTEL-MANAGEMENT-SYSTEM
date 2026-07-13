@@ -1,5 +1,3 @@
-from datetime import datetime, time, timedelta
-
 from odoo import _, fields, models
 from odoo.exceptions import UserError
 
@@ -7,17 +5,55 @@ from odoo.exceptions import UserError
 class HotelFolio(models.Model):
     _inherit = "hotel.folio"
 
-    def add_charge(self, product, qty=1.0, price_unit=None, date=None):
+    def add_charge(self, product, qty=1.0, price_unit=None, date=None, **kwargs):
         """Enforce guest-level blocks/limits and entity ceilings.
 
         Manager override: call with a ``service_override_reason`` in the
         context. Requires the FO supervisor group; the override is
         logged in the folio chatter.
         """
+        return self._add_charge_with_restrictions(
+            product,
+            qty=qty,
+            price_unit=price_unit,
+            date=date,
+            workflow=False,
+            **kwargs,
+        )
+
+    def _add_workflow_charge(
+        self, product, qty=1.0, price_unit=None, date=None, **kwargs
+    ):
+        return self._add_charge_with_restrictions(
+            product,
+            qty=qty,
+            price_unit=price_unit,
+            date=date,
+            workflow=True,
+            **kwargs,
+        )
+
+    def _add_charge_with_restrictions(
+        self, product, qty=1.0, price_unit=None, date=None, workflow=False, **kwargs
+    ):
         self.ensure_one()
-        amount = (
-            price_unit if price_unit is not None else product.list_price
-        ) * qty
+        unit_price = price_unit if price_unit is not None else product.list_price
+        discount = kwargs.get("discount", 0.0)
+        tax_ids = kwargs.get("tax_ids")
+        taxes = (
+            self.env["account.tax"].browse(tax_ids).exists()
+            if tax_ids is not None
+            else product.taxes_id.filtered(
+                lambda tax: tax.company_id == self.property_id.company_id
+            )
+        )
+        amount = taxes.compute_all(
+            unit_price * (1.0 - discount / 100.0),
+            currency=self.currency_id,
+            quantity=qty,
+            product=product,
+            partner=self.partner_id,
+        )["total_included"]
         charge_date = date or fields.Datetime.now()
         override_reason = self.env.context.get("service_override_reason")
 
@@ -38,9 +74,14 @@ class HotelFolio(models.Model):
                     )
                 )
 
-        line = super().add_charge(
-            product, qty=qty, price_unit=price_unit, date=date
-        )
+        if workflow:
+            line = super()._add_workflow_charge(
+                product, qty=qty, price_unit=price_unit, date=date, **kwargs
+            )
+        else:
+            line = super().add_charge(
+                product, qty=qty, price_unit=price_unit, date=date, **kwargs
+            )
 
         entity_violation = self._entity_ceiling_violation(line)
         if entity_violation:
@@ -72,15 +113,11 @@ class HotelFolio(models.Model):
 
     # -- helpers -----------------------------------------------------
 
-    @staticmethod
-    def _day_bounds(charge_date):
-        day = (
-            charge_date.date()
-            if isinstance(charge_date, datetime)
-            else charge_date
-        )
-        start = datetime.combine(day, time.min)
-        return start, start + timedelta(days=1)
+    def _day_bounds(self, charge_date):
+        self.ensure_one()
+        prop = self.reservation_id.property_id
+        day = prop.get_business_date(charge_date)
+        return prop.get_business_day_bounds(day)
 
     def _category_charges(self, restriction, date_from=None, date_to=None):
         """Total already charged on this folio for a restriction's
@@ -158,19 +195,43 @@ class HotelFolio(models.Model):
         ceilings = payee.service_ceiling_ids.filtered(
             lambda c: c.active
             and c.daily_limit
+            and c.property_id == self.property_id
             and c.matches_product(line.product_id)
         )
+        if ceilings:
+            # Odoo transactions use REPEATABLE READ.  SELECT ... FOR UPDATE
+            # alone can wait and then continue with a stale snapshot, allowing
+            # two concurrent charges to validate the same remaining ceiling.
+            # A no-op row update creates a write/write conflict instead; Odoo
+            # retries the losing request with a fresh snapshot.
+            self.env.cr.execute(
+                "UPDATE hotel_entity_service_ceiling SET id = id WHERE id IN %s",
+                [tuple(ceilings.ids)],
+            )
         for ceiling in ceilings:
             day_start, day_end = self._day_bounds(line.date)
+            candidate_lines = self.env["hotel.folio.line"].search(
+                [
+                    ("folio_id.property_id", "=", self.property_id.id),
+                    ("payee_partner_id", "=", payee.id),
+                    ("date", ">=", day_start),
+                    ("date", "<", day_end),
+                ]
+            )
+            matching_lines = candidate_lines.filtered(
+                lambda candidate: ceiling.matches_product(candidate.product_id)
+            )
             billed = sum(
-                self.line_ids.filtered(
-                    lambda l: l.payee_partner_id == payee
-                    and ceiling.matches_product(l.product_id)
-                    and day_start <= l.date < day_end
-                ).mapped("amount")
+                candidate.currency_id._convert(
+                    candidate.amount_total,
+                    ceiling.currency_id,
+                    self.property_id.company_id,
+                    self.property_id.get_business_date(candidate.date),
+                )
+                for candidate in matching_lines
             )
             if (
-                self.currency_id.compare_amounts(
+                ceiling.currency_id.compare_amounts(
                     billed, ceiling.daily_limit
                 )
                 > 0
@@ -178,7 +239,7 @@ class HotelFolio(models.Model):
                 return _(
                     "Daily ceiling of %(limit)s for entity %(entity)s "
                     "(%(category)s) exceeded: %(billed)s billed today "
-                    "on this folio.",
+                    "across this property.",
                     limit=ceiling.daily_limit,
                     entity=payee.name,
                     category=ceiling.category_id.display_name

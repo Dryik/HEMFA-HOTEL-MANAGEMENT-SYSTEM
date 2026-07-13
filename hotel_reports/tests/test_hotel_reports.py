@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from odoo import fields
+from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -37,6 +38,28 @@ class TestHotelReports(TransactionCase):
         )
         cls.today_noon = fields.Datetime.now().replace(
             hour=12, minute=0, second=0, microsecond=0
+        )
+        cls.housekeeper = cls.env["res.users"].create(
+            {
+                "name": "Report Housekeeper",
+                "login": "report_housekeeper",
+                "group_ids": [
+                    (4, cls.env.ref("hotel_base.group_hotel_housekeeping").id)
+                ],
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
+            }
+        )
+        cls.frontdesk = cls.env["res.users"].create(
+            {
+                "name": "Report Front Desk",
+                "login": "report_frontdesk",
+                "group_ids": [
+                    (4, cls.env.ref("hotel_base.group_hotel_frontdesk").id)
+                ],
+                "hotel_property_ids": [(6, 0, [cls.property.id])],
+                "default_hotel_property_id": cls.property.id,
+            }
         )
 
     def _reservation(self, room, guest, offset_days=0, nights=2):
@@ -121,3 +144,45 @@ class TestHotelReports(TransactionCase):
             "report.hotel_reports.report_daily_movement"
         ]._get_report_values(wizard.ids)
         self.assertIn(reservation, values["reservations_for"][wizard.id])
+
+    def test_western_digits_preserve_zero(self):
+        wizard = self._wizard("occupancy")
+        self.assertEqual(wizard._western(0), "0")
+        self.assertEqual(wizard._western("٢٠٢٦"), "2026")
+
+    def test_xlsx_uses_same_payload(self):
+        reservation = self._reservation(self.rooms[0], self.guests[0])
+        reservation.action_confirm()
+        wizard = self._wizard("arrivals")
+        payload = wizard._get_report_payload()
+        workbook = wizard._build_xlsx()
+        self.assertTrue(payload["rows"])
+        self.assertTrue(workbook.startswith(b"PK"))
+
+    def test_report_types_are_role_restricted(self):
+        discrepancy = self._wizard("discrepancy").with_user(self.housekeeper)
+        discrepancy._get_report_payload()
+        debtors = self._wizard("debtors").with_user(self.housekeeper)
+        with self.assertRaises(UserError):
+            debtors._get_report_payload()
+
+    def test_consolidated_statement_pdf_xlsx_payload_has_balances(self):
+        reservation = self._reservation(self.rooms[0], self.guests[0])
+        reservation.action_confirm()
+        folio = reservation.folio_ids[0]
+        wizard = self.env["hotel.report.wizard"].create(
+            {
+                "report_type": "folio_statement",
+                "date": fields.Date.context_today(self.env.user),
+                "property_id": self.property.id,
+                "folio_id": folio.id,
+            }
+        )
+        payload = wizard._get_report_payload()
+        self.assertEqual(len(payload["summary"]), 4)
+        self.assertEqual(payload["summary"][-1][1], folio.amount_due)
+        self.assertEqual(
+            wizard.with_user(self.frontdesk)._get_report_payload()["summary"],
+            payload["summary"],
+        )
+        self.assertTrue(wizard._build_xlsx().startswith(b"PK"))

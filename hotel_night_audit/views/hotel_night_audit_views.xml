@@ -12,10 +12,14 @@
                 <field name="run_user_id"/>
                 <field name="occupancy_pct"/>
                 <field name="revenue_posted"/>
+                <field name="tax_posted" optional="hide"/>
+                <field name="adr" optional="show"/>
+                <field name="revpar" optional="show"/>
                 <field name="currency_id" column_invisible="True"/>
                 <field name="state" widget="badge"
                     decoration-info="state == 'draft'"
-                    decoration-success="state == 'done'"/>
+                    decoration-success="state == 'done'"
+                    decoration-muted="state == 'reversed'"/>
             </list>
         </field>
     </record>
@@ -30,7 +34,9 @@
                         class="btn-primary" invisible="state != 'draft'"
                         groups="hotel_base.group_hotel_fo_supervisor"
                         confirm="Are you sure you want to run the night audit? This will post room-night charges, close no-shows, and roll the operational business date forward."/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    <button name="action_open_reversal_wizard" type="object" string="Reverse Audit"
+                        invisible="state != 'done'" groups="hotel_base.group_hotel_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done,reversed"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -45,8 +51,24 @@
                             <field name="run_user_id"/>
                             <field name="occupancy_pct"/>
                             <field name="revenue_posted"/>
+                            <field name="tax_posted"/>
+                            <field name="adr"/>
+                            <field name="revpar"/>
+                            <field name="room_count"/>
+                            <field name="sellable_room_count"/>
+                            <field name="occupied_room_count"/>
+                            <field name="arrivals_count"/>
+                            <field name="departures_count"/>
+                            <field name="no_show_count"/>
+                            <field name="closed_session_count"/>
+                            <field name="session_transaction_total"/>
                             <field name="currency_id" invisible="1"/>
                         </group>
+                    </group>
+                    <group string="Reversal" invisible="state != 'reversed'">
+                        <field name="reversal_reason"/>
+                        <field name="reversed_by_id" invisible="not reversed_by_id"/>
+                        <field name="reversed_at" invisible="not reversed_at"/>
                     </group>
                     <notebook>
                         <page string="Audit Details" name="details">
@@ -58,6 +80,12 @@
                                     <field name="folio_id"/>
                                     <field name="status"/>
                                     <field name="amount_posted"/>
+                                    <field name="charge_amount_currency"/>
+                                    <field name="charge_currency_id"/>
+                                    <field name="confirmed_rate"/>
+                                    <field name="tax_basis" optional="hide"/>
+                                    <field name="tax_amount" optional="hide"/>
+                                    <field name="effective_fx_rate" optional="hide"/>
                                     <field name="currency_id" column_invisible="True"/>
                                 </list>
                             </field>

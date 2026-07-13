@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hotel_reservation_group_view_form_folio" model="ir.ui.view">
+        <field name="name">hotel.reservation.group.form.folio</field>
+        <field name="model">hotel.reservation.group</field>
+        <field name="inherit_id" ref="hotel_reservation.hotel_reservation_group_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_group_invoice" type="object"
+                    string="Create Group Invoice" class="btn-secondary"
+                    invisible="state != 'confirmed'"
+                    groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Group Invoices">
+                    <field name="invoice_ids" readonly="1">
+                        <list create="0" delete="0">
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="state" widget="badge"/>
+                            <field name="amount_total"/>
+                            <field name="amount_residual"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hotel_reservation_view_form_checkout_balance" model="ir.ui.view">
+        <field name="name">hotel.reservation.form.checkout.balance</field>
+        <field name="model">hotel.reservation</field>
+        <field name="inherit_id" ref="hotel_reservation.hotel_reservation_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='notes']" position="after">
+                <field name="checkout_balance_override_reason"
+                    placeholder="Manager reason required when checking out with a balance…"
+                    groups="hotel_base.group_hotel_manager"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
