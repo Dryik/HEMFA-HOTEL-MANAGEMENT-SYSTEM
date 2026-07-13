@@ -143,6 +143,7 @@ class HotelFolio(models.Model):
 
         residual_cache = {}
         for folio in self:
+            currency = folio._effective_currency()
             folio.amount_untaxed = sum(folio.line_ids.mapped("amount_untaxed"))
             folio.amount_tax = sum(folio.line_ids.mapped("amount_tax"))
             folio.amount_total = sum(folio.line_ids.mapped("amount_total"))
@@ -153,7 +154,7 @@ class HotelFolio(models.Model):
                 if not folio_move_lines:
                     continue
                 transferred_lines |= folio_move_lines
-                cache_key = (move.id, folio.currency_id.id)
+                cache_key = (move.id, currency.id)
                 if cache_key not in residual_cache:
                     residual_cache[cache_key] = folio._receivable_residual_in_currency(
                         move
@@ -162,7 +163,7 @@ class HotelFolio(models.Model):
                 folio_share = sum(folio_move_lines.mapped("amount_total"))
                 if float_is_zero(
                     move_total,
-                    precision_rounding=folio.currency_id.rounding or 0.01,
+                    precision_rounding=currency.rounding or 0.01,
                 ):
                     # A zero-value document has no amount to allocate.
                     continue
@@ -175,7 +176,7 @@ class HotelFolio(models.Model):
                 lambda move: move.state == "posted" and move not in document_moves
             )
             for move in posted_payment_moves:
-                cache_key = (move.id, folio.currency_id.id)
+                cache_key = (move.id, currency.id)
                 if cache_key not in residual_cache:
                     residual_cache[cache_key] = folio._receivable_residual_in_currency(
                         move
@@ -183,17 +184,22 @@ class HotelFolio(models.Model):
                 receivable_residual += residual_cache[cache_key]
 
             uninvoiced = folio.amount_total - folio.amount_invoiced
-            folio.amount_due = folio.currency_id.round(
-                uninvoiced + receivable_residual
-            )
-            folio.amount_paid = folio.currency_id.round(
-                folio.amount_total - folio.amount_due
-            )
+            folio.amount_due = currency.round(uninvoiced + receivable_residual)
+            folio.amount_paid = currency.round(folio.amount_total - folio.amount_due)
+
+    def _effective_currency(self):
+        """Return a currency even while a new folio has no reservation yet."""
+        self.ensure_one()
+        return (
+            self.currency_id
+            or self.property_id.company_id.currency_id
+            or self.env.company.currency_id
+        )
 
     def _receivable_residual_in_currency(self, move):
         """Return a posted move's signed receivable residual in folio currency."""
         self.ensure_one()
-        target_currency = self.currency_id
+        target_currency = self._effective_currency()
         total = 0.0
         receivable_lines = move.line_ids.filtered(
             lambda line: line.account_id.account_type == "asset_receivable"
