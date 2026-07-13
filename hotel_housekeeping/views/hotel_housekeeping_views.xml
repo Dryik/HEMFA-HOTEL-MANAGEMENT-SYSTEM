@@ -27,11 +27,11 @@
                                 <field name="priority" widget="priority"/>
                             </div>
                             <div class="small text-muted mb-1">
-                                <i class="fa fa-building-o me-1" aria-hidden="true"/>
+                                <i class="fa fa-building-o me-1" title="Property" aria-hidden="true"/>
                                 <field name="property_id"/>
                             </div>
                             <div class="small mb-1">
-                                <i class="fa fa-user me-1 text-muted" aria-hidden="true"/>
+                                <i class="fa fa-user me-1 text-muted" title="Cleaner" aria-hidden="true"/>
                                 <t t-if="record.cleaner_id.raw_value">
                                     <field name="cleaner_id"/>
                                 </t>
