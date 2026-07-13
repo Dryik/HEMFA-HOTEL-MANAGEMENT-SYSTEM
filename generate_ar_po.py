@@ -300,9 +300,9 @@ def generate_module(base_dir, module, check=False):
     module_dir = os.path.join(base_dir, module)
     entries = {}
     for dirpath, dirnames, filenames in os.walk(module_dir):
-        dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
+        dirnames[:] = sorted(d for d in dirnames if d not in SKIP_DIRS)
         in_static = os.sep + "static" + os.sep in dirpath + os.sep
-        for filename in filenames:
+        for filename in sorted(filenames):
             path = os.path.join(dirpath, filename)
             rel = os.path.relpath(path, module_dir).replace(os.sep, "/")
             if filename == "__manifest__.py":
