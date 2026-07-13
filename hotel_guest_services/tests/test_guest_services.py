@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from odoo import fields
 from odoo.exceptions import UserError
@@ -92,3 +92,48 @@ class TestHotelGuestServices(TransactionCase):
         self.assertEqual(call.state, "completed")
         with self.assertRaises(UserError):
             call.write({"completion_note": "Changed"})
+
+    def test_wakeup_urgency_is_searchable(self):
+        now = fields.Datetime.now()
+        overdue = self.env["hotel.wakeup.call"].create(
+            {
+                "property_id": self.property.id,
+                "reservation_id": self.reservation.id,
+                "scheduled_at": now - timedelta(minutes=5),
+            }
+        )
+        upcoming = self.env["hotel.wakeup.call"].create(
+            {
+                "property_id": self.property.id,
+                "reservation_id": self.reservation.id,
+                "scheduled_at": now + timedelta(minutes=30),
+            }
+        )
+        later = self.env["hotel.wakeup.call"].create(
+            {
+                "property_id": self.property.id,
+                "reservation_id": self.reservation.id,
+                "scheduled_at": now + timedelta(hours=2),
+            }
+        )
+
+        self.assertEqual(overdue.urgency, "overdue")
+        self.assertEqual(upcoming.urgency, "upcoming")
+        self.assertEqual(later.urgency, "later")
+        overdue_calls = self.env["hotel.wakeup.call"].search(
+            [("urgency", "=", "overdue")]
+        )
+        self.assertIn(overdue, overdue_calls)
+        self.assertNotIn(upcoming, overdue_calls)
+
+    def test_wakeup_today_bounds_use_property_timezone(self):
+        self.property.timezone = "Pacific/Kiritimati"
+        calls = self.env["hotel.wakeup.call"].with_context(
+            hotel_property_id=self.property.id
+        )
+        start, end = calls._property_calendar_day_bounds(
+            self.property,
+            datetime(2026, 7, 13, 11, 0),
+        )
+        self.assertEqual(start, datetime(2026, 7, 13, 10, 0))
+        self.assertEqual(end, datetime(2026, 7, 14, 10, 0))

@@ -42,9 +42,8 @@ MODULES = [
     "hotel_reports",
     "hotel_guest_services",
 ]
-REQUIRED_COMPLETE_MODULES = {"hotel_board", "hotel_reports"}
+REQUIRED_COMPLETE_MODULES = set(MODULES)
 
-RELATIONAL_FIELDS = {"Many2one", "One2many", "Many2many"}
 TRANSLATED_ATTRS = {"string", "help", "placeholder", "confirm", "title"}
 SKIP_DIRS = {"tests", "i18n", "demo", "__pycache__"}
 
@@ -155,9 +154,15 @@ def parse_python(module, path, rel, entries):
             pos = call.args
             string_node = kwargs.get("string")
             selection_node = kwargs.get("selection")
-            if ftype in RELATIONAL_FIELDS:
+            if ftype == "Many2one":
                 if string_node is None and len(pos) >= 2:
                     string_node = pos[1]
+            elif ftype == "One2many":
+                if string_node is None and len(pos) >= 3:
+                    string_node = pos[2]
+            elif ftype == "Many2many":
+                if string_node is None and len(pos) >= 5:
+                    string_node = pos[4]
             elif ftype == "Selection":
                 if selection_node is None and len(pos) >= 1:
                     selection_node = pos[0]
@@ -201,6 +206,8 @@ def parse_python(module, path, rel, entries):
 
 def extract_arch_terms(module, xmlid, elem, entries, occurrence):
     for node in elem.iter():
+        if node.get("t-translation") == "off":
+            continue
         for attr in TRANSLATED_ATTRS:
             value = node.get(attr)
             if value:
@@ -280,6 +287,8 @@ def parse_static_xml(module, path, rel, entries):
         return
     occurrence = f"code:addons/{module}/{rel}:0"
     for node in root.iter():
+        if node.get("t-translation") == "off":
+            continue
         for attr in TRANSLATED_ATTRS:
             value = node.get(attr)
             if value and not value.startswith(("{", "props.", "state.")):

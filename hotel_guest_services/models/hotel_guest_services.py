@@ -1,7 +1,10 @@
-from datetime import timedelta
+from datetime import datetime, time, timedelta
+
+import pytz
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
+from odoo.fields import Domain
 
 
 class HotelLostFound(models.Model):
@@ -217,6 +220,22 @@ class HotelWakeupCall(models.Model):
     assigned_user_id = fields.Many2one("res.users", default=lambda self: self.env.user)
     completed_at = fields.Datetime(readonly=True, copy=False)
     completion_note = fields.Text()
+    urgency = fields.Selection(
+        [
+            ("overdue", "Overdue"),
+            ("upcoming", "Next 60 Minutes"),
+            ("later", "Later"),
+            ("closed", "Closed"),
+        ],
+        string="Urgency",
+        compute="_compute_operational_status",
+        search="_search_urgency",
+    )
+    scheduled_today = fields.Boolean(
+        string="Scheduled Today",
+        compute="_compute_operational_status",
+        search="_search_scheduled_today",
+    )
     state = fields.Selection(
         [
             ("scheduled", "Scheduled"),
@@ -228,6 +247,117 @@ class HotelWakeupCall(models.Model):
         required=True,
         readonly=True,
     )
+
+    @api.depends("scheduled_at", "state", "property_id.timezone")
+    def _compute_operational_status(self):
+        now = fields.Datetime.now()
+        next_hour = now + timedelta(hours=1)
+        bounds_by_property = {}
+        for call in self:
+            bounds = bounds_by_property.get(call.property_id.id)
+            if not bounds:
+                bounds = self._property_calendar_day_bounds(call.property_id, now)
+                bounds_by_property[call.property_id.id] = bounds
+            call.scheduled_today = bool(
+                call.scheduled_at
+                and bounds[0] <= call.scheduled_at < bounds[1]
+            )
+            if not call.scheduled_at:
+                call.urgency = False
+            elif call.state != "scheduled":
+                call.urgency = "closed"
+            elif call.scheduled_at < now:
+                call.urgency = "overdue"
+            elif call.scheduled_at <= next_hour:
+                call.urgency = "upcoming"
+            else:
+                call.urgency = "later"
+
+    @api.model
+    def _context_property(self):
+        property_id = self.env.context.get("hotel_property_id")
+        if property_id:
+            try:
+                property_id = int(property_id)
+            except (TypeError, ValueError):
+                property_id = False
+            prop = self.env["hotel.property"].browse(property_id).exists()
+            if prop and prop.company_id in self.env.companies:
+                prop.check_access("read")
+                return prop
+        return self.env["hotel.property"]._get_default_property()
+
+    @api.model
+    def _property_calendar_day_bounds(self, prop, moment=None):
+        """Return property-local midnight bounds as naive UTC datetimes."""
+        moment = fields.Datetime.to_datetime(moment or fields.Datetime.now())
+        utc_moment = pytz.UTC.localize(moment) if moment.tzinfo is None else moment
+        timezone = pytz.timezone(prop.timezone or "UTC")
+        local_date = utc_moment.astimezone(timezone).date()
+
+        def local_midnight(day):
+            value = datetime.combine(day, time.min)
+            try:
+                localized = timezone.localize(value, is_dst=None)
+            except pytz.NonExistentTimeError:
+                localized = timezone.localize(value, is_dst=True)
+            except pytz.AmbiguousTimeError:
+                localized = timezone.localize(value, is_dst=False)
+            return localized.astimezone(pytz.UTC).replace(tzinfo=None)
+
+        return local_midnight(local_date), local_midnight(local_date + timedelta(days=1))
+
+    @api.model
+    def _search_scheduled_today(self, operator, value):
+        if operator not in ("=", "!=") or not isinstance(value, bool):
+            return NotImplemented
+        prop = self._context_property()
+        if not prop:
+            return Domain.FALSE if (operator == "=") == value else Domain.TRUE
+        start, end = self._property_calendar_day_bounds(prop)
+        domain = Domain.AND(
+            [
+                Domain("scheduled_at", ">=", start),
+                Domain("scheduled_at", "<", end),
+            ]
+        )
+        return domain if (operator == "=") == value else ~domain
+
+    @api.model
+    def _search_urgency(self, operator, value):
+        supported = {"overdue", "upcoming", "later", "closed"}
+        if operator in ("=", "!="):
+            values = {value}
+        elif operator in ("in", "not in"):
+            values = set(value)
+        else:
+            return NotImplemented
+        if not values <= supported:
+            return Domain.TRUE if operator in ("!=", "not in") else Domain.FALSE
+
+        now = fields.Datetime.now()
+        next_hour = now + timedelta(hours=1)
+        domains = {
+            "overdue": Domain.AND(
+                [Domain("state", "=", "scheduled"), Domain("scheduled_at", "<", now)]
+            ),
+            "upcoming": Domain.AND(
+                [
+                    Domain("state", "=", "scheduled"),
+                    Domain("scheduled_at", ">=", now),
+                    Domain("scheduled_at", "<=", next_hour),
+                ]
+            ),
+            "later": Domain.AND(
+                [
+                    Domain("state", "=", "scheduled"),
+                    Domain("scheduled_at", ">", next_hour),
+                ]
+            ),
+            "closed": Domain("state", "!=", "scheduled"),
+        }
+        domain = Domain.OR([domains[item] for item in values])
+        return domain if operator in ("=", "in") else ~domain
 
     @api.model_create_multi
     def create(self, vals_list):

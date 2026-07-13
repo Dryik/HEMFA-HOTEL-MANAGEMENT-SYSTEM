@@ -47,12 +47,7 @@ msgid "Daily Movement Report Renderer"
 msgstr "عارض تقرير الحركة اليومية"
 
 #. module: hotel_reports
-#: model:ir.actions.act_window,name:hotel_reports.hotel_report_wizard_action
-msgid "Daily Reports"
-msgstr "التقارير اليومية"
-
-#. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_hotel_document
 msgid "Date / التاريخ:"
 msgstr "التاريخ:"
 
@@ -77,14 +72,54 @@ msgid "Export XLSX"
 msgstr "تصدير XLSX"
 
 #. module: hotel_reports
+#: model:report.paperformat,name:hotel_reports.paperformat_hotel_landscape_detail
+msgid "Hotel Detail — A4 Landscape"
+msgstr "تفاصيل الفندق — A4 أفقي"
+
+#. module: hotel_reports
+#: model:ir.actions.report,name:hotel_reports.action_report_landscape_detail
+msgid "Hotel Detailed Report"
+msgstr "تقرير الفندق التفصيلي"
+
+#. module: hotel_reports
+#: model:ir.actions.report,name:hotel_reports.action_report_financial_summary
+msgid "Hotel Financial Summary"
+msgstr "الملخص المالي للفندق"
+
+#. module: hotel_reports
+#: model:ir.model,name:hotel_reports.model_report_hotel_reports_report_financial_summary
+msgid "Hotel Financial Summary Report Renderer"
+msgstr "عارض تقرير الملخص المالي للفندق"
+
+#. module: hotel_reports
+#: model:report.paperformat,name:hotel_reports.paperformat_hotel_financial_summary
+msgid "Hotel Financial Summary — A4 Portrait"
+msgstr "الملخص المالي للفندق — A4 عمودي"
+
+#. module: hotel_reports
+#: model:ir.model,name:hotel_reports.model_report_hotel_reports_report_landscape_detail
+msgid "Hotel Landscape Detail Report Renderer"
+msgstr "عارض تقرير تفاصيل الفندق الأفقي"
+
+#. module: hotel_reports
 #: model:ir.actions.report,name:hotel_reports.action_report_daily_movement
 msgid "Hotel Operational Report"
 msgstr "التقرير التشغيلي للفندق"
 
 #. module: hotel_reports
+#: model:report.paperformat,name:hotel_reports.paperformat_hotel_operations
+msgid "Hotel Operations — A4 Portrait"
+msgstr "عمليات الفندق — A4 عمودي"
+
+#. module: hotel_reports
 #: model:ir.model,name:hotel_reports.model_hotel_report_wizard
 msgid "Hotel Report Wizard"
 msgstr "معالج تقارير الفندق"
+
+#. module: hotel_reports
+#: model:ir.actions.act_window,name:hotel_reports.hotel_report_wizard_action
+msgid "Hotel Reports"
+msgstr "تقارير الفندق"
 
 #. module: hotel_reports
 #: model:ir.rule,name:hotel_reports.rule_hotel_report_wizard_assigned_property
@@ -107,6 +142,11 @@ msgid "Night Audit"
 msgstr "التدقيق الليلي"
 
 #. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_hotel_document
+msgid "No records / لا توجد سجلات"
+msgstr "No records / لا توجد سجلات"
+
+#. module: hotel_reports
 #: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__occupancy
 msgid "Occupancy"
 msgstr "الإشغال"
@@ -122,9 +162,14 @@ msgid "Print"
 msgstr "طباعة"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_hotel_document
 msgid "Property / الفندق:"
 msgstr "الفندق:"
+
+#. module: hotel_reports
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_hotel_document
+msgid "Records / السجلات:"
+msgstr "Records / السجلات:"
 
 #. module: hotel_reports
 #: model:ir.ui.menu,name:hotel_reports.menu_hotel_reports
@@ -146,11 +191,6 @@ msgstr "اختر فوليو لكشف الحساب الموحد."
 #: model:ir.rule,name:hotel_reports.rule_hotel_report_system_unrestricted
 msgid "System administrators: all hotel report wizards"
 msgstr "مديرو النظام: جميع معالجات تقارير الفندق"
-
-#. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Total / الإجمالي:"
-msgstr "الإجمالي:"
 
 #. module: hotel_reports
 #. odoo-python

@@ -19,12 +19,12 @@ msgstr ""
 #. module: hotel_rate
 #: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_rule_view_search
 msgid "Active"
-msgstr ""
+msgstr "نشط"
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_occupancy_band__adjustment_pct
 msgid "Adjustment %"
-msgstr ""
+msgstr "نسبة التعديل %"
 
 #. module: hotel_rate
 #: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_rule__guest_type__all
@@ -40,7 +40,7 @@ msgstr "يطبق هذا السعر حسب جنسية النزيل."
 #. odoo-python
 #: code:addons/hotel_rate/models/hotel_reservation.py:0
 msgid "Confirmed-rate locking is controlled by hotel workflows."
-msgstr ""
+msgstr "تتحكم سير عمل الفندق في قفل الأسعار المؤكدة."
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__currency_id
@@ -75,7 +75,7 @@ msgstr "نوع جنسية النزيل"
 #. module: hotel_rate
 #: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_rule_view_search
 msgid "Guest Type"
-msgstr ""
+msgstr "نوع النزيل"
 
 #. module: hotel_rate
 #: model:ir.model,name:hotel_rate.model_hotel_rate_occupancy_band
@@ -110,7 +110,7 @@ msgstr "الحد الأدنى للإشغال (%)"
 #. module: hotel_rate
 #: model:ir.model.fields,help:hotel_rate.field_hotel_rate_occupancy_band__multiplier
 msgid "Multiplication factor applied to the nightly rate (e.g. 1.20 = +20%, 0.90 = −10%)."
-msgstr ""
+msgstr "معامل الضرب المطبق على السعر الليلي (مثلاً 1.20 = +20%، 0.90 = −10%)."
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__rate_price
@@ -127,17 +127,17 @@ msgstr "شرائح الإشغال"
 #. module: hotel_rate
 #: model:ir.rule,name:hotel_rate.rule_hotel_rate_band_assigned_property
 msgid "Occupancy bands in assigned hotel properties"
-msgstr ""
+msgstr "نطاقات الإشغال في المنشآت الفندقية المخصصة"
 
 #. module: hotel_rate
 #: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_occupancy_band_action
 msgid "Occupancy bands let you adjust room prices dynamically based on the percentage of occupied rooms."
-msgstr ""
+msgstr "تتيح لك نطاقات الإشغال تعديل أسعار الغرف ديناميكياً بناءً على نسبة الغرف المشغولة."
 
 #. module: hotel_rate
 #: model:ir.model.fields,help:hotel_rate.field_hotel_rate_occupancy_band__adjustment_pct
 msgid "Percentage markup or discount implied by the rate factor."
-msgstr ""
+msgstr "نسبة الزيادة أو الخصم التي يحددها معامل السعر."
 
 #. module: hotel_rate
 #: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_rule_view_form
@@ -159,7 +159,7 @@ msgstr "الفندق / المنشأة"
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_occupancy_band__multiplier
 msgid "Rate Factor (1.0 = no change)"
-msgstr ""
+msgstr "معامل السعر (1.0 = بدون تغيير)"
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_reservation__rate_locked
@@ -176,7 +176,7 @@ msgstr "قواعد التسعير"
 #. module: hotel_rate
 #: model:ir.rule,name:hotel_rate.rule_hotel_rate_rule_assigned_property
 msgid "Rate rules in assigned hotel properties"
-msgstr ""
+msgstr "قواعد الأسعار في المنشآت الفندقية المخصصة"
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__room_type_id
@@ -192,7 +192,7 @@ msgstr "معلومات قاعدة التسعير"
 #. module: hotel_rate
 #: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_rule_action
 msgid "Seasonal rules let you override base prices for specific dates or guest nationalities."
-msgstr ""
+msgstr "تتيح لك القواعد الموسمية تجاوز الأسعار الأساسية لتواريخ أو جنسيات نزلاء محددة."
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__date_start
@@ -202,18 +202,18 @@ msgstr "تاريخ البدء"
 #. module: hotel_rate
 #: model:ir.rule,name:hotel_rate.rule_hotel_rate_band_system_unrestricted
 msgid "System administrators: all occupancy bands"
-msgstr ""
+msgstr "مديرو النظام: كل نطاقات الإشغال"
 
 #. module: hotel_rate
 #: model:ir.rule,name:hotel_rate.rule_hotel_rate_rule_system_unrestricted
 msgid "System administrators: all rate rules"
-msgstr ""
+msgstr "مديرو النظام: كل قواعد الأسعار"
 
 #. module: hotel_rate
 #. odoo-python
 #: code:addons/hotel_rate/models/hotel_rate.py:0
 msgid "The room type must be shared or belong to the rate rule property."
-msgstr ""
+msgstr "يجب أن يكون نوع الغرفة مشتركاً أو تابعاً لمنشأة قاعدة السعر."
 
 #. module: hotel_rate
 #. odoo-python

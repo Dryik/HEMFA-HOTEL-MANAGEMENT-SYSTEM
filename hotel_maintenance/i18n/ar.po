@@ -31,12 +31,12 @@ msgstr "لا يمكن إلغاء طلب معتمد."
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
 msgid "Are you sure you want to mark this maintenance request as done?"
-msgstr ""
+msgstr "هل أنت متأكد من تحديد طلب الصيانة هذا كمنجز؟"
 
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
 msgid "Are you sure you want to verify this maintenance request as complete?"
-msgstr ""
+msgstr "هل أنت متأكد من التحقق من اكتمال طلب الصيانة هذا؟"
 
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
@@ -153,19 +153,19 @@ msgstr "طلبات الصيانة"
 #. module: hotel_maintenance
 #: model:ir.rule,name:hotel_maintenance.rule_hotel_maintenance_assigned_property
 msgid "Maintenance requests in assigned hotel properties"
-msgstr ""
+msgstr "طلبات الصيانة في المنشآت الفندقية المخصصة"
 
 #. module: hotel_maintenance
 #. odoo-python
 #: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
 msgid "Maintenance requests must change status through their actions."
-msgstr ""
+msgstr "يجب تغيير حالة طلبات الصيانة من خلال إجراءاتها."
 
 #. module: hotel_maintenance
 #. odoo-python
 #: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
 msgid "Maintenance status can only be changed through its actions."
-msgstr ""
+msgstr "لا يمكن تغيير حالة الصيانة إلا من خلال إجراءاتها."
 
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
@@ -192,7 +192,7 @@ msgstr "عادي"
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_kanban
 msgid "OOO"
-msgstr ""
+msgstr "خارج الخدمة"
 
 #. module: hotel_maintenance
 #. odoo-python
@@ -247,6 +247,11 @@ msgid "Problem"
 msgstr "المشكلة"
 
 #. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
+msgid "Property"
+msgstr "الفندق / المنشأة"
+
+#. module: hotel_maintenance
 #: model_terms:ir.actions.act_window,help:hotel_maintenance.hotel_maintenance_request_action
 msgid "Report a maintenance problem"
 msgstr "الإبلاغ عن مشكلة صيانة"
@@ -269,7 +274,7 @@ msgstr "مرجع الطلب"
 #. module: hotel_maintenance
 #: model_terms:ir.actions.act_window,help:hotel_maintenance.hotel_maintenance_request_action
 msgid "Requests flow from reporting through confirmation, technician work and manager verification. A request that blocks the room removes it from sale until it is verified."
-msgstr ""
+msgstr "تنتقل الطلبات من الإبلاغ إلى التأكيد، ثم عمل الفني، ثم تحقق المدير. يزيل الطلب الحاجب للغرفة من البيع حتى يتم التحقق منه."
 
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
@@ -305,7 +310,7 @@ msgstr "الحالة"
 #. module: hotel_maintenance
 #: model:ir.rule,name:hotel_maintenance.rule_hotel_maintenance_system_unrestricted
 msgid "System administrators: all maintenance requests"
-msgstr ""
+msgstr "مديرو النظام: كل طلبات الصيانة"
 
 #. module: hotel_maintenance
 #: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__technician_id
@@ -338,7 +343,7 @@ msgstr "تاريخ الاعتماد"
 #. odoo-python
 #: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
 msgid "Verified maintenance requests are immutable. Create a new request for additional work."
-msgstr ""
+msgstr "طلبات الصيانة المتحقق منها غير قابلة للتغيير. أنشئ طلباً جديداً للعمل الإضافي."
 
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form

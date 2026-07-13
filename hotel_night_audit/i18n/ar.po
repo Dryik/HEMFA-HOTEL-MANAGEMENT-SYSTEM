@@ -20,13 +20,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "A completed audit and a reversal reason are required."
-msgstr ""
+msgstr "يلزم تدقيق مكتمل وسبب للعكس."
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "A night audit must use the active property business date."
-msgstr ""
+msgstr "يجب أن يستخدم التدقيق الليلي تاريخ العمل النشط للمنشأة."
 
 #. module: hotel_night_audit
 #: model:ir.model.fields.selection,name:hotel_night_audit.selection__hotel_night_audit_line__status__skipped
@@ -68,7 +68,7 @@ msgstr "مرجع التدقيق"
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Audit date %(audit_date)s does not match the property's current business date %(property_date)s."
-msgstr ""
+msgstr "لا يطابق تاريخ التدقيق %(audit_date)s تاريخ عمل المنشأة الحالي %(property_date)s."
 
 #. module: hotel_night_audit
 #: model_terms:ir.ui.view,arch_db:hotel_night_audit.hotel_night_audit_reversal_wizard_view_form
@@ -84,25 +84,25 @@ msgstr "مكتملة"
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Completed night audits are immutable."
-msgstr ""
+msgstr "عمليات التدقيق الليلي المكتملة غير قابلة للتغيير."
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Completed night-audit details are immutable."
-msgstr ""
+msgstr "تفاصيل التدقيق الليلي المكتمل غير قابلة للتغيير."
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Completed night-audit details cannot be deleted."
-msgstr ""
+msgstr "لا يمكن حذف تفاصيل التدقيق الليلي المكتمل."
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Completed or reversed night audits cannot be deleted."
-msgstr ""
+msgstr "لا يمكن حذف عمليات التدقيق الليلي المكتملة أو المعكوسة."
 
 #. module: hotel_night_audit
 #: model:ir.model.fields,field_description:hotel_night_audit.field_hotel_night_audit__currency_id
@@ -161,7 +161,7 @@ msgstr "التدقيق الليلي"
 #. module: hotel_night_audit
 #: model:ir.model,name:hotel_night_audit.model_hotel_night_audit_reversal_wizard
 msgid "Night Audit Reversal Reason"
-msgstr ""
+msgstr "سبب عكس التدقيق الليلي"
 
 #. module: hotel_night_audit
 #: model_terms:ir.ui.view,arch_db:hotel_night_audit.hotel_night_audit_view_list
@@ -172,36 +172,36 @@ msgstr "التدقيق الليلي"
 #. module: hotel_night_audit
 #: model:ir.rule,name:hotel_night_audit.rule_hotel_night_audit_line_assigned_property
 msgid "Night audit lines in assigned hotel properties"
-msgstr ""
+msgstr "سطور التدقيق الليلي في المنشآت الفندقية المخصصة"
 
 #. module: hotel_night_audit
 #: model:ir.rule,name:hotel_night_audit.rule_hotel_night_audit_assigned_property
 msgid "Night audits in assigned hotel properties"
-msgstr ""
+msgstr "عمليات التدقيق الليلي في المنشآت الفندقية المخصصة"
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Night-audit details can only be created by the audit run."
-msgstr ""
+msgstr "لا يمكن إنشاء تفاصيل التدقيق الليلي إلا عند تشغيل التدقيق."
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Night-audit details require a draft audit."
-msgstr ""
+msgstr "تتطلب تفاصيل التدقيق الليلي تدقيقاً مسودة."
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Night-audit results can only be created by the run action."
-msgstr ""
+msgstr "لا يمكن إنشاء نتائج التدقيق الليلي إلا من خلال إجراء التشغيل."
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Night-audit state and snapshots can only be changed through the run or manager reversal actions."
-msgstr ""
+msgstr "لا يمكن تغيير حالة التدقيق الليلي ولقطاته إلا من خلال إجراءي التشغيل أو عكس المدير."
 
 #. module: hotel_night_audit
 #: model:ir.model.fields.selection,name:hotel_night_audit.selection__hotel_night_audit_line__occupancy_status__no_show
@@ -227,25 +227,25 @@ msgstr "مشغولة"
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Only a Front Office Supervisor or Hotel Manager can run the night audit."
-msgstr ""
+msgstr "يمكن لمشرف المكتب الأمامي أو مدير الفندق فقط تشغيل التدقيق الليلي."
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Only a Hotel Manager can reverse a night audit."
-msgstr ""
+msgstr "يمكن لمدير الفندق فقط عكس التدقيق الليلي."
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Only a completed audit can be reversed."
-msgstr ""
+msgstr "لا يمكن عكس سوى تدقيق مكتمل."
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Only one active audit is allowed per property and date."
-msgstr ""
+msgstr "يسمح بتدقيق نشط واحد فقط لكل منشأة وتاريخ."
 
 #. module: hotel_night_audit
 #: model:ir.model.fields,help:hotel_night_audit.field_hotel_night_audit__date
@@ -276,12 +276,12 @@ msgstr "الإيرادات المسجلة والملغاة"
 #. module: hotel_night_audit
 #: model_terms:ir.ui.view,arch_db:hotel_night_audit.hotel_night_audit_view_form
 msgid "Reversal"
-msgstr ""
+msgstr "عكس"
 
 #. module: hotel_night_audit
 #: model_terms:ir.ui.view,arch_db:hotel_night_audit.hotel_night_audit_reversal_wizard_view_form
 msgid "Reverse"
-msgstr ""
+msgstr "عكس"
 
 #. module: hotel_night_audit
 #: model_terms:ir.ui.view,arch_db:hotel_night_audit.hotel_night_audit_view_form
@@ -299,7 +299,7 @@ msgstr "عكس التدقيق الليلي"
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "Reverse later completed audits first."
-msgstr ""
+msgstr "اعكس أولاً عمليات التدقيق اللاحقة المكتملة."
 
 #. module: hotel_night_audit
 #: model:ir.model.fields.selection,name:hotel_night_audit.selection__hotel_night_audit__state__reversed
@@ -335,7 +335,7 @@ msgstr "بدء التدقيق الليلي"
 #. module: hotel_night_audit
 #: model_terms:ir.actions.act_window,help:hotel_night_audit.hotel_night_audit_action
 msgid "Running the night audit closes the operational day, posts room night charges, and updates no-shows."
-msgstr ""
+msgstr "يغلق تشغيل التدقيق الليلي يوم التشغيل، ويرحّل رسوم ليالي الغرف، ويحدث حالات عدم الحضور."
 
 #. module: hotel_night_audit
 #: model_terms:ir.actions.act_window,help:hotel_night_audit.hotel_night_audit_action
@@ -345,21 +345,21 @@ msgstr "ابدأ أول تدقيق ليلي"
 #. module: hotel_night_audit
 #: model:ir.rule,name:hotel_night_audit.rule_hotel_audit_system_unrestricted
 msgid "System administrators: all night audits"
-msgstr ""
+msgstr "مديرو النظام: كل عمليات التدقيق الليلي"
 
 #. module: hotel_night_audit
 #: model:ir.rule,name:hotel_night_audit.rule_hotel_audit_line_system_unrestricted
 msgid "System administrators: all night-audit details"
-msgstr ""
+msgstr "مديرو النظام: كل تفاصيل التدقيق الليلي"
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "This night audit is not in draft."
-msgstr ""
+msgstr "هذا التدقيق الليلي ليس في حالة مسودة."
 
 #. module: hotel_night_audit
 #. odoo-python
 #: code:addons/hotel_night_audit/models/hotel_night_audit.py:0
 msgid "This property and business date are already audited."
-msgstr ""
+msgstr "سبق تدقيق هذه المنشأة وتاريخ العمل هذا."

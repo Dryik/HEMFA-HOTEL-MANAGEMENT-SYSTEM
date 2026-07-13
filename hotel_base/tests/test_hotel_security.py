@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 
+from odoo import fields
 from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
@@ -117,6 +118,23 @@ class TestHotelPropertySecurity(TransactionCase):
             self.frontdesk
         )._get_default_property()
         self.assertEqual(default, self.property_a)
+
+    def test_user_context_seeds_default_frontdesk_workspace(self):
+        context = self.env["res.users"].with_user(self.frontdesk).context_get()
+        self.assertEqual(context["hotel_property_id"], self.property_a.id)
+        self.assertEqual(
+            context["hotel_business_date"],
+            fields.Date.to_string(
+                self.property_a.current_business_date
+                or self.property_a.get_business_date()
+            ),
+        )
+        public_context = (
+            self.env["res.users"]
+            .with_user(self.env.ref("base.public_user"))
+            .context_get()
+        )
+        self.assertNotIn("hotel_property_id", public_context)
 
     def test_system_administrator_is_unrestricted_without_assignment(self):
         self.assertTrue(
