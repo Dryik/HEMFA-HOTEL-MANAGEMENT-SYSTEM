@@ -11,9 +11,7 @@ class TestHotelGuestServices(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.property = cls.env["hotel.property"].create(
-            {"name": "Guest Services Hotel", "code": "GSH"}
-        )
+        cls.property = cls.env["hotel.property"]._get_default_property()
         cls.floor = cls.env["hotel.floor"].create(
             {"name": "Guest Services Floor", "property_id": cls.property.id}
         )

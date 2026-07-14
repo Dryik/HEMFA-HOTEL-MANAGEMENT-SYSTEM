@@ -9,9 +9,7 @@ class TestHotelHousekeeping(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.property = cls.env["hotel.property"].create({
-            "name": "Housekeeping Test Hotel",
-        })
+        cls.property = cls.env["hotel.property"]._get_default_property()
         cls.floor = cls.env["hotel.floor"].create({
             "name": "Floor 1",
             "property_id": cls.property.id,
@@ -157,18 +155,27 @@ class TestHotelHousekeeping(TransactionCase):
                 {"state": "cleaned"}
             )
 
-    def test_tasks_are_property_scoped(self):
-        other_property = self.env["hotel.property"].create(
-            {"name": "Other Housekeeping Hotel", "code": "OHH"}
+    def test_tasks_are_company_scoped(self):
+        other_company = self.env["res.company"].create(
+            {"name": "Other Housekeeping Company"}
         )
+        other_property = self.env["hotel.property"].with_company(
+            other_company
+        )._get_default_property()
         other_floor = self.env["hotel.floor"].create(
             {"name": "Other Floor", "property_id": other_property.id}
+        )
+        other_room_type = self.env["hotel.room.type"].create(
+            {
+                "name": "Other Housekeeping Room",
+                "property_id": other_property.id,
+            }
         )
         other_room = self.env["hotel.room"].create(
             {
                 "name": "OH101",
                 "floor_id": other_floor.id,
-                "room_type_id": self.room_type.id,
+                "room_type_id": other_room_type.id,
             }
         )
         hidden_task = self.env["hotel.housekeeping.task"].create(

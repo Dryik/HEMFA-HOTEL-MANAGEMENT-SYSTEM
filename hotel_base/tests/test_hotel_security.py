@@ -81,7 +81,10 @@ class TestHotelCompanySecurity(TransactionCase):
                 "name": "Hotel Technical Administrator",
                 "login": "hotel_technical_admin_test",
                 "group_ids": [(4, cls.env.ref("base.group_system").id)],
-                "company_ids": [(4, cls.company_b.id)],
+                "company_id": cls.env.company.id,
+                "company_ids": [
+                    (6, 0, [cls.env.company.id, cls.company_b.id])
+                ],
             }
         )
         cls.guest = cls.env["res.partner"].create(

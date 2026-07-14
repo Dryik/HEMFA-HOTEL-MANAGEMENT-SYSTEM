@@ -13,13 +13,9 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.business_date = fields.Date.today()
-        cls.property = cls.env["hotel.property"].create(
-            {
-                "name": "Workspace Hotel",
-                "code": "WSH",
-                "day_start_hour": 12.0,
-                "timezone": "Africa/Tripoli",
-            }
+        cls.property = cls.env["hotel.property"]._get_default_property()
+        cls.property.write(
+            {"day_start_hour": 12.0, "timezone": "Africa/Tripoli"}
         )
         cls.floor = cls.env["hotel.floor"].create(
             {
