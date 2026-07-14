@@ -28,7 +28,7 @@
             justify-content: space-between;
             gap: 1rem;
             cursor: pointer;
-            padding: 0.75rem 1rem;
+            padding: 0.65rem 0.75rem;
 
             > span:first-child {
                 display: inline-flex;
@@ -38,8 +38,8 @@
             }
 
             &:focus-visible {
-                outline: 3px solid rgba(11, 99, 206, 0.45);
-                outline-offset: 2px;
+                outline: 2px solid var(--hotel-focus);
+                outline-offset: 1px;
             }
         }
 
@@ -53,7 +53,7 @@
         grid-template-columns: repeat(5, minmax(9.5rem, 1fr));
         align-items: end;
         gap: 0.7rem;
-        padding: 0.85rem 1rem 1rem;
+        padding: 0.75rem;
     }
 
     .o_hotel_filter_field {
@@ -115,8 +115,8 @@
         scrollbar-gutter: stable;
 
         &:focus-visible {
-            outline: 3px solid rgba(11, 99, 206, 0.45);
-            outline-offset: 2px;
+            outline: 2px solid var(--hotel-focus);
+            outline-offset: 1px;
         }
     }
 
@@ -132,7 +132,7 @@
         position: sticky;
         inset-block-start: 0;
         z-index: 20;
-        background: #eef2f6;
+        background: var(--hotel-border);
         border-block-end: 1px solid var(--hotel-border-strong);
     }
 
@@ -143,7 +143,7 @@
         min-height: 5.35rem;
         display: flex;
         align-items: center;
-        background: #e4e9ef;
+        background: var(--hotel-border);
         border-inline-end: 1px solid var(--hotel-border-strong);
         color: var(--hotel-text);
         font-weight: 700;
@@ -184,11 +184,11 @@
         }
 
         &.o_is_today {
-            box-shadow: inset 0 -0.2rem 0 var(--hotel-focus);
+            box-shadow: inset 0 -0.2rem 0 var(--hotel-brand);
         }
 
         &.o_is_business_date {
-            background: #fff4dd;
+            background: #f3ead7;
         }
     }
 
@@ -216,7 +216,7 @@
         text-align: center;
 
         &.o_today_marker {
-            color: #0756b0;
+            color: var(--hotel-brand);
         }
 
         &.o_business_marker {
@@ -234,7 +234,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
-        background: #dfe5eb;
+        background: var(--hotel-border-strong);
         border-block: 1px solid var(--hotel-border-strong);
         color: var(--hotel-text);
         padding: 0.45rem 0.8rem;
@@ -257,7 +257,7 @@
         border-block-end: 1px solid var(--hotel-border);
 
         &:nth-of-type(even) {
-            background: #fbfcfd;
+            background: #{mix($o-gray-100, $o-gray-200, 55%)};
         }
     }
 
@@ -279,7 +279,7 @@
         text-align: start;
 
         &:hover {
-            background: #eef3f8;
+            background: rgba($o-brand-primary, 0.08);
         }
     }
 
@@ -313,8 +313,8 @@
         gap: 0.2rem;
         max-width: 100%;
         border: 1px solid var(--hotel-border);
-        border-radius: 999px;
-        background: #f8fafc;
+        border-radius: var(--hotel-radius);
+        background: var(--hotel-bg);
         color: var(--hotel-text);
         font-size: 0.65rem;
         font-weight: 700;
@@ -348,8 +348,8 @@
             cursor: pointer;
 
             &:hover {
-                background: #e8f2ff;
-                color: var(--hotel-focus);
+                background: rgba($o-brand-primary, 0.1);
+                color: var(--hotel-brand-dark);
             }
         }
 
@@ -383,8 +383,8 @@
         }
 
         &.o_is_today {
-            box-shadow: inset 2px 0 0 rgba(11, 99, 206, 0.65),
-                inset -2px 0 0 rgba(11, 99, 206, 0.65);
+            box-shadow: inset 2px 0 0 rgba($o-brand-primary, 0.7),
+                inset -2px 0 0 rgba($o-brand-primary, 0.7);
         }
 
         &.o_is_business_date {
@@ -405,9 +405,9 @@
         gap: 0.5rem;
         background: var(--reservation-color);
         color: #fff;
-        border: 2px solid #fff;
-        border-radius: 0.45rem;
-        box-shadow: 0 1px 3px rgba(23, 33, 43, 0.3);
+        border: 1px solid rgba($o-gray-900, 0.35);
+        border-radius: var(--hotel-radius);
+        box-shadow: none;
         margin: 0.45rem 0.15rem;
         padding: 0.35rem 0.55rem;
         text-align: start;
@@ -415,8 +415,8 @@
         cursor: pointer;
 
         &:hover {
-            filter: brightness(0.92);
-            box-shadow: 0 3px 8px rgba(23, 33, 43, 0.35);
+            filter: brightness(0.94);
+            box-shadow: none;
         }
 
         &[data-span="1"] {
@@ -478,19 +478,19 @@
     }
 
     .o_reservation_draft { --reservation-color: #5c6670; }
-    .o_reservation_confirmed { --reservation-color: #0b5ed7; }
-    .o_reservation_checked_in { --reservation-color: #59359a; }
-    .o_reservation_checked_out { --reservation-color: #146c43; }
-    .o_reservation_no_show { --reservation-color: #8a5700; }
-    .o_reservation_cancelled { --reservation-color: #7b3b3b; }
+    .o_reservation_confirmed { --reservation-color: #714b67; }
+    .o_reservation_checked_in { --reservation-color: #3b6f78; }
+    .o_reservation_checked_out { --reservation-color: #3f7a5d; }
+    .o_reservation_no_show { --reservation-color: #8a641b; }
+    .o_reservation_cancelled { --reservation-color: #8b4f5a; }
 
     .o_hotel_planning_legend {
         .o_reservation_draft > i { background: #5c6670 !important; }
-        .o_reservation_confirmed > i { background: #0b5ed7 !important; }
-        .o_reservation_checked_in > i { background: #59359a !important; }
-        .o_reservation_checked_out > i { background: #146c43 !important; }
-        .o_reservation_no_show > i { background: #8a5700 !important; }
-        .o_reservation_cancelled > i { background: #7b3b3b !important; }
+        .o_reservation_confirmed > i { background: #714b67 !important; }
+        .o_reservation_checked_in > i { background: #3b6f78 !important; }
+        .o_reservation_checked_out > i { background: #3f7a5d !important; }
+        .o_reservation_no_show > i { background: #8a641b !important; }
+        .o_reservation_cancelled > i { background: #8b4f5a !important; }
         .o_primary_vacant > i { background: var(--hotel-vacant) !important; }
         .o_primary_reserved > i { background: var(--hotel-reserved) !important; }
         .o_primary_occupied > i { background: var(--hotel-occupied) !important; }
