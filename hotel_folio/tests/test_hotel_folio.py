@@ -18,7 +18,11 @@ class TestHotelFolio(TransactionCase):
             {"name": "Floor F1", "property_id": cls.property.id}
         )
         cls.room_type = cls.env["hotel.room.type"].create(
-            {"name": "Folio Suite", "base_price": 400.0}
+            {
+                "name": "Folio Suite",
+                "base_price": 400.0,
+                "property_id": cls.property.id,
+            }
         )
         cls.room_type.product_id.taxes_id = [(5, 0, 0)]
         cls.room = cls.env["hotel.room"].create(

@@ -15,7 +15,11 @@ class TestHotelBase(TransactionCase):
             {"name": "Floor 1", "property_id": cls.property.id}
         )
         cls.room_type = cls.env["hotel.room.type"].create(
-            {"name": "Test Double", "base_price": 100.0}
+            {
+                "name": "Test Double",
+                "base_price": 100.0,
+                "property_id": cls.property.id,
+            }
         )
 
     def test_room_type_creates_service_product(self):
