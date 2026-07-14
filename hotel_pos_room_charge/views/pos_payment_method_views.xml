@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <field name="journal_id" position="after">
                 <field name="is_room_charge"/>
-                <field name="hotel_property_id" invisible="not is_room_charge" required="is_room_charge"/>
+                <field name="hotel_property_id" invisible="1"/>
             </field>
         </field>
     </record>
@@ -17,11 +17,9 @@
         <field name="model">pos.config</field>
         <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[@id='title']" position="after">
-                <group>
-                    <field name="hotel_property_id"/>
-                </group>
-            </xpath>
+            <field name="company_id" position="after">
+                <field name="hotel_property_id" invisible="1"/>
+            </field>
         </field>
     </record>
 </odoo>

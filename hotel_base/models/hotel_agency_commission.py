@@ -3,7 +3,7 @@ from odoo.exceptions import ValidationError
 
 
 class HotelAgencyCommission(models.Model):
-    """Property-level commission configuration placeholder.
+    """Company-level commission configuration placeholder.
 
     This deliberately stores only the agreed commercial terms. It does not
     accrue, settle, or post commission accounting entries.

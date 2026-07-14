@@ -40,16 +40,16 @@ test("operational values always use Western digits", () => {
     expect(addIsoDays("2026-07-31", 1)).toBe("2026-08-01");
 });
 
-test("Front Desk context is persisted and invalid storage is ignored", () => {
+test("Front Desk date is persisted and invalid storage is ignored", () => {
     const storage = makeStorage("not-json");
     const store = createFrontdeskStateStore(storage);
-    expect(store.get()).toEqual({ propertyId: null, businessDate: null });
+    expect(store.get()).toEqual({ businessDate: null });
 
-    store.update({ propertyId: "9", businessDate: "2026-07-13" });
-    expect(store.get()).toEqual({ propertyId: 9, businessDate: "2026-07-13" });
+    store.update({ businessDate: "2026-07-13" });
+    expect(store.get()).toEqual({ businessDate: "2026-07-13" });
 
     const restored = createFrontdeskStateStore(storage);
-    expect(restored.get()).toEqual({ propertyId: 9, businessDate: "2026-07-13" });
+    expect(restored.get()).toEqual({ businessDate: "2026-07-13" });
 });
 
 test("Front Desk context is isolated by database, user, and company scope", () => {
@@ -57,13 +57,13 @@ test("Front Desk context is isolated by database, user, and company scope", () =
     let scope = "hotel.7.3";
     const store = createFrontdeskStateStore(storage, () => scope);
 
-    store.update({ propertyId: 4, businessDate: "2026-07-13" });
+    store.update({ businessDate: "2026-07-13" });
     scope = "hotel.8.3";
-    expect(store.get()).toEqual({ propertyId: null, businessDate: null });
+    expect(store.get()).toEqual({ businessDate: null });
 
-    store.update({ propertyId: 9, businessDate: "2026-07-14" });
+    store.update({ businessDate: "2026-07-14" });
     scope = "hotel.7.3";
-    expect(store.get()).toEqual({ propertyId: 4, businessDate: "2026-07-13" });
+    expect(store.get()).toEqual({ businessDate: "2026-07-13" });
 });
 
 test("an empty scoped store adopts server Front Desk defaults once", () => {
@@ -73,14 +73,14 @@ test("an empty scoped store adopts server Front Desk defaults once", () => {
             hotel_property_id: 4,
             hotel_business_date: "2026-07-13",
         })
-    ).toEqual({ propertyId: 4, businessDate: "2026-07-13" });
+    ).toEqual({ businessDate: "2026-07-13" });
 
     expect(
         seedFrontdeskState(store, {
             hotel_property_id: 9,
             hotel_business_date: "2026-08-01",
         })
-    ).toEqual({ propertyId: 4, businessDate: "2026-07-13" });
+    ).toEqual({ businessDate: "2026-07-13" });
 });
 
 test("actions receive the full selected Front Desk context without mutation", () => {

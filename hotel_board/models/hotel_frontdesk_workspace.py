@@ -44,7 +44,7 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
         """Return one coherent, security-filtered Front Desk snapshot.
 
         Counts and their drill-down domains are built from the same recordsets.
-        This prevents a selected property or business date from being lost when
+        This prevents the active hotel or business date from being lost when
         an operator opens a KPI.
         """
         prop = self._resolve_property(property_id)
@@ -289,7 +289,6 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
                 generated_at,
                 metric_data,
             ),
-            "properties": self._property_options(),
             "permissions": self._permissions(),
             "kpis": kpis,
             "attention": {
@@ -333,25 +332,15 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
         _unused, window_end = prop.get_business_day_bounds(end_date - timedelta(days=1))
         generated_at = fields.Datetime.now()
 
-        rooms = self.env["hotel.room"].search(
-            [("property_id", "=", prop.id), ("active", "=", True)],
-            order="floor_id, name, id",
-        )
+        room_domain = [("property_id", "=", prop.id), ("active", "=", True)]
         if filters["floor_ids"]:
-            rooms = rooms.filtered(
-                lambda room: room.floor_id.id in filters["floor_ids"]
-            )
+            room_domain.append(("floor_id", "in", filters["floor_ids"]))
         if filters["room_type_ids"]:
-            rooms = rooms.filtered(
-                lambda room: room.room_type_id.id in filters["room_type_ids"]
-            )
+            room_domain.append(("room_type_id", "in", filters["room_type_ids"]))
         if filters["hk_statuses"]:
-            rooms = rooms.filtered(
-                lambda room: room.hk_status in filters["hk_statuses"]
-            )
+            room_domain.append(("hk_status", "in", filters["hk_statuses"]))
         if filters["room_query"]:
-            query = filters["room_query"].casefold()
-            rooms = rooms.filtered(lambda room: query in (room.name or "").casefold())
+            room_domain.append(("name", "ilike", filters["room_query"]))
 
         reservation_domain = [
             ("property_id", "=", prop.id),
@@ -373,10 +362,22 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
         reservations = self.env["hotel.reservation"].search(
             reservation_domain, order="checkin_date, id"
         )
+        if any(
+            filters[key]
+            for key in ("agency_ids", "group_ids", "guest_query", "reference_query")
+        ):
+            room_domain.append(("id", "in", reservations.mapped("room_id").ids))
+        rooms = self.env["hotel.room"].search(
+            room_domain, order="floor_id, name, id"
+        )
+        room_ids = set(rooms.ids)
+        reservations = reservations.filtered(
+            lambda record: record.room_id.id in room_ids
+        )
         blocking_reservations = self.env["hotel.reservation"].search(
             [
                 ("property_id", "=", prop.id),
-                ("room_id", "!=", False),
+                ("room_id", "in", list(room_ids)),
                 ("state", "in", ("confirmed", "checked_in")),
                 ("checkin_date", "<", window_end),
                 ("checkout_date", ">", window_start),
@@ -384,20 +385,10 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
             order="state desc, checkin_date, id",
         )
 
-        if any(
-            filters[key]
-            for key in ("agency_ids", "group_ids", "guest_query", "reference_query")
-        ):
-            matching_room_ids = set(reservations.mapped("room_id").ids)
-            rooms = rooms.filtered(lambda room: room.id in matching_room_ids)
-        reservations = reservations.filtered(lambda record: record.room_id in rooms)
-        blocking_reservations = blocking_reservations.filtered(
-            lambda record: record.room_id in rooms
-        )
-
+        _first_day_start, first_day_end = prop.get_business_day_bounds(start_date)
         first_day_reservations = blocking_reservations.filtered(
             lambda reservation: (
-                reservation.checkin_date < prop.get_business_day_bounds(start_date)[1]
+                reservation.checkin_date < first_day_end
                 and reservation.checkout_date > window_start
             )
         )
@@ -414,9 +405,12 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
                     )
                 )
             )
-            reservations = reservations.filtered(lambda record: record.room_id in rooms)
+            room_ids = set(rooms.ids)
+            reservations = reservations.filtered(
+                lambda record: record.room_id.id in room_ids
+            )
             blocking_reservations = blocking_reservations.filtered(
-                lambda record: record.room_id in rooms
+                lambda record: record.room_id.id in room_ids
             )
 
         day_records = self._planning_days(prop, start_date, day_count)
@@ -427,9 +421,9 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
         reservations_by_room = defaultdict(lambda: self.env["hotel.reservation"])
         for reservation in reservations:
             reservations_by_room[reservation.room_id.id] |= reservation
-        blocking_by_room = defaultdict(lambda: self.env["hotel.reservation"])
-        for reservation in blocking_reservations:
-            blocking_by_room[reservation.room_id.id] |= reservation
+        blocking_by_room_and_day = self._planning_reservations_by_day(
+            blocking_reservations, day_records
+        )
 
         floor_rows = defaultdict(list)
         for room in rooms:
@@ -453,7 +447,7 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
                     "alerts": row_alerts,
                     "day_statuses": self._planning_day_statuses(
                         room,
-                        blocking_by_room[room.id],
+                        blocking_by_room_and_day.get(room.id, {}),
                         day_records,
                         planning_alerts,
                         prop,
@@ -495,11 +489,11 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
         options = self._planning_filter_options(prop, all_window_reservations, rooms)
         currency = self._currency_payload(prop.company_id.currency_id)
         return {
-            "version": 1,
+            "version": 2,
             "meta": {
                 "property_id": prop.id,
-                "property_name": prop.display_name,
-                "property_code": prop.code or "",
+                "property_name": prop.company_id.display_name,
+                "property_code": "",
                 "business_date": fields.Date.to_string(start_date),
                 "current_business_date": fields.Date.to_string(
                     self._current_business_date(prop)
@@ -512,7 +506,6 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
                 "generated_at": fields.Datetime.to_string(generated_at),
                 "currency": currency,
             },
-            "properties": self._property_options(),
             "permissions": self._permissions(),
             "days": day_records,
             "filters": {"applied": filters, "options": options},
@@ -527,8 +520,8 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
             },
             "actions": {
                 "new_reservation": self._new_reservation_action(prop, start_date),
-                "reservation_gantt": self._window_action(
-                    _("Reservation Gantt — Read-only"),
+                "reservation_planner": self._window_action(
+                    _("Reservation Planner"),
                     "hotel.reservation",
                     [
                         ("property_id", "=", prop.id),
@@ -571,7 +564,7 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
             "property_id": snapshot["meta"]["property_id"],
             "property_name": snapshot["meta"]["property_name"],
             "business_date": snapshot["meta"]["business_date"],
-            "properties": snapshot["properties"],
+            "properties": self._property_options(),
             "total_rooms": sum(
                 floor["counts"]["total"] for floor in snapshot["floors"]
             ),
@@ -594,30 +587,23 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
     # -- Resolution, formatting and actions -------------------------------
 
     def _resolve_property(self, property_id):
-        if property_id:
-            try:
-                property_id = int(property_id)
-            except (TypeError, ValueError) as error:
-                raise ValidationError(
-                    _("A valid hotel property is required.")
-                ) from error
-            prop = self.env["hotel.property"].browse(property_id).exists()
-        else:
-            prop = self.env["hotel.property"]._get_default_property()
+        # Odoo's active company is the authoritative hotel.  The legacy
+        # argument remains accepted so existing bookmarked actions still open.
+        prop = self.env["hotel.property"]._get_default_property()
         if not prop:
-            raise UserError(_("Assign a default hotel property to your user."))
+            raise UserError(_("Configure the active company before opening Hotel."))
         prop.ensure_one()
         prop.check_access("read")
-        if prop.company_id not in self.env.companies:
+        if prop.company_id != self.env.company:
             raise AccessError(
-                _("You cannot access this property in the active company.")
+                _("The hotel workspace follows the active Odoo company.")
             )
         return prop
 
     def _resolve_business_date(self, prop, value):
         try:
             result = fields.Date.to_date(
-                value or prop.current_business_date or prop.get_business_date()
+                value or prop.get_business_date()
             )
         except (TypeError, ValueError) as error:
             raise ValidationError(_("A valid business date is required.")) from error
@@ -626,16 +612,10 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
         return result
 
     def _current_business_date(self, prop):
-        return prop.current_business_date or prop.get_business_date()
+        return prop.get_business_date()
 
     def _property_options(self):
-        properties = self.env["hotel.property"].search(
-            [
-                ("active", "=", True),
-                ("company_id", "in", self.env.companies.ids),
-            ],
-            order="name, id",
-        )
+        properties = self.env["hotel.property"]._get_default_property()
         return [
             {
                 "id": prop.id,
@@ -657,11 +637,7 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
                 "hotel_base.group_hotel_manager",
             )
         )
-        return {
-            "can_view_finance": can_view_finance,
-            "can_view_cashier": self.env.su
-            or self.env.user.has_group("hotel_base.group_hotel_cashier"),
-        }
+        return {"can_view_finance": can_view_finance}
 
     def _currency_payload(self, currency):
         return {
@@ -805,7 +781,7 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
         return "vacant"
 
     def _reservation_primary_status(self, reservation, business_date, prop):
-        """Return the stay state on a selected property business day.
+        """Return the stay state on the active hotel business day.
 
         Reservation workflow state describes the record *now*. Historical
         snapshots instead use immutable actual check-in/out timestamps, while
@@ -981,54 +957,18 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
         return result
 
     def _metric_data(self, prop, business_date, rooms, reservations, context):
-        audit = self.env["hotel.night.audit"].search(
-            [
-                ("property_id", "=", prop.id),
-                ("date", "=", business_date),
-                ("state", "=", "done"),
-            ],
-            order="id desc",
-            limit=1,
-        )
-        if audit:
-            action = self._window_action(
-                _("Night Audit"),
-                "hotel.night.audit",
-                [("id", "=", audit.id)],
-                context=context,
-            )
-            return {
-                "mode": "actual",
-                "label": _("Actual"),
-                "available": True,
-                "occupancy": round(audit.occupancy_pct, 1),
-                "adr": audit.adr,
-                "revpar": audit.revpar,
-                "action": action,
-            }
-        if business_date < self._current_business_date(prop):
-            return {
-                "mode": "unavailable",
-                "label": _("Unaudited"),
-                "available": False,
-                "occupancy": False,
-                "adr": False,
-                "revpar": False,
-                "action": False,
-            }
-
         sellable = rooms.filtered("is_sellable")
-        forecast_reservations = reservations.filtered(
+        live_reservations = reservations.filtered(
             lambda reservation: (
                 reservation.room_id in sellable
                 and self._reservation_primary_status(reservation, business_date, prop)
                 in ("reserved", "occupied")
             )
         )
-        occupied_room_ids = set(forecast_reservations.mapped("room_id").ids)
+        occupied_room_ids = set(live_reservations.mapped("room_id").ids)
         company_currency = prop.company_id.currency_id
         revenue = 0.0
-        for reservation in forecast_reservations:
+        for reservation in live_reservations:
             revenue += reservation.currency_id._convert(
                 reservation.rate_night,
                 company_currency,
@@ -1037,14 +977,14 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
             )
         occupied_count = len(occupied_room_ids)
         action = self._window_action(
-            _("Forecast Stays"),
+            _("Hotel Stays"),
             "hotel.reservation",
-            [("id", "in", forecast_reservations.ids)],
+            [("id", "in", live_reservations.ids)],
             context=context,
         )
         return {
-            "mode": "forecast",
-            "label": _("Forecast"),
+            "mode": "live",
+            "label": _("Live"),
             "available": True,
             "occupancy": round(100.0 * occupied_count / len(sellable), 1)
             if sellable
@@ -1065,8 +1005,8 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
     ):
         return {
             "property_id": prop.id,
-            "property_name": prop.display_name,
-            "property_code": prop.code or "",
+            "property_name": prop.company_id.display_name,
+            "property_code": "",
             "business_date": fields.Date.to_string(business_date),
             "current_business_date": fields.Date.to_string(
                 self._current_business_date(prop)
@@ -1414,92 +1354,7 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
             "hotel.room",
         )
 
-        audit = self.env["hotel.night.audit"].search(
-            [
-                ("property_id", "=", prop.id),
-                ("date", "=", business_date),
-                ("state", "=", "done"),
-            ],
-            limit=1,
-        )
-        if business_date <= self._current_business_date(prop) and not audit:
-            items.append(
-                {
-                    "key": "pending_night_audit",
-                    "label": _("Pending Night Audit"),
-                    "count": 1,
-                    "severity": "warning",
-                    "action": self._window_action(
-                        _("Night Audit"),
-                        "hotel.night.audit",
-                        [
-                            ("property_id", "=", prop.id),
-                            ("date", "=", business_date),
-                        ],
-                        context=context,
-                    ),
-                }
-            )
-
         permissions = self._permissions()
-        if permissions["can_view_cashier"]:
-            open_session = self.env["hotel.frontdesk.session"].search(
-                [
-                    ("property_id", "=", prop.id),
-                    ("user_id", "=", self.env.uid),
-                    ("state", "=", "opened"),
-                ]
-            )
-            if not open_session:
-                items.append(
-                    {
-                        "key": "cashier_session_missing",
-                        "label": _("Open a Cashier Session"),
-                        "count": 1,
-                        "severity": "warning",
-                        "action": self._window_action(
-                            _("Cashier Sessions"),
-                            "hotel.frontdesk.session",
-                            [
-                                ("property_id", "=", prop.id),
-                                ("user_id", "=", self.env.uid),
-                            ],
-                            context=context,
-                        ),
-                    }
-                )
-            else:
-                items.append(
-                    {
-                        "key": "cashier_session_open",
-                        "label": _("Cashier Session Open"),
-                        "count": len(open_session),
-                        "severity": "success",
-                        "action": self._window_action(
-                            _("Cashier Sessions"),
-                            "hotel.frontdesk.session",
-                            [("id", "in", open_session.ids)],
-                            context=context,
-                        ),
-                    }
-                )
-            variance_sessions = self.env["hotel.frontdesk.session"].search(
-                [
-                    ("property_id", "=", prop.id),
-                    ("state", "=", "closed"),
-                    ("date_closed", ">=", business_start),
-                    ("date_closed", "<", business_end),
-                    ("difference", "!=", 0.0),
-                ]
-            )
-            add(
-                "cashier_variance",
-                _("Cashier Variances"),
-                variance_sessions,
-                "danger",
-                "hotel.frontdesk.session",
-            )
-
         if permissions["can_view_finance"]:
             due_reservations = self.env["hotel.reservation"].search(
                 [
@@ -1607,59 +1462,73 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
             )
         return result
 
-    def _planning_day_statuses(self, room, reservations, days, alert_data, prop):
+    def _planning_reservations_by_day(self, reservations, days):
+        """Index the preferred blocking stay once for each room/day cell."""
+        result = defaultdict(dict)
+        state_priority = {"confirmed": 2, "checked_in": 3}
+        day_windows = [
+            (
+                day["index"],
+                fields.Datetime.to_datetime(day["start"]),
+                fields.Datetime.to_datetime(day["end"]),
+            )
+            for day in days
+        ]
+        for reservation in reservations:
+            for day_index, day_start, day_end in day_windows:
+                if not (
+                    reservation.checkin_date < day_end
+                    and reservation.checkout_date > day_start
+                ):
+                    continue
+                current = result[reservation.room_id.id].get(day_index)
+                if not current or state_priority.get(
+                    reservation.state, 0
+                ) > state_priority.get(current.state, 0):
+                    result[reservation.room_id.id][day_index] = reservation
+        return result
+
+    def _planning_day_statuses(self, room, reservations_by_day, days, alert_data, prop):
+        current_business_date = self._current_business_date(prop)
+        has_dnd = bool(alert_data["dnd_by_room"][room.id])
+        has_maintenance = bool(alert_data["maintenance_by_room"][room.id])
+        wakeup_dates = {
+            prop.get_business_date(call.scheduled_at)
+            for call in alert_data["wakeups_by_room"][room.id]
+        }
+        blocker = self._capacity_blocker(room)
         result = []
         for day in days:
             business_date = fields.Date.to_date(day["date"])
-            day_start = fields.Datetime.to_datetime(day["start"])
-            day_end = fields.Datetime.to_datetime(day["end"])
-            active = reservations.filtered(
-                lambda reservation: (
-                    reservation.state in ("confirmed", "checked_in")
-                    and reservation.checkin_date < day_end
-                    and reservation.checkout_date > day_start
+            reservation = reservations_by_day.get(day["index"])
+            if reservation:
+                primary_status = (
+                    "occupied" if reservation.state == "checked_in" else "reserved"
                 )
-            )
-            reservation = self._preferred_reservations_by_room(active).get(room.id)
-            alert_types = []
-            if alert_data["dnd_by_room"][
-                room.id
-            ] and business_date == self._current_business_date(prop):
-                alert_types.append("dnd")
-            if alert_data["maintenance_by_room"][room.id]:
-                alert_types.append("maintenance")
-            if any(
-                prop.get_business_date(call.scheduled_at) == business_date
-                for call in alert_data["wakeups_by_room"][room.id]
+            elif (
+                room.occupancy_state == "checkout"
+                and business_date == current_business_date
             ):
+                primary_status = "checkout"
+            else:
+                primary_status = "vacant"
+            alert_types = []
+            if has_dnd and business_date == current_business_date:
+                alert_types.append("dnd")
+            if has_maintenance:
+                alert_types.append("maintenance")
+            if business_date in wakeup_dates:
                 alert_types.append("wakeup")
             result.append(
                 {
                     "date": day["date"],
                     "index": day["index"],
-                    "primary_status": self._primary_status(
-                        room, reservation, business_date, prop
-                    ),
+                    "primary_status": primary_status,
                     "hk_status": room.hk_status,
-                    "capacity_blocker": self._capacity_blocker(room),
+                    "capacity_blocker": blocker,
                     "alert_types": alert_types,
                     "reservation_id": reservation.id if reservation else False,
-                    "reservation_action": self._record_action(
-                        reservation,
-                        _("Reservation"),
-                        context=self._action_context(prop, business_date),
-                    )
-                    if reservation
-                    else False,
-                    "action": False
-                    if reservation or not room.is_sellable
-                    else self._new_reservation_action(
-                        prop,
-                        business_date,
-                        room,
-                        checkin=day_start,
-                        checkout=day_end,
-                    ),
+                    "can_create": bool(not reservation and room.is_sellable),
                 }
             )
         return result

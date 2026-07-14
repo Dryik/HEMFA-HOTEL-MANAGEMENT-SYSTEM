@@ -7,8 +7,8 @@ release.
 
 ## Shared context and states
 
-- Property and hotel business date are shared between Dashboard and Planning.
-- A business-day cell represents the property's configured noon-to-noon window.
+- The active Odoo company is the hotel and is shared between Dashboard and Planning.
+- A business-day cell represents the active hotel's configured noon-to-noon window.
 - The last successful payload remains visible while a background refresh runs or
   fails.  Loading, empty, stale, error, selected, and refreshing states must not
   change the user's filters or scroll position.
@@ -19,7 +19,7 @@ release.
 
 | Variant | Direction | Header and controls | Operational body |
 |---|---|---|---|
-| Arabic desktop | RTL, Arabic labels | Title begins at the logical start; property/date and actions wrap from the logical end | Six KPI columns where space permits; floor labels and room column freeze at the logical start |
+| Arabic desktop | RTL, Arabic labels | Title begins at the logical start; date and actions wrap from the logical end | Six KPI columns where space permits; floor labels and room column freeze at the logical start |
 | Arabic tablet | RTL, Arabic labels | Controls wrap into labelled rows with no truncated action text | KPI grid reduces to two columns; the 224 px room column remains frozen and the date tape scrolls |
 | English desktop | LTR, English labels | Same information order, mirrored through logical properties | Six KPI columns where space permits; room and floor column freezes at the left |
 | English tablet | LTR, English labels | Controls wrap without changing tab order | Two-column KPIs and a horizontally scrollable date tape |
@@ -32,10 +32,10 @@ allowed for Arabic, English, desktop, or tablet.
 | State | Existing snapshot | Required presentation | Interaction |
 |---|---|---|---|
 | Initial loading | None | Centred progress indicator and polite status text | Controls remain labelled; no false zero values |
-| Empty | Successful, no rooms/results | Purpose-specific empty message | Keep property/date and filter controls available |
+| Empty | Successful, no rooms/results | Purpose-specific empty message | Keep date and filter controls available |
 | Refreshing | Last successful snapshot | Non-blocking progress text and unchanged content | Preserve focus, filters, selection, collapse state and scroll |
-| Stale | Last successful snapshot after failure | Warning banner, last-updated time and Retry | All actions retain the displayed snapshot's property/date context |
-| Error | No successful snapshot | Error message and Retry | Property/date can be corrected without a reload |
+| Stale | Last successful snapshot after failure | Warning banner, last-updated time and Retry | All actions retain the displayed company/date context |
+| Error | No successful snapshot | Error message and Retry | The date can be corrected without a reload |
 | Selected | Valid room/date or reservation | Visible focus/selection outline in addition to state color | Enter/Space performs the same action as pointer/touch |
 | Attention | Warning or danger queue entry | Icon, text, count and severity border | Opens the exact record set used for the count |
 
@@ -53,20 +53,20 @@ states.  Combined states such as occupied + dirty + DND remain visible.
 
 ## Dashboard layout
 
-1. A wrapping header contains title, labelled property and business-date inputs,
+1. A wrapping header contains title, labelled business-date input,
    Planning, New Reservation, manual refresh, and the last-updated timestamp.
 2. Primary KPIs show arrivals, departures, in-house rooms, occupancy, ADR, and
    RevPAR. Secondary KPIs show inventory and housekeeping counts.
 3. The attention queue is ordered by severity and time. Every item opens a list
-   filtered to the same property and business date.
+   filtered to the same company and business date.
 4. The room board uses collapsible floor sections. Room buttons show room/type,
    guest or reservation reference when permitted, arrival/departure, and every
    applicable status layer.
 
 ## Planning layout
 
-1. A wrapping toolbar contains property, start date, 7/14/30-day range, filters,
-   legend, refresh, and the read-only native Gantt fallback.
+1. A wrapping toolbar contains start date, 7/14/30-day range, filters,
+   legend, refresh, and the native Reservation Planner fallback.
 2. The room/floor column is frozen while dates scroll horizontally. Floors are
    explicit groups and every active room is shown, including empty rooms.
 3. Selecting an empty room/date opens a one-night draft reservation prefilled at

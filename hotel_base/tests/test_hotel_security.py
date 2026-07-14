@@ -7,7 +7,7 @@ from odoo.tests.common import TransactionCase
 
 
 @tagged("post_install", "-at_install")
-class TestHotelPropertySecurity(TransactionCase):
+class TestHotelCompanySecurity(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -18,8 +18,13 @@ class TestHotelPropertySecurity(TransactionCase):
                 "timezone": "Africa/Tripoli",
             }
         )
+        cls.company_b = cls.env["res.company"].create({"name": "Other Hotel Company"})
         cls.property_b = cls.env["hotel.property"].create(
-            {"name": "Other Hotel", "code": "OTH"}
+            {
+                "name": "Other Hotel",
+                "code": "OTH",
+                "company_id": cls.company_b.id,
+            }
         )
         cls.floor_a = cls.env["hotel.floor"].create(
             {"name": "A", "property_id": cls.property_a.id}
@@ -29,6 +34,12 @@ class TestHotelPropertySecurity(TransactionCase):
         )
         cls.room_type = cls.env["hotel.room.type"].create(
             {"name": "Security Room Type"}
+        )
+        cls.room_type_b = cls.env["hotel.room.type"].create(
+            {
+                "name": "Other Company Room Type",
+                "property_id": cls.property_b.id,
+            }
         )
         cls.room_a = cls.env["hotel.room"].create(
             {
@@ -41,7 +52,7 @@ class TestHotelPropertySecurity(TransactionCase):
             {
                 "name": "201",
                 "floor_id": cls.floor_b.id,
-                "room_type_id": cls.room_type.id,
+                "room_type_id": cls.room_type_b.id,
             }
         )
         cls.frontdesk = cls.env["res.users"].create(
@@ -51,8 +62,6 @@ class TestHotelPropertySecurity(TransactionCase):
                 "group_ids": [
                     (4, cls.env.ref("hotel_base.group_hotel_frontdesk").id)
                 ],
-                "hotel_property_ids": [(6, 0, [cls.property_a.id])],
-                "default_hotel_property_id": cls.property_a.id,
             }
         )
         cls.housekeeper = cls.env["res.users"].create(
@@ -62,8 +71,6 @@ class TestHotelPropertySecurity(TransactionCase):
                 "group_ids": [
                     (4, cls.env.ref("hotel_base.group_hotel_housekeeping").id)
                 ],
-                "hotel_property_ids": [(6, 0, [cls.property_a.id])],
-                "default_hotel_property_id": cls.property_a.id,
             }
         )
         cls.accountant = cls.env["res.users"].create(
@@ -73,8 +80,6 @@ class TestHotelPropertySecurity(TransactionCase):
                 "group_ids": [
                     (4, cls.env.ref("hotel_base.group_hotel_accountant").id)
                 ],
-                "hotel_property_ids": [(6, 0, [cls.property_a.id])],
-                "default_hotel_property_id": cls.property_a.id,
             }
         )
         cls.system_admin = cls.env["res.users"].create(
@@ -82,6 +87,7 @@ class TestHotelPropertySecurity(TransactionCase):
                 "name": "Hotel Technical Administrator",
                 "login": "hotel_technical_admin_test",
                 "group_ids": [(4, cls.env.ref("base.group_system").id)],
+                "company_ids": [(4, cls.company_b.id)],
             }
         )
         cls.guest = cls.env["res.partner"].create(
@@ -89,18 +95,18 @@ class TestHotelPropertySecurity(TransactionCase):
                 "name": "Protected Guest",
                 "is_hotel_guest": True,
                 "guest_id_number": "P-SECRET",
-                "hotel_property_ids": [(6, 0, [cls.property_a.id])],
+                "company_id": cls.env.company.id,
             }
         )
         cls.other_guest = cls.env["res.partner"].create(
             {
                 "name": "Other Property Guest",
                 "is_hotel_guest": True,
-                "hotel_property_ids": [(6, 0, [cls.property_b.id])],
+                "company_id": cls.company_b.id,
             }
         )
 
-    def test_property_rules_and_default(self):
+    def test_company_rules_and_default(self):
         rooms = self.env["hotel.room"].with_user(self.frontdesk).search([])
         self.assertIn(self.room_a, rooms)
         self.assertNotIn(self.room_b, rooms)
@@ -125,8 +131,7 @@ class TestHotelPropertySecurity(TransactionCase):
         self.assertEqual(
             context["hotel_business_date"],
             fields.Date.to_string(
-                self.property_a.current_business_date
-                or self.property_a.get_business_date()
+                self.property_a.get_business_date()
             ),
         )
         public_context = (
@@ -136,11 +141,18 @@ class TestHotelPropertySecurity(TransactionCase):
         )
         self.assertNotIn("hotel_property_id", public_context)
 
-    def test_system_administrator_is_unrestricted_without_assignment(self):
+    def test_system_administrator_can_use_all_allowed_companies(self):
         self.assertTrue(
             self.system_admin.has_group("hotel_base.group_hotel_manager")
         )
-        properties = self.env["hotel.property"].with_user(self.system_admin).search([])
+        properties = (
+            self.env["hotel.property"]
+            .with_user(self.system_admin)
+            .with_context(
+                allowed_company_ids=[self.env.company.id, self.company_b.id]
+            )
+            .search([])
+        )
         self.assertIn(self.property_a, properties)
         self.assertIn(self.property_b, properties)
         default_property = self.env["hotel.property"].with_user(

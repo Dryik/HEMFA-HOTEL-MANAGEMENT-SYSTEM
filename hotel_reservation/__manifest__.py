@@ -1,7 +1,7 @@
 {
     "name": "Hotel Reservations",
-    "summary": "Reservation lifecycle, Gantt tape chart, calendar, availability",
-    "version": "19.0.3.0.0",
+    "summary": "Reservation lifecycle, planner, calendar, and availability",
+    "version": "19.0.4.0.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",

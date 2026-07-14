@@ -99,8 +99,8 @@ msgstr "سقوف خدمات الجهات"
 
 #. module: hotel_restricted_services
 #: model:ir.rule,name:hotel_restricted_services.rule_hotel_entity_ceiling_assigned_property
-msgid "Entity ceilings in assigned hotel properties"
-msgstr "سقوف الجهات في المنشآت الفندقية المخصصة"
+msgid "Entity ceilings in active companies"
+msgstr "سقوف الجهات في الشركات النشطة"
 
 #. module: hotel_restricted_services
 #: model:ir.model,name:hotel_restricted_services.model_hotel_service_restriction
@@ -178,8 +178,8 @@ msgstr "تم تجاوز قيد الخدمة بواسطة %(user)s للمنتج %
 
 #. module: hotel_restricted_services
 #: model:ir.rule,name:hotel_restricted_services.rule_hotel_service_restriction_assigned_property
-msgid "Service restrictions in assigned hotel properties"
-msgstr "قيود الخدمات في المنشآت الفندقية المخصصة"
+msgid "Service restrictions in active companies"
+msgstr "قيود الخدمات في الشركات النشطة"
 
 #. module: hotel_restricted_services
 #: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_service_restriction__stay_limit

@@ -34,6 +34,82 @@ class HotelReservation(models.Model):
                         "reservation_id": rec.id,
                     }
                 )
+        self._ensure_stay_charge()
+
+    def _ensure_stay_charge(self):
+        """Post the remaining contracted stay once confirmation is complete."""
+        for reservation in self:
+            if not reservation.folio_ids or not reservation.room_type_id.product_id:
+                continue
+            folio = reservation.folio_ids[:1]
+            room_lines = folio.line_ids.filtered(
+                lambda line: line.source_type == "room_night"
+                and not line.reversal_of_id
+                and line.qty > 0
+            )
+            policy_reversals = room_lines.mapped("reversal_line_ids").filtered(
+                lambda line: (line.source_key or "").startswith("stay_reversal:")
+            )
+            remaining_nights = max(
+                float(reservation.nights)
+                - sum(room_lines.mapped("qty"))
+                - sum(policy_reversals.mapped("qty")),
+                0.0,
+            )
+            if float_is_zero(
+                remaining_nights, precision_rounding=reservation.currency_id.rounding
+            ):
+                continue
+            source_key = f"stay:{reservation.id}"
+            if self.env["hotel.folio.line"].search_count(
+                [("source_key", "=", source_key)]
+            ):
+                source_key = f"stay:{reservation.id}:remaining:{len(room_lines)}"
+            folio._add_workflow_charge(
+                reservation.room_type_id.product_id,
+                qty=remaining_nights,
+                price_unit=reservation.rate_night,
+                date=reservation.checkin_date,
+                source_type="room_night",
+                source_reference=reservation.name,
+                source_key=source_key,
+            )
+
+    def _reverse_stay_charge(self, policy_type):
+        for reservation in self:
+            if not reservation.folio_ids:
+                continue
+            folio = reservation.folio_ids[:1]
+            stay_lines = folio.line_ids.filtered(
+                lambda line: line.source_type == "room_night"
+                and not line.reversal_of_id
+                and line.qty > 0
+            )
+            for line in stay_lines:
+                reversal_key = (
+                    f"stay_reversal:{policy_type}:{reservation.id}:{line.id}"
+                )
+                if self.env["hotel.folio.line"].search_count(
+                    [("source_key", "=", reversal_key)]
+                ):
+                    continue
+                reversal = folio._add_workflow_charge(
+                    line.product_id,
+                    qty=-line.qty,
+                    price_unit=line.price_unit,
+                    date=fields.Datetime.now(),
+                    discount=line.discount,
+                    tax_ids=line.tax_ids.ids,
+                    source_type="reversal",
+                    source_reference=reservation.name,
+                    source_key=reversal_key,
+                    invoiceable=line.invoiceable,
+                    payee=line.payee_partner_id,
+                )
+                reversal._link_stay_reversal(
+                    line,
+                    _("Stay charge reversed by the %(policy)s workflow.", policy=policy_type),
+                )
 
     def action_view_folios(self):
         self.ensure_one()
@@ -82,12 +158,14 @@ class HotelReservation(models.Model):
     def action_cancel(self):
         candidates = self.filtered(lambda reservation: reservation.state == "confirmed")
         result = super().action_cancel()
+        candidates._reverse_stay_charge("cancellation")
         candidates._apply_stay_policy_charge("cancellation")
         return result
 
     def action_no_show(self):
         candidates = self.filtered(lambda reservation: reservation.state == "confirmed")
         result = super().action_no_show()
+        candidates._reverse_stay_charge("no_show")
         candidates._apply_stay_policy_charge("no_show")
         return result
 

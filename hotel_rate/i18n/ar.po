@@ -126,8 +126,8 @@ msgstr "شرائح الإشغال"
 
 #. module: hotel_rate
 #: model:ir.rule,name:hotel_rate.rule_hotel_rate_band_assigned_property
-msgid "Occupancy bands in assigned hotel properties"
-msgstr "نطاقات الإشغال في المنشآت الفندقية المخصصة"
+msgid "Occupancy bands in active companies"
+msgstr "شرائح الإشغال في الشركات النشطة"
 
 #. module: hotel_rate
 #: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_occupancy_band_action
@@ -152,7 +152,6 @@ msgstr "الأولوية"
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__property_id
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_occupancy_band__property_id
-#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_occupancy_band_view_search
 msgid "Property"
 msgstr "الفندق / المنشأة"
 
@@ -175,8 +174,8 @@ msgstr "قواعد التسعير"
 
 #. module: hotel_rate
 #: model:ir.rule,name:hotel_rate.rule_hotel_rate_rule_assigned_property
-msgid "Rate rules in assigned hotel properties"
-msgstr "قواعد الأسعار في المنشآت الفندقية المخصصة"
+msgid "Rate rules in active companies"
+msgstr "قواعد الأسعار في الشركات النشطة"
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__room_type_id

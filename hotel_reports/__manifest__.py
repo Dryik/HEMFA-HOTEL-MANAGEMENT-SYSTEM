@@ -1,11 +1,11 @@
 {
     "name": "Hotel Reports",
-    "summary": "Bilingual operational, finance, audit, POS, and folio reports",
-    "version": "19.0.3.0.0",
+    "summary": "Bilingual operational, finance, POS, and folio reports",
+    "version": "19.0.4.0.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",
-    "depends": ["hotel_housekeeping", "hotel_night_audit", "hotel_pos_room_charge"],
+    "depends": ["hotel_housekeeping", "hotel_pos_room_charge"],
     "data": [
         "security/hotel_record_rules.xml",
         "security/ir.model.access.csv",

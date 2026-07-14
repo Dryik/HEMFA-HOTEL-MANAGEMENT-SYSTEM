@@ -533,7 +533,7 @@ class HotelReservation(models.Model):
             raise UserError(_("Assign a default hotel property to your user."))
         prop.check_access("read")
         business_date = fields.Date.to_date(
-            business_date or prop.current_business_date or prop.get_business_date()
+            business_date or prop.get_business_date()
         )
         today_start, today_end = prop.get_business_day_bounds(business_date)
         property_domain = [("property_id", "=", prop.id)]
@@ -612,13 +612,7 @@ class HotelReservation(models.Model):
             "property_id": prop.id,
             "property_name": prop.display_name,
             "business_date": fields.Date.to_string(business_date),
-            "properties": [
-                {"id": assigned.id, "name": assigned.display_name}
-                for assigned in self.env.user.hotel_property_ids.filtered(
-                    lambda assigned: assigned.active
-                    and assigned.company_id in self.env.companies
-                ).sorted("name")
-            ],
+            "properties": [{"id": prop.id, "name": prop.company_id.display_name}],
             "total_rooms": len(rooms),
             "sellable_rooms": len(sellable),
             "occupied": len(occupied),

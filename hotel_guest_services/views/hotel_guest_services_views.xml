@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <list decoration-warning="state == 'found'"
                   decoration-success="state == 'claimed'" decoration-muted="state == 'disposed'">
-                <field name="name"/><field name="item_name"/><field name="property_id"/>
+                <field name="name"/><field name="item_name"/>
                 <field name="room_id"/><field name="found_at"/><field name="storage_location"/>
                 <field name="found_by_id" optional="hide"/>
                 <field name="state" widget="badge"
@@ -32,7 +32,7 @@
                 <sheet>
                     <div class="oe_title"><h1><field name="name"/></h1></div>
                     <group><group>
-                        <field name="property_id"/><field name="room_id"/><field name="reservation_id"/>
+                        <field name="property_id" invisible="1"/><field name="room_id"/><field name="reservation_id"/>
                         <field name="item_name"/><field name="description"/><field name="storage_location"/>
                     </group><group>
                         <field name="found_at"/><field name="found_by_id"/><field name="claimant_id"/>
@@ -50,7 +50,6 @@
                 <field name="name"/>
                 <field name="item_name"/>
                 <field name="storage_location"/>
-                <field name="property_id"/>
                 <field name="room_id"/>
                 <filter string="Unresolved" name="unresolved" domain="[('state', '=', 'found')]"/>
                 <filter string="Older than 7 Days" name="older_than_seven_days"
@@ -59,7 +58,6 @@
                 <filter string="Claimed" name="claimed" domain="[('state', '=', 'claimed')]"/>
                 <filter string="Disposed" name="disposed" domain="[('state', '=', 'disposed')]"/>
                 <group>
-                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
                     <filter string="Room" name="group_room" context="{'group_by': 'room_id'}"/>
                     <filter string="Storage Location" name="group_storage" context="{'group_by': 'storage_location'}"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
@@ -86,7 +84,7 @@
     <record id="hotel_dnd_view_list" model="ir.ui.view">
         <field name="name">hotel.do.not.disturb.list</field><field name="model">hotel.do.not.disturb</field>
         <field name="arch" type="xml"><list decoration-danger="state == 'active'" decoration-muted="state != 'active'">
-            <field name="property_id"/><field name="room_id"/><field name="reservation_id"/>
+            <field name="room_id"/><field name="reservation_id"/>
             <field name="start_at"/><field name="end_at"/><field name="note"/>
             <field name="state" widget="badge" decoration-danger="state == 'active'" decoration-muted="state != 'active'"/>
             <button name="action_end" type="object" string="End DND" class="btn-primary"
@@ -104,7 +102,7 @@
                 invisible="state != 'active'" groups="hotel_base.group_hotel_frontdesk"/>
             <field name="state" widget="statusbar"/>
         </header><sheet><group>
-            <field name="property_id"/><field name="reservation_id"/><field name="room_id"/>
+            <field name="property_id" invisible="1"/><field name="reservation_id"/><field name="room_id"/>
             <field name="start_at"/><field name="end_at"/><field name="note"/>
         </group></sheet></form></field>
     </record>
@@ -113,14 +111,12 @@
         <field name="model">hotel.do.not.disturb</field>
         <field name="arch" type="xml">
             <search>
-                <field name="property_id"/>
                 <field name="room_id"/>
                 <field name="reservation_id" groups="hotel_base.group_hotel_frontdesk"/>
                 <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
                 <filter string="Ended" name="ended" domain="[('state', '=', 'ended')]"/>
                 <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
                 <group>
-                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
                     <filter string="Room" name="group_room" context="{'group_by': 'room_id'}"/>
                     <filter string="Stay" name="group_reservation" context="{'group_by': 'reservation_id'}"
                         groups="hotel_base.group_hotel_frontdesk"/>
@@ -150,7 +146,7 @@
             decoration-danger="urgency == 'overdue'"
             decoration-warning="urgency == 'upcoming'"
             decoration-success="state == 'completed'" decoration-muted="state == 'cancelled'">
-            <field name="name"/><field name="property_id"/><field name="room_id"/>
+            <field name="name"/><field name="room_id"/>
             <field name="reservation_id"/><field name="scheduled_at"/><field name="urgency" widget="badge"
                 decoration-danger="urgency == 'overdue'"
                 decoration-warning="urgency == 'upcoming'"
@@ -173,7 +169,7 @@
             <button name="action_cancel" type="object" string="Cancel" invisible="state != 'scheduled'"/>
             <field name="state" widget="statusbar"/>
         </header><sheet><div class="oe_title"><h1><field name="name"/></h1></div><group>
-            <field name="property_id"/><field name="reservation_id"/><field name="room_id"/>
+            <field name="property_id" invisible="1"/><field name="reservation_id"/><field name="room_id"/>
             <field name="scheduled_at"/><field name="assigned_user_id"/>
             <field name="completed_at"/><field name="completion_note"/>
         </group></sheet><div class="oe_chatter"><field name="activity_ids"/></div></form></field>
@@ -198,7 +194,6 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="property_id"/>
                 <field name="room_id"/>
                 <field name="reservation_id"/>
                 <field name="assigned_user_id"/>
@@ -214,7 +209,6 @@
                 <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
                 <filter string="Missed" name="missed" domain="[('state', '=', 'missed')]"/>
                 <group>
-                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
                     <filter string="Room" name="group_room" context="{'group_by': 'room_id'}"/>
                     <filter string="Assigned To" name="group_assigned" context="{'group_by': 'assigned_user_id'}"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>

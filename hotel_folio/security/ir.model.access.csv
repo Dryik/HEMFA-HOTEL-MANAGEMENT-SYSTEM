@@ -10,8 +10,5 @@ access_hotel_folio_routing_rule_accountant,hotel.folio.routing.rule accountant,m
 access_hotel_folio_routing_rule_manager,hotel.folio.routing.rule manager,model_hotel_folio_routing_rule,hotel_base.group_hotel_manager,1,1,1,1
 access_hotel_manual_fx_wizard_accountant,hotel.manual.fx.wizard accountant,model_hotel_manual_fx_wizard,hotel_base.group_hotel_accountant,1,1,1,1
 access_hotel_manual_fx_wizard_manager,hotel.manual.fx.wizard manager,model_hotel_manual_fx_wizard,hotel_base.group_hotel_manager,1,1,1,1
-access_hotel_allocate_advance_wizard_cashier,hotel.allocate.advance.wizard cashier,model_hotel_allocate_advance_wizard,hotel_base.group_hotel_cashier,1,1,1,1
 access_hotel_allocate_advance_wizard_accountant,hotel.allocate.advance.wizard accountant,model_hotel_allocate_advance_wizard,hotel_base.group_hotel_accountant,1,1,1,1
 access_hotel_allocate_advance_wizard_manager,hotel.allocate.advance.wizard manager,model_hotel_allocate_advance_wizard,hotel_base.group_hotel_manager,1,1,1,1
-access_hotel_payment_cashier,account.payment cashier,account.model_account_payment,hotel_base.group_hotel_cashier,1,0,0,0
-access_hotel_journal_cashier,account.journal cashier,account.model_account_journal,hotel_base.group_hotel_cashier,1,0,0,0

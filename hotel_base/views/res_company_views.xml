@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_company_view_form_hotel" model="ir.ui.view">
+        <field name="name">res.company.form.hotel</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="hotel_operations" string="Hotel Operations"
+                    groups="hotel_base.group_hotel_manager">
+                    <field name="hotel_property_config_id" invisible="1"/>
+                    <group>
+                        <group string="Business Day">
+                            <field name="hotel_timezone"/>
+                            <field name="hotel_day_start_hour" widget="float_time"/>
+                            <field name="hotel_late_checkout_grace_hours"/>
+                        </group>
+                        <group string="Cancellation / No-show">
+                            <field name="hotel_cancellation_policy"/>
+                            <field name="hotel_cancellation_grace_hours"/>
+                            <field name="hotel_cancellation_fee_value"
+                                invisible="hotel_cancellation_policy == 'none'"/>
+                            <field name="hotel_no_show_policy"/>
+                            <field name="hotel_no_show_grace_hours"/>
+                            <field name="hotel_no_show_fee_value"
+                                invisible="hotel_no_show_policy == 'none'"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_hotel_company_settings" model="ir.actions.act_window">
+        <field name="name">Hotel Settings</field>
+        <field name="res_model">res.company</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="base.view_company_tree"/>
+        <field name="domain">[]</field>
+        <field name="context">{'default_is_company': True}</field>
+    </record>
+</odoo>

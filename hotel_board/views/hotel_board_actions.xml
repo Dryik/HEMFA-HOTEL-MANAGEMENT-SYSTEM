@@ -46,15 +46,6 @@
     <record id="hotel_reservation.menu_hotel_reservation_amendments" model="ir.ui.menu">
         <field name="sequence">70</field>
     </record>
-    <record id="hotel_frontdesk_session.menu_hotel_frontdesk_sessions" model="ir.ui.menu">
-        <field name="parent_id" ref="hotel_reservation.menu_hotel_frontdesk"/>
-        <field name="sequence">80</field>
-    </record>
-    <record id="hotel_night_audit.menu_hotel_night_audit" model="ir.ui.menu">
-        <field name="parent_id" ref="hotel_reservation.menu_hotel_frontdesk"/>
-        <field name="sequence">90</field>
-    </record>
-
     <!-- Consolidate non-front-desk operational queues. -->
     <menuitem id="menu_hotel_operations"
         name="Operations"

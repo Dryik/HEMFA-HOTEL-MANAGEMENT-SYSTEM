@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="rule_hotel_rate_rule_assigned_property" model="ir.rule">
-        <field name="name">Rate rules in assigned hotel properties</field>
+        <field name="name">Rate rules in active companies</field>
         <field name="model_id" ref="model_hotel_rate_rule"/>
-        <field name="domain_force">[('property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk'))]"/>
     </record>
     <record id="rule_hotel_rate_band_assigned_property" model="ir.rule">
-        <field name="name">Occupancy bands in assigned hotel properties</field>
+        <field name="name">Occupancy bands in active companies</field>
         <field name="model_id" ref="model_hotel_rate_occupancy_band"/>
-        <field name="domain_force">[('property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk'))]"/>
     </record>
     <record id="rule_hotel_rate_rule_system_unrestricted" model="ir.rule">

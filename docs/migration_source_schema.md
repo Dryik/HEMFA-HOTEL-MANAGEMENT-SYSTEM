@@ -12,4 +12,4 @@ The result is JSON-serializable and contains per-model created/updated counts, r
 
 Finance sections may be supplied only after the signed finance map identifies journals, taxes, partners, currencies, and the opening-balance date. Missing or inactive mappings are hard row errors. The importer never creates an account, tax, journal, currency, product, or synthetic payment assignment.
 
-`sequence_maxima` accepts `sequence_code` plus a non-negative integer `maximum` for `hotel.reservation`, `hotel.folio`, and `hotel.night.audit`. These values must come from the signed legacy numbering inventory. Imported accounting document names are validated separately in staging because Odoo accounting uses journal/date sequence rules rather than these hotel `ir.sequence` records.
+`sequence_maxima` accepts `sequence_code` plus a non-negative integer `maximum` for `hotel.reservation` and `hotel.folio`. These values must come from the signed legacy numbering inventory. Imported accounting document names are validated separately in staging because Odoo accounting uses journal/date sequence rules rather than these hotel `ir.sequence` records.

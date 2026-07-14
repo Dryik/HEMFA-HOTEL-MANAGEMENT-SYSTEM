@@ -1,4 +1,4 @@
-from odoo import Command, _, fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 
@@ -24,17 +24,6 @@ class ResPartner(models.Model):
         help="Travel agency, company or government entity (جهة) that can "
         "be billed for its guests and hold advance balances.",
     )
-    hotel_property_ids = fields.Many2many(
-        "hotel.property",
-        "hotel_property_partner_rel",
-        "partner_id",
-        "property_id",
-        string="Hotel Properties",
-        default=lambda self: self.env.user.default_hotel_property_id.ids,
-        readonly=True,
-        help="Properties where this guest or entity is authorized for hotel use.",
-    )
-
     guest_gender = fields.Selection(
         [("male", "Male"), ("female", "Female")],
         string="Gender",
@@ -95,18 +84,5 @@ class ResPartner(models.Model):
             and partner.company_id != prop.company_id
         ):
             raise UserError(_("The hotel partner and property must use the same company."))
-        records = self.filtered(lambda partner: prop not in partner.hotel_property_ids)
-        if records:
-            return super(ResPartner, records).write(
-                {"hotel_property_ids": [Command.link(prop.id)]}
-            )
-        return True
-
-    def write(self, vals):
-        if "hotel_property_ids" in vals and not self.env.user.has_group(
-            "base.group_system"
-        ):
-            raise UserError(
-                _("Hotel partner property membership is assigned by hotel workflows.")
-            )
-        return super().write(vals)
+        records = self.filtered(lambda partner: not partner.company_id)
+        return super(ResPartner, records).write({"company_id": prop.company_id.id})

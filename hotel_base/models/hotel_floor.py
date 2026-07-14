@@ -9,7 +9,11 @@ class HotelFloor(models.Model):
     name = fields.Char(required=True)
     sequence = fields.Integer(default=10)
     property_id = fields.Many2one(
-        "hotel.property", required=True, ondelete="cascade", index=True
+        "hotel.property",
+        required=True,
+        ondelete="cascade",
+        index=True,
+        default=lambda self: self.env["hotel.property"]._get_default_property(),
     )
     room_ids = fields.One2many("hotel.room", "floor_id", string="Rooms")
     active = fields.Boolean(default=True)

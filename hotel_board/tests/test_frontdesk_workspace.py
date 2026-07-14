@@ -17,7 +17,6 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
             {
                 "name": "Workspace Hotel",
                 "code": "WSH",
-                "current_business_date": cls.business_date,
                 "day_start_hour": 12.0,
                 "timezone": "Africa/Tripoli",
             }
@@ -85,7 +84,7 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
         )
         self.assertEqual(snapshot["version"], 1)
         self.assertEqual(snapshot["meta"]["property_id"], self.property.id)
-        self.assertEqual(snapshot["meta"]["metric_mode"], "forecast")
+        self.assertEqual(snapshot["meta"]["metric_mode"], "live")
         self.assertEqual(snapshot["kpis"]["reserved"]["value"], 1)
         self.assertEqual(snapshot["kpis"]["in_house"]["value"], 1)
         self.assertEqual(snapshot["kpis"]["vacant_clean"]["value"], 1)
@@ -116,47 +115,26 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
                 fields.Date.to_string(self.business_date),
             )
 
-    def test_metric_modes_actual_forecast_and_unavailable(self):
+    def test_metrics_are_live_for_every_selected_date(self):
         prior_date = self.business_date - timedelta(days=1)
-        self.env["hotel.night.audit"].create(
-            {
-                "property_id": self.property.id,
-                "date": prior_date,
-                "state": "done",
-                "occupancy_pct": 75.0,
-                "adr": 120.0,
-                "revpar": 90.0,
-                "room_count": 4,
-                "sellable_room_count": 4,
-                "occupied_room_count": 3,
-            }
-        )
-        actual = self.workspace.get_workspace_snapshot(self.property.id, prior_date)
-        self.assertEqual(actual["meta"]["metric_mode"], "actual")
-        self.assertEqual(actual["kpis"]["occupancy"]["value"], 75.0)
-        self.assertEqual(actual["kpis"]["adr"]["value"], 120.0)
-        self.assertEqual(actual["kpis"]["revpar"]["value"], 90.0)
+        prior = self.workspace.get_workspace_snapshot(self.property.id, prior_date)
+        self.assertEqual(prior["meta"]["metric_mode"], "live")
+        self.assertTrue(prior["kpis"]["occupancy"]["available"])
 
-        forecast = self.workspace.get_workspace_snapshot(
+        current = self.workspace.get_workspace_snapshot(
             self.property.id, self.business_date
         )
-        self.assertEqual(forecast["meta"]["metric_mode"], "forecast")
-        self.assertTrue(forecast["kpis"]["adr"]["available"])
-        self.assertEqual(forecast["kpis"]["occupancy"]["value"], 50.0)
-        self.assertEqual(forecast["kpis"]["adr"]["value"], 150.0)
-        self.assertEqual(forecast["kpis"]["revpar"]["value"], 75.0)
-
-        unaudited = self.workspace.get_workspace_snapshot(
-            self.property.id, self.business_date - timedelta(days=2)
-        )
-        self.assertEqual(unaudited["meta"]["metric_mode"], "unavailable")
-        self.assertFalse(unaudited["kpis"]["occupancy"]["available"])
-        self.assertFalse(unaudited["kpis"]["occupancy"]["action"])
+        self.assertEqual(current["meta"]["metric_mode"], "live")
+        self.assertTrue(current["kpis"]["adr"]["available"])
+        self.assertEqual(current["kpis"]["occupancy"]["value"], 50.0)
+        self.assertEqual(current["kpis"]["adr"]["value"], 150.0)
+        self.assertEqual(current["kpis"]["revpar"]["value"], 75.0)
 
     def test_planning_includes_empty_rooms_and_actionable_cells(self):
         planning = self.workspace.get_planning_window(
             self.property.id, self.business_date, 14, {}
         )
+        self.assertEqual(planning["version"], 2)
         self.assertEqual(planning["meta"]["day_count"], 14)
         self.assertEqual(planning["totals"]["rooms"], 4)
         self.assertEqual(len(planning["days"]), 14)
@@ -164,10 +142,7 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
         self.assertIn(self.room_empty.id, rows)
         empty_first_day = rows[self.room_empty.id]["day_statuses"][0]
         self.assertEqual(empty_first_day["primary_status"], "vacant")
-        self.assertEqual(
-            empty_first_day["action"]["context"]["default_room_id"],
-            self.room_empty.id,
-        )
+        self.assertTrue(empty_first_day["can_create"])
         reserved_row = rows[self.room_reserved.id]
         self.assertEqual(reserved_row["day_statuses"][0]["primary_status"], "reserved")
         self.assertEqual(reserved_row["reservations"][0]["span"], 2)
@@ -200,7 +175,9 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
         self.assertEqual(
             alerted_rows[self.room_empty.id]["capacity_blocker"], "out_of_order"
         )
-        self.assertFalse(alerted_rows[self.room_empty.id]["day_statuses"][0]["action"])
+        self.assertFalse(
+            alerted_rows[self.room_empty.id]["day_statuses"][0]["can_create"]
+        )
         self.assertIn(
             "maintenance",
             {item["type"] for item in alerted_rows[self.room_empty.id]["alerts"]},
@@ -449,7 +426,6 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
             {
                 "name": "Workspace Agency",
                 "is_hotel_agency": True,
-                "hotel_property_ids": [(6, 0, [self.property.id])],
             }
         )
         agency_room = self._create_room("W109")
@@ -515,8 +491,6 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
                 "group_ids": [
                     (4, self.env.ref("hotel_base.group_hotel_housekeeping").id)
                 ],
-                "hotel_property_ids": [(6, 0, [self.property.id])],
-                "default_hotel_property_id": self.property.id,
             }
         )
         restricted_workspace = self.workspace.with_user(housekeeper)
@@ -531,32 +505,7 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
                 self.property.id, self.business_date, 7, {}
             )
 
-    def test_open_cashier_session_is_reported_as_non_attention_success(self):
-        self.env["hotel.frontdesk.session"].create(
-            {
-                "property_id": self.property.id,
-                "user_id": self.env.user.id,
-            }
-        )
-        snapshot = self.workspace.get_workspace_snapshot(
-            self.property.id, self.business_date
-        )
-        cashier_item = next(
-            item
-            for item in snapshot["attention"]["items"]
-            if item["key"] == "cashier_session_open"
-        )
-        self.assertEqual(cashier_item["severity"], "success")
-        self.assertEqual(
-            snapshot["attention"]["total"],
-            sum(
-                item["count"]
-                for item in snapshot["attention"]["items"]
-                if item["severity"] in ("warning", "danger")
-            ),
-        )
-
-    def test_property_record_rule_is_enforced(self):
+    def test_active_company_is_authoritative(self):
         other_property = self.env["hotel.property"].create(
             {"name": "Workspace Other Hotel", "code": "WSO"}
         )
@@ -565,18 +514,16 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
                 "name": "Workspace Front Desk",
                 "login": "workspace_frontdesk",
                 "group_ids": [(4, self.env.ref("hotel_base.group_hotel_frontdesk").id)],
-                "hotel_property_ids": [(6, 0, [self.property.id])],
-                "default_hotel_property_id": self.property.id,
             }
         )
-        with self.assertRaises(AccessError):
-            self.workspace.with_user(frontdesk).get_workspace_snapshot(
-                other_property.id, self.business_date
-            )
-        with self.assertRaises(AccessError):
-            self.workspace.with_user(frontdesk).get_planning_window(
-                other_property.id, self.business_date, 14, {}
-            )
+        snapshot = self.workspace.with_user(frontdesk).get_workspace_snapshot(
+            other_property.id, self.business_date
+        )
+        planning = self.workspace.with_user(frontdesk).get_planning_window(
+            other_property.id, self.business_date, 14, {}
+        )
+        self.assertEqual(snapshot["meta"]["property_id"], self.property.id)
+        self.assertEqual(planning["meta"]["property_id"], self.property.id)
 
     def test_reservation_dashboard_compatibility_shim(self):
         legacy = self.env["hotel.reservation"].get_dashboard_data(
