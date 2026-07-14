@@ -11,9 +11,7 @@ class TestPosRoomCharge(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.property = cls.env["hotel.property"].create(
-            {"name": "POS Test Hotel", "code": "PTH"}
-        )
+        cls.property = cls.env["hotel.property"]._get_default_property()
         cls.floor = cls.env["hotel.floor"].create(
             {"name": "Floor P1", "property_id": cls.property.id}
         )
@@ -97,20 +95,28 @@ class TestPosRoomCharge(TransactionCase):
         cls.pos_config.open_ui()
         cls.session = cls.pos_config.current_session_id
 
-        cls.other_property = cls.env["hotel.property"].create(
-            {"name": "Other POS Test Hotel", "code": "OPH"}
+        cls.other_company = cls.env["res.company"].create(
+            {"name": "Other POS Test Company"}
+        )
+        cls.other_property = cls.env["hotel.property"].with_company(
+            cls.other_company
+        )._get_default_property()
+        cls.other_cash_method = cls.env["pos.payment.method"].create(
+            {"name": "Other Test Cash", "company_id": cls.other_company.id}
         )
         cls.other_pos_config = cls.env["pos.config"].create(
             {
                 "name": "Other Hotel Restaurant POS",
+                "company_id": cls.other_company.id,
                 "hotel_property_id": cls.other_property.id,
-                "payment_method_ids": [(6, 0, [cls.cash_method.id])],
+                "payment_method_ids": [(6, 0, [cls.other_cash_method.id])],
             }
         )
         cls.other_room_charge_method = cls.env["pos.payment.method"].create(
             {
                 "name": "Other Room Charge",
                 "is_room_charge": False,
+                "company_id": cls.other_company.id,
                 "hotel_property_id": cls.other_property.id,
             }
         )
@@ -175,7 +181,7 @@ class TestPosRoomCharge(TransactionCase):
         )
         return order
 
-    def test_fb_pos_records_are_property_scoped(self):
+    def test_fb_pos_records_are_company_scoped(self):
         configs = self.env["pos.config"].with_user(self.fb_user).search([])
         self.assertIn(self.pos_config, configs)
         self.assertNotIn(self.other_pos_config, configs)
@@ -185,13 +191,13 @@ class TestPosRoomCharge(TransactionCase):
         self.assertIn(self.cash_method, methods)
         self.assertNotIn(self.other_room_charge_method, methods)
 
-    def test_pos_config_view_uses_stable_title_anchor(self):
+    def test_pos_config_view_uses_stable_active_anchor(self):
         parent_arch = self.env.ref("point_of_sale.pos_config_view_form").arch_db
         inherited_arch = self.env.ref(
             "hotel_pos_room_charge.pos_config_view_form_hotel_property"
         ).arch_db
-        self.assertIn('id="title"', parent_arch)
-        self.assertIn("//div[@id='title']", inherited_arch)
+        self.assertIn('<field name="active"', parent_arch)
+        self.assertIn('<field name="active" position="after"', inherited_arch)
 
     def test_room_charge_posts_to_folio(self):
         reservation = self._checked_in_reservation()
