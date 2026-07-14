@@ -1,7 +1,7 @@
 {
     "name": "Hotel Front Desk Workspace",
     "summary": "Operational dashboard, room board, and inventory planning tape",
-    "version": "19.0.3.0.0",
+    "version": "19.0.3.1.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",

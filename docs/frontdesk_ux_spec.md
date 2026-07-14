@@ -87,8 +87,11 @@ states.  Combined states such as occupied + dirty + DND remain visible.
 ## Semantic design tokens
 
 Custom Front Desk surfaces share the `--hotel-*` token namespace. Text and
-surface tokens are independent from occupancy/status tokens; focus uses a
-dedicated high-contrast blue ring. Spacing follows 4/8 px increments, cards use
-one consistent radius, and every interactive target has a 44 px minimum touch
-dimension. Status colors are always paired with a translated label or icon and
-screen-reader text.
+surface tokens are independent from occupancy/status tokens. The neutral canvas,
+panel borders, brand accent, focus treatment, and four-pixel radius derive from
+Odoo's backend theme variables. Operational pages use flat grey hierarchy rather
+than bright white card fields: shadows, glossy gradients, and hover lift are not
+part of the Front Desk visual language. Spacing follows 4/8 px increments and
+every interactive target has a 44 px minimum touch dimension. Status colors are
+restrained and always paired with a translated label or icon and screen-reader
+text.
