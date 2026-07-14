@@ -8,6 +8,7 @@ class ResCompany(models.Model):
         "hotel.property",
         string="Hotel Configuration",
         compute="_compute_hotel_property_config_id",
+        search="_search_hotel_property_config_id",
         compute_sudo=True,
     )
     hotel_day_start_hour = fields.Float(
@@ -81,6 +82,24 @@ class ResCompany(models.Model):
                 )
                 by_company[company.id] = prop
             company.hotel_property_config_id = prop
+
+    @api.model
+    def _search_hotel_property_config_id(self, operator, value):
+        """Map the private hotel configuration back to its Odoo company."""
+        if operator not in {"in", "not in"}:
+            return NotImplemented
+
+        property_ids = value if isinstance(value, (list, tuple)) else [value]
+        property_ids = [property_id for property_id in property_ids if property_id]
+        company_ids = (
+            self.env["hotel.property"]
+            .sudo()
+            .browse(property_ids)
+            .exists()
+            .mapped("company_id")
+            .ids
+        )
+        return [("id", operator, company_ids)]
 
     def write(self, vals):
         manager_group = self.env.ref(
