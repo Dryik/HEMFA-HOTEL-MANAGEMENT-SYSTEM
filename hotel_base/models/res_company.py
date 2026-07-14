@@ -89,7 +89,10 @@ class ResCompany(models.Model):
         if operator not in {"in", "not in"}:
             return NotImplemented
 
-        property_ids = value if isinstance(value, (list, tuple)) else [value]
+        try:
+            property_ids = list(value)
+        except TypeError:
+            property_ids = [value]
         property_ids = [property_id for property_id in property_ids if property_id]
         company_ids = (
             self.env["hotel.property"]

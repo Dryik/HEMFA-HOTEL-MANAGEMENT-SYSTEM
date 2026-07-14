@@ -101,18 +101,36 @@ class TestPosRoomCharge(TransactionCase):
         cls.other_property = cls.env["hotel.property"].with_company(
             cls.other_company
         )._get_default_property()
-        cls.other_cash_method = cls.env["pos.payment.method"].create(
+        cls.other_cash_method = cls.env["pos.payment.method"].with_company(
+            cls.other_company
+        ).create(
             {"name": "Other Test Cash", "company_id": cls.other_company.id}
         )
-        cls.other_pos_config = cls.env["pos.config"].create(
+        cls.other_sales_journal = cls.env["account.journal"].with_company(
+            cls.other_company
+        ).create(
+            {
+                "name": "Other POS Sales",
+                "code": "OPOS",
+                "type": "sale",
+                "company_id": cls.other_company.id,
+            }
+        )
+        cls.other_pos_config = cls.env["pos.config"].with_company(
+            cls.other_company
+        ).create(
             {
                 "name": "Other Hotel Restaurant POS",
                 "company_id": cls.other_company.id,
                 "hotel_property_id": cls.other_property.id,
+                "journal_id": cls.other_sales_journal.id,
+                "invoice_journal_id": cls.other_sales_journal.id,
                 "payment_method_ids": [(6, 0, [cls.other_cash_method.id])],
             }
         )
-        cls.other_room_charge_method = cls.env["pos.payment.method"].create(
+        cls.other_room_charge_method = cls.env["pos.payment.method"].with_company(
+            cls.other_company
+        ).create(
             {
                 "name": "Other Room Charge",
                 "is_room_charge": False,
