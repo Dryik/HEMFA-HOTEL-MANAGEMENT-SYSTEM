@@ -11,9 +11,7 @@ class TestHotelReservation(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.property = cls.env["hotel.property"].create(
-            {"name": "Res Test Hotel", "code": "RTH"}
-        )
+        cls.property = cls.env["hotel.property"]._get_default_property()
         cls.floor = cls.env["hotel.floor"].create(
             {"name": "Floor R1", "property_id": cls.property.id}
         )
@@ -114,7 +112,8 @@ class TestHotelReservation(TransactionCase):
         self.assertEqual(self.room.occupancy_state, "vacant")
         res.action_check_in()
         self.assertEqual(self.room.occupancy_state, "occupied")
-        res.action_check_out()
+        res.checkout_balance_override_reason = "Reservation lifecycle test"
+        res.with_user(self.manager).action_check_out()
         self.assertEqual(self.room.occupancy_state, "checkout")
         self.assertEqual(self.room.hk_status, "dirty")
 

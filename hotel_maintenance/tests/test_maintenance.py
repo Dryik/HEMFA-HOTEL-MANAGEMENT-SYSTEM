@@ -8,9 +8,7 @@ class TestHotelMaintenance(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.property = cls.env["hotel.property"].create(
-            {"name": "Maintenance Test Hotel", "code": "MTH"}
-        )
+        cls.property = cls.env["hotel.property"]._get_default_property()
         cls.floor = cls.env["hotel.floor"].create(
             {"name": "Floor M1", "property_id": cls.property.id}
         )
@@ -190,10 +188,13 @@ class TestHotelMaintenance(TransactionCase):
                 {"state": "verified"}
             )
 
-    def test_requests_are_property_scoped(self):
-        other_property = self.env["hotel.property"].create(
-            {"name": "Other Maintenance Hotel", "code": "OMH"}
+    def test_requests_are_company_scoped(self):
+        other_company = self.env["res.company"].create(
+            {"name": "Other Maintenance Company"}
         )
+        other_property = self.env["hotel.property"].with_company(
+            other_company
+        )._get_default_property()
         hidden_request = self.env["hotel.maintenance.request"].create(
             {
                 "property_id": other_property.id,
