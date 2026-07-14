@@ -8,7 +8,7 @@
                 <group>
                     <field name="report_type"/>
                     <field name="date"/>
-                    <field name="property_id"/>
+                    <field name="property_id" invisible="1"/>
                     <field name="language"/>
                     <field name="folio_id" invisible="report_type != 'folio_statement'"
                         required="report_type == 'folio_statement'"/>
@@ -40,5 +40,5 @@
         parent="hotel_base.menu_hotel_root"
         action="hotel_report_wizard_action"
         sequence="90"
-        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_cashier,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_accountant"/>
+        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_accountant"/>
 </odoo>

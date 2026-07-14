@@ -13,9 +13,18 @@ class PosPaymentMethod(models.Model):
     )
     hotel_property_id = fields.Many2one(
         "hotel.property",
-        string="Hotel Property",
+        string="Hotel Company Link",
         domain="[('company_id', '=', company_id)]",
+        default=lambda self: self.env["hotel.property"]._get_default_property(),
     )
+
+    @api.onchange("is_room_charge", "company_id")
+    def _onchange_room_charge_company(self):
+        for method in self.filtered("is_room_charge"):
+            company = method.company_id or self.env.company
+            method.hotel_property_id = self.env["hotel.property"].with_company(
+                company
+            )._get_default_property()
 
     @api.constrains(
         "is_room_charge", "hotel_property_id", "receivable_account_id", "company_id"
@@ -25,15 +34,15 @@ class PosPaymentMethod(models.Model):
             prop = method.hotel_property_id
             if not prop or prop.company_id != method.company_id:
                 raise ValidationError(
-                    _("A room-charge payment method requires a property in the same company.")
+                    _("A room-charge payment method must use the active POS company.")
                 )
             if not prop.room_charge_clearing_account_id or not prop.room_charge_journal_id:
                 raise ValidationError(
-                    _("Configure the property's room-charge clearing account and journal first.")
+                    _("Configure the company's room-charge clearing account and journal first.")
                 )
             if method.receivable_account_id != prop.room_charge_clearing_account_id:
                 raise ValidationError(
-                    _("The POS intermediary account must be the property's room-charge clearing account.")
+                    _("The POS intermediary account must be the company's room-charge clearing account.")
                 )
 
 
@@ -42,9 +51,19 @@ class PosConfig(models.Model):
 
     hotel_property_id = fields.Many2one(
         "hotel.property",
-        string="Hotel Property",
+        string="Hotel Company Link",
         domain="[('company_id', '=', company_id)]",
+        default=lambda self: self.env["hotel.property"]._get_default_property(),
     )
+
+    @api.onchange("company_id", "payment_method_ids")
+    def _onchange_hotel_company(self):
+        for config in self:
+            if config.payment_method_ids.filtered("is_room_charge"):
+                company = config.company_id or self.env.company
+                config.hotel_property_id = self.env["hotel.property"].with_company(
+                    company
+                )._get_default_property()
 
     @api.constrains("hotel_property_id", "company_id", "payment_method_ids")
     def _check_hotel_property_configuration(self):
@@ -52,13 +71,13 @@ class PosConfig(models.Model):
             room_methods = config.payment_method_ids.filtered("is_room_charge")
             if room_methods and not config.hotel_property_id:
                 raise ValidationError(
-                    _("Select a hotel property when the POS accepts room charges.")
+                    _("The POS company could not be prepared for room charges.")
                 )
             if config.hotel_property_id and config.hotel_property_id.company_id != config.company_id:
-                raise ValidationError(_("The POS and hotel property must use the same company."))
+                raise ValidationError(_("The POS room-charge setup must use the same company."))
             if room_methods.filtered(
                 lambda method: method.hotel_property_id != config.hotel_property_id
             ):
                 raise ValidationError(
-                    _("Room-charge payment methods must match the POS hotel property.")
+                    _("Room-charge payment methods must match the POS company.")
                 )

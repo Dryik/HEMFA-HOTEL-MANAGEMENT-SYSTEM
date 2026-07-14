@@ -16,18 +16,6 @@
                 </div>
                 <div class="o_hotel_workspace_controls">
                     <div class="o_hotel_field">
-                        <label for="hotel-planning-property">Property</label>
-                        <select id="hotel-planning-property" class="form-select"
-                            t-on-change="onPropertyChange"
-                            t-att-disabled="!state.data or state.refreshing">
-                            <option t-foreach="state.data?.properties || []" t-as="property"
-                                t-key="property.id" t-att-value="property.id"
-                                t-att-selected="property.id === state.propertyId">
-                                <t t-esc="property.name"/>
-                            </option>
-                        </select>
-                    </div>
-                    <div class="o_hotel_field">
                         <label for="hotel-planning-start-date">Start Date</label>
                         <input id="hotel-planning-start-date" type="date" class="form-control" lang="en" dir="ltr"
                             t-att-value="state.startDate" t-on-change="onStartDateChange"
@@ -59,11 +47,11 @@
                             <i class="fa fa-plus" aria-hidden="true"/>
                             <span>New Reservation</span>
                         </button>
-                        <button t-if="state.data?.actions?.reservation_gantt" type="button"
+                        <button t-if="state.data?.actions?.reservation_planner" type="button"
                             class="btn btn-outline-secondary o_hotel_touch_target"
-                            t-on-click="openReservationGantt">
+                            t-on-click="openReservationPlanner">
                             <i class="fa fa-calendar-o" aria-hidden="true"/>
-                            <span>Read-only Gantt</span>
+                            <span>Reservation Planner</span>
                         </button>
                     </div>
                     <small t-if="state.updatedAt" class="o_hotel_updated_at text-muted">
@@ -90,7 +78,7 @@
             </div>
 
             <t t-if="state.data">
-                <details class="o_hotel_planning_filters o_hotel_card" open="open">
+                <details class="o_hotel_planning_filters o_hotel_card">
                     <summary>
                         <span>
                             <i class="fa fa-filter" aria-hidden="true"/> Filters
@@ -296,18 +284,20 @@
                                 </span>
                             </button>
                             <div class="o_hotel_planning_timeline" t-att-style="rowTimelineStyle(row)">
-                                <button t-foreach="state.data.days" t-as="day" t-key="day.date"
-                                    type="button" t-att-class="dayCellClass(row, day)"
-                                    t-att-style="`grid-column: ${day.index + 1}; grid-row: 1 / span ${row.laneCount || 1};`"
-                                    t-on-click="() => this.openDayCell(row, day)"
-                                    t-att-aria-disabled="!dayStatus(row, day).action and !dayStatus(row, day).reservation_action and !dayStatus(row, day).reservation_id"
-                                    tabindex="-1" t-att-data-day-index="day.index" t-att-data-day-end="day.index"
-                                    t-att-aria-label="dayCellAriaLabel(row, day)">
-                                    <i t-if="dayStatus(row, day).action" class="fa fa-plus" aria-hidden="true"/>
-                                    <i t-if="dayStatus(row, day).capacity_blocker" class="fa fa-ban" aria-hidden="true"/>
-                                    <i t-if="dayStatus(row, day).hk_status === 'dirty'" class="fa fa-bed" aria-hidden="true"/>
-                                    <i t-if="dayStatus(row, day).alertTypes.length" class="fa fa-exclamation-circle" aria-hidden="true"/>
-                                </button>
+                                <t t-foreach="state.data.days" t-as="day" t-key="day.date">
+                                    <t t-set="status" t-value="dayStatus(row, day)"/>
+                                    <button type="button" t-att-class="dayCellClass(row, day)"
+                                        t-att-style="`grid-column: ${day.index + 1}; grid-row: 1 / span ${row.laneCount || 1};`"
+                                        t-on-click="() => this.openDayCell(row, day)"
+                                        t-att-aria-disabled="!status.can_create and !status.reservation_id"
+                                        tabindex="-1" t-att-data-day-index="day.index" t-att-data-day-end="day.index"
+                                        t-att-aria-label="dayCellAriaLabel(row, day)">
+                                        <i t-if="status.can_create" class="fa fa-plus" aria-hidden="true"/>
+                                        <i t-if="status.capacity_blocker" class="fa fa-ban" aria-hidden="true"/>
+                                        <i t-if="status.hk_status === 'dirty'" class="fa fa-bed" aria-hidden="true"/>
+                                        <i t-if="status.alertTypes.length" class="fa fa-exclamation-circle" aria-hidden="true"/>
+                                    </button>
+                                </t>
                                 <button t-foreach="row.reservations" t-as="reservation" t-key="reservation.id"
                                     type="button" draggable="false"
                                     t-attf-class="o_hotel_reservation_bar o_reservation_{{ reservation.stateClass }}"
@@ -346,7 +336,7 @@
                 <div t-else="" class="o_hotel_empty_state o_hotel_card">
                     <i class="fa fa-calendar-times-o" aria-hidden="true"/>
                     <h2>No rooms match these filters</h2>
-                    <p>Clear filters or choose another property or date range.</p>
+                    <p>Clear filters or choose another date range.</p>
                     <button t-if="activeFilterCount()" type="button"
                         class="btn btn-secondary o_hotel_touch_target" t-on-click="clearFilters">
                         Clear All Filters

@@ -32,9 +32,9 @@ msgid "Cancel"
 msgstr "إلغاء"
 
 #. module: hotel_reports
-#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__cashier_close
-msgid "Cashier Close"
-msgstr "إقفال الصندوق"
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_hotel_document
+msgid "Company / الشركة:"
+msgstr "الشركة / Company:"
 
 #. module: hotel_reports
 #: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__folio_statement
@@ -82,21 +82,6 @@ msgid "Hotel Detailed Report"
 msgstr "تقرير الفندق التفصيلي"
 
 #. module: hotel_reports
-#: model:ir.actions.report,name:hotel_reports.action_report_financial_summary
-msgid "Hotel Financial Summary"
-msgstr "الملخص المالي للفندق"
-
-#. module: hotel_reports
-#: model:ir.model,name:hotel_reports.model_report_hotel_reports_report_financial_summary
-msgid "Hotel Financial Summary Report Renderer"
-msgstr "عارض تقرير الملخص المالي للفندق"
-
-#. module: hotel_reports
-#: model:report.paperformat,name:hotel_reports.paperformat_hotel_financial_summary
-msgid "Hotel Financial Summary — A4 Portrait"
-msgstr "الملخص المالي للفندق — A4 عمودي"
-
-#. module: hotel_reports
 #: model:ir.model,name:hotel_reports.model_report_hotel_reports_report_landscape_detail
 msgid "Hotel Landscape Detail Report Renderer"
 msgstr "عارض تقرير تفاصيل الفندق الأفقي"
@@ -123,8 +108,8 @@ msgstr "تقارير الفندق"
 
 #. module: hotel_reports
 #: model:ir.rule,name:hotel_reports.rule_hotel_report_wizard_assigned_property
-msgid "Hotel reports in assigned properties"
-msgstr "تقارير الفندق في المنشآت المخصصة"
+msgid "Hotel reports in active companies"
+msgstr "تقارير الفندق في الشركات النشطة"
 
 #. module: hotel_reports
 #: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__discrepancy
@@ -135,11 +120,6 @@ msgstr "فروقات التدبير الفندقي"
 #: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__inhouse
 msgid "In-House Guests"
 msgstr "النزلاء المقيمون"
-
-#. module: hotel_reports
-#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__night_audit
-msgid "Night Audit"
-msgstr "التدقيق الليلي"
 
 #. module: hotel_reports
 #: model_terms:ir.ui.view,arch_db:hotel_reports.report_hotel_document
@@ -160,11 +140,6 @@ msgstr "مبيعات نقاط البيع على الغرف"
 #: model_terms:ir.ui.view,arch_db:hotel_reports.hotel_report_wizard_view_form
 msgid "Print"
 msgstr "طباعة"
-
-#. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_hotel_document
-msgid "Property / الفندق:"
-msgstr "الفندق:"
 
 #. module: hotel_reports
 #: model_terms:ir.ui.view,arch_db:hotel_reports.report_hotel_document

@@ -320,8 +320,8 @@ msgstr "حجوزات المجموعات"
 
 #. module: hotel_reservation
 #: model:ir.rule,name:hotel_reservation.rule_hotel_reservation_group_allocation_assigned_property
-msgid "Group allocations in assigned properties"
-msgstr "تخصيصات المجموعات في المنشآت المخصصة"
+msgid "Group allocations in active companies"
+msgstr "تخصيصات المجموعات في الشركات النشطة"
 
 #. module: hotel_reservation
 #. odoo-python
@@ -337,8 +337,8 @@ msgstr "لا يمكن تغيير حالة حجز المجموعة إلا من خ
 
 #. module: hotel_reservation
 #: model:ir.rule,name:hotel_reservation.rule_hotel_reservation_group_assigned_property
-msgid "Group reservations in assigned properties"
-msgstr "حجوزات المجموعات في المنشآت المخصصة"
+msgid "Group reservations in active companies"
+msgstr "حجوزات المجموعات في الشركات النشطة"
 
 #. module: hotel_reservation
 #. odoo-python
@@ -518,13 +518,6 @@ msgstr "التسعير"
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_search
-#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_group_view_search
-#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
-msgid "Property"
-msgstr "الفندق / المنشأة"
-
-#. module: hotel_reservation
-#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_search
 msgid "Requested By"
 msgstr "مقدم الطلب"
 
@@ -541,16 +534,16 @@ msgid "Reservation Amendments"
 msgstr "تعديلات الحجوزات"
 
 #. module: hotel_reservation
-#: model:ir.ui.menu,name:hotel_reservation.menu_hotel_reservation_gantt_readonly
-#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_gantt
-#: model:ir.actions.act_window,name:hotel_reservation.action_hotel_reservation
-msgid "Reservation Gantt — Read-only"
-msgstr "مخطط جانت للحجوزات — للقراءة فقط"
-
-#. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__name
 msgid "Reservation Number"
 msgstr "رقم الحجز"
+
+#. module: hotel_reservation
+#: model:ir.ui.menu,name:hotel_reservation.menu_hotel_reservation_gantt_readonly
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_gantt
+#: model:ir.actions.act_window,name:hotel_reservation.action_hotel_reservation
+msgid "Reservation Planner"
+msgstr "مخطط الحجوزات"
 
 #. module: hotel_reservation
 #: model:ir.ui.menu,name:hotel_reservation.menu_hotel_reservation_planning
@@ -559,8 +552,8 @@ msgstr "مخطط الحجوزات"
 
 #. module: hotel_reservation
 #: model:ir.rule,name:hotel_reservation.rule_hotel_reservation_amendment_assigned_property
-msgid "Reservation amendments in assigned properties"
-msgstr "تعديلات الحجوزات في المنشآت المخصصة"
+msgid "Reservation amendments in active companies"
+msgstr "تعديلات الحجوزات في الشركات النشطة"
 
 #. module: hotel_reservation
 #. odoo-python
@@ -581,8 +574,8 @@ msgstr "الحجوزات"
 
 #. module: hotel_reservation
 #: model:ir.rule,name:hotel_reservation.rule_hotel_reservation_assigned_property
-msgid "Reservations in assigned hotel properties"
-msgstr "الحجوزات في المنشآت الفندقية المخصصة"
+msgid "Reservations in active companies"
+msgstr "الحجوزات في الشركات النشطة"
 
 #. module: hotel_reservation
 #. odoo-python

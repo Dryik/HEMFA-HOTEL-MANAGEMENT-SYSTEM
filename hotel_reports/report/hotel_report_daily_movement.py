@@ -27,12 +27,3 @@ class ReportLandscapeDetail(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         return _report_values(self.env, docids)
-
-
-class ReportFinancialSummary(models.AbstractModel):
-    _name = "report.hotel_reports.report_financial_summary"
-    _description = "Hotel Financial Summary Report Renderer"
-
-    @api.model
-    def _get_report_values(self, docids, data=None):
-        return _report_values(self.env, docids)

@@ -13,7 +13,8 @@ class HotelRoomType(models.Model):
     active = fields.Boolean(default=True)
     property_id = fields.Many2one(
         "hotel.property",
-        help="Leave empty for a room type shared across all properties.",
+        default=lambda self: self.env["hotel.property"]._get_default_property(),
+        help="Internal company-to-hotel compatibility link.",
     )
     # Room types are sellable service products so pricing, taxes and
     # accounting reuse the standard product/invoicing machinery.
@@ -48,13 +49,16 @@ class HotelRoomType(models.Model):
     def create(self, vals_list):
         room_types = super().create(vals_list)
         for rtype in room_types.filtered(lambda r: not r.product_id):
-            rtype.product_id = self.env["product.product"].create(
+            rtype.product_id = self.env["product.product"].with_company(
+                rtype.property_id.company_id or self.env.company
+            ).create(
                 {
                     "name": rtype.name,
                     "type": "service",
                     "list_price": rtype.base_price,
                     "sale_ok": True,
                     "purchase_ok": False,
+                    "company_id": (rtype.property_id.company_id or self.env.company).id,
                 }
             )
         return room_types

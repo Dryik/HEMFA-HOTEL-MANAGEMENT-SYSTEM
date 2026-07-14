@@ -7,8 +7,8 @@ The staging volume is at least 500 rooms, 5,000 partners, 100,000 reservations, 
 | Room board and availability p95 | < 2 seconds |
 | Front Desk Dashboard initial usable render and refresh p95 | < 2 seconds |
 | Planning tape initial usable render and refresh p95 (30 days) | < 2 seconds |
-| Common reservation/cashier actions p95 | < 2 seconds |
-| Full-occupancy night audit | < 5 minutes |
+| Common reservation and payment actions p95 | < 2 seconds |
+| Full-occupancy daily operations report | < 5 minutes |
 | Interactive PDF report | < 10 seconds |
 | Large XLSX export | < 60 seconds |
 

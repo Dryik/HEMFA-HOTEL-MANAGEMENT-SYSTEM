@@ -164,7 +164,6 @@ function normaliseSnapshot(raw = {}) {
     return {
         version: raw.version || 0,
         meta,
-        properties: asArray(raw.properties),
         permissions: raw.permissions || {},
         kpis,
         attention: {
@@ -190,9 +189,6 @@ export class HotelDashboard extends Component {
         this.frontdeskState = useService("hotel_frontdesk_state");
         const stored = this.frontdeskState.get();
         const actionContext = this.props.action?.context || {};
-        const explicitPropertyId = asId(
-            actionContext.default_property_id || actionContext.property_id
-        );
         this.state = useState({
             data: null,
             loading: true,
@@ -201,8 +197,7 @@ export class HotelDashboard extends Component {
             stale: false,
             updatedAt: null,
             ariaStatus: _t("Loading the Front Desk workspace."),
-            propertyId:
-                explicitPropertyId || stored.propertyId,
+            propertyId: null,
             businessDate:
                 actionContext.default_business_date ||
                 actionContext.business_date ||
@@ -214,9 +209,6 @@ export class HotelDashboard extends Component {
         this._refreshTimer = null;
         this._lastAttemptAt = 0;
         this._destroyed = false;
-        this._storedPropertyFallbackPending = Boolean(
-            stored.propertyId && !explicitPropertyId
-        );
         this._onVisibilityChange = () => this.onVisibilityChange();
 
         onMounted(() => {
@@ -276,7 +268,7 @@ export class HotelDashboard extends Component {
         }
         try {
             this._request = this.orm.silent.call("hotel.frontdesk.workspace", "get_workspace_snapshot", [
-                this.state.propertyId || false,
+                false,
                 this.state.businessDate || false,
             ]);
             const raw = await this._request;
@@ -288,7 +280,6 @@ export class HotelDashboard extends Component {
             this.state.propertyId = asId(data.meta.property_id);
             this.state.businessDate = data.meta.business_date;
             this.frontdeskState.update({
-                propertyId: this.state.propertyId,
                 businessDate: this.state.businessDate,
             });
             for (const floor of data.floors) {
@@ -306,12 +297,6 @@ export class HotelDashboard extends Component {
                 requestSequence === this._requestSequence &&
                 error.name !== "ConnectionAbortedError"
             ) {
-                if (!this.state.data && this._storedPropertyFallbackPending) {
-                    this._storedPropertyFallbackPending = false;
-                    this.state.propertyId = null;
-                    this.frontdeskState.update({ propertyId: null });
-                    return this.loadData({ background });
-                }
                 const failure = refreshFailureViewState(
                     this.state.data,
                     errorMessage(error, _t("Unable to refresh the Front Desk workspace."))
@@ -322,7 +307,6 @@ export class HotelDashboard extends Component {
                     this.state.propertyId = asId(this.state.data.meta.property_id);
                     this.state.businessDate = this.state.data.meta.business_date;
                     this.frontdeskState.update({
-                        propertyId: this.state.propertyId,
                         businessDate: this.state.businessDate,
                     });
                 } else {
@@ -340,12 +324,6 @@ export class HotelDashboard extends Component {
                 this._request = null;
             }
         }
-    }
-
-    onPropertyChange(event) {
-        this.state.propertyId = asId(event.target.value);
-        this.frontdeskState.update({ propertyId: this.state.propertyId });
-        this.loadData();
     }
 
     onDateChange(event) {

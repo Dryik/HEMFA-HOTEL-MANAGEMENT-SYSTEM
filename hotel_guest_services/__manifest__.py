@@ -1,7 +1,7 @@
 {
     "name": "Hotel Guest Services",
     "summary": "Lost-and-found, do-not-disturb, and wake-up call operations",
-    "version": "19.0.3.0.0",
+    "version": "19.0.4.0.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",

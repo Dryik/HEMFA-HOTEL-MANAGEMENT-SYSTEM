@@ -10,4 +10,4 @@
 
 Rollback is mandatory when unexplained financial differences remain, critical role isolation fails, room availability is unreliable, or the production database cannot be restored inside the agreed window. Restore the verified backup, return users to the legacy process, preserve failed-import diagnostics, and obtain a new go-live approval.
 
-During an outage, use numbered paper registration and cashier sheets. Record property, business date, operator, guest/stay reference, taxes, currency, payment method, and signatures. On recovery, a supervisor enters records in original sequence, accounting reconciles delayed payments, and the night audit is withheld until delayed entry is signed off. Test primary and secondary internet paths during rehearsal.
+During an outage, use numbered paper registration and payment sheets. Record company, business date, operator, guest/stay reference, taxes, currency, payment method, and signatures. On recovery, a supervisor enters records in original sequence and accounting reconciles delayed payments before normal operations resume. Test primary and secondary internet paths during rehearsal.

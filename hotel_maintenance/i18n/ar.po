@@ -152,8 +152,8 @@ msgstr "طلبات الصيانة"
 
 #. module: hotel_maintenance
 #: model:ir.rule,name:hotel_maintenance.rule_hotel_maintenance_assigned_property
-msgid "Maintenance requests in assigned hotel properties"
-msgstr "طلبات الصيانة في المنشآت الفندقية المخصصة"
+msgid "Maintenance requests in active companies"
+msgstr "طلبات الصيانة في الشركات النشطة"
 
 #. module: hotel_maintenance
 #. odoo-python
@@ -245,11 +245,6 @@ msgstr "مفتوحة"
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
 msgid "Problem"
 msgstr "المشكلة"
-
-#. module: hotel_maintenance
-#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
-msgid "Property"
-msgstr "الفندق / المنشأة"
 
 #. module: hotel_maintenance
 #: model_terms:ir.actions.act_window,help:hotel_maintenance.hotel_maintenance_request_action

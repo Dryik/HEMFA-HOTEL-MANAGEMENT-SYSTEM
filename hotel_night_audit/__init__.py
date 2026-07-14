@@ -1,2 +1,1 @@
-from . import models
-from . import wizard
+"""Migration tombstone for the removed daily-audit workflow."""

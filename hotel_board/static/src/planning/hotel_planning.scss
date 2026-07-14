@@ -1,6 +1,6 @@
 .o_hotel_planning {
-    --hotel-day-width: 100px;
-    --hotel-room-column: 224px;
+    --hotel-day-width: 84px;
+    --hotel-room-column: 200px;
 
     .o_hotel_day_count {
         display: flex;
@@ -109,7 +109,7 @@
     .o_hotel_planning_tape {
         position: relative;
         min-height: 22rem;
-        max-height: calc(100vh - 20rem);
+        max-height: calc(100vh - 15rem);
         overflow: auto;
         overscroll-behavior: contain;
         scrollbar-gutter: stable;
@@ -140,7 +140,7 @@
         position: sticky;
         inset-inline-start: 0;
         z-index: 24;
-        min-height: 5.35rem;
+        min-height: 4.5rem;
         display: flex;
         align-items: center;
         background: var(--hotel-border);
@@ -159,7 +159,7 @@
 
     .o_hotel_planning_day {
         min-width: 0;
-        min-height: 5.35rem;
+        min-height: 4.5rem;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -252,7 +252,7 @@
     }
 
     .o_hotel_planning_row {
-        min-height: 5rem;
+        min-height: 4rem;
         background: var(--hotel-surface);
         border-block-end: 1px solid var(--hotel-border);
 
@@ -327,8 +327,8 @@
 
     .o_hotel_planning_timeline {
         position: relative;
-        min-height: var(--reservation-height, 4.2rem);
-        grid-template-rows: repeat(var(--reservation-lanes, 1), minmax(4.2rem, auto));
+        min-height: var(--reservation-height, 3.5rem);
+        grid-template-rows: repeat(var(--reservation-lanes, 1), minmax(3.5rem, auto));
     }
 
     .o_hotel_planning_cell {
@@ -344,13 +344,26 @@
         border-inline-end: 1px solid var(--hotel-border);
         padding: 0.3rem;
 
+        > .fa-plus {
+            opacity: 0.2;
+            transition: opacity 120ms ease;
+        }
+
         &:not(.o_is_readonly) {
             cursor: pointer;
 
             &:hover {
                 background: rgba($o-brand-primary, 0.1);
                 color: var(--hotel-brand-dark);
+
+                > .fa-plus {
+                    opacity: 1;
+                }
             }
+        }
+
+        &:focus-visible > .fa-plus {
+            opacity: 1;
         }
 
         &.o_is_readonly {
@@ -399,7 +412,7 @@
         align-self: start;
         z-index: 4;
         min-width: 0;
-        min-height: 3.25rem;
+        min-height: 2.75rem;
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -408,8 +421,8 @@
         border: 1px solid rgba($o-gray-900, 0.35);
         border-radius: var(--hotel-radius);
         box-shadow: none;
-        margin: 0.45rem 0.15rem;
-        padding: 0.35rem 0.55rem;
+        margin: 0.35rem 0.12rem;
+        padding: 0.3rem 0.45rem;
         text-align: start;
         overflow: hidden;
         cursor: pointer;

@@ -33,8 +33,6 @@ MODULES = [
     "hotel_board",
     "hotel_folio",
     "hotel_rate",
-    "hotel_night_audit",
-    "hotel_frontdesk_session",
     "hotel_housekeeping",
     "hotel_maintenance",
     "hotel_restricted_services",

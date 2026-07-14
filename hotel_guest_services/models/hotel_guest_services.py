@@ -70,9 +70,9 @@ class HotelLostFound(models.Model):
     def _check_property_consistency(self):
         for item in self:
             if item.room_id and item.room_id.property_id != item.property_id:
-                raise ValidationError(_("The room must belong to the selected property."))
+                raise ValidationError(_("The room must belong to the active company."))
             if item.reservation_id and item.reservation_id.property_id != item.property_id:
-                raise ValidationError(_("The stay must belong to the selected property."))
+                raise ValidationError(_("The stay must belong to the active company."))
 
     def action_mark_claimed(self):
         for item in self:

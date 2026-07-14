@@ -31,8 +31,6 @@ class TestHotelMaintenance(TransactionCase):
                 "group_ids": [
                     (4, cls.env.ref("hotel_base.group_hotel_maintenance").id)
                 ],
-                "hotel_property_ids": [(6, 0, [cls.property.id])],
-                "default_hotel_property_id": cls.property.id,
             }
         )
         # Odoo 19 has_group checks real membership even for the test
@@ -44,8 +42,6 @@ class TestHotelMaintenance(TransactionCase):
                 "group_ids": [
                     (4, cls.env.ref("hotel_base.group_hotel_manager").id)
                 ],
-                "hotel_property_ids": [(6, 0, [cls.property.id])],
-                "default_hotel_property_id": cls.property.id,
             }
         )
 

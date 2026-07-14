@@ -1,7 +1,7 @@
 {
     "name": "Hotel Rates",
     "summary": "Seasonal rates, occupancy bands, nationality currency rule, 12:00-12:00 business day, rate lock",
-    "version": "19.0.2.0.0",
+    "version": "19.0.4.0.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",

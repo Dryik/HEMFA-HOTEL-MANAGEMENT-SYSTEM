@@ -311,6 +311,7 @@ class HotelFolio(models.Model):
         source_reference=None,
         source_key=None,
         invoiceable=True,
+        payee=None,
     ):
         if source_type not in {
             "room_night",
@@ -332,6 +333,7 @@ class HotelFolio(models.Model):
             source_reference=source_reference,
             source_key=source_key,
             invoiceable=invoiceable,
+            payee=payee,
             workflow=True,
         )
 
@@ -347,6 +349,7 @@ class HotelFolio(models.Model):
         source_reference=None,
         source_key=None,
         invoiceable=True,
+        payee=None,
         workflow=False,
     ):
         self.ensure_one()
@@ -354,18 +357,19 @@ class HotelFolio(models.Model):
             price_unit = product.list_price
 
         # Determine payee using routing rules
-        payee = self.partner_id
-        if self.reservation_id.agency_id:
-            rule = self.env["hotel.folio.routing.rule"].search(
-                [
-                    ("property_id", "=", self.reservation_id.property_id.id),
-                    ("category_id", "=", product.categ_id.id),
-                    ("active", "=", True),
-                ],
-                limit=1,
-            )
-            if rule and rule.routing_type == "agency":
-                payee = rule.agency_id or self.reservation_id.agency_id
+        if not payee:
+            payee = self.partner_id
+            if self.reservation_id.agency_id:
+                rule = self.env["hotel.folio.routing.rule"].search(
+                    [
+                        ("property_id", "=", self.reservation_id.property_id.id),
+                        ("category_id", "=", product.categ_id.id),
+                        ("active", "=", True),
+                    ],
+                    limit=1,
+                )
+                if rule and rule.routing_type == "agency":
+                    payee = rule.agency_id or self.reservation_id.agency_id
 
         # Determine taxes
         company = self.property_id.company_id
@@ -484,8 +488,16 @@ class HotelFolio(models.Model):
 
     def unlink(self):
         for folio in self:
-            if any(line.is_posted for line in folio.line_ids):
-                raise UserError(_("You cannot delete a folio with posted or invoiced charges."))
+            if any(
+                line.is_posted or line.source_type != "manual"
+                for line in folio.line_ids
+            ):
+                raise UserError(
+                    _(
+                        "You cannot delete a folio with workflow-generated, "
+                        "posted, or invoiced charges."
+                    )
+                )
         return super().unlink()
 
 
@@ -552,7 +564,6 @@ class HotelFolioLine(models.Model):
             ("unlocked", "Unlocked"),
             ("accounting", "Accounting"),
             ("pos", "POS"),
-            ("night_audit", "Night Audit"),
             ("reversal", "Reversal"),
         ],
         default="unlocked",
@@ -575,7 +586,7 @@ class HotelFolioLine(models.Model):
     is_posted = fields.Boolean(
         string="Posted",
         default=False,
-        help="If checked, the charge is locked (e.g. invoiced or processed by night audit).",
+        help="If checked, the charge is locked by an accounting or operational workflow.",
     )
     reversal_of_id = fields.Many2one(
         "hotel.folio.line",
@@ -708,6 +719,25 @@ class HotelFolioLine(models.Model):
             raise UserError(
                 _("Financial lock and source links can only be changed by their hotel workflow.")
             )
+        workflow_financial_fields = {
+            "name",
+            "product_id",
+            "qty",
+            "price_unit",
+            "discount",
+            "tax_ids",
+            "service_date",
+            "payee_partner_id",
+        }
+        if workflow_financial_fields.intersection(vals) and self.filtered(
+            lambda line: line.source_type != "manual"
+        ):
+            raise UserError(
+                _(
+                    "Workflow-generated folio charges are immutable. "
+                    "Use the originating hotel workflow."
+                )
+            )
         protected_fields = {
             "date",
             "product_id",
@@ -752,10 +782,7 @@ class HotelFolioLine(models.Model):
         if self.is_posted or self.lock_state != "unlocked":
             raise UserError(_("This folio line is already locked."))
         values = {"is_posted": True, "lock_state": lock_state}
-        if lock_state == "night_audit":
-            if self.source_type != "room_night" or accounting_move:
-                raise UserError(_("A night-audit lock requires an untransferred room-night line."))
-        elif lock_state == "pos":
+        if lock_state == "pos":
             if (
                 self.source_type != "pos"
                 or not self.pos_order_line_id
@@ -797,12 +824,34 @@ class HotelFolioLine(models.Model):
             raise UserError(_("The amendment source does not match this folio charge."))
         return super(HotelFolioLine, self).write({"amendment_id": amendment.id})
 
+    def _link_stay_reversal(self, original_line, reason):
+        """Link an unlocked cancellation/no-show credit to its stay charge."""
+        self.ensure_one()
+        original_line.ensure_one()
+        if (
+            self.source_type != "reversal"
+            or self.is_posted
+            or self.folio_id != original_line.folio_id
+            or original_line.source_type != "room_night"
+            or self.qty >= 0
+            or self.reversal_of_id
+        ):
+            raise UserError(_("The stay reversal does not match its original charge."))
+        return super(HotelFolioLine, self).write(
+            {
+                "reversal_of_id": original_line.id,
+                "reversal_reason": reason,
+                "reversed_by_id": self.env.user.id,
+                "reversed_at": fields.Datetime.now(),
+            }
+        )
+
     def _link_invoice_line(self, invoice_line):
         """Attach an immutable charge to its finance-generated draft invoice.
 
         This private method is the only valid transition from an operational
-        night-audit lock to an accounting lock.  It validates the generated
-        invoice instead of trusting a caller-controlled context flag.
+        charge to an accounting lock. It validates the generated invoice
+        instead of trusting a caller-controlled context flag.
         """
         self.ensure_one()
         invoice_line.ensure_one()
@@ -1043,8 +1092,13 @@ class HotelFolioLine(models.Model):
 
     def unlink(self):
         for line in self:
-            if line.is_posted:
-                raise UserError(_("You cannot delete a posted or invoiced folio line."))
+            if line.is_posted or line.source_type != "manual":
+                raise UserError(
+                    _(
+                        "You cannot delete a workflow-generated, posted, "
+                        "or invoiced folio line."
+                    )
+                )
         return super().unlink()
 
 

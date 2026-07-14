@@ -9,7 +9,6 @@
                 <field name="id"/>
                 <field name="name"/>
                 <field name="room_id"/>
-                <field name="property_id"/>
                 <field name="cleaner_id"/>
                 <field name="priority"/>
                 <field name="date_start"/>
@@ -25,10 +24,6 @@
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <strong class="fs-4 text-dark"><field name="room_id"/></strong>
                                 <field name="priority" widget="priority"/>
-                            </div>
-                            <div class="small text-muted mb-1">
-                                <i class="fa fa-building-o me-1" title="Property" aria-hidden="true"/>
-                                <field name="property_id"/>
                             </div>
                             <div class="small mb-1">
                                 <i class="fa fa-user me-1 text-muted" title="Cleaner" aria-hidden="true"/>
@@ -71,7 +66,6 @@
             <list string="Housekeeping Tasks" decoration-info="state == 'new'" decoration-warning="state == 'cleaning'" decoration-success="state == 'cleaned'" decoration-muted="state == 'cancel'">
                 <field name="name"/>
                 <field name="room_id"/>
-                <field name="property_id"/>
                 <field name="cleaner_id"/>
                 <field name="priority" widget="priority"/>
                 <field name="date_start"/>
@@ -102,7 +96,7 @@
                     <group>
                         <group name="room_details" string="Room Details">
                             <field name="room_id"/>
-                            <field name="property_id"/>
+                            <field name="property_id" invisible="1"/>
                             <field name="room_type_id"/>
                         </group>
                         <group name="cleaning_assignment" string="Cleaning">
@@ -134,7 +128,6 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="property_id"/>
                 <field name="room_id"/>
                 <field name="cleaner_id"/>
                 <filter string="New" name="new" domain="[('state', '=', 'new')]"/>
@@ -147,7 +140,6 @@
                     <filter string="Room" name="group_by_room" context="{'group_by': 'room_id'}"/>
                     <filter string="Cleaner" name="group_by_cleaner" context="{'group_by': 'cleaner_id'}"/>
                     <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
-                    <filter string="Property" name="group_by_property" context="{'group_by': 'property_id'}"/>
                 </group>
             </search>
         </field>
