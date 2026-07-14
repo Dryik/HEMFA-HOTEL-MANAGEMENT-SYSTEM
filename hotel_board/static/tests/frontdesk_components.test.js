@@ -17,7 +17,6 @@ const BUSINESS_DATE = "2026-07-13";
 
 function mockFrontdeskState(initial = {}) {
     let state = {
-        propertyId: initial.propertyId || null,
         businessDate: initial.businessDate || null,
     };
     mockService("hotel_frontdesk_state", () => ({
@@ -103,7 +102,7 @@ function dashboardSnapshot() {
 
 function planningWindow() {
     return {
-        version: 1,
+        version: 2,
         meta: {
             property_id: PROPERTY_ID,
             property_name: "Tripoli Hotel",
@@ -156,7 +155,7 @@ function planningWindow() {
                                 primary_status: "vacant",
                                 hk_status: "clean",
                                 alert_types: [],
-                                action: false,
+                                can_create: false,
                             },
                             {
                                 index: 1,
@@ -164,7 +163,7 @@ function planningWindow() {
                                 primary_status: "vacant",
                                 hk_status: "clean",
                                 alert_types: [],
-                                action: false,
+                                can_create: false,
                             },
                         ],
                         reservations: [],
@@ -188,7 +187,7 @@ test("Dashboard renders loading data and opens drill-downs with snapshot context
         "hotel.frontdesk.workspace",
         "get_workspace_snapshot",
         ({ args }) => {
-            expect(args).toEqual([PROPERTY_ID, BUSINESS_DATE]);
+            expect(args).toEqual([false, BUSINESS_DATE]);
             return response;
         }
     );
@@ -210,7 +209,6 @@ test("Dashboard renders loading data and opens drill-downs with snapshot context
     expect(".o_hotel_loading_state").toHaveCount(0);
     expect(".o_hotel_room_tile").toHaveText(/101/);
     expect(getFrontdeskState()).toEqual({
-        propertyId: PROPERTY_ID,
         businessDate: BUSINESS_DATE,
     });
 
@@ -264,7 +262,7 @@ test("Planning exposes read-only cells to RTL arrow-key navigation", async () =>
     mockFrontdeskState();
     mockAction();
     onRpc("hotel.frontdesk.workspace", "get_planning_window", ({ args }) => {
-        expect(args.slice(0, 3)).toEqual([PROPERTY_ID, BUSINESS_DATE, 7]);
+        expect(args.slice(0, 3)).toEqual([false, BUSINESS_DATE, 7]);
         return planningWindow();
     });
 

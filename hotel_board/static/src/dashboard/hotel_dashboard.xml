@@ -15,18 +15,6 @@
                 </div>
                 <div class="o_hotel_workspace_controls">
                     <div class="o_hotel_field">
-                        <label for="hotel-dashboard-property">Property</label>
-                        <select id="hotel-dashboard-property" class="form-select"
-                            t-on-change="onPropertyChange"
-                            t-att-disabled="!state.data or state.refreshing">
-                            <option t-foreach="state.data?.properties || []" t-as="property"
-                                t-key="property.id" t-att-value="property.id"
-                                t-att-selected="property.id === state.propertyId">
-                                <t t-esc="property.name"/>
-                            </option>
-                        </select>
-                    </div>
-                    <div class="o_hotel_field">
                         <label for="hotel-dashboard-date">Business Date</label>
                         <input id="hotel-dashboard-date" type="date" class="form-control" lang="en" dir="ltr"
                             t-att-value="state.businessDate" t-on-change="onDateChange"
@@ -232,7 +220,7 @@
                     <div t-else="" class="o_hotel_empty_state o_hotel_card">
                         <i class="fa fa-bed" aria-hidden="true"/>
                         <h3>No rooms to display</h3>
-                        <p>Try another property or business date.</p>
+                        <p>Try another business date.</p>
                     </div>
                 </section>
             </t>

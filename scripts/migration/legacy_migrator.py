@@ -154,8 +154,6 @@ class LegacyMigrator:
                 "name": row["name"],
                 "code": row.get("code"),
                 "timezone": row.get("timezone", "Africa/Tripoli"),
-                "current_business_date": row.get("current_business_date")
-                or fields.Date.today(),
                 "company_id": self.env.company.id,
             },
         )
@@ -446,7 +444,6 @@ class LegacyMigrator:
         mapping = {
             "hotel.reservation": "hotel.reservation",
             "hotel.folio": "hotel.folio",
-            "hotel.night.audit": "hotel.night.audit",
         }
         for model, sequence_code in mapping.items():
             maxima = []

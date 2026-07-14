@@ -30,9 +30,9 @@ import "../shared/frontdesk_state_service";
 
 const REFRESH_INTERVAL_MS = 60_000;
 const ALLOWED_DAY_COUNTS = [7, 14, 30];
-const DAY_WIDTH_PX = 100;
-const ROOM_COLUMN_WIDTH_PX = 224;
-const RESERVATION_LANE_HEIGHT_REM = 4.2;
+const DAY_WIDTH_PX = 84;
+const ROOM_COLUMN_WIDTH_PX = 200;
+const RESERVATION_LANE_HEIGHT_REM = 3.5;
 
 const EMPTY_FILTERS = Object.freeze({
     floor_ids: [],
@@ -217,7 +217,6 @@ export function normalisePlanning(raw = {}, requestedStartDate, requestedDayCoun
     return {
         version: raw.version || 1,
         meta: { ...meta, start_date: startDate, day_count: dayCount },
-        properties: asArray(raw.properties),
         permissions: raw.permissions || {},
         days,
         filters: {
@@ -250,11 +249,6 @@ export class HotelPlanning extends Component {
         const stored = this.frontdeskState.get();
         const actionContext = this.props.action?.context || {};
         const actionParams = this.props.action?.params || {};
-        const explicitPropertyId = asId(
-            actionParams.property_id ||
-                actionContext.default_property_id ||
-                actionContext.property_id
-        );
         const contextDayCount = Number(
             actionParams.day_count || actionContext.day_count || actionContext.default_day_count
         );
@@ -266,8 +260,7 @@ export class HotelPlanning extends Component {
             stale: false,
             updatedAt: null,
             ariaStatus: _t("Loading reservation planning."),
-            propertyId:
-                explicitPropertyId || stored.propertyId,
+            propertyId: null,
             startDate:
                 actionParams.start_date ||
                 actionContext.default_start_date ||
@@ -283,9 +276,6 @@ export class HotelPlanning extends Component {
         this._refreshTimer = null;
         this._lastAttemptAt = 0;
         this._destroyed = false;
-        this._storedPropertyFallbackPending = Boolean(
-            stored.propertyId && !explicitPropertyId
-        );
         this._lastSuccessfulFilters = normaliseFilters(this.state.filters);
         this._onVisibilityChange = () => this.onVisibilityChange();
 
@@ -352,7 +342,7 @@ export class HotelPlanning extends Component {
         }
         try {
             this._request = this.orm.silent.call("hotel.frontdesk.workspace", "get_planning_window", [
-                this.state.propertyId || false,
+                false,
                 this.state.startDate || false,
                 this.state.dayCount,
                 this.state.filters,
@@ -368,7 +358,6 @@ export class HotelPlanning extends Component {
             this.state.dayCount = data.meta.day_count;
             this._lastSuccessfulFilters = requestedFilters;
             this.frontdeskState.update({
-                propertyId: this.state.propertyId,
                 businessDate: data.meta.business_date || this.state.startDate,
             });
             this.state.error = null;
@@ -389,13 +378,6 @@ export class HotelPlanning extends Component {
                 requestSequence === this._requestSequence &&
                 error.name !== "ConnectionAbortedError"
             ) {
-                if (!this.state.data && this._storedPropertyFallbackPending) {
-                    this._storedPropertyFallbackPending = false;
-                    this.state.propertyId = null;
-                    this.state.filters = cloneEmptyFilters();
-                    this.frontdeskState.update({ propertyId: null });
-                    return this.loadData({ background, preserveScroll: false });
-                }
                 const failure = refreshFailureViewState(
                     this.state.data,
                     errorMessage(error, _t("Unable to refresh reservation planning."))
@@ -408,7 +390,6 @@ export class HotelPlanning extends Component {
                     this.state.dayCount = this.state.data.meta.day_count;
                     this.state.filters = normaliseFilters(this._lastSuccessfulFilters);
                     this.frontdeskState.update({
-                        propertyId: this.state.propertyId,
                         businessDate:
                             this.state.data.meta.business_date || this.state.startDate,
                     });
@@ -429,13 +410,6 @@ export class HotelPlanning extends Component {
                 this._request = null;
             }
         }
-    }
-
-    onPropertyChange(event) {
-        this.state.propertyId = asId(event.target.value);
-        this.state.filters = cloneEmptyFilters();
-        this.frontdeskState.update({ propertyId: this.state.propertyId });
-        this.loadData({ preserveScroll: false });
     }
 
     onStartDateChange(event) {
@@ -506,7 +480,7 @@ export class HotelPlanning extends Component {
             blockerClass: "unknown",
             alertTypes: [],
             reservation_id: false,
-            action: false,
+            can_create: false,
         };
     }
 
@@ -518,7 +492,7 @@ export class HotelPlanning extends Component {
             status.hk_status ? `o_hk_${status.housekeepingClass}` : "",
             status.capacity_blocker ? `o_blocker_${status.blockerClass}` : "",
             status.alertTypes.length ? "o_has_alert" : "",
-            !status.action && !status.reservation_action && !status.reservation_id
+            !status.can_create && !status.reservation_id
                 ? "o_is_readonly"
                 : "",
             day.is_today ? "o_is_today" : "",
@@ -558,7 +532,7 @@ export class HotelPlanning extends Component {
             ...status.alertTypes.map(
                 (alert) => ALERT_LABELS[alert] || this.statusLabel(alert)
             ),
-            status.action ? _t("Create a reservation") : "",
+            status.can_create ? _t("Create a reservation") : "",
         ]
             .filter(Boolean)
             .join(", ");
@@ -630,13 +604,16 @@ export class HotelPlanning extends Component {
         }
     }
 
-    async openAction(action) {
+    async openAction(action, businessDateOverride = null) {
         if (!action) {
             return;
         }
         const propertyId = asId(this.state.data?.meta?.property_id) || this.state.propertyId;
         const businessDate =
-            this.state.data?.meta?.business_date || this.state.data?.meta?.start_date || this.state.startDate;
+            businessDateOverride ||
+            this.state.data?.meta?.business_date ||
+            this.state.data?.meta?.start_date ||
+            this.state.startDate;
         await this.action.doAction(
             actionWithFrontdeskContext(
                 action,
@@ -648,11 +625,28 @@ export class HotelPlanning extends Component {
 
     openDayCell(row, day) {
         const status = this.dayStatus(row, day);
-        if (status.action) {
-            return this.openAction(status.action);
-        }
-        if (status.reservation_action) {
-            return this.openAction(status.reservation_action);
+        if (status.can_create) {
+            const action = this.state.data?.actions?.new_reservation || {
+                type: "ir.actions.act_window",
+                name: _t("New Reservation"),
+                res_model: "hotel.reservation",
+                views: [[false, "form"]],
+                target: "current",
+                context: {},
+            };
+            return this.openAction(
+                {
+                    ...action,
+                    context: {
+                        ...(action.context || {}),
+                        default_room_id: row.id,
+                        default_room_type_id: asId(row.room_type?.id),
+                        default_checkin_date: atNoon(day.date),
+                        default_checkout_date: atNoon(addIsoDays(day.date, 1)),
+                    },
+                },
+                day.date
+            );
         }
         if (status.reservation_id) {
             const reservation = row.reservations.find(
@@ -707,8 +701,8 @@ export class HotelPlanning extends Component {
         });
     }
 
-    openReservationGantt() {
-        return this.openAction(this.state.data?.actions?.reservation_gantt);
+    openReservationPlanner() {
+        return this.openAction(this.state.data?.actions?.reservation_planner);
     }
 
     reservationStyle(reservation) {

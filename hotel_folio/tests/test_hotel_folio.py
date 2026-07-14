@@ -20,6 +20,7 @@ class TestHotelFolio(TransactionCase):
         cls.room_type = cls.env["hotel.room.type"].create(
             {"name": "Folio Suite", "base_price": 400.0}
         )
+        cls.room_type.product_id.taxes_id = [(5, 0, 0)]
         cls.room = cls.env["hotel.room"].create(
             {
                 "name": "R201",
@@ -40,8 +41,6 @@ class TestHotelFolio(TransactionCase):
                 "group_ids": [
                     (4, cls.env.ref("hotel_base.group_hotel_frontdesk").id)
                 ],
-                "hotel_property_ids": [(6, 0, [cls.property.id])],
-                "default_hotel_property_id": cls.property.id,
             }
         )
         cls.manager_user = cls.env["res.users"].create(
@@ -51,8 +50,6 @@ class TestHotelFolio(TransactionCase):
                 "group_ids": [
                     (4, cls.env.ref("hotel_base.group_hotel_manager").id)
                 ],
-                "hotel_property_ids": [(6, 0, [cls.property.id])],
-                "default_hotel_property_id": cls.property.id,
             }
         )
 
@@ -112,6 +109,34 @@ class TestHotelFolio(TransactionCase):
         folio = res.folio_ids[0]
         self.assertTrue(folio.name.startswith("FOLIO/"))
         self.assertEqual(folio.partner_id, self.guest)
+        stay_line = folio.line_ids.filtered(
+            lambda line: line.source_type == "room_night"
+        )
+        self.assertEqual(stay_line.qty, 2.0)
+        self.assertEqual(stay_line.amount_total, 800.0)
+
+    def test_cancellation_reverses_contracted_stay(self):
+        reservation = self._reservation()
+        reservation.action_confirm()
+        folio = reservation.folio_ids[0]
+        stay_line = folio.line_ids.filtered(
+            lambda line: line.source_type == "room_night"
+        )
+
+        reservation.action_cancel()
+
+        reversal = folio.line_ids.filtered(
+            lambda line: line.source_type == "reversal"
+        )
+        self.assertEqual(len(reversal), 1)
+        self.assertEqual(reversal.qty, -stay_line.qty)
+        self.assertEqual(reversal.payee_partner_id, stay_line.payee_partner_id)
+        self.assertEqual(reversal.reversal_of_id, stay_line)
+        self.assertEqual(folio.amount_total, 0.0)
+
+        reservation.action_reset_draft()
+        reservation.action_confirm()
+        self.assertEqual(folio.amount_total, 800.0)
 
     def test_new_folio_totals_are_safe_before_reservation_selection(self):
         folio = self.env["hotel.folio"].new({})
@@ -129,7 +154,7 @@ class TestHotelFolio(TransactionCase):
         line1 = folio.add_charge(self.burger, qty=2.0)
         self.assertEqual(line1.amount, 30.0)
         self.assertEqual(line1.payee_partner_id, self.guest)
-        self.assertEqual(folio.amount_total, 30.0)
+        self.assertEqual(folio.amount_total, 830.0)
         with self.assertRaises(UserError):
             line1.write({"source_type": "pos", "source_key": "pos:forged"})
         with self.assertRaises(UserError):
@@ -263,9 +288,9 @@ class TestHotelFolio(TransactionCase):
         with self.assertRaises(UserError):
             payment.write({"hotel_folio_id": False})
         folio._compute_totals()
-        self.assertAlmostEqual(folio.amount_total, 30.0)
+        self.assertAlmostEqual(folio.amount_total, 830.0)
         self.assertAlmostEqual(folio.amount_paid, 10.0)
-        self.assertAlmostEqual(folio.amount_due, 20.0)
+        self.assertAlmostEqual(folio.amount_due, 820.0)
 
         action = folio.action_create_invoice()
         invoice = self.env["account.move"].browse(action["res_id"])
@@ -275,9 +300,9 @@ class TestHotelFolio(TransactionCase):
         )
         receivable_lines.reconcile()
         folio._compute_totals()
-        self.assertAlmostEqual(folio.amount_invoiced, 30.0)
+        self.assertAlmostEqual(folio.amount_invoiced, 830.0)
         self.assertAlmostEqual(folio.amount_paid, 10.0)
-        self.assertAlmostEqual(folio.amount_due, 20.0)
+        self.assertAlmostEqual(folio.amount_due, 820.0)
 
     def test_invoicing(self):
         res = self._reservation()
@@ -286,7 +311,7 @@ class TestHotelFolio(TransactionCase):
 
         folio.add_charge(self.burger, qty=1.0)
         folio.add_charge(self.laundry, qty=2.0)
-        self.assertEqual(folio.amount_total, 35.0)
+        self.assertEqual(folio.amount_total, 835.0)
 
         with self.assertRaises(UserError):
             folio.with_user(self.frontdesk_user).action_create_invoice()
@@ -295,8 +320,8 @@ class TestHotelFolio(TransactionCase):
         action = folio.action_create_invoice()
         invoice = self.env["account.move"].browse(action["res_id"])
         self.assertEqual(invoice.partner_id, self.guest)
-        self.assertEqual(len(invoice.invoice_line_ids), 2)
-        self.assertEqual(invoice.amount_untaxed, 35.0)
+        self.assertEqual(len(invoice.invoice_line_ids), 3)
+        self.assertEqual(invoice.amount_untaxed, 835.0)
 
         # All lines should now be marked as posted
         self.assertTrue(all(line.is_posted for line in folio.line_ids))
@@ -337,38 +362,68 @@ class TestHotelFolio(TransactionCase):
         with self.assertRaises(UserError):
             posted_line.with_user(self.manager_user).action_reverse("Duplicate")
 
-        # A non-posted folio and line should be deletable
+        # Workflow charges stay immutable before invoicing; manual lines and
+        # empty draft folios remain deletable.
         res2 = self._reservation(offset_days=5)
         res2.action_confirm()
         folio2 = res2.folio_ids[0]
-        folio2.add_charge(self.burger, qty=1.0)
+        manual_line = folio2.add_charge(self.burger, qty=1.0)
         self.assertFalse(any(line.is_posted for line in folio2.line_ids))
-        folio2.line_ids[0].unlink()
-        folio2.unlink()
+        workflow_line = folio2.line_ids.filtered(
+            lambda line: line.source_type == "room_night"
+        )
+        with self.assertRaises(UserError):
+            workflow_line.unlink()
+        with self.assertRaises(UserError):
+            folio2.unlink()
+        manual_line.unlink()
+
+        draft_reservation = self._reservation(offset_days=8)
+        empty_folio = self.env["hotel.folio"].create(
+            {"reservation_id": draft_reservation.id}
+        )
+        empty_folio.unlink()
 
     def test_folio_is_open(self):
         res = self._reservation()
         res.action_confirm()
         folio = res.folio_ids[0]
-        # Confirmed stay with no balance is still open (stay active).
+        # The full contracted stay is charged on confirmation.
         self.assertTrue(folio.is_open)
         self.assertEqual(folio.property_id, self.property)
 
         res.action_check_in()
         folio.add_charge(self.burger, qty=1.0)
         self.assertTrue(folio.is_open)
-        self.assertEqual(folio.amount_due, 15.0)
+        self.assertEqual(folio.amount_due, 815.0)
 
         res.checkout_balance_override_reason = "Approved test checkout balance"
         res.action_check_out()
         # Checked out with balance still due remains open.
         self.assertTrue(folio.is_open)
 
-        # Zero out the due amount by matching paid to total without invoices:
-        # mark amount_paid via a posted invoice residual of zero is complex;
-        # simulate settlement by clearing the charge line for this unit test.
-        folio.line_ids.unlink()
-        folio.invalidate_recordset()
+        action = folio.action_create_invoice()
+        invoice = self.env["account.move"].browse(action["res_id"])
+        invoice.action_post()
+        payment = self.env["account.payment"].create(
+            {
+                "amount": 815.0,
+                "date": fields.Date.today(),
+                "payment_type": "inbound",
+                "partner_type": "customer",
+                "partner_id": self.guest.id,
+                "currency_id": folio.currency_id.id,
+                "hotel_property_id": self.property.id,
+                "hotel_folio_id": folio.id,
+                "hotel_payment_purpose": "folio_settlement",
+            }
+        )
+        payment.action_post()
+        receivable_lines = (invoice | payment.move_id).line_ids.filtered(
+            lambda line: line.account_id.account_type == "asset_receivable"
+        )
+        receivable_lines.reconcile()
+        folio._compute_totals()
         self.assertEqual(folio.amount_due, 0.0)
         self.assertFalse(folio.is_open)
 

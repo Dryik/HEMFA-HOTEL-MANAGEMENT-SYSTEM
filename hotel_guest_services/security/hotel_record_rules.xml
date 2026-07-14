@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="rule_hotel_lost_found_property" model="ir.rule">
-        <field name="name">Lost and found in assigned properties</field>
+        <field name="name">Lost and found in active companies</field>
         <field name="model_id" ref="model_hotel_lost_found"/>
-        <field name="domain_force">[('property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk')), (4, ref('hotel_base.group_hotel_housekeeping'))]"/>
     </record>
     <record id="rule_hotel_dnd_property" model="ir.rule">
-        <field name="name">DND requests in assigned properties</field>
+        <field name="name">DND requests in active companies</field>
         <field name="model_id" ref="model_hotel_do_not_disturb"/>
-        <field name="domain_force">[('property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk')), (4, ref('hotel_base.group_hotel_housekeeping'))]"/>
     </record>
     <record id="rule_hotel_wakeup_property" model="ir.rule">
-        <field name="name">Wake-up calls in assigned properties</field>
+        <field name="name">Wake-up calls in active companies</field>
         <field name="model_id" ref="model_hotel_wakeup_call"/>
-        <field name="domain_force">[('property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk'))]"/>
     </record>
     <record id="rule_hotel_lost_found_system_unrestricted" model="ir.rule">

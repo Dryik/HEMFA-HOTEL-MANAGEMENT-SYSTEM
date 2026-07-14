@@ -14,7 +14,7 @@
                    disable_drag_drop="1"
                    default_scale="week"
                    scales="day,week,month"
-                   string="Reservation Gantt — Read-only"
+                   string="Reservation Planner"
                    sample="0">
                 <field name="partner_id"/>
                 <field name="state"/>
@@ -159,7 +159,6 @@
             <search>
                 <field name="name"/>
                 <field name="partner_id"/>
-                <field name="property_id"/>
                 <field name="room_id"/>
                 <field name="room_type_id"/>
                 <field name="name" string="Floor"
@@ -181,7 +180,6 @@
                     <filter string="Room" name="group_room" context="{'group_by': 'room_id'}"/>
                     <filter string="Guest" name="group_guest" context="{'group_by': 'partner_id'}"/>
                     <filter string="Agency / Entity" name="group_agency" context="{'group_by': 'agency_id'}"/>
-                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
                     <filter string="Room Type" name="group_room_type" context="{'group_by': 'room_type_id'}"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
                     <filter string="Arrival Date" name="group_checkin" context="{'group_by': 'checkin_date:day'}"/>
@@ -191,7 +189,7 @@
     </record>
 
     <record id="action_hotel_reservation" model="ir.actions.act_window">
-        <field name="name">Reservation Gantt — Read-only</field>
+        <field name="name">Reservation Planner</field>
         <field name="res_model">hotel.reservation</field>
         <field name="view_mode">gantt</field>
         <field name="view_id" ref="hotel_reservation_view_gantt"/>
@@ -272,7 +270,7 @@
         groups="hotel_base.group_hotel_frontdesk"/>
 
     <menuitem id="menu_hotel_reservation_gantt_readonly"
-        name="Reservation Gantt — Read-only"
+        name="Reservation Planner"
         parent="menu_hotel_frontdesk"
         action="action_hotel_reservation"
         sequence="95"

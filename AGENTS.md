@@ -20,19 +20,17 @@ Deployment target: Odoo.sh (dev / staging / production branches).
 
 | Module | Phase | Status | Purpose |
 |---|---|---|---|
-| `hotel_base` | 1 | done | Properties, floors, room types, rooms, amenities, guest/agency partner extensions |
+| `hotel_base` | 1 | done | Company-scoped hotel configuration, floors, room types, rooms, amenities, guest/agency partner extensions |
 | `hotel_reservation` | 4 | implemented | Shared availability, physical occupancy, amendments, groups and rooming lists |
 | `hotel_board` | 5 | implemented | Front Desk composition workspace, operational KPIs, attention queues and complete-room Planning tape |
 | `hotel_folio` | 3 | implemented (finance approval pending) | Tax-aware folio, native accounting, deposits/advances, FX, credits/reversals |
 | `hotel_rate` | 5 | implemented | Deterministic seasonal/occupancy pricing and confirmed-rate lock |
-| `hotel_night_audit` | 5 | implemented | Concurrency lock, audited-date charges, immutable KPI snapshots and reversal |
-| `hotel_frontdesk_session` | 3 | implemented | Explicit posted payments and per-journal/currency immutable close |
 | `hotel_housekeeping` | 4 | implemented | Cleaning/discrepancy workflow with immutable completion |
 | `hotel_maintenance` | 4 | implemented | Maintenance workflow and verified immutable room-block release |
 | `hotel_guest_services` | 4 | implemented | Lost-and-found, DND and wake-up calls |
 | `hotel_restricted_services` | 3 | implemented | Property/business-day aggregate ceilings with row locking |
 | `hotel_pos_room_charge` | 3 | implemented | Idempotent discounted/taxed folio transfer from clearing to receivable |
-| `hotel_reports` | 6 | implemented | Bilingual PDF/XLSX operational, finance, audit and folio reports |
+| `hotel_reports` | 6 | implemented | Bilingual PDF/XLSX operational, finance and folio reports |
 
 ## Key Field Name Conventions
 
@@ -40,8 +38,6 @@ Deployment target: Odoo.sh (dev / staging / production branches).
 - `hotel.room`: Fields are `occupancy_state`, `hk_status`, `out_of_order`, `admin_use`.
 - `hotel.reservation`: States are `draft`, `confirmed`, `checked_in`, `checked_out`, `cancelled`, `no_show`.
 - `hotel.folio.line`: `payee_partner_id` determines who is billed.
-- `hotel.frontdesk.session`: States are `opened`, `closed`.
-- `hotel.night.audit`: States are `draft`, `done`.
 - `hotel.housekeeping.task`: States are `new`, `cleaning`, `cleaned`, `cancel`.
 - `hotel.maintenance.request`: States are `new`, `confirmed`, `in_progress`, `done`, `verified`, `cancel`; blocking starts at `confirmed`, verify needs `group_hotel_manager`.
 - `hotel.service.restriction`: `restriction_type` is `blocked` or `limited` (with `daily_limit` / `stay_limit`); enforcement lives in `hotel.folio.add_charge`.
@@ -56,15 +52,13 @@ hotel_base (foundation)
   │     ├── hotel_housekeeping (auto-triggered on checkout)
   │     ├── hotel_guest_services (lost/found, DND, wake-up)
   │     └── hotel_folio (auto-created on confirm)
-  │           ├── hotel_frontdesk_session (cashier shifts)
-  │           ├── hotel_night_audit (nightly rollover)
   │           ├── hotel_restricted_services (charge validation)
   │           │     └── hotel_pos_room_charge (+ point_of_sale)
   │           └── hotel_reports (+ hotel_housekeeping)
   ├── hotel_maintenance (room out-of-order driver)
   └── hotel_board (Front Desk composition layer)
-        └── reservation, folio, cashier, audit, housekeeping,
-              maintenance, guest-service and report operations
+        └── reservation, folio, housekeeping, maintenance,
+              guest-service and report operations
 ```
 
 ## Odoo 19 Breaking Changes — MUST FOLLOW
@@ -127,19 +121,17 @@ hotel_base (foundation)
 | Module | Tests |
 |---|---|
 | `hotel_base` | 11 tests |
-| `hotel_board` | 11 tests |
+| `hotel_board` | 10 tests |
 | `hotel_reservation` | 15 tests |
-| `hotel_folio` | 10 tests |
+| `hotel_folio` | 11 tests |
 | `hotel_rate` | 6 tests |
-| `hotel_night_audit` | 5 tests |
-| `hotel_frontdesk_session` | 5 tests |
 | `hotel_guest_services` | 5 tests |
 | `hotel_housekeeping` | 10 tests |
 | `hotel_restricted_services` | 7 tests |
 | `hotel_maintenance` | 13 tests |
 | `hotel_pos_room_charge` | 9 tests |
 | `hotel_reports` | 13 tests |
-| **Total** | **120 tests** |
+| **Total** | **110 tests** |
 
 ## Local Checks
 

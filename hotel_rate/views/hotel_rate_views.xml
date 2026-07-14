@@ -8,7 +8,6 @@
             <list string="Rate Rules">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
-                <field name="property_id"/>
                 <field name="room_type_id"/>
                 <field name="date_start"/>
                 <field name="date_end"/>
@@ -28,7 +27,7 @@
                     <group>
                         <group string="Rule Info">
                             <field name="name"/>
-                            <field name="property_id"/>
+                            <field name="property_id" invisible="1"/>
                             <field name="room_type_id"/>
                             <field name="sequence" string="Priority"/>
                         </group>
@@ -79,7 +78,6 @@
         <field name="arch" type="xml">
             <list string="Occupancy Bands">
                 <field name="name"/>
-                <field name="property_id"/>
                 <field name="min_occupancy"/>
                 <field name="max_occupancy"/>
                 <field name="multiplier"/>
@@ -96,7 +94,7 @@
                 <sheet>
                     <group>
                         <field name="name"/>
-                        <field name="property_id"/>
+                        <field name="property_id" invisible="1"/>
                         <field name="min_occupancy"/>
                         <field name="max_occupancy"/>
                         <field name="multiplier"/>
@@ -113,9 +111,6 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <group>
-                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
-                </group>
             </search>
         </field>
     </record>

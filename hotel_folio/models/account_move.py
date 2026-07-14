@@ -141,6 +141,17 @@ class AccountPayment(models.Model):
         currency_field="currency_id",
     )
 
+    @api.onchange("hotel_payment_purpose", "company_id")
+    def _onchange_hotel_payment_company(self):
+        for payment in self:
+            if payment.hotel_payment_purpose == "standard":
+                payment.hotel_property_id = False
+            else:
+                company = payment.company_id or self.env.company
+                payment.hotel_property_id = self.env["hotel.property"].with_company(
+                    company
+                )._get_default_property()
+
     @api.depends(
         "state",
         "move_id.line_ids.amount_residual",
@@ -198,7 +209,6 @@ class AccountPayment(models.Model):
             "hotel_property_id",
             "hotel_folio_id",
             "hotel_payment_purpose",
-            "hotel_frontdesk_session_id",
         }
         if controlled.intersection(vals) and self.filtered(
             lambda payment: payment.state != "draft"
@@ -212,7 +222,7 @@ class AccountPayment(models.Model):
     def _check_hotel_payment_consistency(self):
         for payment in self:
             if payment.hotel_payment_purpose != "standard" and not payment.hotel_property_id:
-                raise ValidationError(_("A hotel property is required for hotel payments."))
+                raise ValidationError(_("The active company is required for hotel payments."))
             if payment.hotel_payment_purpose in (
                 "guest_deposit",
                 "agency_advance",
@@ -244,10 +254,10 @@ class AccountPayment(models.Model):
                 payment.hotel_property_id
                 and payment.hotel_property_id.company_id != payment.company_id
             ):
-                raise ValidationError(_("The payment and hotel property must use the same company."))
+                raise ValidationError(_("The hotel payment must use its active company."))
             if payment.hotel_folio_id:
                 if payment.hotel_folio_id.property_id != payment.hotel_property_id:
-                    raise ValidationError(_("The payment folio must belong to the selected property."))
+                    raise ValidationError(_("The payment folio must belong to the active company."))
                 payees = payment.hotel_folio_id.line_ids.mapped("payee_partner_id")
                 payees |= payment.hotel_folio_id.partner_id | payment.hotel_folio_id.agency_id
                 if payment.partner_id and payment.partner_id not in payees:
@@ -324,3 +334,44 @@ class HotelProperty(models.Model):
                 raise ValidationError(
                     _("Every hotel finance journal must belong to the property company.")
                 )
+
+
+class ResCompany(models.Model):
+    _inherit = "res.company"
+
+    hotel_room_charge_clearing_account_id = fields.Many2one(
+        string="Room-charge Clearing Account",
+        related="hotel_property_config_id.room_charge_clearing_account_id",
+        domain="[('company_ids', 'in', [id]), ('account_type', '=', 'asset_receivable'), ('reconcile', '=', True)]",
+        readonly=False,
+    )
+    hotel_room_charge_journal_id = fields.Many2one(
+        string="Room-charge Transfer Journal",
+        related="hotel_property_config_id.room_charge_journal_id",
+        domain="[('company_id', '=', id), ('type', '=', 'general')]",
+        readonly=False,
+    )
+    hotel_deposit_journal_id = fields.Many2one(
+        string="Guest Deposit Journal",
+        related="hotel_property_config_id.deposit_journal_id",
+        domain="[('company_id', '=', id), ('type', 'in', ('bank', 'cash'))]",
+        readonly=False,
+    )
+    hotel_advance_journal_id = fields.Many2one(
+        string="Agency Advance Journal",
+        related="hotel_property_config_id.advance_journal_id",
+        domain="[('company_id', '=', id), ('type', 'in', ('bank', 'cash'))]",
+        readonly=False,
+    )
+    hotel_cancellation_fee_product_id = fields.Many2one(
+        string="Cancellation Fee Product",
+        related="hotel_property_config_id.cancellation_fee_product_id",
+        domain="[('type', '=', 'service'), '|', ('company_id', '=', False), ('company_id', '=', id)]",
+        readonly=False,
+    )
+    hotel_no_show_fee_product_id = fields.Many2one(
+        string="No-show Fee Product",
+        related="hotel_property_config_id.no_show_fee_product_id",
+        domain="[('type', '=', 'service'), '|', ('company_id', '=', False), ('company_id', '=', id)]",
+        readonly=False,
+    )

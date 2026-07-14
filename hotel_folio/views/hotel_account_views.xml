@@ -11,7 +11,7 @@
                     invisible="state != 'draft' or move_type not in ('out_invoice', 'out_refund') or not hotel_property_id"/>
             </xpath>
             <xpath expr="//field[@name='invoice_currency_rate']" position="after">
-                <field name="hotel_property_id"/>
+                <field name="hotel_property_id" invisible="1"/>
                         <field name="hotel_folio_id" domain="[('property_id', '=', hotel_property_id)]"/>
                 <field name="hotel_reservation_group_id"/>
                 <field name="hotel_manual_fx_reason" readonly="1" invisible="not hotel_manual_fx_reason"/>
@@ -29,8 +29,7 @@
             <xpath expr="//group[@name='main_group']" position="after">
                 <group string="Hotel References">
                     <field name="hotel_payment_purpose" readonly="state != 'draft'"/>
-                    <field name="hotel_property_id" readonly="state != 'draft'"
-                        required="hotel_payment_purpose != 'standard'"/>
+                    <field name="hotel_property_id" invisible="1"/>
                     <field name="hotel_folio_id" readonly="state != 'draft'"
                         domain="[('property_id', '=', hotel_property_id)]"/>
                     <field name="hotel_available_advance" readonly="1"
@@ -40,22 +39,21 @@
         </field>
     </record>
 
-    <record id="hotel_property_view_form_finance" model="ir.ui.view">
-        <field name="name">hotel.property.form.finance</field>
-        <field name="model">hotel.property</field>
-        <field name="inherit_id" ref="hotel_base.hotel_property_view_form"/>
+    <record id="res_company_view_form_hotel_finance" model="ir.ui.view">
+        <field name="name">res.company.form.hotel.finance</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="hotel_base.res_company_view_form_hotel"/>
         <field name="arch" type="xml">
-            <xpath expr="//notebook" position="inside">
-                <page string="Finance" groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager">
-                    <group>
-                        <field name="room_charge_clearing_account_id"/>
-                        <field name="room_charge_journal_id"/>
-                        <field name="deposit_journal_id"/>
-                        <field name="advance_journal_id"/>
-                        <field name="cancellation_fee_product_id"/>
-                        <field name="no_show_fee_product_id"/>
-                    </group>
-                </page>
+            <xpath expr="//page[@name='hotel_operations']/group" position="inside">
+                <group string="Hotel Finance"
+                    groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager">
+                    <field name="hotel_room_charge_clearing_account_id"/>
+                    <field name="hotel_room_charge_journal_id"/>
+                    <field name="hotel_deposit_journal_id"/>
+                    <field name="hotel_advance_journal_id"/>
+                    <field name="hotel_cancellation_fee_product_id"/>
+                    <field name="hotel_no_show_fee_product_id"/>
+                </group>
             </xpath>
         </field>
     </record>

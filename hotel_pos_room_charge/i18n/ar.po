@@ -25,8 +25,8 @@ msgstr "ليس لدى %(guest)s حجز إقامة حالي في %(property)s. ي
 #. module: hotel_pos_room_charge
 #. odoo-python
 #: code:addons/hotel_pos_room_charge/models/pos_payment_method.py:0
-msgid "A room-charge payment method requires a property in the same company."
-msgstr "تتطلب طريقة دفع رسوم الغرفة منشأة في الشركة نفسها."
+msgid "A room-charge payment method must use the active POS company."
+msgstr "يجب أن تستخدم طريقة دفع رسوم الغرفة شركة نقطة البيع النشطة."
 
 #. module: hotel_pos_room_charge
 #: model:ir.model.fields,field_description:hotel_pos_room_charge.field_pos_payment_method__is_room_charge
@@ -36,8 +36,8 @@ msgstr "تحميل على الغرفة"
 #. module: hotel_pos_room_charge
 #. odoo-python
 #: code:addons/hotel_pos_room_charge/models/pos_payment_method.py:0
-msgid "Configure the property's room-charge clearing account and journal first."
-msgstr "اضبط أولاً حساب مقاصة رسوم الغرف ودفتر المنشأة."
+msgid "Configure the company's room-charge clearing account and journal first."
+msgstr "اضبط أولاً حساب ودفتر مقاصة رسوم الغرف للشركة."
 
 #. module: hotel_pos_room_charge
 #. odoo-python
@@ -46,40 +46,40 @@ msgid "Folio transfer total %(folio)s does not match POS receipt total %(pos)s."
 msgstr "لا يطابق إجمالي ترحيل الفوليو %(folio)s إجمالي إيصال نقاط البيع %(pos)s."
 
 #. module: hotel_pos_room_charge
+#: model:ir.model.fields,field_description:hotel_pos_room_charge.field_pos_payment_method__hotel_property_id
+#: model:ir.model.fields,field_description:hotel_pos_room_charge.field_pos_config__hotel_property_id
+msgid "Hotel Company Link"
+msgstr "رابط شركة الفندق"
+
+#. module: hotel_pos_room_charge
 #: model:ir.rule,name:hotel_pos_room_charge.rule_hotel_pos_report_assigned_property
-msgid "Hotel POS analysis in assigned properties"
-msgstr "تحليل نقاط بيع الفندق في المنشآت المخصصة"
+msgid "Hotel POS analysis in active companies"
+msgstr "تحليل نقاط بيع الفندق في الشركات النشطة"
 
 #. module: hotel_pos_room_charge
 #: model:ir.rule,name:hotel_pos_room_charge.rule_hotel_pos_config_assigned_property
-msgid "Hotel POS configurations in assigned properties"
-msgstr "إعدادات نقاط بيع الفندق في المنشآت المخصصة"
+msgid "Hotel POS configurations in active companies"
+msgstr "إعدادات نقاط بيع الفندق في الشركات النشطة"
 
 #. module: hotel_pos_room_charge
 #: model:ir.rule,name:hotel_pos_room_charge.rule_hotel_pos_order_line_assigned_property
-msgid "Hotel POS order lines in assigned properties"
-msgstr "سطور طلبات نقاط بيع الفندق في المنشآت المخصصة"
+msgid "Hotel POS order lines in active companies"
+msgstr "سطور طلبات نقاط بيع الفندق في الشركات النشطة"
 
 #. module: hotel_pos_room_charge
 #: model:ir.rule,name:hotel_pos_room_charge.rule_hotel_pos_order_assigned_property
-msgid "Hotel POS orders in assigned properties"
-msgstr "طلبات نقاط بيع الفندق في المنشآت المخصصة"
+msgid "Hotel POS orders in active companies"
+msgstr "طلبات نقاط بيع الفندق في الشركات النشطة"
 
 #. module: hotel_pos_room_charge
 #: model:ir.rule,name:hotel_pos_room_charge.rule_hotel_pos_payment_assigned_property
-msgid "Hotel POS payments in assigned properties"
-msgstr "مدفوعات نقاط بيع الفندق في المنشآت المخصصة"
+msgid "Hotel POS payments in active companies"
+msgstr "مدفوعات نقاط بيع الفندق في الشركات النشطة"
 
 #. module: hotel_pos_room_charge
 #: model:ir.rule,name:hotel_pos_room_charge.rule_hotel_pos_session_assigned_property
-msgid "Hotel POS sessions in assigned properties"
-msgstr "جلسات نقاط بيع الفندق في المنشآت المخصصة"
-
-#. module: hotel_pos_room_charge
-#: model:ir.model.fields,field_description:hotel_pos_room_charge.field_pos_payment_method__hotel_property_id
-#: model:ir.model.fields,field_description:hotel_pos_room_charge.field_pos_config__hotel_property_id
-msgid "Hotel Property"
-msgstr "المنشأة الفندقية"
+msgid "Hotel POS sessions in active companies"
+msgstr "جلسات نقاط بيع الفندق في الشركات النشطة"
 
 #. module: hotel_pos_room_charge
 #: model:ir.model.fields,field_description:hotel_pos_room_charge.field_hotel_folio_line__pos_order_id
@@ -146,20 +146,14 @@ msgstr "ترحيل رسوم الغرف"
 #. module: hotel_pos_room_charge
 #. odoo-python
 #: code:addons/hotel_pos_room_charge/models/pos_payment_method.py:0
-msgid "Room-charge payment methods must match the POS hotel property."
-msgstr "يجب أن تطابق طرق دفع رسوم الغرف منشأة الفندق لنقاط البيع."
+msgid "Room-charge payment methods must match the POS company."
+msgstr "يجب أن تطابق طرق دفع رسوم الغرف شركة نقطة البيع."
 
 #. module: hotel_pos_room_charge
 #. odoo-python
 #: code:addons/hotel_pos_room_charge/models/pos_order.py:0
 msgid "Select a hotel property on the POS configuration."
 msgstr "حدد منشأة فندقية في إعدادات نقاط البيع."
-
-#. module: hotel_pos_room_charge
-#. odoo-python
-#: code:addons/hotel_pos_room_charge/models/pos_payment_method.py:0
-msgid "Select a hotel property when the POS accepts room charges."
-msgstr "حدد منشأة فندقية عندما تقبل نقاط البيع رسوم الغرف."
 
 #. module: hotel_pos_room_charge
 #. odoo-python
@@ -215,17 +209,23 @@ msgstr "مديرو النظام: كل جلسات نقاط بيع الفندق"
 #. module: hotel_pos_room_charge
 #. odoo-python
 #: code:addons/hotel_pos_room_charge/models/pos_payment_method.py:0
-msgid "The POS and hotel property must use the same company."
-msgstr "يجب أن تستخدم نقطة البيع والمنشأة الفندقية الشركة نفسها."
+msgid "The POS company could not be prepared for room charges."
+msgstr "تعذر تجهيز شركة نقطة البيع لقبول رسوم الغرف."
 
 #. module: hotel_pos_room_charge
 #. odoo-python
 #: code:addons/hotel_pos_room_charge/models/pos_payment_method.py:0
-msgid "The POS intermediary account must be the property's room-charge clearing account."
-msgstr "يجب أن يكون حساب وسيط نقاط البيع هو حساب مقاصة رسوم الغرف للمنشأة."
+msgid "The POS intermediary account must be the company's room-charge clearing account."
+msgstr "يجب أن يكون حساب وسيط نقطة البيع هو حساب مقاصة رسوم الغرف للشركة."
 
 #. module: hotel_pos_room_charge
 #. odoo-python
 #: code:addons/hotel_pos_room_charge/models/pos_order.py:0
 msgid "The POS property's room-charge clearing account and journal are required."
 msgstr "يلزم حساب مقاصة رسوم الغرف ودفتر منشأة نقاط البيع."
+
+#. module: hotel_pos_room_charge
+#. odoo-python
+#: code:addons/hotel_pos_room_charge/models/pos_payment_method.py:0
+msgid "The POS room-charge setup must use the same company."
+msgstr "يجب أن يستخدم إعداد رسوم الغرف لنقطة البيع الشركة نفسها."

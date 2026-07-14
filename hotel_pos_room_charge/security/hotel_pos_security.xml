@@ -8,45 +8,45 @@
          deployment share one company.  The hotel F&amp;B role therefore needs a
          second boundary at POS configuration/property level. -->
     <record id="rule_hotel_pos_config_assigned_property" model="ir.rule">
-        <field name="name">Hotel POS configurations in assigned properties</field>
+        <field name="name">Hotel POS configurations in active companies</field>
         <field name="model_id" ref="point_of_sale.model_pos_config"/>
-        <field name="domain_force">[('hotel_property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('hotel_property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_fb'))]"/>
     </record>
     <record id="rule_hotel_pos_session_assigned_property" model="ir.rule">
-        <field name="name">Hotel POS sessions in assigned properties</field>
+        <field name="name">Hotel POS sessions in active companies</field>
         <field name="model_id" ref="point_of_sale.model_pos_session"/>
-        <field name="domain_force">[('config_id.hotel_property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('config_id.hotel_property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_fb'))]"/>
     </record>
     <record id="rule_hotel_pos_order_assigned_property" model="ir.rule">
-        <field name="name">Hotel POS orders in assigned properties</field>
+        <field name="name">Hotel POS orders in active companies</field>
         <field name="model_id" ref="point_of_sale.model_pos_order"/>
-        <field name="domain_force">[('config_id.hotel_property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('config_id.hotel_property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_fb'))]"/>
     </record>
     <record id="rule_hotel_pos_order_line_assigned_property" model="ir.rule">
-        <field name="name">Hotel POS order lines in assigned properties</field>
+        <field name="name">Hotel POS order lines in active companies</field>
         <field name="model_id" ref="point_of_sale.model_pos_order_line"/>
-        <field name="domain_force">[('order_id.config_id.hotel_property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('order_id.config_id.hotel_property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_fb'))]"/>
     </record>
     <record id="rule_hotel_pos_payment_assigned_property" model="ir.rule">
-        <field name="name">Hotel POS payments in assigned properties</field>
+        <field name="name">Hotel POS payments in active companies</field>
         <field name="model_id" ref="point_of_sale.model_pos_payment"/>
-        <field name="domain_force">[('pos_order_id.config_id.hotel_property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('pos_order_id.config_id.hotel_property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_fb'))]"/>
     </record>
     <record id="rule_hotel_pos_payment_method_assigned_property" model="ir.rule">
         <field name="name">Shared or assigned-property hotel POS payment methods</field>
         <field name="model_id" ref="point_of_sale.model_pos_payment_method"/>
-        <field name="domain_force">['|', ('hotel_property_id', '=', False), ('hotel_property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">['|', ('hotel_property_id', '=', False), ('hotel_property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_fb'))]"/>
     </record>
     <record id="rule_hotel_pos_report_assigned_property" model="ir.rule">
-        <field name="name">Hotel POS analysis in assigned properties</field>
+        <field name="name">Hotel POS analysis in active companies</field>
         <field name="model_id" ref="point_of_sale.model_report_pos_order"/>
-        <field name="domain_force">[('config_id.hotel_property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('config_id.hotel_property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_fb'))]"/>
     </record>
 

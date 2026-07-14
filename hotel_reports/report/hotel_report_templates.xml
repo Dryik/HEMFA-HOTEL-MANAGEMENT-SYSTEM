@@ -28,20 +28,6 @@
         <field name="dpi">90</field>
     </record>
 
-    <record id="paperformat_hotel_financial_summary" model="report.paperformat">
-        <field name="name">Hotel Financial Summary — A4 Portrait</field>
-        <field name="default" eval="False"/>
-        <field name="format">A4</field>
-        <field name="orientation">Portrait</field>
-        <field name="margin_top">38</field>
-        <field name="margin_bottom">26</field>
-        <field name="margin_left">8</field>
-        <field name="margin_right">8</field>
-        <field name="header_line" eval="False"/>
-        <field name="header_spacing">30</field>
-        <field name="dpi">90</field>
-    </record>
-
     <record id="action_report_daily_movement" model="ir.actions.report">
         <field name="name">Hotel Operational Report</field>
         <field name="model">hotel.report.wizard</field>
@@ -62,16 +48,6 @@
         <field name="print_report_name">'%s - %s' % (object.report_type, object.date)</field>
     </record>
 
-    <record id="action_report_financial_summary" model="ir.actions.report">
-        <field name="name">Hotel Financial Summary</field>
-        <field name="model">hotel.report.wizard</field>
-        <field name="report_type">qweb-pdf</field>
-        <field name="report_name">hotel_reports.report_financial_summary</field>
-        <field name="report_file">hotel_reports.report_financial_summary</field>
-        <field name="paperformat_id" ref="paperformat_hotel_financial_summary"/>
-        <field name="print_report_name">'%s - %s' % (object.report_type, object.date)</field>
-    </record>
-
     <template id="report_hotel_document">
         <t t-set="payload" t-value="payloads[doc.id]"/>
         <style t-translation="off">
@@ -82,7 +58,6 @@
                 line-height: 1.35;
             }
             .hotel_report_document.hotel_report_landscape { font-size: 7.7px; }
-            .hotel_report_document.hotel_report_financial { font-size: 8.4px; }
             .hotel_report_title {
                 color: #172554;
                 font-size: 20px;
@@ -153,7 +128,7 @@
             <table class="hotel_report_meta">
                 <tr>
                     <td t-att-style="'text-align: right;' if payload['rtl'] else 'text-align: left;'">
-                        <strong>Property / الفندق:</strong>
+                        <strong>Company / الشركة:</strong>
                         <t t-out="payload['property']"/>
                     </td>
                     <td dir="ltr" t-att-style="'text-align: left;' if payload['rtl'] else 'text-align: right;'">
@@ -223,13 +198,4 @@
         </t>
     </template>
 
-    <template id="report_financial_summary">
-        <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="doc">
-                <t t-call="web.external_layout">
-                    <t t-call="hotel_reports.report_hotel_document"/>
-                </t>
-            </t>
-        </t>
-    </template>
 </odoo>

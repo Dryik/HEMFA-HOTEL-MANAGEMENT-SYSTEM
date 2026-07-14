@@ -38,7 +38,7 @@
                       groups="hotel_base.group_hotel_fo_supervisor">
                     <field name="service_ceiling_ids">
                         <list editable="bottom">
-                            <field name="property_id"/>
+                            <field name="property_id" column_invisible="True"/>
                             <field name="category_id"/>
                             <field name="daily_limit"/>
                             <field name="active" column_invisible="True"/>
@@ -56,7 +56,7 @@
         <field name="model">hotel.entity.service.ceiling</field>
         <field name="arch" type="xml">
             <list editable="bottom">
-                <field name="property_id"/>
+                <field name="property_id" column_invisible="True"/>
                 <field name="partner_id"/>
                 <field name="category_id"/>
                 <field name="daily_limit"/>

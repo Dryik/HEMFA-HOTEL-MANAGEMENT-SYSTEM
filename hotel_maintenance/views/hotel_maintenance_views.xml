@@ -129,7 +129,6 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="property_id"/>
                 <field name="room_id"/>
                 <field name="technician_id"/>
                 <filter string="Open" name="open"
@@ -142,8 +141,6 @@
                 <separator/>
                 <filter string="My Tasks" name="my_tasks" domain="[('technician_id', '=', uid)]"/>
                 <group>
-                    <filter string="Property" name="group_property"
-                        context="{'group_by': 'property_id'}"/>
                     <filter string="Status" name="group_state"
                         context="{'group_by': 'state'}"/>
                     <filter string="Room" name="group_room"

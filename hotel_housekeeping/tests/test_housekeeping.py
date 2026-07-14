@@ -32,8 +32,6 @@ class TestHotelHousekeeping(TransactionCase):
             "login": "cleaner_bob",
             "email": "bob@example.com",
             "group_ids": [(6, 0, [cls.env.ref("hotel_base.group_hotel_housekeeping").id])],
-            "hotel_property_ids": [(6, 0, [cls.property.id])],
-            "default_hotel_property_id": cls.property.id,
         })
 
     def test_task_lifecycle(self):

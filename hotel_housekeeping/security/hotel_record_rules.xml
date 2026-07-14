@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="rule_hotel_housekeeping_task_assigned_property" model="ir.rule">
-        <field name="name">Housekeeping tasks in assigned hotel properties</field>
+        <field name="name">Housekeeping tasks in active companies</field>
         <field name="model_id" ref="model_hotel_housekeeping_task"/>
-        <field name="domain_force">[('property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_housekeeping')), (4, ref('hotel_base.group_hotel_frontdesk'))]"/>
     </record>
     <record id="rule_hotel_housekeeping_wizard_assigned_property" model="ir.rule">
-        <field name="name">Housekeeping discrepancy wizard in assigned properties</field>
+        <field name="name">Housekeeping discrepancy wizard in active companies</field>
         <field name="model_id" ref="model_hotel_housekeeping_discrepancy_wizard"/>
-        <field name="domain_force">[('property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_housekeeping'))]"/>
     </record>
     <record id="rule_hotel_housekeeping_wizard_line_assigned_property" model="ir.rule">
-        <field name="name">Housekeeping discrepancy lines in assigned properties</field>
+        <field name="name">Housekeeping discrepancy lines in active companies</field>
         <field name="model_id" ref="model_hotel_housekeeping_discrepancy_wizard_line"/>
-        <field name="domain_force">[('wizard_id.property_id', 'in', user.hotel_property_ids.ids)]</field>
+        <field name="domain_force">[('wizard_id.property_id.company_id', 'in', company_ids)]</field>
         <field name="groups" eval="[(4, ref('hotel_base.group_hotel_housekeeping'))]"/>
     </record>
     <record id="rule_hotel_housekeeping_task_system_unrestricted" model="ir.rule">

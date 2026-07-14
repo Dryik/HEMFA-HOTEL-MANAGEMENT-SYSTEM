@@ -5,7 +5,6 @@
         <field name="model">hotel.agency.commission</field>
         <field name="arch" type="xml">
             <list>
-                <field name="property_id"/>
                 <field name="agency_id"/>
                 <field name="commission_type"/>
                 <field name="commission_rate" optional="show"/>
@@ -23,7 +22,7 @@
             <form string="Agency Commission Placeholder">
                 <sheet>
                     <group>
-                        <field name="property_id"/>
+                        <field name="property_id" invisible="1"/>
                         <field name="agency_id"/>
                         <field name="commission_type"/>
                         <field name="commission_rate" invisible="commission_type != 'percent'"/>

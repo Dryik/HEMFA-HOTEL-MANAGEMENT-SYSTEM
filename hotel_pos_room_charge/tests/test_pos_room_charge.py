@@ -115,8 +115,6 @@ class TestPosRoomCharge(TransactionCase):
                 "name": "Property F&B User",
                 "login": "property_fb_pos_test",
                 "group_ids": [(4, cls.env.ref("hotel_base.group_hotel_fb").id)],
-                "hotel_property_ids": [(6, 0, [cls.property.id])],
-                "default_hotel_property_id": cls.property.id,
             }
         )
 

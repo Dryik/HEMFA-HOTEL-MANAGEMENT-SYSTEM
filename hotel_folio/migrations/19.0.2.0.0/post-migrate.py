@@ -24,7 +24,7 @@ def migrate(cr, version):
             )
         if line.is_posted and line.lock_state == "unlocked":
             values["lock_state"] = (
-                "accounting" if line.invoice_line_id else "night_audit"
+                "accounting" if line.invoice_line_id else "unlocked"
             )
         if line.invoice_line_id and not line.source_reference:
             values["source_reference"] = line.invoice_line_id.move_id.display_name

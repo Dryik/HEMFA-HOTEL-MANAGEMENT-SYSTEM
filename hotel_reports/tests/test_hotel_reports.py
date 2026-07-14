@@ -43,8 +43,6 @@ class TestHotelReports(TransactionCase):
                 "group_ids": [
                     (4, cls.env.ref("hotel_base.group_hotel_housekeeping").id)
                 ],
-                "hotel_property_ids": [(6, 0, [cls.property.id])],
-                "default_hotel_property_id": cls.property.id,
             }
         )
         cls.frontdesk = cls.env["res.users"].create(
@@ -52,8 +50,6 @@ class TestHotelReports(TransactionCase):
                 "name": "Report Front Desk",
                 "login": "report_frontdesk",
                 "group_ids": [(4, cls.env.ref("hotel_base.group_hotel_frontdesk").id)],
-                "hotel_property_ids": [(6, 0, [cls.property.id])],
-                "default_hotel_property_id": cls.property.id,
             }
         )
         cls.accountant = cls.env["res.users"].create(
@@ -61,8 +57,6 @@ class TestHotelReports(TransactionCase):
                 "name": "Report Accountant",
                 "login": "report_accountant",
                 "group_ids": [(4, cls.env.ref("hotel_base.group_hotel_accountant").id)],
-                "hotel_property_ids": [(6, 0, [cls.property.id])],
-                "default_hotel_property_id": cls.property.id,
             }
         )
 
@@ -148,11 +142,6 @@ class TestHotelReports(TransactionCase):
                 "Landscape",
                 "landscape",
             ),
-            "night_audit": (
-                "hotel_reports.report_financial_summary",
-                "Portrait",
-                "financial",
-            ),
         }
         for report_type, (report_name, orientation, family) in cases.items():
             wizard = self._wizard(report_type)
@@ -206,7 +195,6 @@ class TestHotelReports(TransactionCase):
             {
                 "name": "Report Agency",
                 "is_hotel_agency": True,
-                "hotel_property_ids": [(6, 0, [self.property.id])],
             }
         )
         payment = self.env["account.payment"].create(

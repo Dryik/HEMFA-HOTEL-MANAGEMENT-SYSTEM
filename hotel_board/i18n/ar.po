@@ -23,12 +23,6 @@ msgid "A valid business date is required."
 msgstr "يلزم تحديد تاريخ عمل صالح."
 
 #. module: hotel_board
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
-msgid "A valid hotel property is required."
-msgstr "يلزم تحديد منشأة فندقية صالحة."
-
-#. module: hotel_board
 #. odoo-javascript
 #. odoo-python
 #: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
@@ -44,8 +38,6 @@ msgstr "طلبات عدم الإزعاج النشطة"
 
 #. module: hotel_board
 #. odoo-javascript
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
 msgid "Actual"
 msgstr "فعلي"
@@ -128,12 +120,6 @@ msgid "Arrivals"
 msgstr "الواصلون"
 
 #. module: hotel_board
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
-msgid "Assign a default hotel property to your user."
-msgstr "عيّن منشأة فندقية افتراضية للمستخدم."
-
-#. module: hotel_board
 #. odoo-javascript
 #. odoo-python
 #: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
@@ -153,24 +139,6 @@ msgstr "صيانة حاجبة للغرفة"
 #: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
 msgid "Business Date"
 msgstr "تاريخ العمل"
-
-#. module: hotel_board
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
-msgid "Cashier Session Open"
-msgstr "جلسة الصندوق مفتوحة"
-
-#. module: hotel_board
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
-msgid "Cashier Sessions"
-msgstr "جلسات الاستقبال والصندوق"
-
-#. module: hotel_board
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
-msgid "Cashier Variances"
-msgstr "فروقات الصندوق"
 
 #. module: hotel_board
 #. odoo-javascript
@@ -199,8 +167,14 @@ msgstr "مسح كل عوامل التصفية"
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
-msgid "Clear filters or choose another property or date range."
-msgstr "امسح عوامل التصفية أو اختر منشأة أو نطاق تواريخ آخر."
+msgid "Clear filters or choose another date range."
+msgstr "امسح عوامل التصفية أو اختر نطاق تاريخ آخر."
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Configure the active company before opening Hotel."
+msgstr "اضبط الشركة النشطة قبل فتح الفندق."
 
 #. module: hotel_board
 #. odoo-javascript
@@ -270,17 +244,9 @@ msgstr "فوليوهات تتطلب التسوية"
 
 #. module: hotel_board
 #. odoo-javascript
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
 msgid "Forecast"
 msgstr "متوقع"
-
-#. module: hotel_board
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
-msgid "Forecast Stays"
-msgstr "الإقامات المتوقعة"
 
 #. module: hotel_board
 #. odoo-javascript
@@ -335,6 +301,12 @@ msgid "Hotel Front Desk Workspace Service"
 msgstr "خدمة مساحة عمل مكتب استقبال الفندق"
 
 #. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Hotel Stays"
+msgstr "إقامات الفندق"
+
+#. module: hotel_board
 #. odoo-javascript
 #. odoo-python
 #: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
@@ -374,6 +346,12 @@ msgstr "مفتشة ومفحوصة"
 #: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
 msgid "Late Arrivals"
 msgstr "وصولات متأخرة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Live"
+msgstr "مباشر"
 
 #. module: hotel_board
 #. odoo-javascript
@@ -431,12 +409,6 @@ msgid "New Reservation"
 msgstr "حجز جديد"
 
 #. module: hotel_board
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
-msgid "Night Audit"
-msgstr "التدقيق الليلي"
-
-#. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
 msgid "No rooms match these filters"
@@ -469,12 +441,6 @@ msgid "Occupied"
 msgstr "مشغولة"
 
 #. module: hotel_board
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
-msgid "Open a Cashier Session"
-msgstr "فتح جلسة صندوق"
-
-#. module: hotel_board
 #: model:ir.ui.menu,name:hotel_board.menu_hotel_operations
 msgid "Operations"
 msgstr "العمليات"
@@ -501,12 +467,6 @@ msgid "Overdue Departures"
 msgstr "مغادرات متأخرة"
 
 #. module: hotel_board
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
-msgid "Pending Night Audit"
-msgstr "تدقيق ليلي معلق"
-
-#. module: hotel_board
 #. odoo-javascript
 #. odoo-python
 #: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
@@ -527,19 +487,6 @@ msgstr "يجب أن يكون عدد أيام التخطيط 7 أو 14 أو 30."
 #: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
 msgid "Planning is unavailable"
 msgstr "التخطيط غير متاح"
-
-#. module: hotel_board
-#. odoo-javascript
-#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
-#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
-msgid "Property"
-msgstr "الفندق / المنشأة"
-
-#. module: hotel_board
-#. odoo-javascript
-#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
-msgid "Read-only Gantt"
-msgstr "مخطط جانت للقراءة فقط"
 
 #. module: hotel_board
 #. odoo-javascript
@@ -588,10 +535,12 @@ msgid "Reservation"
 msgstr "الحجز"
 
 #. module: hotel_board
+#. odoo-javascript
 #. odoo-python
 #: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
-msgid "Reservation Gantt — Read-only"
-msgstr "مخطط جانت للحجوزات — للقراءة فقط"
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Reservation Planner"
+msgstr "مخطط الحجوزات"
 
 #. module: hotel_board
 #. odoo-javascript
@@ -706,6 +655,12 @@ msgid "Start Date"
 msgstr "تاريخ البدء"
 
 #. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "The hotel workspace follows the active Odoo company."
+msgstr "تتبع مساحة عمل الفندق شركة أودو النشطة."
+
+#. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
 msgid "Today"
@@ -714,8 +669,8 @@ msgstr "اليوم"
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
-msgid "Try another property or business date."
-msgstr "جرّب منشأة أو تاريخ عمل آخر."
+msgid "Try another business date."
+msgstr "جرّب تاريخ عمل آخر."
 
 #. module: hotel_board
 #. odoo-javascript
@@ -741,12 +696,6 @@ msgstr "تعذر تحديث مساحة العمل هذه."
 #: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
 msgid "Unassigned Floor"
 msgstr "طابق غير محدد"
-
-#. module: hotel_board
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
-msgid "Unaudited"
-msgstr "غير مدقق"
 
 #. module: hotel_board
 #. odoo-javascript
@@ -807,9 +756,3 @@ msgstr "مكالمات الإيقاظ"
 #: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
 msgid "Wake-up Calls Due"
 msgstr "مكالمات إيقاظ مستحقة"
-
-#. module: hotel_board
-#. odoo-python
-#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
-msgid "You cannot access this property in the active company."
-msgstr "لا يمكنك الوصول إلى هذه المنشأة ضمن الشركة النشطة."

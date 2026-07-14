@@ -8,7 +8,7 @@ from odoo.exceptions import UserError, ValidationError
 
 class HotelProperty(models.Model):
     _name = "hotel.property"
-    _description = "Hotel Property"
+    _description = "Hotel Company Configuration"
     _inherit = ["mail.thread"]
     _order = "name"
 
@@ -38,13 +38,7 @@ class HotelProperty(models.Model):
         selection=lambda self: [(tz, tz) for tz in pytz.all_timezones],
         required=True,
         default=lambda self: self.env.user.tz or "Africa/Tripoli",
-        help="Timezone used to convert the property's business day to UTC.",
-    )
-    current_business_date = fields.Date(
-        string="Current Business Date",
-        default=fields.Date.today,
-        tracking=True,
-        help="Operational date rolled forward by the night audit.",
+        help="Timezone used to convert the company's hotel business day to UTC.",
     )
     late_checkout_grace_hours = fields.Float(
         string="Late Checkout Grace (hours)",
@@ -91,7 +85,7 @@ class HotelProperty(models.Model):
 
     _code_company_uniq = models.Constraint(
         "unique (code, company_id)",
-        "Property code must be unique per company.",
+        "Hotel code must be unique per company.",
     )
 
     @api.depends("room_ids.active", "room_ids.is_sellable")
@@ -103,26 +97,24 @@ class HotelProperty(models.Model):
 
     @api.model
     def _get_default_property(self):
-        """Return the current user's explicit default/first assigned property."""
-        user = self.env.user
-        assigned = user.hotel_property_ids.filtered(
-            lambda prop: prop.active and prop.company_id in self.env.companies
+        """Return the private hotel configuration for the active Odoo company."""
+        company = self.env.company
+        prop = self.sudo().search(
+            [("company_id", "=", company.id), ("active", "=", True)],
+            order="id",
+            limit=1,
         )
-        if user.default_hotel_property_id in assigned:
-            return user.default_hotel_property_id
-        if assigned:
-            return assigned.sorted("name")[:1]
-        # Superuser-mode jobs and technical administrators have unrestricted
-        # property access, so keep the clean-database dashboard usable before an
-        # explicit default is configured. Normal hotel users still require an
-        # assigned property.
-        if self.env.su or user.has_group("base.group_system"):
-            return self.search(
-                [("company_id", "in", self.env.companies.ids)],
-                order="name, id",
-                limit=1,
+        if not prop:
+            prop = self.sudo().create(
+                {
+                    "name": company.name,
+                    "code": str(company.id),
+                    "company_id": company.id,
+                    "address_id": company.partner_id.id,
+                    "timezone": self.env.user.tz or "Africa/Tripoli",
+                }
             )
-        return self.browse()
+        return self.browse(prop.id)
 
     def _day_start_parts(self):
         self.ensure_one()
@@ -166,27 +158,6 @@ class HotelProperty(models.Model):
             end_local.astimezone(pytz.UTC).replace(tzinfo=None),
         )
 
-    def _set_business_date(self, business_date):
-        business_date = fields.Date.to_date(business_date)
-        if not business_date:
-            raise ValidationError(_("A valid business date is required."))
-        # This private helper is reached only after the night-audit workflow
-        # has enforced its supervisor/manager role and locked the property.
-        # The rollover itself must bypass the manager-only configuration ACL.
-        return super(HotelProperty, self.sudo()).write(
-            {"current_business_date": business_date}
-        )
-
-    def write(self, vals):
-        if (
-            "current_business_date" in vals
-            and not (self.env.su and self.env.context.get("hotel_migration"))
-        ):
-            raise UserError(
-                _("The active business date can only be changed by night audit or migration.")
-            )
-        return super().write(vals)
-
     @api.constrains(
         "day_start_hour",
         "cancellation_grace_hours",
@@ -221,5 +192,10 @@ class HotelProperty(models.Model):
                 ]
             )
             if active_res:
-                raise UserError(_("You cannot delete property %s because it has active or completed reservations.") % prop.name)
+                raise UserError(
+                    _(
+                        "You cannot delete the hotel configuration for %s because it has reservations."
+                    )
+                    % prop.company_id.display_name
+                )
         return super().unlink()
