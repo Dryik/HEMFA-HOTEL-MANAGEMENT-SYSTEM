@@ -17,7 +17,7 @@
         <field name="model">pos.config</field>
         <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
         <field name="arch" type="xml">
-            <field name="company_id" position="after">
+            <field name="active" position="after">
                 <field name="hotel_property_id" invisible="1"/>
             </field>
         </field>
