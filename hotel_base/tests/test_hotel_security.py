@@ -124,6 +124,11 @@ class TestHotelCompanySecurity(TransactionCase):
             self.frontdesk
         )._get_default_property()
         self.assertEqual(default, self.property_a)
+        matching_companies = self.env["res.company"].search(
+            [("hotel_property_config_id", "=", self.property_a.id)]
+        )
+        self.assertIn(self.env.company, matching_companies)
+        self.assertNotIn(self.company_b, matching_companies)
 
     def test_user_context_seeds_default_frontdesk_workspace(self):
         context = self.env["res.users"].with_user(self.frontdesk).context_get()

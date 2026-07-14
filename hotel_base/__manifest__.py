@@ -14,7 +14,7 @@ protection. It is the shared foundation used by reservations, front desk,
 folios, housekeeping, maintenance, POS room charging and hotel
 reporting.
 """,
-    "version": "19.0.4.0.0",
+    "version": "19.0.4.0.1",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",
