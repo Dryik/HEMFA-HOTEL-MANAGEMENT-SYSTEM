@@ -18,7 +18,11 @@ class TestHotelReports(TransactionCase):
             {"name": "Floor RP1", "property_id": cls.property.id}
         )
         cls.room_type = cls.env["hotel.room.type"].create(
-            {"name": "Report Suite", "base_price": 150.0}
+            {
+                "name": "Report Suite",
+                "base_price": 150.0,
+                "property_id": cls.property.id,
+            }
         )
         cls.rooms = cls.env["hotel.room"].create(
             [

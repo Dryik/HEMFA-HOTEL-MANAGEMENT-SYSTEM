@@ -18,7 +18,11 @@ class TestHotelGuestServices(TransactionCase):
             {"name": "Guest Services Floor", "property_id": cls.property.id}
         )
         cls.room_type = cls.env["hotel.room.type"].create(
-            {"name": "Guest Services Room", "base_price": 100.0}
+            {
+                "name": "Guest Services Room",
+                "base_price": 100.0,
+                "property_id": cls.property.id,
+            }
         )
         cls.room = cls.env["hotel.room"].create(
             {

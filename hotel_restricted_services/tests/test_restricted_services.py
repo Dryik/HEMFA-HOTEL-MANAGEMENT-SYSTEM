@@ -18,7 +18,11 @@ class TestRestrictedServices(TransactionCase):
             {"name": "Floor R1", "property_id": cls.property.id}
         )
         cls.room_type = cls.env["hotel.room.type"].create(
-            {"name": "Restricted Suite", "base_price": 300.0}
+            {
+                "name": "Restricted Suite",
+                "base_price": 300.0,
+                "property_id": cls.property.id,
+            }
         )
         cls.room = cls.env["hotel.room"].create(
             {
