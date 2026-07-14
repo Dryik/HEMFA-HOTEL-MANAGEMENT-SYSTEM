@@ -11,13 +11,7 @@ class TestHotelCompanySecurity(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.property_a = cls.env["hotel.property"].create(
-            {
-                "name": "Assigned Hotel",
-                "code": "ASG",
-                "timezone": "Africa/Tripoli",
-            }
-        )
+        cls.property_a = cls.env["hotel.property"]._get_default_property()
         cls.company_b = cls.env["res.company"].create({"name": "Other Hotel Company"})
         cls.property_b = cls.env["hotel.property"].create(
             {
@@ -33,7 +27,7 @@ class TestHotelCompanySecurity(TransactionCase):
             {"name": "B", "property_id": cls.property_b.id}
         )
         cls.room_type = cls.env["hotel.room.type"].create(
-            {"name": "Security Room Type"}
+            {"name": "Security Room Type", "property_id": cls.property_a.id}
         )
         cls.room_type_b = cls.env["hotel.room.type"].create(
             {
@@ -43,7 +37,7 @@ class TestHotelCompanySecurity(TransactionCase):
         )
         cls.room_a = cls.env["hotel.room"].create(
             {
-                "name": "101",
+                "name": "SEC-101",
                 "floor_id": cls.floor_a.id,
                 "room_type_id": cls.room_type.id,
             }

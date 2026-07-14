@@ -19,6 +19,7 @@ class TestHotelHousekeeping(TransactionCase):
         cls.room_type = cls.env["hotel.room.type"].create({
             "name": "Deluxe Room",
             "code": "DLX",
+            "property_id": cls.property.id,
         })
         cls.room = cls.env["hotel.room"].create({
             "name": "Room 101",
