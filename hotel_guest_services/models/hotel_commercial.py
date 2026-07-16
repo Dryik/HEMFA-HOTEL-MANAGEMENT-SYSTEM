@@ -399,7 +399,7 @@ class HotelReservation(models.Model):
     _inherit = "hotel.reservation"
 
     service_line_ids = fields.One2many(
-        "hotel.reservation.service", "reservation_id", string="Allotted Services"
+        "hotel.reservation.service", "reservation_id", string="Service Orders"
     )
     document_ids = fields.One2many(
         "hotel.reservation.document", "reservation_id", string="Guest Documents"

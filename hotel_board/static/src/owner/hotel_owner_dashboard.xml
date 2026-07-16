@@ -5,7 +5,7 @@
             <header class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
                 <div><h1 class="mb-1">Owner Dashboard</h1><p class="text-muted mb-0" t-if="state.data" t-esc="state.data.meta.property_name"/></div>
                 <div class="d-flex flex-wrap align-items-end gap-2">
-                    <div t-if="state.data and state.data.meta.properties.length"><label class="form-label">Hotel</label>
+                    <div t-if="state.data and state.data.meta.properties.length &gt; 1"><label class="form-label">Hotel</label>
                         <select class="form-select" t-att-value="state.propertyId" t-on-change="onProperty">
                             <option t-foreach="state.data.meta.properties" t-as="property" t-key="property.id"
                                 t-att-value="property.id" t-esc="property.name"/>

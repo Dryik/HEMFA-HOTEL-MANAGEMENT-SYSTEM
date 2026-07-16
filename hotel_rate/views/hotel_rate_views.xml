@@ -133,13 +133,13 @@
     <!-- Menu Items -->
     <menuitem id="menu_hotel_config_rates"
         name="Rate Rules"
-        parent="hotel_base.menu_hotel_config"
+        parent="hotel_base.menu_hotel_config_section_pricing"
         action="hotel_rate_rule_action"
-        sequence="50"/>
+        sequence="20"/>
 
     <menuitem id="menu_hotel_config_occupancy_bands"
         name="Occupancy Bands"
-        parent="hotel_base.menu_hotel_config"
+        parent="hotel_base.menu_hotel_config_section_pricing"
         action="hotel_rate_occupancy_band_action"
-        sequence="60"/>
+        sequence="30"/>
 </odoo>

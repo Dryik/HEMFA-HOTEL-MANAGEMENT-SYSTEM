@@ -121,12 +121,12 @@
         </field>
     </record>
 
-    <menuitem id="menu_hotel_seasonal_pricing" name="Seasonal Pricing" parent="hotel_base.menu_hotel_config"
-        action="hotel_seasonal_pricing_action" sequence="45"/>
-    <menuitem id="menu_hotel_pricelists" name="Pricelists" parent="hotel_base.menu_hotel_config"
-        action="product.product_pricelist_action2" sequence="50"/>
-    <menuitem id="menu_hotel_guest_supplements" name="Extra Guest Supplements" parent="hotel_base.menu_hotel_config"
-        action="hotel_guest_supplement_action" sequence="65"/>
-    <menuitem id="menu_hotel_booking_sources" name="Booking Source Pricing" parent="hotel_base.menu_hotel_config"
-        action="hotel_booking_source_action" sequence="70"/>
+    <menuitem id="menu_hotel_seasonal_pricing" name="Seasonal Pricing" parent="hotel_base.menu_hotel_config_section_pricing"
+        action="hotel_seasonal_pricing_action" sequence="10"/>
+    <menuitem id="menu_hotel_guest_supplements" name="Extra Guest Supplements" parent="hotel_base.menu_hotel_config_section_pricing"
+        action="hotel_guest_supplement_action" sequence="40"/>
+    <menuitem id="menu_hotel_booking_sources" name="Booking Source Pricing" parent="hotel_base.menu_hotel_config_section_pricing"
+        action="hotel_booking_source_action" sequence="50"/>
+    <menuitem id="menu_hotel_pricelists" name="Pricelists" parent="hotel_base.menu_hotel_config_section_pricing"
+        action="product.product_pricelist_action2" sequence="60"/>
 </odoo>
