@@ -44,9 +44,7 @@ class HotelReservation(models.Model):
             folio = reservation.folio_ids[:1]
             if "rate_line_ids" in reservation._fields and reservation.rate_line_ids:
                 due_lines = reservation.rate_line_ids.filtered(
-                    lambda line: not line.posted
-                    and not line.superseded
-                    and not line.reversal_of_id
+                    lambda line: not line.superseded and not line.reversal_of_id
                 )
                 if reservation.property_id.stay_charge_policy == "per_night":
                     business_date = reservation.property_id.get_business_date()
@@ -54,27 +52,35 @@ class HotelReservation(models.Model):
                         lambda line: line.business_date <= business_date
                     )
                 for rate_line in due_lines:
-                    source_key = (
+                    base_source_key = (
                         f"stay:{reservation.id}:night:{rate_line.business_date.isoformat()}"
                     )
-                    existing = self.env["hotel.folio.line"].search(
-                        [("source_key", "=", source_key)], limit=1
+                    existing = folio.line_ids.filtered(
+                        lambda line: line.source_type == "room_night"
+                        and (line.source_key or "").startswith(base_source_key)
                     )
-                    if not existing:
-                        night_start, _night_end = reservation.property_id.get_business_day_bounds(
-                            rate_line.business_date
-                        )
-                        folio._add_workflow_charge(
-                            reservation.room_type_id.product_id,
-                            qty=1.0,
-                            price_unit=rate_line.amount_untaxed,
-                            date=night_start,
-                            tax_ids=rate_line.tax_ids.ids,
-                            source_type="room_night",
-                            source_reference=reservation.name,
-                            source_key=source_key,
-                        )
-                    rate_line._mark_posted()
+                    if existing.filtered(lambda line: not line.reversal_line_ids):
+                        if not rate_line.posted:
+                            rate_line._mark_posted()
+                        continue
+                    source_key = base_source_key
+                    if existing:
+                        source_key = f"{base_source_key}:reconfirm:{len(existing) + 1}"
+                    night_start, _night_end = reservation.property_id.get_business_day_bounds(
+                        rate_line.business_date
+                    )
+                    folio._add_workflow_charge(
+                        reservation.room_type_id.product_id,
+                        qty=1.0,
+                        price_unit=rate_line.amount_untaxed,
+                        date=night_start,
+                        tax_ids=rate_line.tax_ids.ids,
+                        source_type="room_night",
+                        source_reference=reservation.name,
+                        source_key=source_key,
+                    )
+                    if not rate_line.posted:
+                        rate_line._mark_posted()
                 continue
             room_lines = folio.line_ids.filtered(
                 lambda line: line.source_type == "room_night"

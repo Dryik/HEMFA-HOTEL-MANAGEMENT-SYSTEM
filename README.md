@@ -35,9 +35,9 @@ phase acceptance documents under `docs/` for the locked production design.
 
 ## Local checks
 
-```powershell
-python scripts/validate_repository.py
-```
+Run the repository validation command::
+
+    python scripts/validate_repository.py
 
 The repository contains tagged model and workflow tests across the addon test
 suites. Runtime installation, upgrade, and tagged tests run on Odoo.sh; GitHub

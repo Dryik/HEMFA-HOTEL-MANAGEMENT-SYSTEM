@@ -1024,6 +1024,12 @@ msgstr "يجب أن يكون سعر العملة أكبر من صفر."
 
 #. module: hotel_folio
 #. odoo-python
+#: code:addons/hotel_folio/models/account_move.py:0
+msgid "The entry is not balanced."
+msgstr "القيد غير متوازن."
+
+#. module: hotel_folio
+#. odoo-python
 #: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "The generated invoice product does not match the folio charge."
 msgstr "لا يطابق منتج الفاتورة المنشأة رسم الفوليو."

@@ -482,7 +482,7 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
             )
             quote_currency = self.env["res.currency"].browse(quote["currency_id"])
             current_prices[room_type.id] = quote_currency._convert(
-                quote["amount_total"],
+                quote["amount_untaxed"],
                 prop.company_id.currency_id,
                 prop.company_id,
                 business_date,
