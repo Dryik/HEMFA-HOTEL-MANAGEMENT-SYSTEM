@@ -68,7 +68,6 @@ function normaliseSnapshot(raw = {}) {
         })),
         activity: normaliseActivity(raw.activity),
         operationalKpis: asArray(raw.operational_kpis),
-        rooms: asArray(raw.rooms),
         actions: raw.actions || {},
     };
 }
@@ -92,6 +91,7 @@ export class HotelDashboard extends Component {
             query: "",
             searchOpen: false,
             menuOpen: false,
+            drawerRow: null,
             loading: true,
             activityLoading: false,
             refreshing: false,
@@ -112,11 +112,13 @@ export class HotelDashboard extends Component {
         this._lastAttemptAt = 0;
         this._destroyed = false;
         this._onVisibilityChange = () => this.onVisibilityChange();
+        this._onKeydown = (event) => this.onDocumentKeydown(event);
 
         onMounted(() => {
             this.refreshDashboard();
             this.startRefreshTimer();
             globalThis.document?.addEventListener("visibilitychange", this._onVisibilityChange);
+            globalThis.document?.addEventListener("keydown", this._onKeydown);
         });
         onWillUnmount(() => {
             this._destroyed = true;
@@ -125,6 +127,7 @@ export class HotelDashboard extends Component {
                 browser.clearTimeout(this._searchTimer);
             }
             globalThis.document?.removeEventListener("visibilitychange", this._onVisibilityChange);
+            globalThis.document?.removeEventListener("keydown", this._onKeydown);
         });
     }
 
@@ -272,6 +275,7 @@ export class HotelDashboard extends Component {
         if (!nextDate || nextDate === this.state.businessDate) {
             return;
         }
+        this.closeQuickView();
         this.state.businessDate = nextDate;
         this.frontdeskState.update({ businessDate: nextDate });
         this.refreshDashboard();
@@ -282,6 +286,7 @@ export class HotelDashboard extends Component {
         if (!today || today === this.state.businessDate) {
             return;
         }
+        this.closeQuickView();
         this.state.businessDate = today;
         this.frontdeskState.update({ businessDate: today });
         this.refreshDashboard();
@@ -291,6 +296,7 @@ export class HotelDashboard extends Component {
         if (!ACTIVITY_KEYS.includes(key) || key === this.state.activeTab) {
             return;
         }
+        this.closeQuickView();
         this.state.activeTab = key;
         this.state.includeCompleted = false;
         this.loadActivity();
@@ -371,10 +377,6 @@ export class HotelDashboard extends Component {
         return this.openAction(this.state.data?.actions?.planning);
     }
 
-    bookRoom(room) {
-        return this.openAction(room?.action);
-    }
-
     openOperationalKpi(kpi) {
         return this.openAction(kpi?.action);
     }
@@ -385,6 +387,81 @@ export class HotelDashboard extends Component {
 
     openRowAction(row, key) {
         return this.openAction(row.actions?.[key]);
+    }
+
+    openQuickView(row) {
+        this.state.menuOpen = false;
+        this._drawerReturnFocus = globalThis.document?.activeElement || null;
+        this.state.drawerRow = row;
+        browser.requestAnimationFrame(() => {
+            globalThis.document?.querySelector(".o_hotel_drawer_close")?.focus();
+        });
+    }
+
+    closeQuickView(options = {}) {
+        const restoreFocus = options?.restoreFocus !== false;
+        this.state.drawerRow = null;
+        if (restoreFocus && this._drawerReturnFocus?.focus) {
+            browser.requestAnimationFrame(() => this._drawerReturnFocus?.focus());
+        }
+        this._drawerReturnFocus = null;
+    }
+
+    onDrawerBackdropClick(event) {
+        if (event.target === event.currentTarget) {
+            this.closeQuickView();
+        }
+    }
+
+    onDocumentKeydown(event) {
+        if (!this.state.drawerRow) {
+            return;
+        }
+        if (event.key === "Escape") {
+            event.preventDefault();
+            this.closeQuickView();
+            return;
+        }
+        if (event.key !== "Tab") {
+            return;
+        }
+        const drawer = globalThis.document?.querySelector(".o_hotel_dashboard_drawer");
+        const focusable = Array.from(
+            drawer?.querySelectorAll(
+                'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+            ) || []
+        );
+        if (!focusable.length) {
+            return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && globalThis.document?.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && globalThis.document?.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+        }
+    }
+
+    openDrawerAction(key) {
+        const row = this.state.drawerRow;
+        this.closeQuickView({ restoreFocus: false });
+        return this.openRowAction(row, key);
+    }
+
+    guestInitials(row) {
+        const name = String(row?.guest?.name || "").trim();
+        if (!name) {
+            return "—";
+        }
+        return name
+            .split(/\s+/)
+            .slice(0, 2)
+            .map((part) => part.charAt(0))
+            .join("")
+            .toUpperCase();
     }
 
     async runPrimaryAction(row) {

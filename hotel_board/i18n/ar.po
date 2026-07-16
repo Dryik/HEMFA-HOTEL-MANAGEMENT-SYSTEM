@@ -282,6 +282,12 @@ msgstr "نظيفة"
 
 #. module: hotel_board
 #. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Close"
+msgstr "إغلاق"
+
+#. module: hotel_board
+#. odoo-javascript
 #: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
 msgid "Clear All"
 msgstr "مسح الكل"
@@ -743,6 +749,12 @@ msgstr "فتح الحجز"
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
 msgid "Operational workload"
 msgstr "عبء العمل التشغيلي"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Overview"
+msgstr "نظرة عامة"
 
 #. module: hotel_board
 #: model:ir.ui.menu,name:hotel_board.menu_hotel_operations
