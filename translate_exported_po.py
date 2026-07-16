@@ -1061,6 +1061,7 @@ TRANSLATIONS.update({
     "Manual FX approved by %(user)s: %(old)s → %(new)s. Reason: %(reason)s": "اعتمد %(user)s سعر الصرف اليدوي: %(old)s → %(new)s. السبب: %(reason)s",
     "Manual FX can only be changed on a draft hotel invoice.": "لا يمكن تغيير سعر الصرف اليدوي إلا في فاتورة فندق مسودة.",
     "Manual FX can only be changed on a draft invoice.": "لا يمكن تغيير سعر الصرف اليدوي إلا في فاتورة مسودة.",
+    "The entry is not balanced.": "القيد غير متوازن.",
     "Migration": "ترحيل البيانات",
     "No invoiceable group folio lines are available.": "لا توجد سطور فوليو مجموعة قابلة للفوترة.",
     "No unreconciled receivable balance is available to allocate.": "لا يوجد رصيد مستحق غير مطابق متاح للتخصيص.",

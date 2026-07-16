@@ -127,7 +127,8 @@
     }
 
     .o_hotel_occupancy_ring {
-        width: min(9rem, 100%);
+        width: 100%;
+        max-width: 9rem;
         aspect-ratio: 1;
         display: grid;
         place-items: center;
@@ -199,7 +200,8 @@
     }
 
     .o_hotel_activity_search {
-        width: min(20rem, 35vw);
+        width: 35vw;
+        max-width: 20rem;
         min-height: var(--dashboard-touch);
         border-color: var(--dashboard-border);
     }

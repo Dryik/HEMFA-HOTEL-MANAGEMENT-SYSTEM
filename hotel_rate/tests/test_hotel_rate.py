@@ -420,3 +420,46 @@ class TestHotelRate(TransactionCase):
         # Compute rate check again. Rate should remain 200.0 because it's locked.
         res._compute_rate_night()
         self.assertEqual(res.rate_night, 200.0)
+
+    def test_room_move_supersedes_cached_rate_snapshots(self):
+        reservation = self._reservation(self.guest_libyan, self.room1)
+        # Prime the relation before confirmation to reproduce the stale-cache
+        # path that previously collided with the active-night unique index.
+        self.assertFalse(reservation.rate_line_ids)
+        reservation.action_confirm()
+        original_lines = self.env["hotel.reservation.rate.line"].search(
+            [
+                ("reservation_id", "=", reservation.id),
+                ("superseded", "=", False),
+                ("reversal_of_id", "=", False),
+            ]
+        )
+        self.assertEqual(len(original_lines), 2)
+
+        amendment = self.env["hotel.reservation.amendment"].create(
+            {
+                "reservation_id": reservation.id,
+                "amendment_type": "room_move",
+                "new_room_id": self.room2.id,
+                "reason": "Move to a quieter room",
+            }
+        )
+        amendment.action_apply()
+
+        active_lines = self.env["hotel.reservation.rate.line"].search(
+            [
+                ("reservation_id", "=", reservation.id),
+                ("superseded", "=", False),
+                ("reversal_of_id", "=", False),
+            ]
+        )
+        reversal_lines = self.env["hotel.reservation.rate.line"].search(
+            [
+                ("reservation_id", "=", reservation.id),
+                ("reversal_of_id", "in", original_lines.ids),
+            ]
+        )
+        self.assertEqual(len(active_lines), 2)
+        self.assertEqual(len(reversal_lines), 2)
+        self.assertTrue(all(original_lines.mapped("superseded")))
+        self.assertEqual(active_lines.mapped("amendment_id"), amendment)
