@@ -143,11 +143,12 @@ class TestHotelReservation(TransactionCase):
     def test_cancellation_migration_backfills_existing_cancelled_records(self):
         reservation = self._reservation()
         reservation.action_cancel()
+        reservation.flush_recordset(["cancelled_at"])
         self.env.cr.execute(
             "UPDATE hotel_reservation SET cancelled_at = NULL WHERE id = %s",
             [reservation.id],
         )
-        reservation.invalidate_recordset(["cancelled_at"])
+        reservation.invalidate_recordset(["cancelled_at"], flush=False)
         self.assertFalse(reservation.cancelled_at)
 
         migration_path = (
@@ -157,7 +158,7 @@ class TestHotelReservation(TransactionCase):
             / "post-migrate.py"
         )
         run_path(str(migration_path))["migrate"](self.env.cr, "19.0.6.0.0")
-        reservation.invalidate_recordset(["cancelled_at"])
+        reservation.invalidate_recordset(["cancelled_at"], flush=False)
         self.assertTrue(reservation.cancelled_at)
 
     def test_state_cannot_bypass_workflow(self):
@@ -218,7 +219,8 @@ class TestHotelReservation(TransactionCase):
             self.property.unlink()
 
     def test_room_move_amendment_records_snapshots(self):
-        reservation = self._reservation(state="confirmed")
+        reservation = self._reservation()
+        reservation.action_confirm()
         amendment = self.env["hotel.reservation.amendment"].with_user(
             self.manager
         ).create(

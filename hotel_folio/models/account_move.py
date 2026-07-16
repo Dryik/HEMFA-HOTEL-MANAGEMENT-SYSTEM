@@ -73,9 +73,11 @@ class AccountMove(models.Model):
         if not reason:
             raise UserError(_("A reason is required for a manual FX change."))
         old_rate = self.invoice_currency_rate
+        rate_move = self.with_context(check_move_validity=False)
+        super(AccountMove, rate_move).write({"invoice_currency_rate": new_rate})
+        self._balance_hotel_manual_fx_rounding()
         super(AccountMove, self).write(
             {
-                "invoice_currency_rate": new_rate,
                 "hotel_manual_fx_reason": reason,
                 "hotel_manual_fx_user_id": self.env.user.id,
                 "hotel_manual_fx_at": fields.Datetime.now(),
@@ -90,6 +92,29 @@ class AccountMove(models.Model):
                 reason=reason,
             )
         )
+        return True
+
+    def _balance_hotel_manual_fx_rounding(self):
+        """Absorb only the sub-cent accumulation from per-line FX conversion."""
+        self.ensure_one()
+        self.line_ids.flush_recordset(["balance"])
+        currency = self.company_currency_id
+        imbalance = currency.round(sum(self.line_ids.mapped("balance")))
+        if currency.is_zero(imbalance):
+            return True
+        maximum_rounding = currency.rounding * max(len(self.invoice_line_ids), 1)
+        payment_terms = self.line_ids.filtered(
+            lambda line: line.display_type == "payment_term"
+        ).sorted(lambda line: (line.date_maturity or self.date, line.id))
+        if abs(imbalance) > maximum_rounding or not payment_terms:
+            raise UserError(_("The entry is not balanced."))
+        balancing_line = payment_terms[-1]
+        balancing_line.with_context(
+            check_move_validity=False, skip_invoice_sync=True
+        ).write({"balance": balancing_line.balance - imbalance})
+        self.line_ids.flush_recordset(["balance"])
+        if self._get_unbalanced_moves({"records": self}):
+            raise UserError(_("The entry is not balanced."))
         return True
 
     def write(self, vals):
