@@ -141,6 +141,37 @@ class ResCompany(models.Model):
                 by_company[company.id] = prop
             company.hotel_property_config_id = prop
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        # The hotel operational settings are related fields onto a per-company
+        # hotel.property that does not exist yet while a brand-new company is
+        # being entered. On such a form those fields render as 0/empty, and
+        # writing them straight through on create would push an invalid value
+        # (e.g. online_hold_minutes = 0) into the auto-created property and trip
+        # its validation. Hold the hotel_* values aside, let the company (and
+        # its default-valued property) come into being, then re-apply only the
+        # values the user actually set.
+        hotel_field_names = [
+            name
+            for name in self._fields
+            if name.startswith("hotel_") and name != "hotel_property_config_id"
+        ]
+        held_values = []
+        for vals in vals_list:
+            held_values.append(
+                {name: vals.pop(name) for name in hotel_field_names if name in vals}
+            )
+        companies = super().create(vals_list)
+        for company, held in zip(companies, held_values):
+            meaningful = {
+                name: value
+                for name, value in held.items()
+                if value not in (0, 0.0, False, "")
+            }
+            if meaningful:
+                company.write(meaningful)
+        return companies
+
     @api.model
     def _search_hotel_property_config_id(self, operator, value):
         """Map the private hotel configuration back to its Odoo company."""

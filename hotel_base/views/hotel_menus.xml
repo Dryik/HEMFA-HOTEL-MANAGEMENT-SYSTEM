@@ -39,11 +39,10 @@
         sequence="100"
         groups="hotel_base.group_hotel_manager"/>
 
-    <menuitem id="menu_hotel_company_settings"
-        name="Hotel Settings"
-        parent="menu_hotel_config"
-        action="action_hotel_company_settings"
-        sequence="5"/>
+    <!-- Company management (name, address, currency) is handled from Odoo's
+         standard Settings > Companies. Hotel operational settings live on the
+         "Hotel Operations" tab of that company form, so there is deliberately
+         no company-settings entry inside the Hotel app menu. -->
 
     <!-- Configuration sections. Sections without visible children hide
          automatically, so modules can safely target them. -->
