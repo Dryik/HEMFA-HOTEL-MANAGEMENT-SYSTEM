@@ -75,7 +75,7 @@ class AccountMove(models.Model):
         old_rate = self.invoice_currency_rate
         rate_move = self.with_context(check_move_validity=False)
         super(AccountMove, rate_move).write({"invoice_currency_rate": new_rate})
-        self._balance_hotel_manual_fx_rounding()
+        self._recompute_hotel_manual_fx_balances(new_rate)
         super(AccountMove, self).write(
             {
                 "hotel_manual_fx_reason": reason,
@@ -94,24 +94,42 @@ class AccountMove(models.Model):
         )
         return True
 
-    def _balance_hotel_manual_fx_rounding(self):
-        """Absorb only the sub-cent accumulation from per-line FX conversion."""
+    def _recompute_hotel_manual_fx_balances(self, new_rate):
+        """Revalue a draft invoice and absorb only conversion rounding."""
         self.ensure_one()
-        self.line_ids.flush_recordset(["balance"])
         currency = self.company_currency_id
-        imbalance = currency.round(sum(self.line_ids.mapped("balance")))
-        if currency.is_zero(imbalance):
-            return True
-        maximum_rounding = currency.rounding * max(len(self.invoice_line_ids), 1)
-        payment_terms = self.line_ids.filtered(
+        converted_lines = self.line_ids.filtered(
+            lambda line: line.currency_id == self.currency_id
+            and line.display_type
+            not in ("line_section", "line_subsection", "line_note")
+        )
+        payment_terms = converted_lines.filtered(
             lambda line: line.display_type == "payment_term"
+            or line.account_id.account_type
+            in ("asset_receivable", "liability_payable")
         ).sorted(lambda line: (line.date_maturity or self.date, line.id))
-        if abs(imbalance) > maximum_rounding or not payment_terms:
+        if not converted_lines or not payment_terms:
             raise UserError(_("The entry is not balanced."))
-        balancing_line = payment_terms[-1]
-        balancing_line.with_context(
-            check_move_validity=False, skip_invoice_sync=True
-        ).write({"balance": balancing_line.balance - imbalance})
+
+        line_context = {
+            "check_move_validity": False,
+            "skip_invoice_sync": True,
+        }
+        for line in converted_lines:
+            line.with_context(**line_context).write(
+                {"balance": currency.round(line.amount_currency / new_rate)}
+            )
+
+        self.line_ids.flush_recordset(["balance"])
+        imbalance = currency.round(sum(self.line_ids.mapped("balance")))
+        maximum_rounding = currency.rounding * max(len(converted_lines), 1)
+        if abs(imbalance) > maximum_rounding:
+            raise UserError(_("The entry is not balanced."))
+        if not currency.is_zero(imbalance):
+            balancing_line = payment_terms[-1]
+            balancing_line.with_context(**line_context).write(
+                {"balance": balancing_line.balance - imbalance}
+            )
         self.line_ids.flush_recordset(["balance"])
         if self._get_unbalanced_moves({"records": self}):
             raise UserError(_("The entry is not balanced."))

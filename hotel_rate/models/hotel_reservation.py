@@ -206,12 +206,20 @@ class HotelReservationAmendment(models.Model):
         effective_business_date = reservation.property_id.get_business_date(
             self.effective_date
         )
-        old_lines = reservation.rate_line_ids.filtered(
-            lambda line: not line.superseded
-            and not line.reversal_of_id
-            and line.business_date >= effective_business_date
-        )
         line_model = self.env["hotel.reservation.rate.line"]
+        # Search the immutable snapshots directly instead of trusting a possibly
+        # prefetched one2many cache.  Confirmation creates the child snapshots
+        # after clearing that relation, so a stale empty cache here can leave the
+        # original row active and collide with the partial unique index below.
+        old_lines = line_model.search(
+            [
+                ("reservation_id", "=", reservation.id),
+                ("superseded", "=", False),
+                ("reversal_of_id", "=", False),
+                ("business_date", ">=", effective_business_date),
+            ],
+            order="business_date, id",
+        )
         old_posted_by_date = {line.business_date: line.posted for line in old_lines}
         for line in old_lines:
             line._supersede(self)
@@ -238,6 +246,7 @@ class HotelReservationAmendment(models.Model):
                     "reversal_of_id": line.id,
                 }
             )
+        old_lines.flush_recordset(["superseded"])
         room_type = reservation.room_type_id or reservation.room_id.room_type_id
         quote = self.env["hotel.rate.quote"].quote(
             reservation.property_id.id,
@@ -278,4 +287,5 @@ class HotelReservationAmendment(models.Model):
                 }
             )
             line_model.create(values)
+        reservation.invalidate_recordset(["rate_line_ids", "amount_total"])
         return True

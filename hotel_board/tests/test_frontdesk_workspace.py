@@ -223,6 +223,8 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
         business_start, business_end = self.property.get_business_day_bounds(
             self.business_date
         )
+        (cancelled | outside_cancelled).flush_recordset(["cancelled_at"])
+        (booking | outside_booking).flush_recordset(["create_date"])
         self.env.cr.execute(
             "UPDATE hotel_reservation SET cancelled_at = %s WHERE id = %s",
             [business_start + timedelta(hours=1), cancelled.id],
@@ -239,8 +241,12 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
             "UPDATE hotel_reservation SET create_date = %s WHERE id = %s",
             [business_end, outside_booking.id],
         )
-        cancelled.invalidate_recordset(["cancelled_at"])
-        booking.invalidate_recordset(["create_date"])
+        (cancelled | outside_cancelled).invalidate_recordset(
+            ["cancelled_at"], flush=False
+        )
+        (booking | outside_booking).invalidate_recordset(
+            ["create_date"], flush=False
+        )
 
         cancellations = self.workspace.get_dashboard_activity(
             self.property.id, self.business_date, "cancellations", False, False, 50
@@ -765,8 +771,15 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
             )
 
     def test_active_company_is_authoritative(self):
-        other_property = self.env["hotel.property"].create(
-            {"name": "Workspace Other Hotel", "code": "WSO"}
+        other_company = self.env["res.company"].create(
+            {"name": "Workspace Other Hotel"}
+        )
+        other_property = self.env["hotel.property"].with_company(
+            other_company
+        )._get_default_property()
+        self.assertEqual(
+            other_property.company_id,
+            other_company,
         )
         frontdesk = self.env["res.users"].create(
             {
