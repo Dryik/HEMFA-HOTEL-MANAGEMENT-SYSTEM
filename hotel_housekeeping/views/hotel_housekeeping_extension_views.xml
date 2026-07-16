@@ -67,8 +67,8 @@
         <field name="name">Housekeeping Checklist</field><field name="res_model">hotel.housekeeping.checklist.item</field><field name="view_mode">list</field>
     </record>
 
-    <menuitem id="menu_hotel_config_housekeeping_teams" name="Housekeeping Teams" parent="hotel_base.menu_hotel_config"
-        action="hotel_housekeeping_team_action" sequence="70"/>
-    <menuitem id="menu_hotel_config_housekeeping_checklist" name="Housekeeping Checklist" parent="hotel_base.menu_hotel_config"
-        action="hotel_housekeeping_checklist_item_action" sequence="75"/>
+    <menuitem id="menu_hotel_config_housekeeping_teams" name="Teams" parent="hotel_base.menu_hotel_config_section_housekeeping"
+        action="hotel_housekeeping_team_action" sequence="10"/>
+    <menuitem id="menu_hotel_config_housekeeping_checklist" name="Checklist" parent="hotel_base.menu_hotel_config_section_housekeeping"
+        action="hotel_housekeeping_checklist_item_action" sequence="20"/>
 </odoo>

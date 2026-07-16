@@ -49,7 +49,8 @@
                         <field name="amenity_ids" widget="many2many_tags"/>
                     </group>
                     <notebook>
-                        <page string="Occupancy" name="occupancy">
+                        <page string="Included Occupancy" name="occupancy">
+                            <p class="text-muted">Guests up to these base counts are included in the nightly rate. Extra guests above them are priced by the Extra Guest Supplement rules, while the capacity fields on the first tab cap what can be booked at all.</p>
                             <group>
                                 <field name="base_adults"/>
                                 <field name="base_teenagers"/>

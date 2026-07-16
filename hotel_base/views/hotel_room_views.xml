@@ -40,8 +40,6 @@
                             <field name="telephone_extension"/>
                         </group>
                         <group>
-                            <field name="occupancy_state"/>
-                            <field name="hk_status"/>
                             <field name="out_of_order" readonly="1"/>
                             <field name="admin_use" groups="hotel_base.group_hotel_manager"/>
                             <field name="is_sellable"/>
@@ -83,6 +81,10 @@
                                 <field name="hk_status" widget="badge"
                                     decoration-danger="hk_status == 'dirty'"
                                     decoration-success="hk_status != 'dirty'"/>
+                            </div>
+                            <div t-if="record.out_of_order.raw_value or record.admin_use.raw_value" class="mt-1">
+                                <span t-if="record.out_of_order.raw_value" class="badge text-bg-danger me-1">Out of Order</span>
+                                <span t-if="record.admin_use.raw_value" class="badge text-bg-warning">House Use</span>
                             </div>
                         </div>
                     </t>

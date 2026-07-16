@@ -27,7 +27,7 @@
         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant"/>
 
     <menuitem id="menu_hotel_agency_commissions"
-        name="Agency Commission Placeholders"
+        name="Agency Commissions"
         parent="menu_hotel_root"
         action="hotel_agency_commission_action"
         sequence="45"
@@ -39,30 +39,54 @@
         sequence="100"
         groups="hotel_base.group_hotel_manager"/>
 
-    <menuitem id="menu_hotel_config_floor"
-        name="Floors"
-        parent="menu_hotel_config"
-        action="hotel_floor_action"
-        sequence="10"/>
-
     <menuitem id="menu_hotel_company_settings"
         name="Hotel Settings"
         parent="menu_hotel_config"
         action="action_hotel_company_settings"
         sequence="5"/>
-    <record id="menu_hotel_company_settings" model="ir.ui.menu">
-        <field name="active" eval="False"/>
-    </record>
+
+    <!-- Configuration sections. Sections without visible children hide
+         automatically, so modules can safely target them. -->
+    <menuitem id="menu_hotel_config_section_property"
+        name="Property"
+        parent="menu_hotel_config"
+        sequence="10"/>
+
+    <menuitem id="menu_hotel_config_section_pricing"
+        name="Pricing"
+        parent="menu_hotel_config"
+        sequence="20"/>
+
+    <menuitem id="menu_hotel_config_section_services"
+        name="Services"
+        parent="menu_hotel_config"
+        sequence="30"/>
+
+    <menuitem id="menu_hotel_config_section_housekeeping"
+        name="Housekeeping"
+        parent="menu_hotel_config"
+        sequence="40"/>
+
+    <menuitem id="menu_hotel_config_section_billing"
+        name="Billing"
+        parent="menu_hotel_config"
+        sequence="50"/>
+
+    <menuitem id="menu_hotel_config_floor"
+        name="Floors"
+        parent="menu_hotel_config_section_property"
+        action="hotel_floor_action"
+        sequence="10"/>
 
     <menuitem id="menu_hotel_config_room_type"
         name="Room Types"
-        parent="menu_hotel_config"
+        parent="menu_hotel_config_section_property"
         action="hotel_room_type_action"
         sequence="20"/>
 
     <menuitem id="menu_hotel_config_amenity"
         name="Amenities"
-        parent="menu_hotel_config"
+        parent="menu_hotel_config_section_property"
         action="hotel_amenity_action"
         sequence="30"/>
 </odoo>

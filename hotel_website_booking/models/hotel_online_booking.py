@@ -509,17 +509,58 @@ class HotelOnlineBooking(models.Model):
 
     def action_cancel_online(self):
         for booking in self:
-            if booking.state not in ("pending_review", "held", "payment_pending", "confirmed"):
+            if booking.state not in (
+                "pending_review",
+                "held",
+                "payment_pending",
+                "payment_exception",
+                "confirmed",
+            ):
                 raise UserError(_("This booking can no longer be cancelled online."))
             if booking.checkin_date <= fields.Datetime.now():
                 raise UserError(_("Contact the hotel to cancel after the arrival time."))
             if booking.state in ("held", "payment_pending"):
                 booking._expire_hold()
+            elif booking.state == "payment_exception":
+                booking._release_exception_holds()
+                booking._write_workflow_values({"state": "cancelled", "expires_at": False})
             else:
                 if booking.group_id and booking.group_id.state == "confirmed":
                     booking.group_id.action_cancel()
                 booking._write_workflow_values({"state": "cancelled", "expires_at": False})
             booking._send_template("hotel_website_booking.mail_template_booking_cancellation")
+        return True
+
+    def _release_exception_holds(self):
+        """Release inventory still held by a booking stuck in payment exception."""
+        self.ensure_one()
+        self._lock()
+        held = self.reservation_ids.filtered(
+            lambda reservation: reservation.state == "pending_payment"
+        )
+        held._action_expire_payment_hold()
+        if self.group_id and self.group_id.state == "draft":
+            self.group_id._write_group_state("cancelled")
+        return True
+
+    def action_return_to_review(self):
+        """Staff recovery path: send an exception booking back to the review queue."""
+        for booking in self:
+            if booking.state != "payment_exception":
+                raise UserError(
+                    _("Only bookings in payment exception can be returned to review.")
+                )
+            booking._release_exception_holds()
+            booking._write_workflow_values(
+                {"state": "pending_review", "expires_at": False, "exception_note": False}
+            )
+            booking.message_post(
+                body=_(
+                    "Payment exception returned to review by %(user)s. Previous exception: %(note)s",
+                    user=self.env.user.name,
+                    note=booking.exception_note or "-",
+                )
+            )
         return True
 
     def _send_template(self, xmlid):

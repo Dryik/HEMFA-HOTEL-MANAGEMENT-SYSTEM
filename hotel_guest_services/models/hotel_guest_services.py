@@ -126,6 +126,7 @@ class HotelLostFound(models.Model):
 class HotelDoNotDisturb(models.Model):
     _name = "hotel.do.not.disturb"
     _description = "Hotel Do Not Disturb Request"
+    _inherit = ["mail.thread"]
     _order = "start_at desc, id desc"
 
     property_id = fields.Many2one(
@@ -148,6 +149,7 @@ class HotelDoNotDisturb(models.Model):
         default="active",
         required=True,
         readonly=True,
+        tracking=True,
     )
 
     @api.model_create_multi
@@ -201,7 +203,7 @@ class HotelDoNotDisturb(models.Model):
 class HotelWakeupCall(models.Model):
     _name = "hotel.wakeup.call"
     _description = "Hotel Wake-up Call"
-    _inherit = ["mail.activity.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "scheduled_at, id"
 
     name = fields.Char(default=lambda self: _("New"), readonly=True, copy=False)
@@ -244,6 +246,7 @@ class HotelWakeupCall(models.Model):
             ("cancelled", "Cancelled"),
         ],
         default="scheduled",
+        tracking=True,
         required=True,
         readonly=True,
     )

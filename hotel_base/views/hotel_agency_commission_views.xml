@@ -19,7 +19,7 @@
         <field name="name">hotel.agency.commission.form</field>
         <field name="model">hotel.agency.commission</field>
         <field name="arch" type="xml">
-            <form string="Agency Commission Placeholder">
+            <form string="Agency Commission">
                 <sheet>
                     <group>
                         <field name="property_id" invisible="1"/>
@@ -39,8 +39,12 @@
     </record>
 
     <record id="hotel_agency_commission_action" model="ir.actions.act_window">
-        <field name="name">Agency Commission Placeholders</field>
+        <field name="name">Agency Commissions</field>
         <field name="res_model">hotel.agency.commission</field>
         <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Record agency commission terms</p>
+            <p>Commission rates are configuration only for now — accrual and settlement are planned for a later release.</p>
+        </field>
     </record>
 </odoo>

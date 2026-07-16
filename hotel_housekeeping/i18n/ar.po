@@ -40,6 +40,7 @@ msgstr "مغادر / مسجل خروج"
 
 #. module: hotel_housekeeping
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__checklist_line_ids
+#: model:ir.ui.menu,name:hotel_housekeeping.menu_hotel_config_housekeeping_checklist
 #: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form_inherit_extended
 msgid "Checklist"
 msgstr "قائمة التحقق"
@@ -158,7 +159,6 @@ msgid "Housekeeping"
 msgstr "التدبير الفندقي"
 
 #. module: hotel_housekeeping
-#: model:ir.ui.menu,name:hotel_housekeeping.menu_hotel_config_housekeeping_checklist
 #: model:ir.actions.act_window,name:hotel_housekeeping.hotel_housekeeping_checklist_item_action
 msgid "Housekeeping Checklist"
 msgstr "قائمة تحقق التدبير الفندقي"
@@ -221,7 +221,6 @@ msgid "Housekeeping Tasks"
 msgstr "مهام التدبير الفندقي"
 
 #. module: hotel_housekeeping
-#: model:ir.ui.menu,name:hotel_housekeeping.menu_hotel_config_housekeeping_teams
 #: model:ir.actions.act_window,name:hotel_housekeeping.hotel_housekeeping_team_action
 msgid "Housekeeping Teams"
 msgstr "فرق التدبير الفندقي"
@@ -449,6 +448,11 @@ msgstr "مرجع المهمة"
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_team__member_ids
 msgid "Team Members"
 msgstr "أعضاء الفريق"
+
+#. module: hotel_housekeeping
+#: model:ir.ui.menu,name:hotel_housekeeping.menu_hotel_config_housekeeping_teams
+msgid "Teams"
+msgstr "الفرق"
 
 #. module: hotel_housekeeping
 #. odoo-python

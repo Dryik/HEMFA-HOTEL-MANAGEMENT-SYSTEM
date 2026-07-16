@@ -1605,6 +1605,66 @@ TRANSLATIONS.update({
     "Your request is waiting for hotel approval. No room is blocked until staff approves it.": "طلبك بانتظار اعتماد الفندق. لن تحجب أي غرفة حتى يعتمد الموظفون الطلب.",
 })
 
+# UI/UX audit remediation (2026-07-16): workflow confirmations, amendment
+# rejection, payment-exception recovery, configuration sections, and renames.
+TRANSLATIONS.update({
+    # Reservation workflow confirmations
+    "Check Out": "تسجيل مغادرة",
+    "Check out": "تسجيل المغادرة",
+    "Keep Stay": "إبقاء الإقامة",
+    "Check this guest out now? Checkout ends the stay and cannot be undone.": "هل تريد تسجيل مغادرة هذا النزيل الآن؟ تسجيل المغادرة ينهي الإقامة ولا يمكن التراجع عنه.",
+    "Check out %(guest)s from room %(room)s? Checkout ends the stay and cannot be undone.": "هل تريد تسجيل مغادرة %(guest)s من الغرفة %(room)s؟ تسجيل المغادرة ينهي الإقامة ولا يمكن التراجع عنه.",
+    "Mark this reservation as a no-show?": "هل تريد تسجيل هذا الحجز كعدم حضور؟",
+    "Cancel this reservation?": "هل تريد إلغاء هذا الحجز؟",
+    # Amendment rejection workflow
+    "To Approve": "بانتظار الاعتماد",
+    "Rejection": "الرفض",
+    "Rejection Reason": "سبب الرفض",
+    "Rejected By": "رفضه",
+    "Rejected At": "تاريخ الرفض",
+    "Only draft amendments can be rejected.": "لا يمكن رفض إلا التعديلات في حالة المسودة.",
+    "A Front Office Supervisor is required to reject.": "يتطلب الرفض مشرف المكتب الأمامي.",
+    "A rejection reason is required.": "يلزم إدخال سبب الرفض.",
+    "Amendment %(amendment)s rejected by %(user)s. Reason: %(reason)s": "رفض التعديل %(amendment)s بواسطة %(user)s. السبب: %(reason)s",
+    "Rejected reservation amendments are immutable.": "تعديلات الحجز المرفوضة غير قابلة للتغيير.",
+    "Applied or rejected reservation amendments cannot be deleted.": "لا يمكن حذف تعديلات الحجز المطبقة أو المرفوضة.",
+    "Required when a supervisor rejects the requested amendment.": "مطلوب عندما يرفض المشرف التعديل المطلوب.",
+    "Reject this amendment? Fill in the rejection reason first — the requester will see it in the stay's log.": "هل تريد رفض هذا التعديل؟ أدخل سبب الرفض أولاً — سيظهر لمقدم الطلب في سجل الإقامة.",
+    "Supervisor: fill this in before rejecting…": "للمشرف: يرجى التعبئة قبل الرفض…",
+    "No amendments waiting for approval.": "لا توجد تعديلات بانتظار الاعتماد.",
+    "Amendments record room moves, stay changes and repricing. A supervisor approves and applies them, or rejects them with a reason.": "تسجل التعديلات نقل الغرف وتغييرات الإقامة وإعادة التسعير. يعتمدها المشرف ويطبقها، أو يرفضها مع ذكر السبب.",
+    # Online booking payment-exception recovery
+    "Return to Review": "إعادة إلى المراجعة",
+    "Release the held rooms and return this booking to the review queue?": "هل تريد تحرير الغرف المحجوزة مؤقتاً وإعادة هذا الحجز إلى قائمة المراجعة؟",
+    "Cancel this booking? The guest will be notified by email.": "هل تريد إلغاء هذا الحجز؟ سيتم إخطار النزيل عبر البريد الإلكتروني.",
+    "Only bookings in payment exception can be returned to review.": "لا يمكن إعادة الحجز إلى المراجعة إلا إذا كان في حالة استثناء دفع.",
+    "Payment exception returned to review by %(user)s. Previous exception: %(note)s": "أعاد %(user)s استثناء الدفع إلى المراجعة. الاستثناء السابق: %(note)s",
+    "The hotel has been notified and will contact you to complete or refund this booking. You can also cancel it below.": "تم إخطار الفندق وسيتواصل معك لإكمال هذا الحجز أو رد المبلغ. يمكنك أيضاً إلغاؤه أدناه.",
+    # Configuration sections and renames
+    "Billing": "الفوترة",
+    "Teams": "الفرق",
+    "Service Catalog": "دليل الخدمات",
+    "Agency Commissions": "عمولات الوكالات",
+    "Agency Commission": "عمولة الوكالة",
+    "Record agency commission terms": "سجل شروط عمولات الوكالات",
+    "Commission rates are configuration only for now — accrual and settlement are planned for a later release.": "نسب العمولة للإعداد فقط حالياً — الاستحقاق والتسوية مخططان لإصدار لاحق.",
+    "Confirm Group": "تأكيد المجموعة",
+    "Cancel this group reservation? All member stays in the group are affected.": "هل تريد إلغاء حجز المجموعة؟ سيؤثر ذلك على جميع إقامات أعضاء المجموعة.",
+    "Service Orders": "طلبات الخدمات",
+    "No service orders yet.": "لا توجد طلبات خدمات بعد.",
+    "Service orders track meals and other guest services from confirmation to delivery, and post their charges to the folio.": "تتابع طلبات الخدمات الوجبات وخدمات النزلاء الأخرى من التأكيد حتى التسليم، وتسجل رسومها على الفوليو.",
+    # Ratings, lost & found, room type help
+    "Approve": "اعتماد",
+    "Approve this rating? Approved ratings are published on the hotel website.": "هل تريد اعتماد هذا التقييم؟ التقييمات المعتمدة تنشر على موقع الفندق.",
+    "Dispose of this item? This closes the lost-and-found record.": "هل تريد التخلص من هذا الشيء؟ سيغلق ذلك سجل المفقودات.",
+    "Set before marking the item claimed": "يحدد قبل تسجيل استلام الشيء",
+    "Included Occupancy": "الإشغال المشمول",
+    "Guests up to these base counts are included in the nightly rate. Extra guests above them are priced by the Extra Guest Supplement rules, while the capacity fields on the first tab cap what can be booked at all.": "النزلاء حتى هذه الأعداد الأساسية مشمولون في سعر الليلة. النزلاء الإضافيون فوقها يسعرون وفق قواعد رسوم النزلاء الإضافيين، بينما تحدد حقول السعة في التبويب الأول الحد الأقصى لما يمكن حجزه.",
+    # Website funnel
+    "Rate plan": "خطة الأسعار",
+    "Teens": "المراهقون",
+})
+
 header_template = """# Translation of Odoo Server.
 # This file contains the translation of the following module:
 # 	* {module_name}

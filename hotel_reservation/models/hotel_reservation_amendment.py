@@ -44,8 +44,14 @@ class HotelReservationAmendment(models.Model):
     )
     approved_by_id = fields.Many2one("res.users", readonly=True, copy=False)
     approved_at = fields.Datetime(readonly=True, copy=False)
+    rejected_by_id = fields.Many2one("res.users", readonly=True, copy=False)
+    rejected_at = fields.Datetime(readonly=True, copy=False)
+    rejection_reason = fields.Text(
+        copy=False,
+        help="Required when a supervisor rejects the requested amendment.",
+    )
     state = fields.Selection(
-        [("draft", "Draft"), ("applied", "Applied")],
+        [("draft", "Draft"), ("applied", "Applied"), ("rejected", "Rejected")],
         default="draft",
         required=True,
         readonly=True,
@@ -191,6 +197,35 @@ class HotelReservationAmendment(models.Model):
     def _write_applied_values(self, values):
         return super(HotelReservationAmendment, self).write(values)
 
+    def action_reject(self):
+        for amendment in self:
+            if amendment.state != "draft":
+                raise UserError(_("Only draft amendments can be rejected."))
+            is_manager = self.env.user.has_group("hotel_base.group_hotel_manager")
+            is_supervisor = self.env.user.has_group(
+                "hotel_base.group_hotel_fo_supervisor"
+            )
+            if not is_supervisor and not is_manager:
+                raise UserError(_("A Front Office Supervisor is required to reject."))
+            if not (amendment.rejection_reason or "").strip():
+                raise UserError(_("A rejection reason is required."))
+            amendment._write_applied_values(
+                {
+                    "state": "rejected",
+                    "rejected_by_id": self.env.user.id,
+                    "rejected_at": fields.Datetime.now(),
+                }
+            )
+            amendment.reservation_id.message_post(
+                body=_(
+                    "Amendment %(amendment)s rejected by %(user)s. Reason: %(reason)s",
+                    amendment=amendment.name,
+                    user=self.env.user.name,
+                    reason=amendment.rejection_reason.strip(),
+                )
+            )
+        return True
+
     def write(self, vals):
         action_fields = {
             "name",
@@ -200,16 +235,22 @@ class HotelReservationAmendment(models.Model):
             "after_values",
             "approved_by_id",
             "approved_at",
+            "rejected_by_id",
+            "rejected_at",
         }
         if action_fields.intersection(vals):
             raise UserError(_("Amendment approval fields can only be set by the apply action."))
         if self.filtered(lambda amendment: amendment.state == "applied"):
             raise UserError(_("Applied reservation amendments are immutable."))
+        if self.filtered(lambda amendment: amendment.state == "rejected"):
+            raise UserError(_("Rejected reservation amendments are immutable."))
         return super().write(vals)
 
     def unlink(self):
-        if self.filtered(lambda amendment: amendment.state == "applied"):
-            raise UserError(_("Applied reservation amendments cannot be deleted."))
+        if self.filtered(lambda amendment: amendment.state in ("applied", "rejected")):
+            raise UserError(
+                _("Applied or rejected reservation amendments cannot be deleted.")
+            )
         return super().unlink()
 
 
