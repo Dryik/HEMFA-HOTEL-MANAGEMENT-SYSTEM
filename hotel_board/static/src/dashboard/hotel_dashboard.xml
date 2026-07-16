@@ -47,13 +47,19 @@
             <t t-if="state.data">
                 <t t-set="dateParts" t-value="selectedDateParts()"/>
                 <section t-if="state.data.operationalKpis.length"
-                    class="o_hotel_operational_kpis" aria-label="Operational workload">
-                    <button t-foreach="state.data.operationalKpis" t-as="kpi" t-key="kpi.key"
-                        type="button" class="o_hotel_dashboard_card o_hotel_operational_kpi"
-                        t-on-click="() => this.openOperationalKpi(kpi)">
-                        <strong dir="ltr"><t t-esc="formatCount(kpi.count)"/></strong>
-                        <span><t t-esc="kpi.label"/></span>
-                    </button>
+                    class="o_hotel_attention_rail" aria-label="Operational workload">
+                    <strong class="o_hotel_attention_title">
+                        <i class="fa fa-bell-o" aria-hidden="true"/>
+                        <span>Operational workload</span>
+                    </strong>
+                    <div class="o_hotel_attention_items" role="list">
+                        <button t-foreach="state.data.operationalKpis" t-as="kpi" t-key="kpi.key"
+                            type="button" class="o_hotel_attention_item" role="listitem"
+                            t-on-click="() => this.openOperationalKpi(kpi)">
+                            <span><t t-esc="kpi.label"/></span>
+                            <strong dir="ltr"><t t-esc="formatCount(kpi.count)"/></strong>
+                        </button>
+                    </div>
                 </section>
                 <div class="o_hotel_dashboard_layout">
                     <aside class="o_hotel_dashboard_sidebar" aria-label="Date and occupancy">
@@ -184,7 +190,7 @@
                                     </div>
                                     <div class="o_hotel_activity_room">
                                         <button type="button" class="o_hotel_text_action"
-                                            t-on-click="() => this.openRowAction(row, 'reservation')">
+                                            t-on-click="() => this.openQuickView(row)">
                                             <bdi dir="ltr"><t t-esc="operationalText(row.room?.name || '—')"/></bdi>
                                             <span t-if="row.room_type?.name"> · <t t-esc="row.room_type.name"/></span>
                                             <i class="fa fa-angle-right" aria-hidden="true"/>
@@ -227,8 +233,8 @@
                                     </div>
                                     <div class="o_hotel_row_actions" aria-label="Reservation actions">
                                         <button type="button" class="btn o_hotel_icon_button"
-                                            t-on-click="() => this.openRowAction(row, 'reservation')"
-                                            aria-label="Open reservation">
+                                            t-on-click="() => this.openQuickView(row)"
+                                            aria-label="Reservation">
                                             <i t-attf-class="fa {{ row.has_notes ? 'fa-sticky-note-o' : 'fa-file-text-o' }}"
                                                 aria-hidden="true"/>
                                         </button>
@@ -271,39 +277,6 @@
                         </div>
                     </section>
                 </div>
-                <section t-if="state.data.rooms.length"
-                    class="o_hotel_dashboard_card o_hotel_room_snapshot"
-                    aria-labelledby="hotel-room-snapshot-title">
-                    <div class="o_hotel_room_snapshot_header">
-                        <div>
-                            <h2 id="hotel-room-snapshot-title">Room snapshot</h2>
-                            <p>Capacity, today’s direct rate, and future demand.</p>
-                        </div>
-                        <button type="button" class="btn btn-link" t-on-click="openPlanning">
-                            Open planning
-                        </button>
-                    </div>
-                    <div class="o_hotel_room_cards">
-                        <article t-foreach="state.data.rooms" t-as="room" t-key="room.id"
-                            t-attf-class="o_hotel_room_card o_is_{{ room.state }}">
-                            <div class="d-flex justify-content-between gap-2">
-                                <strong><bdi dir="ltr"><t t-esc="operationalText(room.name)"/></bdi></strong>
-                                <span t-attf-class="badge {{ room.state === 'available' ? 'text-bg-success' : room.state === 'dirty' ? 'text-bg-warning' : room.state === 'out_of_service' ? 'text-bg-danger' : 'text-bg-secondary' }}">
-                                    <t t-esc="room.state_label"/>
-                                </span>
-                            </div>
-                            <span class="text-muted"><t t-esc="room.room_type?.name"/> · <t t-esc="room.floor?.name || '—'"/></span>
-                            <dl>
-                                <div><dt>Capacity</dt><dd t-esc="formatCount(room.capacity)"/></div>
-                                <div><dt>Current price</dt><dd t-esc="formatAmount(room.current_price)"/></div>
-                                <div><dt>Future bookings</dt><dd t-esc="formatCount(room.future_bookings)"/></div>
-                            </dl>
-                            <small t-if="room.guest_name" class="text-truncate" t-esc="room.guest_name"/>
-                            <button t-if="room.action" type="button" class="btn btn-primary btn-sm"
-                                t-on-click="() => this.bookRoom(room)">Book now</button>
-                        </article>
-                    </div>
-                </section>
             </t>
 
             <div t-elif="state.loading" class="o_hotel_dashboard_loading" role="status">
@@ -317,6 +290,95 @@
                 <button type="button" class="btn btn-primary" t-on-click="() => this.refreshDashboard()">
                     Retry
                 </button>
+            </div>
+
+            <div t-if="state.drawerRow" class="o_hotel_dashboard_drawer_backdrop"
+                t-on-click="onDrawerBackdropClick">
+                <aside class="o_hotel_dashboard_drawer" role="dialog" aria-modal="true"
+                    aria-labelledby="hotel-dashboard-drawer-title">
+                    <header class="o_hotel_drawer_header">
+                        <span class="o_hotel_guest_avatar" aria-hidden="true">
+                            <t t-esc="guestInitials(state.drawerRow)"/>
+                        </span>
+                        <div class="o_hotel_drawer_identity">
+                            <h2 id="hotel-dashboard-drawer-title">
+                                <t t-esc="state.drawerRow.guest?.name"/>
+                            </h2>
+                            <bdi dir="ltr"><t t-esc="operationalText(state.drawerRow.reference)"/></bdi>
+                        </div>
+                        <button type="button" class="btn o_hotel_icon_button o_hotel_drawer_close"
+                            t-on-click="closeQuickView" aria-label="Close">
+                            <i class="fa fa-times" aria-hidden="true"/>
+                        </button>
+                    </header>
+
+                    <div class="o_hotel_drawer_status">
+                        <span><i class="fa fa-circle" aria-hidden="true"/></span>
+                        <strong><t t-esc="state.drawerRow.state_label"/></strong>
+                    </div>
+
+                    <nav class="o_hotel_drawer_tabs" aria-label="Reservation">
+                        <span class="o_is_selected">Overview</span>
+                        <button t-if="state.drawerRow.actions?.guest" type="button"
+                            t-on-click="() => this.openDrawerAction('guest')">Guest</button>
+                        <button t-if="state.drawerRow.actions?.folio" type="button"
+                            t-on-click="() => this.openDrawerAction('folio')">Folio</button>
+                    </nav>
+
+                    <div class="o_hotel_drawer_body">
+                        <section class="o_hotel_drawer_card">
+                            <div class="o_hotel_drawer_card_title">
+                                <i class="fa fa-bed" aria-hidden="true"/>
+                                <strong>
+                                    <bdi dir="ltr"><t t-esc="operationalText(state.drawerRow.room?.name || '—')"/></bdi>
+                                    <span t-if="state.drawerRow.room_type?.name"> · <t t-esc="state.drawerRow.room_type.name"/></span>
+                                </strong>
+                            </div>
+                            <bdi class="o_hotel_drawer_dates" dir="ltr">
+                                <t t-esc="formatDateTime(state.drawerRow.checkin)"/> –
+                                <t t-esc="formatDateTime(state.drawerRow.checkout)"/>
+                            </bdi>
+                            <div class="o_hotel_stay_chips">
+                                <span t-att-aria-label="nightsAriaLabel(state.drawerRow)">
+                                    <bdi dir="ltr"><t t-esc="formatCount(state.drawerRow.nights)"/></bdi>
+                                    <i class="fa fa-moon-o" aria-hidden="true"/>
+                                </span>
+                                <span t-att-aria-label="adultsAriaLabel(state.drawerRow)">
+                                    <bdi dir="ltr"><t t-esc="formatCount(state.drawerRow.adults)"/></bdi>
+                                    <i class="fa fa-user" aria-hidden="true"/>
+                                </span>
+                                <span t-att-aria-label="childrenAriaLabel(state.drawerRow)">
+                                    <bdi dir="ltr"><t t-esc="formatCount(minorGuests(state.drawerRow))"/></bdi>
+                                    <i class="fa fa-child" aria-hidden="true"/>
+                                </span>
+                            </div>
+                        </section>
+
+                        <section t-if="state.drawerRow.finance" class="o_hotel_drawer_card">
+                            <div class="o_hotel_drawer_balance">
+                                <i class="fa fa-credit-card" aria-hidden="true"/>
+                                <div>
+                                    <strong><t t-esc="formatAmount(state.drawerRow.finance.amount_due)"/></strong>
+                                    <span>Balance due</span>
+                                </div>
+                            </div>
+                            <button t-if="state.drawerRow.actions?.folio" type="button"
+                                class="btn btn-outline-primary"
+                                t-on-click="() => this.openDrawerAction('folio')">Open folio</button>
+                        </section>
+
+                        <section class="o_hotel_drawer_actions">
+                            <button type="button" class="btn btn-primary"
+                                data-dashboard-drawer-action="reservation"
+                                t-on-click="() => this.openDrawerAction('reservation')">
+                                Open reservation
+                            </button>
+                            <button t-if="state.drawerRow.actions?.guest" type="button"
+                                class="btn btn-outline-primary"
+                                t-on-click="() => this.openDrawerAction('guest')">Open guest</button>
+                        </section>
+                    </div>
+                </aside>
             </div>
         </main>
     </t>
