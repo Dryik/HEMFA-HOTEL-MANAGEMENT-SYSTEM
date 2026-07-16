@@ -452,12 +452,6 @@ msgid "Hotel Room"
 msgstr "غرفة الفندق"
 
 #. module: hotel_base
-#: model:ir.ui.menu,name:hotel_base.menu_hotel_company_settings
-#: model:ir.actions.act_window,name:hotel_base.action_hotel_company_settings
-msgid "Hotel Settings"
-msgstr "إعدادات الفندق"
-
-#. module: hotel_base
 #: model:ir.model.fields,field_description:hotel_base.field_res_company__hotel_timezone
 msgid "Hotel Timezone"
 msgstr "المنطقة الزمنية للفندق"
