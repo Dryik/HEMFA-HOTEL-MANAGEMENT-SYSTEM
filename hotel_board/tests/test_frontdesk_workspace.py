@@ -130,7 +130,7 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
         snapshot = self.workspace.get_dashboard_snapshot(
             self.property.id, self.business_date
         )
-        self.assertEqual(snapshot["version"], 2)
+        self.assertEqual(snapshot["version"], 3)
         self.assertEqual(snapshot["meta"]["property_id"], self.property.id)
         self.assertEqual(snapshot["occupancy"]["available_units"], 2)
         self.assertEqual(snapshot["occupancy"]["booked_units"], 2)
@@ -166,15 +166,7 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
             snapshot["activity"]["rows"][0]["primary_action"]["key"],
             "check_in",
         )
-        room_cards = {room["name"]: room for room in snapshot["rooms"]}
-        self.assertEqual(len(room_cards), 4)
-        self.assertEqual(room_cards[self.room_reserved.name]["state"], "booked")
-        self.assertFalse(room_cards[self.room_reserved.name]["action"])
-        self.assertEqual(room_cards[self.room_empty.name]["state"], "available")
-        self.assertTrue(room_cards[self.room_empty.name]["action"])
-        self.assertEqual(room_cards[self.room_empty.name]["current_price"], 150.0)
-        self.assertEqual(room_cards[self.room_dirty.name]["state"], "dirty")
-        self.assertFalse(room_cards[self.room_dirty.name]["action"])
+        self.assertNotIn("rooms", snapshot)
         operational_keys = {
             item["key"] for item in snapshot["operational_kpis"]
         }

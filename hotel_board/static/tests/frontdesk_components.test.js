@@ -42,7 +42,7 @@ function mockAction(callback = () => {}) {
 
 function dashboardSnapshot(businessDate = BUSINESS_DATE) {
     return {
-        version: 2,
+        version: 3,
         meta: {
             property_id: PROPERTY_ID,
             property_name: "Tripoli Hotel",
@@ -135,26 +135,6 @@ function dashboardSnapshot(businessDate = BUSINESS_DATE) {
                     type: "ir.actions.act_window",
                     res_model: "hotel.online.booking",
                     domain: [["state", "=", "pending_review"]],
-                },
-            },
-        ],
-        rooms: [
-            {
-                id: 101,
-                name: "101",
-                room_type: { id: 10, name: "Double Suite" },
-                floor: { id: 1, name: "First Floor" },
-                state: "available",
-                state_label: "Available",
-                capacity: 4,
-                current_price: 150,
-                future_bookings: 1,
-                guest_name: false,
-                action: {
-                    type: "ir.actions.act_window",
-                    res_model: "hotel.reservation",
-                    views: [[false, "form"]],
-                    context: { default_room_id: 101 },
                 },
             },
         ],
@@ -313,14 +293,18 @@ test("Dashboard renders the compact activity workspace and preserves action cont
     expect(".o_hotel_dashboard_loading").toHaveCount(0);
     expect(".o_hotel_activity_row").toHaveText(/Ahmed Al-Mansouri/);
     expect(".o_hotel_occupancy_ring").toHaveText(/50%/);
-    expect(".o_hotel_operational_kpi").toHaveText(/Booking Requests/);
-    expect(".o_hotel_room_card").toHaveText(/Double Suite/);
-    expect(".o_hotel_room_card").toHaveText(/150/);
+    expect(".o_hotel_attention_item").toHaveText(/Booking Requests/);
+    expect(".o_hotel_room_card").toHaveCount(0);
     expect(getFrontdeskState()).toEqual({
         businessDate: BUSINESS_DATE,
     });
 
     await contains(".o_hotel_text_action").click();
+    expect(".o_hotel_dashboard_drawer").toHaveCount(1);
+    expect(".o_hotel_dashboard_drawer").toHaveText(/Ahmed Al-Mansouri/);
+    expect(".o_hotel_dashboard_drawer").toHaveText(/Double Suite/);
+    await contains('[data-dashboard-drawer-action="reservation"]').click();
+    expect(".o_hotel_dashboard_drawer").toHaveCount(0);
     expect(openedAction.context).toMatchObject({
         default_property_id: PROPERTY_ID,
         hotel_property_id: PROPERTY_ID,

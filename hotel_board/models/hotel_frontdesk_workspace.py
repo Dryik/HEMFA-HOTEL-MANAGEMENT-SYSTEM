@@ -459,87 +459,6 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
             if sellable_rooms
             else 0.0
         )
-        direct_source = self.env["hotel.booking.source"].search(
-            [
-                ("property_id", "=", prop.id),
-                ("source", "=", "direct"),
-                ("active", "=", True),
-            ],
-            limit=1,
-        )
-        current_prices = {}
-        for room_type in rooms.mapped("room_type_id"):
-            quote = self.env["hotel.rate.quote"].quote(
-                prop.id,
-                room_type.id,
-                business_start,
-                business_end,
-                pricelist_id=direct_source.pricelist_id.id,
-                adults=max(room_type.base_adults, 1),
-                teenagers=room_type.base_teenagers,
-                children=room_type.base_children,
-                infants=room_type.base_infants,
-            )
-            quote_currency = self.env["res.currency"].browse(quote["currency_id"])
-            current_prices[room_type.id] = quote_currency._convert(
-                quote["amount_untaxed"],
-                prop.company_id.currency_id,
-                prop.company_id,
-                business_date,
-            )
-        booked_by_room = {
-            reservation.room_id.id: reservation
-            for reservation in booked.sorted(lambda item: item.checkin_date)
-        }
-        room_cards = []
-        for room in rooms.sorted(lambda item: (item.floor_id.sequence, item.name)):
-            active_stay = booked_by_room.get(room.id)
-            bookable = room.is_sellable and not active_stay and room.hk_status != "dirty"
-            if room.out_of_order:
-                room_state, room_state_label = "out_of_service", _("Out of Service")
-            elif room.admin_use:
-                room_state, room_state_label = "house_use", _("House Use")
-            elif active_stay:
-                room_state, room_state_label = "booked", _("Booked")
-            elif room.hk_status == "dirty":
-                room_state, room_state_label = "dirty", _("Dirty")
-            else:
-                room_state, room_state_label = "available", _("Available")
-            room_cards.append(
-                {
-                    "id": room.id,
-                    "name": room.name,
-                    "room_type": self._many2one_payload(room.room_type_id),
-                    "floor": self._many2one_payload(room.floor_id),
-                    "state": room_state,
-                    "state_label": room_state_label,
-                    "capacity": room.room_type_id.max_occupancy,
-                    "current_price": prop.company_id.currency_id.round(
-                        current_prices.get(
-                            room.room_type_id.id, room.room_type_id.base_price
-                        )
-                    ),
-                    "future_bookings": self.env["hotel.reservation"].search_count(
-                        [
-                            ("room_id", "=", room.id),
-                            (
-                                "state",
-                                "in",
-                                ("pending_payment", "confirmed", "checked_in"),
-                            ),
-                            ("checkout_date", ">", business_end),
-                        ]
-                    ),
-                    "guest_name": (
-                        active_stay.partner_id.display_name if active_stay else False
-                    ),
-                    "action": self._new_reservation_action(
-                        prop, business_date, room=room
-                    )
-                    if bookable
-                    else False,
-                }
-            )
         tabs = []
         for key in DASHBOARD_ACTIVITY_KEYS:
             all_records = self._dashboard_activity_records(
@@ -611,7 +530,7 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
                 }
             )
         return {
-            "version": 2,
+            "version": 3,
             "meta": {
                 "property_id": prop.id,
                 "property_name": prop.company_id.display_name,
@@ -639,7 +558,6 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
             "tabs": tabs,
             "activity": activity,
             "operational_kpis": operational_kpis,
-            "rooms": room_cards,
             "actions": {
                 "new_reservation": self._new_reservation_action(prop, business_date),
                 "planning": self._planning_action(prop, business_date),
