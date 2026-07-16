@@ -76,13 +76,16 @@
                         class="btn-primary" invisible="state not in ('draft', 'pending_payment')"/>
                     <button name="action_check_in" type="object" string="Check In"
                         class="btn-primary" invisible="state != 'confirmed'"/>
-                    <button name="action_check_out" type="object" string="Confirm Check Out"
-                        class="btn-primary" invisible="state != 'checked_in'"/>
+                    <button name="action_check_out" type="object" string="Check Out"
+                        class="btn-primary" invisible="state != 'checked_in'"
+                        confirm="Check this guest out now? Checkout ends the stay and cannot be undone."/>
                     <button name="action_no_show" type="object" string="No Show"
                         invisible="state != 'confirmed'"
-                        groups="hotel_base.group_hotel_fo_supervisor"/>
+                        groups="hotel_base.group_hotel_fo_supervisor"
+                        confirm="Mark this reservation as a no-show?"/>
                     <button name="action_cancel" type="object" string="Cancel"
-                        invisible="state not in ('draft', 'pending_payment', 'confirmed')"/>
+                        invisible="state not in ('draft', 'pending_payment', 'confirmed')"
+                        confirm="Cancel this reservation?"/>
                     <button name="action_reset_draft" type="object" string="Reset to Draft"
                         invisible="state not in ('cancelled', 'no_show')"
                         groups="hotel_base.group_hotel_fo_supervisor"/>
@@ -138,7 +141,7 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Amendments">
+                        <page string="Amendments" name="amendments">
                             <field name="amendment_ids" readonly="1">
                                 <list create="0" delete="0">
                                     <field name="name"/>
@@ -184,7 +187,7 @@
                 <filter string="In House" name="in_house" domain="[('state', '=', 'checked_in')]"/>
                 <filter string="Checked Out" name="checked_out" domain="[('state', '=', 'checked_out')]"/>
                 <filter string="Checked Out Today" name="checked_out_today"
-                    domain="[('state', '=', 'checked_out'), ('actual_checkout_business_date', '=', context_today())]"/>
+                    domain="[('state', '=', 'checked_out'), ('actual_checkout_business_date', '=', context.get('hotel_business_date') or context_today())]"/>
                 <filter string="No Show" name="no_show" domain="[('state', '=', 'no_show')]"/>
                 <group>
                     <filter string="Room" name="group_room" context="{'group_by': 'room_id'}"/>
@@ -204,9 +207,6 @@
         <field name="view_mode">gantt</field>
         <field name="view_id" ref="hotel_reservation_view_gantt"/>
         <field name="search_view_id" ref="hotel_reservation_view_search"/>
-        <field name="context">{
-            'search_default_property_id': context.get('hotel_property_id'),
-        }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">No reservations in this period.</p>
             <p>This fallback timeline is read-only. Use Planning to create or change room stays.</p>
@@ -218,7 +218,6 @@
         <field name="res_model">hotel.reservation</field>
         <field name="view_mode">list,form,gantt,calendar</field>
         <field name="context">{
-            'search_default_property_id': context.get('hotel_property_id'),
             'default_property_id': context.get('hotel_property_id'),
         }</field>
     </record>
@@ -229,7 +228,6 @@
         <field name="view_mode">list,form</field>
         <field name="context">{
             'search_default_arrivals_today': 1,
-            'search_default_property_id': context.get('hotel_property_id'),
             'default_property_id': context.get('hotel_property_id'),
         }</field>
     </record>
@@ -240,7 +238,6 @@
         <field name="view_mode">list,form</field>
         <field name="context">{
             'search_default_departures_today': 1,
-            'search_default_property_id': context.get('hotel_property_id'),
             'default_property_id': context.get('hotel_property_id'),
         }</field>
     </record>
@@ -277,12 +274,5 @@
         parent="menu_hotel_frontdesk"
         action="action_hotel_departures_today"
         sequence="30"
-        groups="hotel_base.group_hotel_frontdesk"/>
-
-    <menuitem id="menu_hotel_reservation_gantt_readonly"
-        name="Reservation Planner"
-        parent="menu_hotel_frontdesk"
-        action="action_hotel_reservation"
-        sequence="95"
         groups="hotel_base.group_hotel_frontdesk"/>
 </odoo>

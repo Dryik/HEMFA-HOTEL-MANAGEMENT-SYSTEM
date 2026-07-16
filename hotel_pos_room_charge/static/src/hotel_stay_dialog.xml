@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <t t-name="hotel_pos_room_charge.HotelStayDialog">
-        <Dialog title.translate="Add Room / Pay at Checkout" size="lg">
+        <Dialog title.translate="Charge to Room" size="lg">
             <div class="mb-3">
                 <input class="form-control form-control-lg" type="search" placeholder="Search guest, reservation, or room…" t-model="state.query"/>
             </div>
@@ -18,12 +18,12 @@
     <t t-name="hotel_pos_room_charge.ControlButtons" t-inherit="point_of_sale.ControlButtons" t-inherit-mode="extension">
         <xpath expr="//SelectPartnerButton" position="after">
             <button t-if="hasHotelRoomCharge and !props.showRemainingButtons" t-att-class="buttonClass" t-on-click="selectHotelStay">
-                <i class="fa fa-bed me-2"/> Add Room / Pay at Checkout
+                <i class="fa fa-bed me-2"/> Charge to Room
             </button>
         </xpath>
         <xpath expr="//div[hasclass('control-buttons-modal')]" position="inside">
             <button t-if="hasHotelRoomCharge" t-att-class="buttonClass" t-on-click="selectHotelStay">
-                <i class="fa fa-bed me-2"/> Add Room / Pay at Checkout
+                <i class="fa fa-bed me-2"/> Charge to Room
             </button>
         </xpath>
     </t>

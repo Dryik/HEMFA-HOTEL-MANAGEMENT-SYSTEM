@@ -153,7 +153,6 @@
         <field name="search_view_id" ref="hotel_housekeeping_task_view_search"/>
         <field name="context">{
             'search_default_open_tasks': 1,
-            'search_default_property_id': context.get('hotel_property_id'),
             'default_property_id': context.get('hotel_property_id'),
         }</field>
         <field name="help" type="html">

@@ -227,6 +227,24 @@ msgid "Cancellations"
 msgstr "الإلغاءات"
 
 #. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Check Out"
+msgstr "تسجيل مغادرة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Check out"
+msgstr "تسجيل المغادرة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Check out %(guest)s from room %(room)s? Checkout ends the stay and cannot be undone."
+msgstr "هل تريد تسجيل مغادرة %(guest)s من الغرفة %(room)s؟ تسجيل المغادرة ينهي الإقامة ولا يمكن التراجع عنه."
+
+#. module: hotel_board
 #. odoo-python
 #: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
 msgid "Check-in"
@@ -536,6 +554,12 @@ msgstr "النزلاء المقيمون"
 #: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
 msgid "Inspected"
 msgstr "مفتشة ومفحوصة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Keep Stay"
+msgstr "إبقاء الإقامة"
 
 #. module: hotel_board
 #. odoo-python

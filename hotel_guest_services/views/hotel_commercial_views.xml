@@ -54,8 +54,12 @@
         </search></field>
     </record>
     <record id="hotel_reservation_service_action" model="ir.actions.act_window">
-        <field name="name">Allotted Services</field><field name="res_model">hotel.reservation.service</field><field name="view_mode">list,form</field>
+        <field name="name">Service Orders</field><field name="res_model">hotel.reservation.service</field><field name="view_mode">list,form</field>
         <field name="search_view_id" ref="hotel_reservation_service_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No service orders yet.</p>
+            <p>Service orders track meals and other guest services from confirmation to delivery, and post their charges to the folio.</p>
+        </field>
     </record>
     <record id="hotel_meal_queue_action" model="ir.actions.act_window">
         <field name="name">Meals to Prepare</field><field name="res_model">hotel.reservation.service</field><field name="view_mode">list,form</field>
@@ -81,20 +85,21 @@
     <record id="hotel_guest_rating_view_list" model="ir.ui.view">
         <field name="name">hotel.guest.rating.list</field><field name="model">hotel.guest.rating</field>
         <field name="arch" type="xml"><list decoration-success="state == 'approved'" decoration-warning="state == 'submitted'">
-            <field name="reservation_id"/><field name="partner_id"/><field name="rating" widget="priority"/>
-            <field name="cleanliness_rating" optional="hide"/><field name="service_rating" optional="hide"/>
-            <field name="value_rating" optional="hide"/><field name="submitted_at"/><field name="state" widget="badge"/>
+            <field name="reservation_id"/><field name="partner_id"/><field name="rating" widget="priority" readonly="1"/>
+            <field name="cleanliness_rating" optional="hide" readonly="1"/><field name="service_rating" optional="hide" readonly="1"/>
+            <field name="value_rating" optional="hide" readonly="1"/><field name="submitted_at"/><field name="state" widget="badge"/>
         </list></field>
     </record>
     <record id="hotel_guest_rating_view_form" model="ir.ui.view">
         <field name="name">hotel.guest.rating.form</field><field name="model">hotel.guest.rating</field>
         <field name="arch" type="xml"><form><header>
-            <button name="action_approve" type="object" string="Publish" class="btn-primary" invisible="state != 'submitted'"/>
+            <button name="action_approve" type="object" string="Approve" class="btn-primary" invisible="state != 'submitted'"
+                confirm="Approve this rating? Approved ratings are published on the hotel website."/>
             <button name="action_reject" type="object" string="Reject" invisible="state != 'submitted'"/>
             <field name="state" widget="statusbar"/>
         </header><sheet><group><group><field name="reservation_id"/><field name="partner_id"/><field name="submitted_at"/>
-            <field name="rating" widget="priority"/></group><group><field name="cleanliness_rating"/><field name="service_rating"/>
-            <field name="value_rating"/><field name="access_token" groups="base.group_no_one"/></group></group><field name="comments"/></sheet><chatter/></form></field>
+            <field name="rating" widget="priority" readonly="1"/></group><group><field name="cleanliness_rating" readonly="1"/><field name="service_rating" readonly="1"/>
+            <field name="value_rating" readonly="1"/><field name="access_token" groups="base.group_no_one"/></group></group><field name="comments" readonly="1"/></sheet><chatter/></form></field>
     </record>
     <record id="hotel_guest_rating_view_pivot" model="ir.ui.view">
         <field name="name">hotel.guest.rating.pivot</field><field name="model">hotel.guest.rating</field>
@@ -122,7 +127,7 @@
     <record id="hotel_reservation_form_inherit_commercial" model="ir.ui.view">
         <field name="name">hotel.reservation.form.commercial</field><field name="model">hotel.reservation</field>
         <field name="inherit_id" ref="hotel_reservation.hotel_reservation_view_form"/>
-        <field name="arch" type="xml"><xpath expr="//notebook" position="inside">
+        <field name="arch" type="xml"><xpath expr="//page[@name='amendments']" position="before">
             <page string="Services" name="allotted_services"><field name="service_line_ids">
                 <list><field name="name"/><field name="service_id"/><field name="service_date"/><field name="assigned_user_id"/>
                     <field name="complimentary"/><field name="amount_total"/><field name="currency_id" column_invisible="True"/><field name="state" widget="badge"/>
@@ -139,14 +144,14 @@
         </xpath></field>
     </record>
 
-    <menuitem id="menu_hotel_allotted_services" name="Allotted Services" parent="menu_hotel_guest_services"
+    <menuitem id="menu_hotel_allotted_services" name="Service Orders" parent="menu_hotel_guest_services"
         action="hotel_reservation_service_action" sequence="5" groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_fb"/>
     <menuitem id="menu_hotel_meal_queue" name="Meals to Prepare" parent="menu_hotel_guest_services"
         action="hotel_meal_queue_action" sequence="6" groups="hotel_base.group_hotel_fb,hotel_base.group_hotel_frontdesk"/>
     <menuitem id="menu_hotel_ratings" name="Guest Ratings" parent="menu_hotel_guest_services"
         action="hotel_guest_rating_action" sequence="40" groups="hotel_base.group_hotel_frontdesk"/>
-    <menuitem id="menu_hotel_config_services" name="Services" parent="hotel_base.menu_hotel_config"
-        action="hotel_service_action" sequence="35"/>
-    <menuitem id="menu_hotel_config_documents" name="Required Documents" parent="hotel_base.menu_hotel_config"
-        action="hotel_document_type_action" sequence="40"/>
+    <menuitem id="menu_hotel_config_services" name="Service Catalog" parent="hotel_base.menu_hotel_config_section_services"
+        action="hotel_service_action" sequence="10"/>
+    <menuitem id="menu_hotel_config_documents" name="Required Documents" parent="hotel_base.menu_hotel_config_section_services"
+        action="hotel_document_type_action" sequence="20"/>
 </odoo>

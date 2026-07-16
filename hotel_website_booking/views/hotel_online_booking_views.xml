@@ -28,7 +28,12 @@
                     <button name="action_reprice" type="object" string="Reprice" invisible="state not in ('draft', 'pending_review')"/>
                     <button name="action_submit" type="object" string="Submit" class="btn-primary" invisible="state != 'draft'"/>
                     <button name="action_approve_manual" type="object" string="Approve and Confirm" class="btn-primary" invisible="state != 'pending_review'"/>
-                    <button name="action_cancel_online" type="object" string="Cancel" invisible="state not in ('pending_review', 'held', 'payment_pending', 'confirmed')"/>
+                    <button name="action_return_to_review" type="object" string="Return to Review"
+                        class="btn-primary" invisible="state != 'payment_exception'"
+                        confirm="Release the held rooms and return this booking to the review queue?"/>
+                    <button name="action_cancel_online" type="object" string="Cancel"
+                        invisible="state not in ('pending_review', 'held', 'payment_pending', 'payment_exception', 'confirmed')"
+                        confirm="Cancel this booking? The guest will be notified by email."/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,pending_review,payment_pending,confirmed"/>
                 </header>
                 <sheet>
@@ -81,7 +86,17 @@
                         </page>
                         <page string="Reservations">
                             <field name="group_id"/>
-                            <field name="reservation_ids" widget="many2many_tags"/>
+                            <field name="reservation_ids" readonly="1">
+                                <list create="0" delete="0">
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                    <field name="room_type_id"/>
+                                    <field name="room_id"/>
+                                    <field name="checkin_date"/>
+                                    <field name="checkout_date"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
                             <field name="transaction_ids" readonly="1"/>
                             <field name="allocation_ids" readonly="1">
                                 <list>
@@ -180,14 +195,33 @@
         <field name="model">hotel.reservation</field>
         <field name="inherit_id" ref="hotel_reservation.hotel_reservation_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//header" position="inside">
-                <button name="action_send_voucher" type="object" string="Send Voucher" invisible="state not in ('confirmed', 'checked_in')"/>
-                <button name="action_send_prearrival" type="object" string="Send Pre-arrival" invisible="state != 'confirmed'"/>
-            </xpath>
             <xpath expr="//field[@name='hold_expires_at']" position="after">
                 <field name="prearrival_sent_at" readonly="1" invisible="not prearrival_sent_at"/>
             </xpath>
         </field>
+    </record>
+
+    <!-- Guest communications live in the reservation's action (cog) menu to
+         keep the workflow header uncluttered. The methods themselves filter
+         out reservations in ineligible states. -->
+    <record id="action_server_send_voucher" model="ir.actions.server">
+        <field name="name">Send Voucher</field>
+        <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
+        <field name="binding_model_id" ref="hotel_reservation.model_hotel_reservation"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_send_voucher()</field>
+        <field name="group_ids" eval="[(4, ref('hotel_base.group_hotel_frontdesk'))]"/>
+    </record>
+
+    <record id="action_server_send_prearrival" model="ir.actions.server">
+        <field name="name">Send Pre-arrival</field>
+        <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
+        <field name="binding_model_id" ref="hotel_reservation.model_hotel_reservation"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_send_prearrival()</field>
+        <field name="group_ids" eval="[(4, ref('hotel_base.group_hotel_frontdesk'))]"/>
     </record>
 
     <record id="payment_transaction_form_hotel_booking" model="ir.ui.view">

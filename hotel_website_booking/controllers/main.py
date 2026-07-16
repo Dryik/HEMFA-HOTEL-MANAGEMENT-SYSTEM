@@ -401,7 +401,7 @@ class HotelWebsiteController(http.Controller):
             {
                 "booking": booking,
                 "can_cancel": booking.state
-                in ("pending_review", "held", "payment_pending", "confirmed")
+                in ("pending_review", "held", "payment_pending", "payment_exception", "confirmed")
                 and booking.checkin_date > fields.Datetime.now(),
             },
         )

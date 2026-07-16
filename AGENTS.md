@@ -36,7 +36,9 @@ Deployment target: Odoo.sh (dev / staging / production branches).
 
 - `hotel.room.type`: Field is `code` (NOT `short_code`).
 - `hotel.room`: Fields are `occupancy_state`, `hk_status`, `out_of_order`, `admin_use`.
-- `hotel.reservation`: States are `draft`, `confirmed`, `checked_in`, `checked_out`, `cancelled`, `no_show`.
+- `hotel.reservation`: States are `draft`, `pending_payment`, `confirmed`, `checked_in`, `checked_out`, `cancelled`, `no_show`.
+- `hotel.reservation.amendment`: States are `draft`, `applied`, `rejected`; applied/rejected records are immutable and undeletable.
+- Configuration menus hang off section parents in `hotel_base`: `menu_hotel_config_section_property` / `_pricing` / `_services` / `_housekeeping` / `_billing`.
 - `hotel.folio.line`: `payee_partner_id` determines who is billed.
 - `hotel.housekeeping.task`: States are `new`, `cleaning`, `cleaned`, `cancel`.
 - `hotel.maintenance.request`: States are `new`, `confirmed`, `in_progress`, `done`, `verified`, `cancel`; blocking starts at `confirmed`, verify needs `group_hotel_manager`.
