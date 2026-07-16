@@ -40,6 +40,65 @@ class HotelProperty(models.Model):
         default=lambda self: self.env.user.tz or "Africa/Tripoli",
         help="Timezone used to convert the company's hotel business day to UTC.",
     )
+    hotel_type = fields.Selection(
+        [
+            ("hotel", "Hotel"),
+            ("resort", "Resort"),
+            ("aparthotel", "Aparthotel"),
+            ("guest_house", "Guest House"),
+        ],
+        default="hotel",
+        required=True,
+        tracking=True,
+    )
+    tagline = fields.Char(translate=True, tracking=True)
+    website_description = fields.Html(translate=True)
+    website_policy = fields.Html(translate=True)
+    website_banner = fields.Image(max_width=2400, max_height=1200)
+    website_gallery_attachment_ids = fields.Many2many(
+        "ir.attachment",
+        "hotel_property_website_gallery_rel",
+        "property_id",
+        "attachment_id",
+        string="Website Gallery",
+        help="Private gallery images served only through the hotel website media route.",
+    )
+    website_published = fields.Boolean(
+        string="Published on Website",
+        default=False,
+        help="Expose this company's hotel content on its configured Odoo website.",
+    )
+    website_review_limit = fields.Integer(default=6)
+    stay_charge_policy = fields.Selection(
+        [("entire_stay", "Entire Stay on Confirmation"), ("per_night", "Per Night")],
+        default="entire_stay",
+        required=True,
+        tracking=True,
+    )
+    online_payment_policy = fields.Selection(
+        [
+            ("manual", "Manual Approval / No Online Payment"),
+            ("fixed_deposit", "Fixed Deposit"),
+            ("percent_deposit", "Percentage Deposit"),
+            ("full", "Full Prepayment"),
+        ],
+        default="manual",
+        required=True,
+        tracking=True,
+    )
+    online_deposit_value = fields.Float(
+        string="Online Deposit / Percentage", default=0.0
+    )
+    online_hold_minutes = fields.Integer(default=15, required=True)
+    prearrival_housekeeping_hours = fields.Integer(
+        string="Pre-arrival Housekeeping Lead (hours)", default=24
+    )
+    adult_age_min = fields.Integer(default=18)
+    teenager_age_min = fields.Integer(default=13)
+    teenager_age_max = fields.Integer(default=17)
+    child_age_min = fields.Integer(default=3)
+    child_age_max = fields.Integer(default=12)
+    infant_age_max = fields.Integer(default=2)
     late_checkout_grace_hours = fields.Float(
         string="Late Checkout Grace (hours)",
         default=0.0,
@@ -87,6 +146,10 @@ class HotelProperty(models.Model):
         "unique (code, company_id)",
         "Hotel code must be unique per company.",
     )
+    _company_uniq = models.Constraint(
+        "unique (company_id)",
+        "Each Odoo company or branch can have only one hotel configuration.",
+    )
 
     @api.depends("room_ids.active", "room_ids.is_sellable")
     def _compute_room_count(self):
@@ -115,6 +178,33 @@ class HotelProperty(models.Model):
                 }
             )
         return self.browse(prop.id)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        properties = super().create(vals_list)
+        properties._secure_website_gallery()
+        return properties
+
+    def write(self, values):
+        result = super().write(values)
+        if "website_gallery_attachment_ids" in values:
+            self._secure_website_gallery()
+        return result
+
+    def _secure_website_gallery(self):
+        attachments = self.mapped("website_gallery_attachment_ids")
+        if attachments:
+            attachments.sudo().write({"public": False})
+        return True
+
+    @api.constrains("website_gallery_attachment_ids")
+    def _check_website_gallery_images(self):
+        for property_rec in self:
+            invalid = property_rec.website_gallery_attachment_ids.filtered(
+                lambda attachment: not (attachment.mimetype or "").startswith("image/")
+            )
+            if invalid:
+                raise ValidationError(_("The hotel website gallery accepts images only."))
 
     def _day_start_parts(self):
         self.ensure_one()
@@ -164,6 +254,16 @@ class HotelProperty(models.Model):
         "cancellation_fee_value",
         "no_show_grace_hours",
         "no_show_fee_value",
+        "website_review_limit",
+        "online_deposit_value",
+        "online_hold_minutes",
+        "prearrival_housekeeping_hours",
+        "adult_age_min",
+        "teenager_age_min",
+        "teenager_age_max",
+        "child_age_min",
+        "child_age_max",
+        "infant_age_max",
     )
     def _check_operational_policy_values(self):
         for prop in self:
@@ -182,20 +282,43 @@ class HotelProperty(models.Model):
                 raise ValidationError(_("Cancellation percentage cannot exceed 100."))
             if prop.no_show_policy == "percent" and prop.no_show_fee_value > 100:
                 raise ValidationError(_("No-show percentage cannot exceed 100."))
-
-    def unlink(self):
-        for prop in self:
-            active_res = self.env["hotel.reservation"].search_count(
-                [
-                    ("property_id", "=", prop.id),
-                    ("state", "not in", ("cancelled", "no_show")),
-                ]
-            )
-            if active_res:
-                raise UserError(
-                    _(
-                        "You cannot delete the hotel configuration for %s because it has reservations."
-                    )
-                    % prop.company_id.display_name
+            if prop.website_review_limit < 0:
+                raise ValidationError(_("The website review limit cannot be negative."))
+            if prop.online_hold_minutes <= 0:
+                raise ValidationError(_("The online room hold must be at least one minute."))
+            if prop.prearrival_housekeeping_hours < 0:
+                raise ValidationError(
+                    _("The pre-arrival housekeeping lead cannot be negative.")
                 )
-        return super().unlink()
+            ages = (
+                prop.adult_age_min,
+                prop.teenager_age_min,
+                prop.teenager_age_max,
+                prop.child_age_min,
+                prop.child_age_max,
+                prop.infant_age_max,
+            )
+            if min(ages) < 0:
+                raise ValidationError(_("Guest age limits cannot be negative."))
+            if not (
+                prop.infant_age_max < prop.child_age_min
+                <= prop.child_age_max < prop.teenager_age_min
+                <= prop.teenager_age_max < prop.adult_age_min
+            ):
+                raise ValidationError(_("Guest age ranges must be ordered and must not overlap."))
+            if prop.online_deposit_value < 0:
+                raise ValidationError(_("The online deposit cannot be negative."))
+            if (
+                prop.online_payment_policy == "percent_deposit"
+                and prop.online_deposit_value > 100
+            ):
+                raise ValidationError(_("The online deposit percentage cannot exceed 100."))
+
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_module_uninstall(self):
+        raise UserError(
+            _(
+                "Company hotel configurations cannot be deleted. Archive the Odoo company "
+                "when the hotel is no longer active."
+            )
+        )

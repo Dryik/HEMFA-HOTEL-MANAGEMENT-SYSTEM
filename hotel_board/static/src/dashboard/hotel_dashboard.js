@@ -9,8 +9,8 @@ import {
     addIsoDays,
     asArray,
     asId,
-    atNoon,
     errorMessage,
+    formatBusinessDateParts,
     formatCurrency,
     formatNumber,
     formatOperationalDateTime,
@@ -22,159 +22,53 @@ import "../shared/frontdesk_state_service";
 
 const REFRESH_INTERVAL_MS = 60_000;
 const STALE_AFTER_MS = REFRESH_INTERVAL_MS * 2;
-
-const KPI_ORDER = [
+const SEARCH_DEBOUNCE_MS = 300;
+const ACTIVITY_LIMIT = 50;
+const ACTIVITY_KEYS = [
     "arrivals",
     "departures",
     "in_house",
-    "reserved",
-    "vacant_clean",
-    "vacant_dirty",
-    "out_of_order",
-    "house_use",
-    "occupancy",
-    "adr",
-    "revpar",
+    "stayovers",
+    "bookings",
+    "cancellations",
+    "overbookings",
 ];
 
-const KPI_DEFAULTS = {
-    arrivals: { label: _t("Arrivals"), tone: "warning" },
-    departures: { label: _t("Departures"), tone: "info" },
-    in_house: { label: _t("In House"), tone: "success" },
-    reserved: { label: _t("Reserved Rooms"), tone: "primary" },
-    vacant_clean: { label: _t("Vacant Clean"), tone: "success" },
-    vacant_dirty: { label: _t("Vacant Dirty"), tone: "danger" },
-    out_of_order: { label: _t("Out of Order"), tone: "neutral" },
-    house_use: { label: _t("House Use"), tone: "neutral" },
-    occupancy: { label: _t("Occupancy"), tone: "brand" },
-    adr: { label: _t("ADR"), tone: "brand" },
-    revpar: { label: _t("RevPAR"), tone: "brand" },
-};
-
-function cssToken(value, fallback = "unknown") {
-    const token = String(value || "").toLowerCase().replace(/[^a-z0-9_-]/g, "_");
-    return token || fallback;
-}
-
-function normaliseMetric(key, metric, raw, actions) {
-    const fallback = KPI_DEFAULTS[key] || { label: key, tone: "neutral" };
-    const legacyKeys = {
-        arrivals: "arrivals_today",
-        departures: "departures_today",
-        house_use: "admin_use",
-        occupancy: "occupancy_pct",
-    };
-    const legacyValue = raw[legacyKeys[key] || key];
-    if (metric === undefined && legacyValue === undefined) {
-        return null;
-    }
-    const value = metric && typeof metric === "object" ? metric : { value: metric ?? legacyValue };
+function normaliseActivity(activity = {}) {
     return {
-        key,
-        label: value.label || fallback.label,
-        value: value.value ?? legacyValue,
-        format:
-            value.format || (key === "occupancy" ? "percent" : ["adr", "revpar"].includes(key) ? "currency" : "integer"),
-        available: value.available !== false && value.value !== null,
-        mode: value.mode || false,
-        modeLabel: value.mode_label || false,
-        tone: value.tone || fallback.tone,
-        action: value.action || actions?.[key] || false,
-    };
-}
-
-function normaliseRoom(room, floor) {
-    let primaryStatus = room.primary_status || room.occupancy_status || room.status || "vacant";
-    let capacityBlocker = room.capacity_blocker || false;
-    let housekeepingStatus = room.hk_status || room.housekeeping_status || false;
-    if (primaryStatus === "out_of_order") {
-        capacityBlocker = "out_of_order";
-        primaryStatus = room.occupancy_status || "vacant";
-    } else if (["house_use", "admin_use"].includes(primaryStatus)) {
-        capacityBlocker = "house_use";
-        primaryStatus = room.occupancy_status || "vacant";
-    } else if (primaryStatus === "dirty") {
-        housekeepingStatus = "dirty";
-        primaryStatus = room.occupancy_status || "vacant";
-    }
-    const reservation = room.reservation || (room.reservation_id
-        ? {
-              id: room.reservation_id,
-              name: room.reservation_name,
-              guest_name: room.guest_name,
-              arrival: room.arrival,
-              departure: room.departure,
-          }
-        : false);
-    return {
-        ...room,
-        id: room.id || room.room_id,
-        name: room.name || room.room_name,
-        floorId: asId(room.floor_id) || floor.id,
-        floorName: room.floor_name || floor.name,
-        roomTypeName: room.room_type?.name || room.room_type || "",
-        primaryStatus,
-        primaryClass: cssToken(primaryStatus),
-        primaryLabel: room.primary_label || KPI_DEFAULTS[primaryStatus]?.label || primaryStatus,
-        housekeepingStatus,
-        housekeepingClass: cssToken(housekeepingStatus),
-        housekeepingLabel: room.hk_label || housekeepingStatus || "",
-        capacityBlocker,
-        blockerClass: cssToken(capacityBlocker),
-        reservation,
-        alerts: asArray(room.alerts).map((alert) => ({
-            ...alert,
-            typeClass: cssToken(alert.type),
-            severityClass: cssToken(alert.severity, "info"),
-        })),
-        action: room.action || false,
+        key: activity.key || "arrivals",
+        label: activity.label || _t("Arrivals"),
+        includeCompleted: Boolean(activity.include_completed),
+        supportsCompleted: Boolean(activity.supports_completed),
+        total: Number(activity.total || 0),
+        pendingTotal: Number(activity.pending_total || 0),
+        truncated: Boolean(activity.truncated),
+        rows: asArray(activity.rows),
+        listAction: activity.list_action || false,
     };
 }
 
 function normaliseSnapshot(raw = {}) {
-    const meta = raw.meta || {
-        property_id: raw.property_id,
-        property_name: raw.property_name,
-        business_date: raw.business_date,
-        metric_mode: "forecast",
-        metric_label: _t("Forecast"),
-        currency: {},
-    };
-    const metrics = raw.kpis || {};
-    const kpis = KPI_ORDER.map((key) => normaliseMetric(key, metrics[key], raw, raw.actions)).filter(Boolean);
-    let floors = asArray(raw.floors);
-    if (!floors.length && asArray(raw.room_board).length) {
-        const byFloor = new Map();
-        for (const room of raw.room_board) {
-            const name = room.floor_name || _t("Unassigned Floor");
-            if (!byFloor.has(name)) {
-                byFloor.set(name, { id: name, name, sequence: byFloor.size, rooms: [] });
-            }
-            byFloor.get(name).rooms.push(room);
-        }
-        floors = [...byFloor.values()];
-    }
-    floors = floors.map((floor, index) => ({
-        ...floor,
-        id: floor.id ?? `floor-${index}`,
-        name: floor.name || _t("Unassigned Floor"),
-        rooms: asArray(floor.rooms).map((room) => normaliseRoom(room, floor)),
-    }));
-    const attention = raw.attention || { total: 0, items: [] };
     return {
         version: raw.version || 0,
-        meta,
+        meta: raw.meta || {},
         permissions: raw.permissions || {},
-        kpis,
-        attention: {
-            total: Number(attention.total || 0),
-            items: asArray(attention.items).map((item) => ({
-                ...item,
-                severityClass: cssToken(item.severity, "info"),
-            })),
+        occupancy: {
+            percentage: Number(raw.occupancy?.percentage || 0),
+            availableUnits: Number(raw.occupancy?.available_units || 0),
+            bookedUnits: Number(raw.occupancy?.booked_units || 0),
+            outOfService: Number(raw.occupancy?.out_of_service || 0),
+            houseUse: Number(raw.occupancy?.house_use || 0),
         },
-        floors,
-        legend: raw.legend || {},
+        tabs: asArray(raw.tabs).map((tab) => ({
+            key: tab.key,
+            label: tab.label,
+            count: Number(tab.count || 0),
+            pendingCount: Number(tab.pending_count || 0),
+        })),
+        activity: normaliseActivity(raw.activity),
+        operationalKpis: asArray(raw.operational_kpis),
+        rooms: asArray(raw.rooms),
         actions: raw.actions || {},
     };
 }
@@ -186,41 +80,51 @@ export class HotelDashboard extends Component {
     setup() {
         this.orm = useService("orm");
         this.action = useService("action");
+        this.notification = useService("notification");
         this.frontdeskState = useService("hotel_frontdesk_state");
         const stored = this.frontdeskState.get();
         const actionContext = this.props.action?.context || {};
         this.state = useState({
             data: null,
+            activity: null,
+            activeTab: "arrivals",
+            includeCompleted: false,
+            query: "",
+            searchOpen: false,
+            menuOpen: false,
             loading: true,
+            activityLoading: false,
             refreshing: false,
             error: null,
             stale: false,
             updatedAt: null,
-            ariaStatus: _t("Loading the Front Desk workspace."),
-            propertyId: null,
+            ariaStatus: _t("Loading the Front Desk dashboard."),
             businessDate:
                 actionContext.default_business_date ||
                 actionContext.business_date ||
                 stored.businessDate,
-            collapsedFloors: {},
+            busyRows: {},
         });
-        this._request = null;
-        this._requestSequence = 0;
+        this._snapshotSequence = 0;
+        this._activitySequence = 0;
         this._refreshTimer = null;
+        this._searchTimer = null;
         this._lastAttemptAt = 0;
         this._destroyed = false;
         this._onVisibilityChange = () => this.onVisibilityChange();
 
         onMounted(() => {
-            this.loadData();
+            this.refreshDashboard();
             this.startRefreshTimer();
             globalThis.document?.addEventListener("visibilitychange", this._onVisibilityChange);
         });
         onWillUnmount(() => {
             this._destroyed = true;
             this.stopRefreshTimer();
+            if (this._searchTimer) {
+                browser.clearTimeout(this._searchTimer);
+            }
             globalThis.document?.removeEventListener("visibilitychange", this._onVisibilityChange);
-            this._request?.abort?.(false);
         });
     }
 
@@ -228,7 +132,7 @@ export class HotelDashboard extends Component {
         if (!this._refreshTimer) {
             this._refreshTimer = browser.setInterval(() => {
                 if (!globalThis.document?.hidden) {
-                    this.loadData({ background: true });
+                    this.refreshDashboard({ background: true });
                 }
             }, REFRESH_INTERVAL_MS);
         }
@@ -251,235 +155,343 @@ export class HotelDashboard extends Component {
             if (this.state.updatedAt && Date.now() - this.state.updatedAt >= STALE_AFTER_MS) {
                 this.state.stale = true;
             }
-            this.loadData({ background: true });
+            this.refreshDashboard({ background: true });
         }
     }
 
-    async loadData({ background = false } = {}) {
-        this._request?.abort?.(false);
-        const requestSequence = ++this._requestSequence;
-        const requestedPropertyId = this.state.propertyId;
-        const requestedBusinessDate = this.state.businessDate;
+    async refreshDashboard({ background = false } = {}) {
+        const sequence = ++this._snapshotSequence;
+        const requestedDate = this.state.businessDate;
         this._lastAttemptAt = Date.now();
         this.state.loading = !this.state.data;
         this.state.refreshing = Boolean(this.state.data);
         if (!background) {
-            this.state.ariaStatus = _t("Refreshing the Front Desk workspace.");
+            this.state.ariaStatus = _t("Refreshing the Front Desk dashboard.");
         }
         try {
-            this._request = this.orm.silent.call("hotel.frontdesk.workspace", "get_workspace_snapshot", [
-                false,
-                this.state.businessDate || false,
-            ]);
-            const raw = await this._request;
-            if (this._destroyed || requestSequence !== this._requestSequence) {
+            const raw = await this.orm.silent.call(
+                "hotel.frontdesk.workspace",
+                "get_dashboard_snapshot",
+                [false, requestedDate || false]
+            );
+            if (this._destroyed || sequence !== this._snapshotSequence) {
                 return;
             }
             const data = normaliseSnapshot(raw);
             this.state.data = data;
-            this.state.propertyId = asId(data.meta.property_id);
             this.state.businessDate = data.meta.business_date;
-            this.frontdeskState.update({
-                businessDate: this.state.businessDate,
-            });
-            for (const floor of data.floors) {
-                if (!(floor.id in this.state.collapsedFloors)) {
-                    this.state.collapsedFloors[floor.id] = Boolean(floor.collapsed_default);
-                }
-            }
+            this.frontdeskState.update({ businessDate: this.state.businessDate });
             this.state.error = null;
             this.state.stale = false;
             this.state.updatedAt = Date.now();
-            this.state.ariaStatus = _t("Front Desk data updated.");
+
+            const canUseInitialActivity =
+                this.state.activeTab === "arrivals" &&
+                !this.state.includeCompleted &&
+                !this.state.query;
+            if (canUseInitialActivity) {
+                this.state.activity = data.activity;
+            } else {
+                await this.loadActivity({ background: true });
+            }
+            this.state.ariaStatus = _t("Front Desk dashboard updated.");
         } catch (error) {
-            if (
-                !this._destroyed &&
-                requestSequence === this._requestSequence &&
-                error.name !== "ConnectionAbortedError"
-            ) {
+            if (!this._destroyed && sequence === this._snapshotSequence) {
                 const failure = refreshFailureViewState(
                     this.state.data,
-                    errorMessage(error, _t("Unable to refresh the Front Desk workspace."))
+                    errorMessage(error, _t("Unable to refresh the Front Desk dashboard."))
                 );
                 this.state.error = failure.error;
                 this.state.stale = failure.stale;
-                if (this.state.data) {
-                    this.state.propertyId = asId(this.state.data.meta.property_id);
-                    this.state.businessDate = this.state.data.meta.business_date;
-                    this.frontdeskState.update({
-                        businessDate: this.state.businessDate,
-                    });
-                } else {
-                    this.state.propertyId = requestedPropertyId;
-                    this.state.businessDate = requestedBusinessDate;
-                }
                 this.state.ariaStatus = this.state.data
                     ? _t("Refresh failed. Previously loaded data remains visible.")
                     : this.state.error;
             }
         } finally {
-            if (!this._destroyed && requestSequence === this._requestSequence) {
+            if (!this._destroyed && sequence === this._snapshotSequence) {
                 this.state.loading = false;
                 this.state.refreshing = false;
-                this._request = null;
             }
         }
     }
 
-    onDateChange(event) {
-        this.state.businessDate = event.target.value || null;
-        this.frontdeskState.update({ businessDate: this.state.businessDate });
-        this.loadData();
+    async loadActivity({ background = false } = {}) {
+        if (!this.state.data) {
+            return;
+        }
+        const sequence = ++this._activitySequence;
+        const requestedDate = this.state.businessDate;
+        const requestedTab = this.state.activeTab;
+        const requestedCompleted = this.state.includeCompleted;
+        const requestedQuery = this.state.query;
+        if (!background) {
+            this.state.activityLoading = true;
+            this.state.ariaStatus = _t("Loading dashboard activity.");
+        }
+        try {
+            const raw = await this.orm.silent.call(
+                "hotel.frontdesk.workspace",
+                "get_dashboard_activity",
+                [
+                    false,
+                    requestedDate,
+                    requestedTab,
+                    requestedCompleted,
+                    requestedQuery || false,
+                    ACTIVITY_LIMIT,
+                ]
+            );
+            if (
+                this._destroyed ||
+                sequence !== this._activitySequence ||
+                requestedDate !== this.state.businessDate ||
+                requestedTab !== this.state.activeTab
+            ) {
+                return;
+            }
+            this.state.activity = normaliseActivity(raw);
+            this.state.data.actions.open_list = raw.list_action;
+            this.state.ariaStatus = _t("Dashboard activity updated.");
+        } catch (error) {
+            if (!this._destroyed && sequence === this._activitySequence) {
+                this.notification.add(
+                    errorMessage(error, _t("Unable to load dashboard activity.")),
+                    { type: "danger" }
+                );
+                this.state.ariaStatus = _t("Unable to load dashboard activity.");
+            }
+        } finally {
+            if (!this._destroyed && sequence === this._activitySequence) {
+                this.state.activityLoading = false;
+            }
+        }
     }
 
-    toggleFloor(floorId) {
-        this.state.collapsedFloors[floorId] = !this.state.collapsedFloors[floorId];
+    changeDate(dayOffset) {
+        const nextDate = addIsoDays(this.state.businessDate, dayOffset);
+        if (!nextDate || nextDate === this.state.businessDate) {
+            return;
+        }
+        this.state.businessDate = nextDate;
+        this.frontdeskState.update({ businessDate: nextDate });
+        this.refreshDashboard();
     }
 
-    isFloorCollapsed(floorId) {
-        return Boolean(this.state.collapsedFloors[floorId]);
+    goToday() {
+        const today = this.state.data?.meta?.current_business_date;
+        if (!today || today === this.state.businessDate) {
+            return;
+        }
+        this.state.businessDate = today;
+        this.frontdeskState.update({ businessDate: today });
+        this.refreshDashboard();
+    }
+
+    selectActivity(key) {
+        if (!ACTIVITY_KEYS.includes(key) || key === this.state.activeTab) {
+            return;
+        }
+        this.state.activeTab = key;
+        this.state.includeCompleted = false;
+        this.loadActivity();
+    }
+
+    onTabKeydown(event, key) {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+            return;
+        }
+        event.preventDefault();
+        let nextIndex;
+        if (event.key === "Home") {
+            nextIndex = 0;
+        } else if (event.key === "End") {
+            nextIndex = ACTIVITY_KEYS.length - 1;
+        } else {
+            const direction = globalThis.document?.documentElement?.dir === "rtl" ? -1 : 1;
+            const delta = event.key === "ArrowRight" ? direction : -direction;
+            nextIndex = (ACTIVITY_KEYS.indexOf(key) + delta + ACTIVITY_KEYS.length) % ACTIVITY_KEYS.length;
+        }
+        const nextKey = ACTIVITY_KEYS[nextIndex];
+        this.selectActivity(nextKey);
+        browser.requestAnimationFrame(() => {
+            globalThis.document
+                ?.querySelector(`[data-dashboard-activity="${nextKey}"]`)
+                ?.focus();
+        });
+    }
+
+    toggleCompleted(event) {
+        this.state.includeCompleted = Boolean(event.target.checked);
+        this.loadActivity();
+    }
+
+    toggleSearch() {
+        this.state.searchOpen = !this.state.searchOpen;
+        if (!this.state.searchOpen && this.state.query) {
+            this.state.query = "";
+            this.loadActivity();
+        } else if (this.state.searchOpen) {
+            browser.requestAnimationFrame(() => {
+                globalThis.document?.querySelector("#hotel-dashboard-search")?.focus();
+            });
+        }
+    }
+
+    onSearchInput(event) {
+        this.state.query = event.target.value;
+        if (this._searchTimer) {
+            browser.clearTimeout(this._searchTimer);
+        }
+        this._searchTimer = browser.setTimeout(() => {
+            this._searchTimer = null;
+            this.loadActivity();
+        }, SEARCH_DEBOUNCE_MS);
+    }
+
+    toggleMenu() {
+        this.state.menuOpen = !this.state.menuOpen;
     }
 
     async openAction(action) {
         if (!action) {
             return;
         }
-        const propertyId = asId(this.state.data?.meta?.property_id) || this.state.propertyId;
-        const businessDate = this.state.data?.meta?.business_date || this.state.businessDate;
+        this.state.menuOpen = false;
+        const propertyId = asId(this.state.data?.meta?.property_id);
         await this.action.doAction(
-            actionWithFrontdeskContext(action, propertyId, businessDate)
+            actionWithFrontdeskContext(action, propertyId, this.state.businessDate)
         );
     }
 
-    openMetric(metric) {
-        return this.openAction(metric.action);
-    }
-
-    openAttention(item) {
-        return this.openAction(item.action);
-    }
-
-    openBoardItem(room) {
-        if (room.action) {
-            return this.openAction(room.action);
-        }
-        return this.action.doAction({
-            type: "ir.actions.act_window",
-            name: room.reservation ? _t("Reservation") : _t("Room"),
-            res_model: room.reservation ? "hotel.reservation" : "hotel.room",
-            views: [[false, "form"]],
-            res_id: room.reservation?.id || room.id,
-            context: {
-                default_property_id:
-                    asId(this.state.data?.meta?.property_id) || this.state.propertyId,
-                default_business_date:
-                    this.state.data?.meta?.business_date || this.state.businessDate,
-            },
-        });
-    }
-
     newReservation() {
-        const checkinDate = this.state.data?.meta?.business_date || this.state.businessDate;
-        const fallback = {
-            type: "ir.actions.act_window",
-            name: _t("New Reservation"),
-            res_model: "hotel.reservation",
-            views: [[false, "form"]],
-            target: "current",
-            context: {},
-        };
-        const action = this.state.data?.actions?.new_reservation || fallback;
-        return this.openAction({
-            ...action,
-            context: {
-                default_checkin_date: atNoon(checkinDate),
-                default_checkout_date: atNoon(addIsoDays(checkinDate, 1)),
-                ...(action.context || {}),
-            },
-        });
+        return this.openAction(this.state.data?.actions?.new_reservation);
     }
 
     openPlanning() {
-        const action = this.state.data?.actions?.planning || {
-            type: "ir.actions.client",
-            tag: "hotel_board.planning",
-            name: _t("Planning"),
-            context: {},
-        };
-        return this.openAction(action);
+        return this.openAction(this.state.data?.actions?.planning);
     }
 
-    formatMetric(metric) {
-        if (!metric.available) {
-            return "—";
-        }
-        if (metric.format === "percent") {
-            return `${formatNumber(metric.value, { maximumFractionDigits: 1 })}%`;
-        }
-        if (metric.format === "currency") {
-            return formatCurrency(metric.value, this.state.data?.meta?.currency);
-        }
-        return formatNumber(metric.value, { maximumFractionDigits: 0 });
+    bookRoom(room) {
+        return this.openAction(room?.action);
     }
 
-    metricMode(metric) {
-        if (!metric.available) {
-            return _t("Unavailable");
-        }
-        if (metric.modeLabel) {
-            return metric.modeLabel;
-        }
-        if (metric.mode === "forecast") {
-            return _t("Forecast");
-        }
-        if (metric.mode === "actual") {
-            return _t("Actual");
-        }
-        return "";
+    openOperationalKpi(kpi) {
+        return this.openAction(kpi?.action);
     }
 
-    metricAriaLabel(metric) {
-        return `${metric.label}: ${this.formatMetric(metric)}${this.metricMode(metric) ? `, ${this.metricMode(metric)}` : ""}`;
+    openFullList() {
+        return this.openAction(this.state.activity?.listAction || this.state.data?.actions?.open_list);
     }
 
-    roomAriaLabel(room) {
-        if (room.aria_label) {
-            return [
-                room.aria_label,
-                room.reservation?.name,
-                room.reservation?.arrival
-                    ? `${_t("Arrival")}: ${this.formatDateTime(room.reservation.arrival)}`
-                    : "",
-                room.reservation?.departure
-                    ? `${_t("Departure")}: ${this.formatDateTime(room.reservation.departure)}`
-                    : "",
-                ...room.alerts.map((alert) => alert.label),
-            ]
-                .filter(Boolean)
-                .join(", ");
+    openRowAction(row, key) {
+        return this.openAction(row.actions?.[key]);
+    }
+
+    async runPrimaryAction(row) {
+        const key = row.primary_action?.key;
+        if (key === "open") {
+            return this.openRowAction(row, "reservation");
         }
-        return [
-            `${_t("Room")} ${room.name}`,
-            room.primaryLabel,
-            room.housekeepingLabel,
-            room.capacityBlocker ? room.capacityBlocker.replaceAll("_", " ") : "",
-            room.reservation?.guest_name,
-            ...room.alerts.map((alert) => alert.label),
-        ]
-            .filter(Boolean)
-            .join(", ");
+        const method = key === "check_in" ? "action_check_in" : key === "check_out" ? "action_check_out" : null;
+        if (!method || this.state.busyRows[row.id]) {
+            return;
+        }
+        this.state.busyRows[row.id] = true;
+        try {
+            await this.orm.call("hotel.reservation", method, [[row.id]]);
+            this.notification.add(
+                key === "check_in" ? _t("Guest checked in.") : _t("Guest checked out."),
+                { type: "success" }
+            );
+            await this.refreshDashboard({ background: true });
+        } catch (error) {
+            this.notification.add(errorMessage(error, _t("Unable to complete the workflow.")), {
+                type: "danger",
+            });
+            this.state.ariaStatus = _t("Unable to complete the workflow.");
+        } finally {
+            delete this.state.busyRows[row.id];
+        }
+    }
+
+    isRowBusy(row) {
+        return Boolean(this.state.busyRows[row.id]);
+    }
+
+    selectedDateParts() {
+        return formatBusinessDateParts(this.state.businessDate);
     }
 
     formatDateTime(value) {
         return formatOperationalDateTime(value, this.state.data?.meta?.timezone);
     }
 
+    formatCount(value) {
+        return formatNumber(value, { maximumFractionDigits: 0 });
+    }
+
+    formatPercentage(value) {
+        return `${formatNumber(value, { maximumFractionDigits: 1 })}%`;
+    }
+
+    formatAmount(value) {
+        return formatCurrency(value, this.state.data?.meta?.currency);
+    }
+
+    occupancyAriaLabel() {
+        return `${this.formatPercentage(this.state.data?.occupancy?.percentage || 0)} ${_t(
+            "occupancy"
+        )}`;
+    }
+
     operationalText(value) {
         return westernDigits(value);
     }
 
+    minorGuests(row) {
+        return Number(row.teenagers || 0) + Number(row.children || 0) + Number(row.infants || 0);
+    }
+
+    nightsAriaLabel(row) {
+        return `${this.formatCount(row.nights)} ${_t("nights")}`;
+    }
+
+    adultsAriaLabel(row) {
+        return `${this.formatCount(row.adults)} ${_t("adults")}`;
+    }
+
+    childrenAriaLabel(row) {
+        return `${this.formatCount(this.minorGuests(row))} ${_t("children")}`;
+    }
+
+    activityCountLabel() {
+        const labels = {
+            arrivals: _t("Arriving guests"),
+            departures: _t("Departing guests"),
+            in_house: _t("In-house guests"),
+            stayovers: _t("Stayovers"),
+            bookings: _t("Bookings"),
+            cancellations: _t("Cancellations"),
+            overbookings: _t("Overbookings"),
+        };
+        return labels[this.state.activeTab] || _t("Activity records");
+    }
+
+    completedLabel() {
+        return this.state.activeTab === "departures"
+            ? _t("Show checked-out guests")
+            : _t("Show completed arrivals");
+    }
+
     updatedAtLabel() {
         return formatUpdatedAt(this.state.updatedAt ? new Date(this.state.updatedAt) : null);
+    }
+
+    refreshLabel() {
+        const time = this.updatedAtLabel();
+        return time
+            ? _t("Refresh dashboard. Last updated at %(time)s.", { time })
+            : _t("Refresh dashboard");
     }
 }
 

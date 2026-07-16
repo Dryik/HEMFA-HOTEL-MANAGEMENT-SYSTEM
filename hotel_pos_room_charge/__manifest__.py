@@ -1,7 +1,7 @@
 {
     "name": "POS Room Charge",
     "summary": "POS charge-to-room payment method with folio and ceiling validation",
-    "version": "19.0.4.0.1",
+    "version": "19.0.5.0.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",
@@ -10,5 +10,10 @@
         "security/hotel_pos_security.xml",
         "views/pos_payment_method_views.xml",
     ],
+    "assets": {
+        "point_of_sale._assets_pos": [
+            "hotel_pos_room_charge/static/src/**/*",
+        ],
+    },
     "installable": True,
 }

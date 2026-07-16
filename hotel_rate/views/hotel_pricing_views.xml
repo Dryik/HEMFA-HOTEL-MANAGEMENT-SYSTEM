@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hotel_seasonal_pricing_view_list" model="ir.ui.view">
+        <field name="name">hotel.seasonal.pricing.list</field>
+        <field name="model">hotel.seasonal.pricing</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'active'" decoration-muted="state == 'expired'">
+                <field name="name"/><field name="date_start"/><field name="date_end"/>
+                <field name="state" widget="badge"/><field name="property_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="hotel_seasonal_pricing_view_form" model="ir.ui.view">
+        <field name="name">hotel.seasonal.pricing.form</field>
+        <field name="model">hotel.seasonal.pricing</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate" type="object" string="Activate" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_expire" type="object" string="Expire" invisible="state != 'active'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group><group><field name="property_id" invisible="1"/><field name="date_start"/><field name="date_end"/></group>
+                        <group><field name="description"/></group></group>
+                    <notebook>
+                        <page string="Nightly Rates"><field name="rate_rule_ids" context="{'default_property_id': property_id}">
+                            <list editable="bottom"><field name="sequence" widget="handle"/><field name="name"/>
+                                <field name="room_type_id"/><field name="guest_type"/><field name="weekday_ids" widget="many2many_tags"/>
+                                <field name="date_start"/><field name="date_end"/><field name="rate_price"/><field name="currency_id"/>
+                            </list>
+                        </field></page>
+                        <page string="Pricelist Adjustments"><field name="pricelist_item_ids" readonly="1">
+                            <list create="0" delete="0"><field name="pricelist_id"/><field name="name"/>
+                                <field name="compute_price"/><field name="date_start"/><field name="date_end"/>
+                            </list>
+                        </field></page>
+                    </notebook>
+                </sheet><chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="hotel_seasonal_pricing_action" model="ir.actions.act_window">
+        <field name="name">Seasonal Pricing</field><field name="res_model">hotel.seasonal.pricing</field><field name="view_mode">list,form</field>
+    </record>
+
+    <record id="hotel_guest_supplement_view_list" model="ir.ui.view">
+        <field name="name">hotel.guest.supplement.list</field><field name="model">hotel.guest.supplement</field>
+        <field name="arch" type="xml"><list><field name="name"/><field name="room_type_id"/><field name="guest_category"/>
+            <field name="charge_type"/><field name="value"/><field name="active"/></list></field>
+    </record>
+    <record id="hotel_guest_supplement_view_form" model="ir.ui.view">
+        <field name="name">hotel.guest.supplement.form</field><field name="model">hotel.guest.supplement</field>
+        <field name="arch" type="xml"><form><sheet><group><field name="name"/><field name="property_id" invisible="1"/>
+            <field name="room_type_id"/><field name="guest_category"/><field name="charge_type"/><field name="value"/><field name="active"/>
+        </group></sheet></form></field>
+    </record>
+    <record id="hotel_guest_supplement_action" model="ir.actions.act_window">
+        <field name="name">Extra Guest Supplements</field><field name="res_model">hotel.guest.supplement</field><field name="view_mode">list,form</field>
+    </record>
+
+    <record id="hotel_booking_source_view_list" model="ir.ui.view">
+        <field name="name">hotel.booking.source.list</field>
+        <field name="model">hotel.booking.source</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/><field name="name"/><field name="source"/>
+                <field name="pricelist_id"/><field name="property_id" optional="hide"/><field name="active"/>
+            </list>
+        </field>
+    </record>
+    <record id="hotel_booking_source_view_form" model="ir.ui.view">
+        <field name="name">hotel.booking.source.form</field>
+        <field name="model">hotel.booking.source</field>
+        <field name="arch" type="xml">
+            <form><sheet><group>
+                <field name="name"/><field name="source"/><field name="property_id" invisible="1"/>
+                <field name="company_id" invisible="1"/><field name="pricelist_id"/><field name="active"/>
+            </group></sheet></form>
+        </field>
+    </record>
+    <record id="hotel_booking_source_action" model="ir.actions.act_window">
+        <field name="name">Booking Source Pricing</field>
+        <field name="res_model">hotel.booking.source</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="res_partner_view_form_hotel_pricelist" model="ir.ui.view">
+        <field name="name">res.partner.form.hotel.pricelist</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="hotel_base.res_partner_view_form_hotel"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='hotel_guest']/group/group[1]" position="inside">
+                <field name="property_product_pricelist" string="Hotel Pricelist" groups="hotel_base.group_hotel_frontdesk"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_pricelist_item_form_inherit_hotel" model="ir.ui.view">
+        <field name="name">product.pricelist.item.form.hotel</field><field name="model">product.pricelist.item</field>
+        <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='pricelist_rule_limits']/field[@name='date_end']" position="after">
+                <field name="hotel_seasonal_pricing_id"/><field name="hotel_weekday_ids" widget="many2many_tags"/>
+            </xpath>
+            <xpath expr="//div[field[@name='percent_price']]" position="after">
+                <field name="base" string="Based on" invisible="compute_price != 'percentage'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_pricelist_form_inherit_hotel_website" model="ir.ui.view">
+        <field name="name">product.pricelist.form.hotel.website</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='currency_id']" position="after">
+                <field name="hotel_website_published"/>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_hotel_seasonal_pricing" name="Seasonal Pricing" parent="hotel_base.menu_hotel_config"
+        action="hotel_seasonal_pricing_action" sequence="45"/>
+    <menuitem id="menu_hotel_pricelists" name="Pricelists" parent="hotel_base.menu_hotel_config"
+        action="product.product_pricelist_action2" sequence="50"/>
+    <menuitem id="menu_hotel_guest_supplements" name="Extra Guest Supplements" parent="hotel_base.menu_hotel_config"
+        action="hotel_guest_supplement_action" sequence="65"/>
+    <menuitem id="menu_hotel_booking_sources" name="Booking Source Pricing" parent="hotel_base.menu_hotel_config"
+        action="hotel_booking_source_action" sequence="70"/>
+</odoo>

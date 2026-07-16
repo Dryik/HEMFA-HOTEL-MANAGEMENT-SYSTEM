@@ -31,6 +31,16 @@ ALERT_TYPES = (
 )
 PLANNING_DAY_COUNTS = (7, 14, 30)
 DEFAULT_PLANNING_STATES = ("draft", "confirmed", "checked_in", "checked_out")
+DASHBOARD_ACTIVITY_KEYS = (
+    "arrivals",
+    "departures",
+    "in_house",
+    "stayovers",
+    "bookings",
+    "cancellations",
+    "overbookings",
+)
+DASHBOARD_ACTIVITY_LIMIT = 50
 
 
 class HotelFrontdeskWorkspace(models.AbstractModel):
@@ -149,6 +159,30 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
             prop,
             business_date,
         )
+        rooms_by_id = {room.id: room for room in rooms}
+        future_counts = {}
+        for room in rooms:
+            future_counts[room.id] = self.env["hotel.reservation"].search_count(
+                [
+                    ("room_id", "=", room.id),
+                    ("state", "in", ("pending_payment", "confirmed", "checked_in")),
+                    ("checkout_date", ">", business_end),
+                ]
+            )
+        for floor in floors:
+            for room_payload in floor["rooms"]:
+                room = rooms_by_id[room_payload["id"]]
+                room_payload.update(
+                    {
+                        "capacity": room.room_type_id.max_occupancy,
+                        "current_price": room.room_type_id.base_price,
+                        "future_bookings": future_counts[room.id],
+                    }
+                )
+                if not room_payload["reservation"] and room.is_sellable:
+                    room_payload["action"] = self._new_reservation_action(
+                        prop, business_date, room=room
+                    )
 
         metric_data = self._metric_data(
             prop, business_date, rooms, reservations, context
@@ -268,6 +302,59 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
                 mode=metric_data["mode"],
             ),
         }
+        booking_request_domain = [
+            ("property_id", "=", prop.id),
+            ("state", "=", "pending_review"),
+        ]
+        meal_domain = [
+            ("property_id", "=", prop.id),
+            ("is_meal", "=", True),
+            ("state", "=", "confirmed"),
+        ]
+        housekeeping_domain = [
+            ("property_id", "=", prop.id),
+            ("state", "in", ("new", "cleaning")),
+        ]
+        kpis.update(
+            {
+                "booking_requests": self._kpi(
+                    "booking_requests",
+                    _("Booking Requests"),
+                    self.env["hotel.online.booking"].search_count(booking_request_domain),
+                    "integer",
+                    self._window_action(
+                        _("Booking Requests"),
+                        "hotel.online.booking",
+                        booking_request_domain,
+                        context=context,
+                    ),
+                ),
+                "meals_to_prepare": self._kpi(
+                    "meals_to_prepare",
+                    _("Meals to Prepare"),
+                    self.env["hotel.reservation.service"].search_count(meal_domain),
+                    "integer",
+                    self._window_action(
+                        _("Meals to Prepare"),
+                        "hotel.reservation.service",
+                        meal_domain,
+                        context=context,
+                    ),
+                ),
+                "housekeeping_workload": self._kpi(
+                    "housekeeping_workload",
+                    _("Housekeeping Workload"),
+                    self.env["hotel.housekeeping.task"].search_count(housekeeping_domain),
+                    "integer",
+                    self._window_action(
+                        _("Housekeeping Workload"),
+                        "hotel.housekeeping.task",
+                        housekeeping_domain,
+                        context=context,
+                    ),
+                ),
+            }
+        )
 
         attention_items = self._attention_items(
             prop,
@@ -279,6 +366,28 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
             vacant_dirty,
             context,
         )
+        payment_exception_domain = [
+            ("property_id", "=", prop.id),
+            ("state", "=", "payment_exception"),
+        ]
+        exception_count = self.env["hotel.online.booking"].search_count(
+            payment_exception_domain
+        )
+        if exception_count:
+            attention_items.append(
+                {
+                    "key": "payment_exceptions",
+                    "label": _("Online Payment Exceptions"),
+                    "count": exception_count,
+                    "severity": "danger",
+                    "action": self._window_action(
+                        _("Online Payment Exceptions"),
+                        "hotel.online.booking",
+                        payment_exception_domain,
+                        context=context,
+                    ),
+                }
+            )
         return {
             "version": 1,
             "meta": self._snapshot_meta(
@@ -306,6 +415,269 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
                 "planning": self._planning_action(prop, business_date),
             },
         }
+
+    @api.model
+    def get_dashboard_snapshot(self, property_id=None, business_date=None):
+        """Return the compact Cloudbeds-style daily Front Desk snapshot."""
+        prop = self._resolve_property(property_id)
+        business_date = self._resolve_business_date(prop, business_date)
+        business_start, business_end = prop.get_business_day_bounds(business_date)
+        generated_at = fields.Datetime.now()
+
+        rooms = self.env["hotel.room"].search(
+            [("property_id", "=", prop.id), ("active", "=", True)]
+        )
+        sellable_rooms = rooms.filtered("is_sellable")
+        stay_candidates = self.env["hotel.reservation"].search(
+            [
+                ("property_id", "=", prop.id),
+                ("room_id", "!=", False),
+                (
+                    "state",
+                    "in",
+                    ("pending_payment", "confirmed", "checked_in", "checked_out"),
+                ),
+                ("checkin_date", "<", business_end),
+                ("checkout_date", ">", business_start),
+            ]
+        )
+        booked = stay_candidates.filtered(
+            lambda reservation: (
+                reservation.room_id in sellable_rooms
+                and (
+                    reservation.state == "pending_payment"
+                    or self._reservation_primary_status(
+                        reservation, business_date, prop
+                    )
+                    in ("reserved", "occupied")
+                )
+            )
+        )
+        booked_room_ids = set(booked.mapped("room_id").ids)
+        occupancy = (
+            round(100.0 * len(booked_room_ids) / len(sellable_rooms), 1)
+            if sellable_rooms
+            else 0.0
+        )
+        direct_source = self.env["hotel.booking.source"].search(
+            [
+                ("property_id", "=", prop.id),
+                ("source", "=", "direct"),
+                ("active", "=", True),
+            ],
+            limit=1,
+        )
+        current_prices = {}
+        for room_type in rooms.mapped("room_type_id"):
+            quote = self.env["hotel.rate.quote"].quote(
+                prop.id,
+                room_type.id,
+                business_start,
+                business_end,
+                pricelist_id=direct_source.pricelist_id.id,
+                adults=max(room_type.base_adults, 1),
+                teenagers=room_type.base_teenagers,
+                children=room_type.base_children,
+                infants=room_type.base_infants,
+            )
+            quote_currency = self.env["res.currency"].browse(quote["currency_id"])
+            current_prices[room_type.id] = quote_currency._convert(
+                quote["amount_total"],
+                prop.company_id.currency_id,
+                prop.company_id,
+                business_date,
+            )
+        booked_by_room = {
+            reservation.room_id.id: reservation
+            for reservation in booked.sorted(lambda item: item.checkin_date)
+        }
+        room_cards = []
+        for room in rooms.sorted(lambda item: (item.floor_id.sequence, item.name)):
+            active_stay = booked_by_room.get(room.id)
+            bookable = room.is_sellable and not active_stay and room.hk_status != "dirty"
+            if room.out_of_order:
+                room_state, room_state_label = "out_of_service", _("Out of Service")
+            elif room.admin_use:
+                room_state, room_state_label = "house_use", _("House Use")
+            elif active_stay:
+                room_state, room_state_label = "booked", _("Booked")
+            elif room.hk_status == "dirty":
+                room_state, room_state_label = "dirty", _("Dirty")
+            else:
+                room_state, room_state_label = "available", _("Available")
+            room_cards.append(
+                {
+                    "id": room.id,
+                    "name": room.name,
+                    "room_type": self._many2one_payload(room.room_type_id),
+                    "floor": self._many2one_payload(room.floor_id),
+                    "state": room_state,
+                    "state_label": room_state_label,
+                    "capacity": room.room_type_id.max_occupancy,
+                    "current_price": prop.company_id.currency_id.round(
+                        current_prices.get(
+                            room.room_type_id.id, room.room_type_id.base_price
+                        )
+                    ),
+                    "future_bookings": self.env["hotel.reservation"].search_count(
+                        [
+                            ("room_id", "=", room.id),
+                            (
+                                "state",
+                                "in",
+                                ("pending_payment", "confirmed", "checked_in"),
+                            ),
+                            ("checkout_date", ">", business_end),
+                        ]
+                    ),
+                    "guest_name": (
+                        active_stay.partner_id.display_name if active_stay else False
+                    ),
+                    "action": self._new_reservation_action(
+                        prop, business_date, room=room
+                    )
+                    if bookable
+                    else False,
+                }
+            )
+        tabs = []
+        for key in DASHBOARD_ACTIVITY_KEYS:
+            all_records = self._dashboard_activity_records(
+                prop, business_date, key, include_completed=True
+            )
+            pending_records = self._dashboard_activity_records(
+                prop, business_date, key, include_completed=False
+            )
+            tabs.append(
+                {
+                    "key": key,
+                    "label": self._dashboard_activity_label(key),
+                    "count": len(all_records),
+                    "pending_count": len(pending_records),
+                }
+            )
+
+        activity = self._dashboard_activity_payload(
+            prop,
+            business_date,
+            "arrivals",
+            include_completed=False,
+            query=None,
+            limit=DASHBOARD_ACTIVITY_LIMIT,
+        )
+        context = self._action_context(prop, business_date)
+        operational_kpis = []
+        for key, label, model_name, domain in (
+            (
+                "booking_requests",
+                _("Booking Requests"),
+                "hotel.online.booking",
+                [("property_id", "=", prop.id), ("state", "=", "pending_review")],
+            ),
+            (
+                "reservations_to_confirm",
+                _("Reservations to Confirm"),
+                "hotel.reservation",
+                [("property_id", "=", prop.id), ("state", "=", "draft")],
+            ),
+            (
+                "meals_to_prepare",
+                _("Meals to Prepare"),
+                "hotel.reservation.service",
+                [
+                    ("property_id", "=", prop.id),
+                    ("is_meal", "=", True),
+                    ("state", "=", "confirmed"),
+                ],
+            ),
+            (
+                "housekeeping_workload",
+                _("Housekeeping Workload"),
+                "hotel.housekeeping.task",
+                [
+                    ("property_id", "=", prop.id),
+                    ("state", "in", ("new", "cleaning")),
+                ],
+            ),
+        ):
+            operational_kpis.append(
+                {
+                    "key": key,
+                    "label": label,
+                    "count": self.env[model_name].search_count(domain),
+                    "action": self._window_action(
+                        label, model_name, domain, context=context
+                    ),
+                }
+            )
+        return {
+            "version": 2,
+            "meta": {
+                "property_id": prop.id,
+                "property_name": prop.company_id.display_name,
+                "business_date": fields.Date.to_string(business_date),
+                "current_business_date": fields.Date.to_string(
+                    self._current_business_date(prop)
+                ),
+                "business_start": fields.Datetime.to_string(business_start),
+                "business_end": fields.Datetime.to_string(business_end),
+                "timezone": prop.timezone,
+                "day_start_hour": prop.day_start_hour,
+                "generated_at": fields.Datetime.to_string(generated_at),
+                "currency": self._currency_payload(prop.company_id.currency_id),
+            },
+            "permissions": self._permissions(),
+            "occupancy": {
+                "percentage": occupancy,
+                "available_units": max(len(sellable_rooms) - len(booked_room_ids), 0),
+                "booked_units": len(booked_room_ids),
+                "out_of_service": len(rooms.filtered("out_of_order")),
+                "house_use": len(
+                    rooms.filtered(lambda room: room.admin_use and not room.out_of_order)
+                ),
+            },
+            "tabs": tabs,
+            "activity": activity,
+            "operational_kpis": operational_kpis,
+            "rooms": room_cards,
+            "actions": {
+                "new_reservation": self._new_reservation_action(prop, business_date),
+                "planning": self._planning_action(prop, business_date),
+                "open_list": activity["list_action"],
+            },
+            "context": context,
+        }
+
+    @api.model
+    def get_dashboard_activity(
+        self,
+        property_id=None,
+        business_date=None,
+        activity_key="arrivals",
+        include_completed=False,
+        query=None,
+        limit=DASHBOARD_ACTIVITY_LIMIT,
+    ):
+        prop = self._resolve_property(property_id)
+        business_date = self._resolve_business_date(prop, business_date)
+        if activity_key not in DASHBOARD_ACTIVITY_KEYS:
+            raise ValidationError(_("Unsupported dashboard activity."))
+        try:
+            limit = int(limit)
+        except (TypeError, ValueError) as error:
+            raise ValidationError(_("A valid dashboard row limit is required.")) from error
+        if limit < 1 or limit > DASHBOARD_ACTIVITY_LIMIT:
+            raise ValidationError(
+                _("Dashboard row limit must be between 1 and %(limit)s.", limit=DASHBOARD_ACTIVITY_LIMIT)
+            )
+        return self._dashboard_activity_payload(
+            prop,
+            business_date,
+            activity_key,
+            include_completed=bool(include_completed),
+            query=query,
+            limit=limit,
+        )
 
     @api.model
     def get_planning_window(
@@ -584,6 +956,334 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
             "room_board": rooms,
         }
 
+    # -- Compact daily dashboard ------------------------------------------
+
+    def _dashboard_activity_label(self, activity_key):
+        labels = {
+            "arrivals": _("Arrivals"),
+            "departures": _("Departures"),
+            "in_house": _("In-house"),
+            "stayovers": _("Stayovers"),
+            "bookings": _("Bookings"),
+            "cancellations": _("Cancellations"),
+            "overbookings": _("Overbookings"),
+        }
+        return labels[activity_key]
+
+    def _dashboard_activity_records(
+        self, prop, business_date, activity_key, include_completed=False
+    ):
+        business_start, business_end = prop.get_business_day_bounds(business_date)
+        reservation_model = self.env["hotel.reservation"]
+
+        if activity_key == "arrivals":
+            activity_states = (
+                ("confirmed", "checked_in", "checked_out", "no_show")
+                if include_completed
+                else ("confirmed",)
+            )
+            return reservation_model.search(
+                [
+                    ("property_id", "=", prop.id),
+                    ("state", "in", activity_states),
+                    ("checkin_date", ">=", business_start),
+                    ("checkin_date", "<", business_end),
+                ]
+            )
+
+        if activity_key == "departures":
+            activity_states = (
+                ("confirmed", "checked_in", "checked_out")
+                if include_completed
+                else ("confirmed", "checked_in")
+            )
+            return reservation_model.search(
+                [
+                    ("property_id", "=", prop.id),
+                    ("state", "in", activity_states),
+                    ("checkout_date", ">=", business_start),
+                    ("checkout_date", "<", business_end),
+                ]
+            )
+
+        if activity_key in ("in_house", "stayovers"):
+            actual_overlap = fields.Domain.AND(
+                [
+                    fields.Domain("actual_checkin", "!=", False),
+                    fields.Domain("actual_checkin", "<", business_end),
+                    fields.Domain.OR(
+                        [
+                            fields.Domain("actual_checkout", "=", False),
+                            fields.Domain("actual_checkout", ">", business_start),
+                        ]
+                    ),
+                ]
+            )
+            planned_overlap = fields.Domain.AND(
+                [
+                    fields.Domain("checkin_date", "<", business_end),
+                    fields.Domain("checkout_date", ">", business_start),
+                ]
+            )
+            candidates = reservation_model.search(
+                fields.Domain.AND(
+                    [
+                        fields.Domain("property_id", "=", prop.id),
+                        fields.Domain(
+                            "state", "in", ("confirmed", "checked_in", "checked_out")
+                        ),
+                        fields.Domain.OR([actual_overlap, planned_overlap]),
+                    ]
+                )
+            )
+            in_house = candidates.filtered(
+                lambda reservation: self._reservation_primary_status(
+                    reservation, business_date, prop
+                )
+                == "occupied"
+            )
+            if activity_key == "in_house":
+                return in_house
+
+            def is_stayover(reservation):
+                arrival_value = reservation.actual_checkin or reservation.checkin_date
+                departure_value = reservation.actual_checkout or reservation.checkout_date
+                arrival_date = prop.get_business_date(arrival_value)
+                departure_date = prop.get_business_date(departure_value)
+                return arrival_date < business_date < departure_date
+
+            return in_house.filtered(is_stayover)
+
+        if activity_key == "bookings":
+            return reservation_model.search(
+                [
+                    ("property_id", "=", prop.id),
+                    ("create_date", ">=", business_start),
+                    ("create_date", "<", business_end),
+                ]
+            )
+
+        if activity_key == "cancellations":
+            return reservation_model.search(
+                [
+                    ("property_id", "=", prop.id),
+                    ("state", "=", "cancelled"),
+                    ("cancelled_at", ">=", business_start),
+                    ("cancelled_at", "<", business_end),
+                ]
+            )
+
+        return self._dashboard_overbooked_reservations(
+            prop, business_start, business_end
+        )
+
+    def _dashboard_overbooked_reservations(self, prop, business_start, business_end):
+        candidates = self.env["hotel.reservation"].search(
+            [
+                ("property_id", "=", prop.id),
+                ("room_type_id", "!=", False),
+                ("state", "in", ("pending_payment", "confirmed", "checked_in")),
+                ("checkin_date", "<", business_end),
+                ("checkout_date", ">", business_start),
+            ]
+        )
+        rooms = self.env["hotel.room"].search(
+            [("property_id", "=", prop.id), ("active", "=", True)]
+        )
+        sellable_by_type = defaultdict(int)
+        for room in rooms.filtered("is_sellable"):
+            sellable_by_type[room.room_type_id.id] += 1
+
+        by_type = defaultdict(lambda: self.env["hotel.reservation"])
+        by_room = defaultdict(lambda: self.env["hotel.reservation"])
+        for reservation in candidates:
+            by_type[reservation.room_type_id.id] |= reservation
+            if reservation.room_id:
+                by_room[reservation.room_id.id] |= reservation
+
+        affected = self.env["hotel.reservation"]
+        for records in by_room.values():
+            if len(records) > 1:
+                affected |= records.sorted(
+                    key=lambda reservation: (reservation.create_date, reservation.id),
+                    reverse=True,
+                )[: len(records) - 1]
+
+        for room_type_id, records in by_type.items():
+            excess = max(len(records) - sellable_by_type[room_type_id], 0)
+            if not excess:
+                continue
+            prioritized = records.sorted(
+                key=lambda reservation: (
+                    bool(reservation.room_id and not reservation.room_id.is_sellable),
+                    reservation.create_date,
+                    reservation.id,
+                ),
+                reverse=True,
+            )
+            selected = prioritized.filtered(lambda reservation: reservation not in affected)
+            affected |= selected[: max(excess - len(records & affected), 0)]
+        return affected
+
+    def _dashboard_activity_payload(
+        self,
+        prop,
+        business_date,
+        activity_key,
+        include_completed=False,
+        query=None,
+        limit=DASHBOARD_ACTIVITY_LIMIT,
+    ):
+        records = self._dashboard_activity_records(
+            prop, business_date, activity_key, include_completed=include_completed
+        )
+        pending_records = self._dashboard_activity_records(
+            prop, business_date, activity_key, include_completed=False
+        )
+        query = (query or "").strip()
+        if query:
+            records = self._dashboard_filter_activity(records, query)
+            pending_records = self._dashboard_filter_activity(pending_records, query)
+        records = self._dashboard_sort_activity(records, activity_key)
+        visible_records = records[:limit]
+        finance_by_reservation = self._finance_by_reservation(visible_records)
+        context = self._action_context(prop, business_date)
+        return {
+            "key": activity_key,
+            "label": self._dashboard_activity_label(activity_key),
+            "include_completed": bool(include_completed),
+            "supports_completed": activity_key in ("arrivals", "departures"),
+            "total": len(records),
+            "pending_total": len(pending_records),
+            "truncated": len(records) > limit,
+            "rows": [
+                self._dashboard_activity_row(
+                    reservation,
+                    activity_key,
+                    finance_by_reservation.get(reservation.id, {}),
+                    context,
+                )
+                for reservation in visible_records
+            ],
+            "list_action": self._window_action(
+                self._dashboard_activity_label(activity_key),
+                "hotel.reservation",
+                [("id", "in", records.ids)],
+                context=context,
+            ),
+        }
+
+    def _dashboard_filter_activity(self, records, query):
+        needle = query.casefold()
+
+        def matches(reservation):
+            values = (
+                reservation.name,
+                reservation.partner_id.display_name,
+                reservation.room_id.display_name,
+                reservation.room_type_id.display_name,
+                reservation.agency_id.display_name,
+                reservation.group_id.display_name,
+            )
+            return needle in " ".join(value or "" for value in values).casefold()
+
+        return records.filtered(matches)
+
+    def _dashboard_sort_activity(self, records, activity_key):
+        if activity_key == "arrivals":
+            return records.sorted(
+                key=lambda reservation: (
+                    reservation.checkin_date,
+                    reservation.room_id.name or "",
+                    reservation.id,
+                )
+            )
+        if activity_key == "departures":
+            return records.sorted(
+                key=lambda reservation: (
+                    reservation.checkout_date,
+                    reservation.room_id.name or "",
+                    reservation.id,
+                )
+            )
+        if activity_key in ("in_house", "stayovers", "overbookings"):
+            return records.sorted(
+                key=lambda reservation: (
+                    reservation.room_id.floor_id.sequence,
+                    reservation.room_id.name or "",
+                    reservation.checkin_date,
+                    reservation.id,
+                )
+            )
+        event_field = "cancelled_at" if activity_key == "cancellations" else "create_date"
+        return records.sorted(
+            key=lambda reservation: (getattr(reservation, event_field), reservation.id),
+            reverse=True,
+        )
+
+    def _dashboard_activity_row(self, reservation, activity_key, finance, context):
+        state_labels = dict(
+            reservation._fields["state"]._description_selection(self.env)
+        )
+        if activity_key == "arrivals" and reservation.state == "confirmed":
+            primary_action = {"key": "check_in", "label": _("Check-in")}
+        elif activity_key == "departures" and reservation.state == "checked_in":
+            primary_action = {"key": "check_out", "label": _("Check-out")}
+        else:
+            primary_action = {"key": "open", "label": _("Open")}
+
+        folio_action = False
+        if self._permissions()["can_view_finance"] and reservation.folio_ids:
+            if len(reservation.folio_ids) == 1:
+                folio_action = self._record_action(
+                    reservation.folio_ids[0], _("Folio"), context=context
+                )
+            else:
+                folio_action = self._window_action(
+                    _("Folios"),
+                    "hotel.folio",
+                    [("reservation_id", "=", reservation.id)],
+                    context=context,
+                )
+
+        return {
+            "id": reservation.id,
+            "reference": reservation.name,
+            "guest": self._many2one_payload(reservation.partner_id),
+            "room": self._many2one_payload(reservation.room_id),
+            "room_type": self._many2one_payload(reservation.room_type_id),
+            "housekeeping_status": reservation.room_id.hk_status if reservation.room_id else False,
+            "checkin": fields.Datetime.to_string(reservation.checkin_date),
+            "checkout": fields.Datetime.to_string(reservation.checkout_date),
+            "nights": reservation.nights,
+            "adults": reservation.adults,
+            "teenagers": reservation.teenagers,
+            "children": reservation.children,
+            "infants": reservation.infants,
+            "state": reservation.state,
+            "state_label": state_labels.get(reservation.state, reservation.state),
+            "agency": self._many2one_payload(reservation.agency_id),
+            "group": self._many2one_payload(reservation.group_id),
+            "has_notes": bool(reservation.notes),
+            "finance": {
+                "has_balance": bool(finance.get("has_balance")),
+                "amount_due": finance.get("amount_due", 0.0),
+                "currency_id": finance.get("currency_id", False),
+            }
+            if finance
+            else False,
+            "primary_action": primary_action,
+            "actions": {
+                "reservation": self._record_action(
+                    reservation, _("Reservation"), context=context
+                ),
+                "guest": self._record_action(
+                    reservation.partner_id, _("Guest"), context=context
+                ),
+                "folio": folio_action,
+            },
+        }
+
     # -- Resolution, formatting and actions -------------------------------
 
     def _resolve_property(self, property_id):
@@ -655,7 +1355,9 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
         return {
             "default_property_id": prop.id,
             "hotel_property_id": prop.id,
+            "business_date": date_string,
             "hotel_business_date": date_string,
+            "default_business_date": date_string,
             "default_checkin_date": fields.Datetime.to_string(default_checkin),
         }
 

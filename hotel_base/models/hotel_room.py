@@ -27,6 +27,13 @@ class HotelRoom(models.Model):
 
     name = fields.Char(string="Room Number", required=True, tracking=True)
     active = fields.Boolean(default=True)
+    website_published = fields.Boolean(
+        string="Published on Website",
+        default=False,
+        help="Allow this physical room to be assigned by the public booking website.",
+    )
+    retired_at = fields.Datetime(readonly=True, copy=False, tracking=True)
+    retirement_reason = fields.Text(copy=False, tracking=True)
     floor_id = fields.Many2one(
         "hotel.floor", required=True, ondelete="restrict", index=True
     )
@@ -107,16 +114,23 @@ class HotelRoom(models.Model):
             room.display_name = f"[{code}] {room.name}" if code else room.name
 
     def write(self, vals):
+        if "active" in vals:
+            vals = dict(vals)
+            vals["retired_at"] = False if vals["active"] else fields.Datetime.now()
+            if vals["active"]:
+                vals["retirement_reason"] = False
         if self.env.su or self.env.user.has_group("base.group_system"):
             return super().write(vals)
         configuration_fields = {
             "name",
             "active",
+            "retirement_reason",
             "floor_id",
             "room_type_id",
             "amenity_ids",
             "telephone_extension",
             "admin_use",
+            "website_published",
         }
         if configuration_fields.intersection(vals) and not self.env.user.has_group(
             "hotel_base.group_hotel_manager"
@@ -157,14 +171,11 @@ class HotelRoom(models.Model):
     def _set_maintenance_block(self, blocked):
         return super(HotelRoom, self).write({"out_of_order": bool(blocked)})
 
-    def unlink(self):
-        for room in self:
-            active_res = self.env["hotel.reservation"].search_count(
-                [
-                    ("room_id", "=", room.id),
-                    ("state", "in", ("confirmed", "checked_in")),
-                ]
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_module_uninstall(self):
+        raise UserError(
+            _(
+                "Rooms are permanent hotel inventory records and cannot be deleted. "
+                "Archive the room and record a retirement reason instead."
             )
-            if active_res:
-                raise UserError(_("You cannot delete room %s because it has active reservations.") % room.name)
-        return super().unlink()
+        )

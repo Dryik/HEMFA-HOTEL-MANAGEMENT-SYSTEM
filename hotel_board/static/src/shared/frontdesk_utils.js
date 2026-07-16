@@ -136,6 +136,30 @@ export function formatWeekday(value) {
     );
 }
 
+export function formatBusinessDateParts(value) {
+    const dateValue = isoDate(value);
+    if (!dateValue) {
+        return { weekday: "", day: "", month: "", year: "" };
+    }
+    const [year, month, day] = dateValue.split("-").map(Number);
+    const date = new Date(Date.UTC(year, month - 1, day));
+    const options = { timeZone: "UTC", numberingSystem: "latn" };
+    return {
+        weekday: westernDigits(
+            new Intl.DateTimeFormat(localeCode(), { ...options, weekday: "long" }).format(date)
+        ),
+        day: westernDigits(
+            new Intl.DateTimeFormat(localeCode(), { ...options, day: "numeric" }).format(date)
+        ),
+        month: westernDigits(
+            new Intl.DateTimeFormat(localeCode(), { ...options, month: "long" }).format(date)
+        ),
+        year: westernDigits(
+            new Intl.DateTimeFormat(localeCode(), { ...options, year: "numeric" }).format(date)
+        ),
+    };
+}
+
 export function actionWithFrontdeskContext(action, propertyId, businessDate) {
     if (!action || typeof action !== "object") {
         return action;

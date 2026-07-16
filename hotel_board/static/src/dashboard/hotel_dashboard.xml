@@ -6,233 +6,317 @@
                 <t t-esc="state.ariaStatus"/>
             </span>
 
-            <header class="o_hotel_workspace_header">
-                <div class="o_hotel_workspace_title">
-                    <h1>Front Desk</h1>
-                    <p t-if="state.data" class="text-muted mb-0">
-                        <t t-esc="state.data.meta.property_name"/>
-                    </p>
-                </div>
-                <div class="o_hotel_workspace_controls">
-                    <div class="o_hotel_field">
-                        <label for="hotel-dashboard-date">Business Date</label>
-                        <input id="hotel-dashboard-date" type="date" class="form-control" lang="en" dir="ltr"
-                            t-att-value="state.businessDate" t-on-change="onDateChange"
-                            t-att-disabled="!state.data or state.refreshing"/>
-                    </div>
-                    <div class="o_hotel_header_actions">
-                        <button type="button" class="btn btn-outline-secondary o_hotel_touch_target"
-                            t-on-click="() => this.loadData()" t-att-disabled="state.refreshing"
-                            aria-label="Refresh Front Desk data">
-                            <i t-attf-class="fa {{ state.refreshing ? 'fa-spinner fa-spin' : 'fa-refresh' }}"
-                                aria-hidden="true"/>
-                            <span>Refresh</span>
-                        </button>
-                        <button type="button" class="btn btn-primary o_hotel_touch_target"
-                            t-on-click="newReservation" t-att-disabled="!state.data">
-                            <i class="fa fa-plus" aria-hidden="true"/>
-                            <span>New Reservation</span>
-                        </button>
-                        <button type="button" class="btn btn-secondary o_hotel_touch_target"
-                            t-on-click="openPlanning" t-att-disabled="!state.data">
-                            <i class="fa fa-calendar" aria-hidden="true"/>
-                            <span>Planning</span>
-                        </button>
-                    </div>
-                    <small t-if="state.updatedAt" class="o_hotel_updated_at text-muted">
-                        Last updated <t t-esc="updatedAtLabel()"/>
-                    </small>
-                </div>
+            <header class="o_hotel_dashboard_header">
+                <h1>Dashboard</h1>
+                <nav class="o_hotel_dashboard_date_controls" aria-label="Dashboard date controls">
+                    <button type="button" class="btn o_hotel_icon_button"
+                        t-on-click="() => this.refreshDashboard()"
+                        t-att-disabled="state.refreshing"
+                        t-att-title="refreshLabel()"
+                        t-att-aria-label="refreshLabel()">
+                        <i t-attf-class="fa {{ state.refreshing ? 'fa-spinner fa-spin' : 'fa-refresh' }}"
+                            aria-hidden="true"/>
+                    </button>
+                    <button type="button" class="btn o_hotel_icon_button"
+                        t-on-click="() => this.changeDate(-1)" aria-label="Previous day">
+                        <i class="fa fa-angle-left" aria-hidden="true"/>
+                    </button>
+                    <button type="button" class="btn o_hotel_today_button"
+                        t-on-click="goToday"
+                        t-att-disabled="state.data and state.businessDate === state.data.meta.current_business_date">
+                        <i class="fa fa-calendar-o" aria-hidden="true"/>
+                        <span>Today</span>
+                    </button>
+                    <button type="button" class="btn o_hotel_icon_button"
+                        t-on-click="() => this.changeDate(1)" aria-label="Next day">
+                        <i class="fa fa-angle-right" aria-hidden="true"/>
+                    </button>
+                </nav>
             </header>
 
-            <div t-if="state.error" class="alert alert-danger o_hotel_workspace_alert" role="alert">
+            <div t-if="state.error and state.data" class="o_hotel_dashboard_stale" role="status">
                 <span>
-                    <i class="fa fa-exclamation-triangle" aria-hidden="true"/>
-                    <t t-esc="state.error"/>
+                    <i class="fa fa-exclamation-circle" aria-hidden="true"/>
+                    <span>Showing previously loaded data.</span>
                 </span>
-                <button type="button" class="btn btn-sm btn-outline-danger o_hotel_touch_target"
-                    t-on-click="() => this.loadData()" t-att-disabled="state.refreshing">
+                <button type="button" class="btn btn-link" t-on-click="() => this.refreshDashboard()">
                     Retry
                 </button>
             </div>
-            <div t-if="state.stale and state.data" class="alert alert-warning o_hotel_workspace_alert"
-                role="status">
-                <span>
-                    <i class="fa fa-clock-o" aria-hidden="true"/>
-                    Showing previously loaded data. Refresh to confirm the latest room status.
-                </span>
-            </div>
 
             <t t-if="state.data">
-                <section class="o_hotel_dashboard_kpis" aria-labelledby="hotel-dashboard-kpis-title">
-                    <div class="o_hotel_section_heading">
-                        <div>
-                            <h2 id="hotel-dashboard-kpis-title">Daily Overview</h2>
-                            <p class="text-muted mb-0" t-if="state.data.meta.metric_label">
-                                <t t-esc="state.data.meta.metric_label"/>
-                            </p>
-                        </div>
-                        <span t-if="state.refreshing" class="o_hotel_refreshing text-muted" role="status">
-                            <i class="fa fa-spinner fa-spin" aria-hidden="true"/> Refreshing…
-                        </span>
-                    </div>
-                    <div class="o_hotel_kpi_grid">
-                        <button t-foreach="state.data.kpis" t-as="metric" t-key="metric.key"
-                            type="button"
-                            t-attf-class="o_hotel_card o_hotel_kpi_button o_tone_{{ metric.tone }}"
-                            t-on-click="() => this.openMetric(metric)"
-                            t-att-disabled="!metric.action"
-                            t-att-aria-label="metricAriaLabel(metric)">
-                            <span class="o_hotel_kpi_label"><t t-esc="metric.label"/></span>
-                            <strong class="o_hotel_kpi_value"><t t-esc="formatMetric(metric)"/></strong>
-                            <small t-if="metricMode(metric)" class="o_hotel_kpi_mode">
-                                <t t-esc="metricMode(metric)"/>
-                            </small>
-                            <i t-if="metric.action" class="fa fa-angle-right o_hotel_action_hint"
-                                aria-hidden="true"/>
-                        </button>
-                    </div>
+                <t t-set="dateParts" t-value="selectedDateParts()"/>
+                <section t-if="state.data.operationalKpis.length"
+                    class="o_hotel_operational_kpis" aria-label="Operational workload">
+                    <button t-foreach="state.data.operationalKpis" t-as="kpi" t-key="kpi.key"
+                        type="button" class="o_hotel_dashboard_card o_hotel_operational_kpi"
+                        t-on-click="() => this.openOperationalKpi(kpi)">
+                        <strong dir="ltr"><t t-esc="formatCount(kpi.count)"/></strong>
+                        <span><t t-esc="kpi.label"/></span>
+                    </button>
                 </section>
-
-                <section class="o_hotel_attention o_hotel_card" aria-labelledby="hotel-attention-title">
-                    <div class="o_hotel_section_heading">
-                        <div class="d-flex align-items-center gap-2">
-                            <h2 id="hotel-attention-title">Needs Attention</h2>
-                            <span t-if="state.data.attention.total" class="badge text-bg-danger">
-                                <t t-esc="state.data.attention.total"/>
-                            </span>
-                        </div>
-                    </div>
-                    <div t-if="state.data.attention.items.length" class="o_hotel_attention_grid">
-                        <button t-foreach="state.data.attention.items" t-as="item" t-key="item.key"
-                            type="button"
-                            t-attf-class="o_hotel_attention_item o_severity_{{ item.severityClass }}"
-                            t-on-click="() => this.openAttention(item)"
-                            t-att-disabled="!item.action"
-                            t-att-aria-label="`${item.label}: ${item.count}`">
-                            <span class="o_hotel_attention_icon" aria-hidden="true">
-                                <i t-if="item.severityClass === 'success'" class="fa fa-check-circle"/>
-                                <i t-else="" class="fa fa-exclamation-circle"/>
-                            </span>
-                            <span class="o_hotel_attention_label"><t t-esc="item.label"/></span>
-                            <strong class="o_hotel_attention_count"><t t-esc="item.count"/></strong>
-                            <i t-if="item.action" class="fa fa-angle-right" aria-hidden="true"/>
-                        </button>
-                    </div>
-                    <p t-else="" class="o_hotel_attention_empty text-muted mb-0">
-                        <i class="fa fa-check-circle" aria-hidden="true"/> No urgent operational items.
-                    </p>
-                </section>
-
-                <section class="o_hotel_room_board_section" aria-labelledby="hotel-room-board-title">
-                    <div class="o_hotel_section_heading o_hotel_room_board_heading">
-                        <div>
-                            <h2 id="hotel-room-board-title">Room Board</h2>
-                            <p class="text-muted mb-0">Occupancy, housekeeping, and operational alerts by floor.</p>
-                        </div>
-                        <div class="o_hotel_room_legend" aria-label="Room status legend">
-                            <span t-foreach="state.data.legend.primary || []" t-as="item"
-                                t-key="`primary-${item.key}`" t-attf-class="o_legend_{{ item.key }}">
-                                <i aria-hidden="true"/><t t-esc="item.label"/>
-                            </span>
-                            <span t-foreach="state.data.legend.housekeeping || []" t-as="item"
-                                t-key="`hk-${item.key}`" t-attf-class="o_legend_hk_{{ item.key }}">
-                                <i aria-hidden="true"/><t t-esc="item.label"/>
-                            </span>
-                            <span t-foreach="state.data.legend.alerts || []" t-as="item"
-                                t-key="`alert-${item.key}`" class="o_legend_alert">
-                                <i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="item.label"/>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div t-if="state.data.floors.length" class="o_hotel_floors">
-                        <section t-foreach="state.data.floors" t-as="floor" t-key="floor.id"
-                            class="o_hotel_floor o_hotel_card"
-                            t-att-aria-labelledby="`hotel-floor-title-${floor.id}`">
-                            <button type="button" class="o_hotel_floor_header"
-                                t-on-click="() => this.toggleFloor(floor.id)"
-                                t-att-aria-expanded="!isFloorCollapsed(floor.id)"
-                                t-att-aria-controls="`hotel-floor-rooms-${floor.id}`">
-                                <span>
-                                    <i t-attf-class="fa {{ isFloorCollapsed(floor.id) ? 'fa-angle-right' : 'fa-angle-down' }}"
-                                        aria-hidden="true"/>
-                                    <strong t-att-id="`hotel-floor-title-${floor.id}`"><t t-esc="floor.name"/></strong>
-                                </span>
-                                <span class="o_hotel_floor_count">
-                                    <t t-esc="floor.rooms.length"/> rooms
-                                </span>
-                            </button>
-                            <div t-if="!isFloorCollapsed(floor.id)"
-                                t-att-id="`hotel-floor-rooms-${floor.id}`" class="o_hotel_floor_rooms">
-                                <button t-foreach="floor.rooms" t-as="room" t-key="room.id"
-                                    type="button"
-                                    t-attf-class="o_hotel_room_tile o_primary_{{ room.primaryClass }} {{ room.capacityBlocker ? `o_blocker_${room.blockerClass}` : '' }}"
-                                    t-on-click="() => this.openBoardItem(room)"
-                                    t-att-aria-label="roomAriaLabel(room)">
-                                    <span class="o_hotel_room_topline">
-                                        <strong class="o_hotel_room_number"><t t-esc="operationalText(room.name)"/></strong>
-                                        <span class="o_hotel_primary_badge"><t t-esc="room.primaryLabel"/></span>
-                                    </span>
-                                    <span class="o_hotel_room_type text-truncate"><t t-esc="room.roomTypeName"/></span>
-                                    <span class="o_hotel_room_badges">
-                                        <span t-if="room.housekeepingStatus"
-                                            t-attf-class="o_hotel_status_badge o_hk_{{ room.housekeepingClass }}">
-                                            <i class="fa fa-bed" aria-hidden="true"/>
-                                            <t t-esc="room.housekeepingLabel"/>
-                                        </span>
-                                        <span t-if="room.capacityBlocker === 'out_of_order'"
-                                            class="o_hotel_status_badge o_capacity_blocker">
-                                            <i class="fa fa-ban" aria-hidden="true"/> Out of Order
-                                        </span>
-                                        <span t-if="room.capacityBlocker === 'house_use'"
-                                            class="o_hotel_status_badge o_capacity_blocker">
-                                            <i class="fa fa-building" aria-hidden="true"/> House Use
-                                        </span>
-                                        <span t-foreach="room.alerts" t-as="alert"
-                                            t-key="`${room.id}-${alert.type}`"
-                                            t-attf-class="o_hotel_status_badge o_alert_badge o_severity_{{ alert.severityClass }}">
-                                            <i class="fa fa-exclamation-circle" aria-hidden="true"/>
-                                            <t t-esc="alert.label"/>
-                                            <t t-if="alert.count and alert.count > 1"> (<t t-esc="alert.count"/>)</t>
-                                        </span>
-                                    </span>
-                                    <span t-if="room.reservation" class="o_hotel_room_stay">
-                                        <strong class="text-truncate"><t t-esc="room.reservation.guest_name"/></strong>
-                                        <small t-if="room.reservation.name" class="text-truncate">
-                                            <t t-esc="operationalText(room.reservation.name)"/>
-                                        </small>
-                                        <small t-if="room.reservation.arrival or room.reservation.departure">
-                                            <span t-if="room.reservation.arrival">
-                                                <i class="fa fa-sign-in" aria-label="Arrival"/>
-                                                <t t-esc="formatDateTime(room.reservation.arrival)"/>
-                                            </span>
-                                            <span t-if="room.reservation.departure">
-                                                <i class="fa fa-sign-out" aria-label="Departure"/>
-                                                <t t-esc="formatDateTime(room.reservation.departure)"/>
-                                            </span>
-                                        </small>
-                                    </span>
-                                </button>
-                            </div>
+                <div class="o_hotel_dashboard_layout">
+                    <aside class="o_hotel_dashboard_sidebar" aria-label="Date and occupancy">
+                        <section class="o_hotel_dashboard_card o_hotel_date_card"
+                            aria-labelledby="hotel-dashboard-weekday">
+                            <h2 id="hotel-dashboard-weekday"><t t-esc="dateParts.weekday"/></h2>
+                            <strong class="o_hotel_date_day" dir="ltr"><t t-esc="dateParts.day"/></strong>
+                            <p><t t-esc="dateParts.month"/> <bdi dir="ltr"><t t-esc="dateParts.year"/></bdi></p>
                         </section>
+
+                        <section class="o_hotel_dashboard_card o_hotel_occupancy_card"
+                            aria-labelledby="hotel-dashboard-occupancy-title">
+                            <div class="o_hotel_occupancy_visual">
+                                <div class="o_hotel_occupancy_ring"
+                                    t-att-style="`--dashboard-occupancy: ${state.data.occupancy.percentage}%;`"
+                                    role="img"
+                                    t-att-aria-label="occupancyAriaLabel()">
+                                    <div class="o_hotel_occupancy_ring_inner">
+                                        <strong dir="ltr"><t t-esc="formatPercentage(state.data.occupancy.percentage)"/></strong>
+                                        <span id="hotel-dashboard-occupancy-title">Occupancy</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <dl class="o_hotel_occupancy_totals">
+                                <div>
+                                    <dt>Available units</dt>
+                                    <dd dir="ltr"><t t-esc="formatCount(state.data.occupancy.availableUnits)"/></dd>
+                                </div>
+                                <div>
+                                    <dt>Booked units</dt>
+                                    <dd dir="ltr"><t t-esc="formatCount(state.data.occupancy.bookedUnits)"/></dd>
+                                </div>
+                                <div>
+                                    <dt>Out of service</dt>
+                                    <dd dir="ltr"><t t-esc="formatCount(state.data.occupancy.outOfService)"/></dd>
+                                </div>
+                                <div>
+                                    <dt>House use</dt>
+                                    <dd dir="ltr"><t t-esc="formatCount(state.data.occupancy.houseUse)"/></dd>
+                                </div>
+                            </dl>
+                        </section>
+                    </aside>
+
+                    <section class="o_hotel_dashboard_card o_hotel_activity_card"
+                        aria-labelledby="hotel-dashboard-activity-title">
+                        <div class="o_hotel_activity_header">
+                            <h2 id="hotel-dashboard-activity-title">Activity</h2>
+                            <div class="o_hotel_activity_header_actions">
+                                <label t-if="state.searchOpen" class="visually-hidden"
+                                    for="hotel-dashboard-search">Search activity</label>
+                                <input t-if="state.searchOpen" id="hotel-dashboard-search"
+                                    type="search" class="form-control o_hotel_activity_search"
+                                    placeholder="Guest, room, or reference"
+                                    t-att-value="state.query" t-on-input="onSearchInput"/>
+                                <button type="button" class="btn o_hotel_icon_button"
+                                    t-on-click="toggleSearch" t-att-aria-expanded="state.searchOpen"
+                                    aria-label="Search activity">
+                                    <i class="fa fa-search" aria-hidden="true"/>
+                                </button>
+                                <div class="o_hotel_activity_menu_wrapper">
+                                    <button type="button" class="btn o_hotel_icon_button"
+                                        t-on-click="toggleMenu" t-att-aria-expanded="state.menuOpen"
+                                        aria-haspopup="menu"
+                                        aria-label="Activity options">
+                                        <i class="fa fa-ellipsis-v" aria-hidden="true"/>
+                                    </button>
+                                    <div t-if="state.menuOpen" class="o_hotel_activity_menu" role="menu">
+                                        <button type="button" role="menuitem" t-on-click="newReservation">
+                                            <i class="fa fa-plus" aria-hidden="true"/>
+                                            <span>New Reservation</span>
+                                        </button>
+                                        <button type="button" role="menuitem" t-on-click="openPlanning">
+                                            <i class="fa fa-calendar" aria-hidden="true"/>
+                                            <span>Planning</span>
+                                        </button>
+                                        <button type="button" role="menuitem" t-on-click="openFullList">
+                                            <i class="fa fa-list" aria-hidden="true"/>
+                                            <span>Open Full List</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="o_hotel_activity_tabs" role="tablist" aria-label="Activity type">
+                            <button t-foreach="state.data.tabs" t-as="tab" t-key="tab.key"
+                                type="button" role="tab"
+                                t-att-data-dashboard-activity="tab.key"
+                                t-att-aria-selected="state.activeTab === tab.key"
+                                t-att-tabindex="state.activeTab === tab.key ? 0 : -1"
+                                t-attf-class="o_hotel_activity_tab {{ state.activeTab === tab.key ? 'o_is_selected' : '' }}"
+                                t-on-click="() => this.selectActivity(tab.key)"
+                                t-on-keydown="(event) => this.onTabKeydown(event, tab.key)">
+                                <span class="o_hotel_activity_tab_value">
+                                    <strong dir="ltr"><t t-esc="formatCount(tab.count)"/></strong>
+                                    <span t-if="tab.pendingCount and ['arrivals', 'departures'].includes(tab.key)"
+                                        class="o_hotel_pending_count" dir="ltr">
+                                        <t t-esc="formatCount(tab.pendingCount)"/>
+                                    </span>
+                                </span>
+                                <span><t t-esc="tab.label"/></span>
+                            </button>
+                        </div>
+
+                        <div class="o_hotel_activity_table" role="tabpanel"
+                            t-att-aria-label="state.activity?.label || ''">
+                            <div class="o_hotel_activity_table_head" aria-hidden="true">
+                                <strong>Guest</strong>
+                                <strong>Accommodation</strong>
+                                <strong>Stay</strong>
+                                <strong>Status</strong>
+                                <span/>
+                            </div>
+
+                            <div t-if="state.activityLoading" class="o_hotel_activity_loading" role="status">
+                                <i class="fa fa-spinner fa-spin" aria-hidden="true"/>
+                                <span>Loading activity…</span>
+                            </div>
+                            <t t-elif="state.activity and state.activity.rows.length">
+                                <article t-foreach="state.activity.rows" t-as="row" t-key="row.id"
+                                    class="o_hotel_activity_row">
+                                    <div class="o_hotel_activity_guest">
+                                        <strong><t t-esc="row.guest?.name"/></strong>
+                                        <bdi class="o_hotel_activity_reference" dir="ltr">
+                                            <t t-esc="operationalText(row.reference)"/>
+                                        </bdi>
+                                    </div>
+                                    <div class="o_hotel_activity_room">
+                                        <button type="button" class="o_hotel_text_action"
+                                            t-on-click="() => this.openRowAction(row, 'reservation')">
+                                            <bdi dir="ltr"><t t-esc="operationalText(row.room?.name || '—')"/></bdi>
+                                            <span t-if="row.room_type?.name"> · <t t-esc="row.room_type.name"/></span>
+                                            <i class="fa fa-angle-right" aria-hidden="true"/>
+                                        </button>
+                                        <span t-if="row.housekeeping_status === 'dirty'"
+                                            class="o_hotel_dirty_label">
+                                            <i class="fa fa-bed" aria-hidden="true"/>
+                                            <span>Dirty</span>
+                                        </span>
+                                    </div>
+                                    <div class="o_hotel_activity_stay">
+                                        <bdi dir="ltr">
+                                            <t t-esc="formatDateTime(row.checkin)"/> –
+                                            <t t-esc="formatDateTime(row.checkout)"/>
+                                        </bdi>
+                                        <div class="o_hotel_stay_chips">
+                                            <span t-att-aria-label="nightsAriaLabel(row)">
+                                                <bdi dir="ltr"><t t-esc="formatCount(row.nights)"/></bdi>
+                                                <i class="fa fa-moon-o" aria-hidden="true"/>
+                                            </span>
+                                            <span t-att-aria-label="adultsAriaLabel(row)">
+                                                <bdi dir="ltr"><t t-esc="formatCount(row.adults)"/></bdi>
+                                                <i class="fa fa-user" aria-hidden="true"/>
+                                            </span>
+                                            <span t-att-aria-label="childrenAriaLabel(row)">
+                                                <bdi dir="ltr"><t t-esc="formatCount(minorGuests(row))"/></bdi>
+                                                <i class="fa fa-child" aria-hidden="true"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="o_hotel_activity_status">
+                                        <button type="button"
+                                            t-attf-class="btn o_hotel_primary_workflow {{ row.primary_action.key === 'open' ? 'o_is_open' : '' }}"
+                                            t-on-click="() => this.runPrimaryAction(row)"
+                                            t-att-disabled="isRowBusy(row)">
+                                            <i t-if="isRowBusy(row)" class="fa fa-spinner fa-spin" aria-hidden="true"/>
+                                            <span t-else=""><t t-esc="row.primary_action.label"/></span>
+                                        </button>
+                                        <small><t t-esc="row.state_label"/></small>
+                                    </div>
+                                    <div class="o_hotel_row_actions" aria-label="Reservation actions">
+                                        <button type="button" class="btn o_hotel_icon_button"
+                                            t-on-click="() => this.openRowAction(row, 'reservation')"
+                                            aria-label="Open reservation">
+                                            <i t-attf-class="fa {{ row.has_notes ? 'fa-sticky-note-o' : 'fa-file-text-o' }}"
+                                                aria-hidden="true"/>
+                                        </button>
+                                        <button type="button" class="btn o_hotel_icon_button"
+                                            t-on-click="() => this.openRowAction(row, 'guest')"
+                                            aria-label="Open guest">
+                                            <i class="fa fa-user-o" aria-hidden="true"/>
+                                        </button>
+                                        <button t-if="row.actions?.folio" type="button"
+                                            class="btn o_hotel_icon_button o_hotel_folio_action"
+                                            t-on-click="() => this.openRowAction(row, 'folio')"
+                                            aria-label="Open folio">
+                                            <i class="fa fa-credit-card" aria-hidden="true"/>
+                                            <span t-if="row.finance?.has_balance" class="o_hotel_balance_dot">
+                                                <span class="visually-hidden">Balance due</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </article>
+                            </t>
+                            <div t-else="" class="o_hotel_activity_empty">
+                                <i class="fa fa-calendar-check-o" aria-hidden="true"/>
+                                <p>No activity for this date.</p>
+                            </div>
+
+                            <footer t-if="state.activity" class="o_hotel_activity_footer">
+                                <label t-if="state.activity.supportsCompleted" class="o_hotel_completed_toggle">
+                                    <input type="checkbox" class="form-check-input"
+                                        t-att-checked="state.includeCompleted" t-on-change="toggleCompleted"/>
+                                    <span><t t-esc="completedLabel()"/></span>
+                                </label>
+                                <span t-else=""/>
+                                <div class="o_hotel_activity_total">
+                                    <span><t t-esc="activityCountLabel()"/>:</span>
+                                    <strong dir="ltr"><t t-esc="formatCount(state.activity.total)"/></strong>
+                                    <button t-if="state.activity.truncated" type="button"
+                                        class="btn btn-link" t-on-click="openFullList">Open Full List</button>
+                                </div>
+                            </footer>
+                        </div>
+                    </section>
+                </div>
+                <section t-if="state.data.rooms.length"
+                    class="o_hotel_dashboard_card o_hotel_room_snapshot"
+                    aria-labelledby="hotel-room-snapshot-title">
+                    <div class="o_hotel_room_snapshot_header">
+                        <div>
+                            <h2 id="hotel-room-snapshot-title">Room snapshot</h2>
+                            <p>Capacity, today’s direct rate, and future demand.</p>
+                        </div>
+                        <button type="button" class="btn btn-link" t-on-click="openPlanning">
+                            Open planning
+                        </button>
                     </div>
-                    <div t-else="" class="o_hotel_empty_state o_hotel_card">
-                        <i class="fa fa-bed" aria-hidden="true"/>
-                        <h3>No rooms to display</h3>
-                        <p>Try another business date.</p>
+                    <div class="o_hotel_room_cards">
+                        <article t-foreach="state.data.rooms" t-as="room" t-key="room.id"
+                            t-attf-class="o_hotel_room_card o_is_{{ room.state }}">
+                            <div class="d-flex justify-content-between gap-2">
+                                <strong><bdi dir="ltr"><t t-esc="operationalText(room.name)"/></bdi></strong>
+                                <span t-attf-class="badge {{ room.state === 'available' ? 'text-bg-success' : room.state === 'dirty' ? 'text-bg-warning' : room.state === 'out_of_service' ? 'text-bg-danger' : 'text-bg-secondary' }}">
+                                    <t t-esc="room.state_label"/>
+                                </span>
+                            </div>
+                            <span class="text-muted"><t t-esc="room.room_type?.name"/> · <t t-esc="room.floor?.name || '—'"/></span>
+                            <dl>
+                                <div><dt>Capacity</dt><dd t-esc="formatCount(room.capacity)"/></div>
+                                <div><dt>Current price</dt><dd t-esc="formatAmount(room.current_price)"/></div>
+                                <div><dt>Future bookings</dt><dd t-esc="formatCount(room.future_bookings)"/></div>
+                            </dl>
+                            <small t-if="room.guest_name" class="text-truncate" t-esc="room.guest_name"/>
+                            <button t-if="room.action" type="button" class="btn btn-primary btn-sm"
+                                t-on-click="() => this.bookRoom(room)">Book now</button>
+                        </article>
                     </div>
                 </section>
             </t>
 
-            <div t-elif="state.loading" class="o_hotel_loading_state" role="status">
+            <div t-elif="state.loading" class="o_hotel_dashboard_loading" role="status">
                 <i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"/>
-                <p>Loading Front Desk…</p>
+                <p>Loading dashboard…</p>
             </div>
-            <div t-elif="state.error" class="o_hotel_empty_state o_hotel_card">
+            <div t-elif="state.error" class="o_hotel_dashboard_error" role="alert">
                 <i class="fa fa-exclamation-triangle" aria-hidden="true"/>
-                <h2>Front Desk is unavailable</h2>
-                <p>Retry when the connection is restored.</p>
+                <h2>Dashboard is unavailable</h2>
+                <p><t t-esc="state.error"/></p>
+                <button type="button" class="btn btn-primary" t-on-click="() => this.refreshDashboard()">
+                    Retry
+                </button>
             </div>
         </main>
     </t>

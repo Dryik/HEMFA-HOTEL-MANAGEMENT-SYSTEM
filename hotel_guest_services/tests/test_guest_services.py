@@ -139,3 +139,93 @@ class TestHotelGuestServices(TransactionCase):
         )
         self.assertEqual(start, datetime(2026, 7, 13, 10, 0))
         self.assertEqual(end, datetime(2026, 7, 14, 10, 0))
+
+    def test_paid_and_free_services_keep_operational_and_financial_history(self):
+        paid = self.env["hotel.service"].create(
+            {
+                "name": "Airport Transfer",
+                "property_id": self.property.id,
+                "default_price": 75.0,
+                "charge_policy": "paid",
+            }
+        )
+        free = self.env["hotel.service"].create(
+            {
+                "name": "Welcome Drink",
+                "property_id": self.property.id,
+                "charge_policy": "free",
+            }
+        )
+        paid_delivery = self.env["hotel.reservation.service"].create(
+            {
+                "reservation_id": self.reservation.id,
+                "service_id": paid.id,
+                "quantity": 2,
+            }
+        )
+        paid_delivery.action_confirm()
+        paid_delivery.action_done()
+        self.assertEqual(paid_delivery.state, "done")
+        self.assertEqual(paid_delivery.folio_line_id.amount_untaxed, 150.0)
+        self.assertEqual(paid_delivery.folio_line_id.source_type, "service")
+
+        free_delivery = self.env["hotel.reservation.service"].create(
+            {
+                "reservation_id": self.reservation.id,
+                "service_id": free.id,
+            }
+        )
+        free_delivery.action_confirm()
+        free_delivery.action_done()
+        self.assertEqual(free_delivery.state, "done")
+        self.assertFalse(free_delivery.folio_line_id)
+        with self.assertRaises(UserError):
+            paid_delivery.write({"quantity": 3})
+
+    def test_reservation_documents_are_private_and_verified_by_workflow(self):
+        document_type = self.env["hotel.document.type"].create(
+            {"name": "Passport", "property_id": self.property.id}
+        )
+        attachment = self.env["ir.attachment"].create(
+            {
+                "name": "passport.pdf",
+                "datas": "dGVzdA==",
+                "mimetype": "application/pdf",
+                "public": True,
+            }
+        )
+        document = self.env["hotel.reservation.document"].create(
+            {
+                "reservation_id": self.reservation.id,
+                "document_type_id": document_type.id,
+                "attachment_id": attachment.id,
+            }
+        )
+        self.assertFalse(attachment.public)
+        self.assertEqual(attachment.res_model, document._name)
+        self.assertEqual(attachment.res_id, document.id)
+        document.action_verify()
+        self.assertTrue(document.verified)
+        self.assertEqual(document.verified_by_id, self.env.user)
+        with self.assertRaises(UserError):
+            document.write({"verified": False})
+
+    def test_post_checkout_rating_is_single_use_and_manager_moderated(self):
+        self.reservation.checkout_balance_override_reason = "Guest will settle later"
+        self.reservation.action_check_out()
+        rating = self.reservation.rating_ids
+        self.assertEqual(len(rating), 1)
+        rating._submit_public_feedback(
+            {
+                "rating": 5,
+                "cleanliness_rating": 4,
+                "service_rating": 5,
+                "value_rating": 4,
+                "comments": "Excellent stay",
+            }
+        )
+        self.assertEqual(rating.state, "submitted")
+        rating.action_approve()
+        self.assertEqual(rating.state, "approved")
+        with self.assertRaises(UserError):
+            rating._submit_public_feedback({"rating": 1})

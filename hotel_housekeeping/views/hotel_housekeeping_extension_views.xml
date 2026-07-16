@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hotel_housekeeping_task_view_list_inherit_extended" model="ir.ui.view">
+        <field name="name">hotel.housekeeping.task.list.extended</field><field name="model">hotel.housekeeping.task</field>
+        <field name="inherit_id" ref="hotel_housekeeping_task_view_list"/>
+        <field name="arch" type="xml"><xpath expr="//field[@name='cleaner_id']" position="after">
+            <field name="trigger_type" optional="show"/><field name="team_id" optional="show"/>
+            <field name="scheduled_at" optional="show"/><field name="deadline" optional="show"/>
+        </xpath></field>
+    </record>
+    <record id="hotel_housekeeping_task_view_form_inherit_extended" model="ir.ui.view">
+        <field name="name">hotel.housekeeping.task.form.extended</field><field name="model">hotel.housekeeping.task</field>
+        <field name="inherit_id" ref="hotel_housekeeping_task_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='room_details']/field[@name='room_type_id']" position="after">
+                <field name="reservation_id"/><field name="trigger_type"/><field name="source_key" groups="base.group_no_one"/>
+            </xpath>
+            <xpath expr="//group[@name='cleaning_assignment']/field[@name='cleaner_id']" position="before">
+                <field name="team_id"/>
+            </xpath>
+            <xpath expr="//group[@name='cleaning_assignment']/field[@name='cleaner_id']" position="after">
+                <field name="supervisor_id"/>
+            </xpath>
+            <xpath expr="//group[@name='timings']/field[@name='date_start']" position="before">
+                <field name="scheduled_at"/><field name="deadline"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page name="checklist" string="Checklist"><field name="checklist_line_ids">
+                    <list editable="bottom"><field name="sequence" widget="handle"/><field name="item_id"/><field name="done"/><field name="note"/></list>
+                </field></page>
+                <page name="photos" string="Photos"><group><field name="before_photo" widget="image"/><field name="after_photo" widget="image"/></group></page>
+                <page name="remarks" string="Remarks"><field name="remarks"/></page>
+            </xpath>
+        </field>
+    </record>
+    <record id="hotel_housekeeping_task_search_inherit_extended" model="ir.ui.view">
+        <field name="name">hotel.housekeeping.task.search.extended</field><field name="model">hotel.housekeeping.task</field>
+        <field name="inherit_id" ref="hotel_housekeeping_task_view_search"/>
+        <field name="arch" type="xml"><xpath expr="//field[@name='cleaner_id']" position="after"><field name="team_id"/><field name="reservation_id"/></xpath>
+            <xpath expr="//filter[@name='my_tasks']" position="after">
+                <filter string="Pre-arrival" name="prearrival" domain="[('trigger_type', '=', 'prearrival')]"/>
+                <filter string="Post-checkout" name="post_checkout" domain="[('trigger_type', '=', 'post_checkout')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hotel_housekeeping_team_view_list" model="ir.ui.view">
+        <field name="name">hotel.housekeeping.team.list</field><field name="model">hotel.housekeeping.team</field>
+        <field name="arch" type="xml"><list><field name="name"/><field name="leader_id"/><field name="supervisor_id"/>
+            <field name="member_ids" widget="many2many_tags"/><field name="active"/></list></field>
+    </record>
+    <record id="hotel_housekeeping_team_view_form" model="ir.ui.view">
+        <field name="name">hotel.housekeeping.team.form</field><field name="model">hotel.housekeeping.team</field>
+        <field name="arch" type="xml"><form><sheet><group><field name="name"/><field name="property_id" invisible="1"/>
+            <field name="leader_id"/><field name="supervisor_id"/><field name="member_ids" widget="many2many_tags"/><field name="active"/>
+        </group></sheet></form></field>
+    </record>
+    <record id="hotel_housekeeping_team_action" model="ir.actions.act_window">
+        <field name="name">Housekeeping Teams</field><field name="res_model">hotel.housekeeping.team</field><field name="view_mode">list,form</field>
+    </record>
+
+    <record id="hotel_housekeeping_checklist_item_view_list" model="ir.ui.view">
+        <field name="name">hotel.housekeeping.checklist.item.list</field><field name="model">hotel.housekeeping.checklist.item</field>
+        <field name="arch" type="xml"><list editable="bottom"><field name="sequence" widget="handle"/><field name="name"/><field name="active"/></list></field>
+    </record>
+    <record id="hotel_housekeeping_checklist_item_action" model="ir.actions.act_window">
+        <field name="name">Housekeeping Checklist</field><field name="res_model">hotel.housekeeping.checklist.item</field><field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_hotel_config_housekeeping_teams" name="Housekeeping Teams" parent="hotel_base.menu_hotel_config"
+        action="hotel_housekeeping_team_action" sequence="70"/>
+    <menuitem id="menu_hotel_config_housekeeping_checklist" name="Housekeeping Checklist" parent="hotel_base.menu_hotel_config"
+        action="hotel_housekeeping_checklist_item_action" sequence="75"/>
+</odoo>

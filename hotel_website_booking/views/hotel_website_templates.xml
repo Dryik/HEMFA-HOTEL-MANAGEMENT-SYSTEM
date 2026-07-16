@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="hotel_home" name="Hotel Home">
+        <t t-call="website.layout">
+            <t t-set="additional_title" t-value="property.name"/>
+            <main id="wrap" class="o_hotel_website">
+                <section class="position-relative text-white py-5 o_hotel_hero" t-att-style="'background-image:linear-gradient(90deg,rgba(0,0,0,.65),rgba(0,0,0,.2)),url(/hotel/media/property/%s);' % property.id">
+                    <div class="container py-5">
+                        <div class="row"><div class="col-lg-8 py-5">
+                            <p class="text-uppercase fw-semibold mb-2" t-out="dict(property._fields['hotel_type'].selection).get(property.hotel_type)"/>
+                            <h1 class="display-3 fw-bold" t-out="property.name"/>
+                            <p class="lead" t-out="property.tagline"/>
+                        </div></div>
+                    </div>
+                </section>
+                <section class="container o_hotel_search_card">
+                    <form action="/hotel/rooms" method="get" class="card shadow border-0 p-3 p-lg-4">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-3"><label class="form-label">Arrival</label><input class="form-control" type="date" name="checkin" required="required"/></div>
+                            <div class="col-md-3"><label class="form-label">Departure</label><input class="form-control" type="date" name="checkout" required="required"/></div>
+                            <div class="col-md-2"><label class="form-label">Adults per room</label><input class="form-control" type="number" name="adults" min="1" value="1"/></div>
+                            <div class="col-md-2"><label class="form-label">Children per room</label><input class="form-control" type="number" name="children" min="0" value="0"/></div>
+                            <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Check availability</button></div>
+                        </div>
+                    </form>
+                </section>
+                <section class="py-5"><div class="container">
+                    <div class="row align-items-center g-5">
+                        <div class="col-lg-5"><h2>Welcome</h2><div t-field="property.website_description"/></div>
+                        <div class="col-lg-7"><div class="row g-3">
+                            <div class="col-md-6" t-foreach="room_types[:4]" t-as="room_type">
+                                <a class="card h-100 text-decoration-none text-body overflow-hidden" t-att-href="'/hotel/room/%s' % room_type.id">
+                                    <img class="card-img-top o_hotel_room_image" t-att-src="'/hotel/media/room-type/%s' % room_type.id" t-att-alt="room_type.name"/>
+                                    <div class="card-body"><h3 class="h5" t-out="room_type.name"/><p class="mb-0 text-muted" t-out="room_type.code"/></div>
+                                </a>
+                            </div>
+                        </div></div>
+                    </div>
+                </div></section>
+                <section class="bg-light py-5" t-if="reviews"><div class="container">
+                    <h2 class="text-center mb-4">Guest reviews</h2>
+                    <div class="row g-3">
+                        <div class="col-md-4" t-foreach="reviews" t-as="review"><div class="card h-100 border-0 shadow-sm"><div class="card-body">
+                            <div class="text-warning mb-2"><t t-foreach="range(review.rating)" t-as="star">★</t></div>
+                            <p t-out="review.comments"/><small class="text-muted" t-out="review.partner_id.name"/>
+                        </div></div></div>
+                    </div>
+                </div></section>
+                <div class="oe_structure" id="oe_structure_hotel_home"/>
+            </main>
+        </t>
+    </template>
+
+    <template id="hotel_rooms" name="Hotel Rooms">
+        <t t-call="website.layout">
+            <t t-set="additional_title">Rooms</t>
+            <main id="wrap" class="o_hotel_website py-5"><div class="container">
+                <h1>Find your rooms</h1>
+                <div class="alert alert-danger" t-if="error" t-out="error"/>
+                <form action="/hotel/rooms" method="get" class="card border-0 bg-light p-3 mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-3"><label class="form-label">Arrival</label><input class="form-control" type="date" name="checkin" t-att-value="arrival" required="required"/></div>
+                        <div class="col-md-3"><label class="form-label">Departure</label><input class="form-control" type="date" name="checkout" t-att-value="departure" required="required"/></div>
+                        <div class="col-6 col-md-2"><label class="form-label">Adults</label><input class="form-control" type="number" name="adults" min="1" t-att-value="adults"/></div>
+                        <div class="col-6 col-md-2"><label class="form-label">Teenagers</label><input class="form-control" type="number" name="teenagers" min="0" t-att-value="teenagers"/></div>
+                        <div class="col-6 col-md-2"><label class="form-label">Children</label><input class="form-control" type="number" name="children" min="0" t-att-value="children"/></div>
+                        <div class="col-6 col-md-2"><label class="form-label">Infants</label><input class="form-control" type="number" name="infants" min="0" t-att-value="infants"/></div>
+                        <div class="col-md-3"><label class="form-label">Nationality / residency</label><select class="form-select" name="nationality_id"><option value="">Any</option><option t-foreach="countries" t-as="country" t-att-value="country.id" t-att-selected="country.id == nationality_id" t-out="country.name"/></select></div>
+                        <div class="col-md-3"><label class="form-label">Pricelist</label><select class="form-select" name="pricelist_id"><option t-foreach="pricelists" t-as="item" t-att-value="item.id" t-att-selected="item == pricelist" t-out="item.name"/></select></div>
+                        <div class="col-md-3"><label class="form-label">Room type</label><select class="form-select" name="room_type_id"><option value="">All room types</option><option t-foreach="room_type_options" t-as="option" t-att-value="option.id" t-att-selected="option.id == selected_room_type_id" t-out="option.name"/></select></div>
+                        <div class="col-md-2"><label class="form-label">Minimum price</label><input class="form-control" type="number" step="0.01" name="min_price"/></div>
+                        <div class="col-md-2"><label class="form-label">Maximum price</label><input class="form-control" type="number" step="0.01" name="max_price"/></div>
+                        <div class="col-md-2 d-flex align-items-end"><button class="btn btn-outline-primary w-100">Apply filters</button></div>
+                        <div class="col-12" t-if="amenities"><span class="me-3 fw-semibold">Amenities</span><label class="form-check form-check-inline" t-foreach="amenities" t-as="amenity"><input class="form-check-input" type="checkbox" name="amenity_id" t-att-value="amenity.id" t-att-checked="amenity.id in selected_amenity_ids"/><span class="form-check-label" t-out="amenity.name"/></label></div>
+                        <div class="col-12"><label class="form-check"><input class="form-check-input" type="checkbox" name="meal" value="1" t-att-checked="meal_required"/><span class="form-check-label">Meal service available</span></label></div>
+                    </div>
+                </form>
+
+                <form action="/hotel/book" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <input type="hidden" name="checkin" t-att-value="arrival"/>
+                    <input type="hidden" name="checkout" t-att-value="departure"/>
+                    <input type="hidden" name="adults" t-att-value="adults"/>
+                    <input type="hidden" name="teenagers" t-att-value="teenagers"/>
+                    <input type="hidden" name="children" t-att-value="children"/>
+                    <input type="hidden" name="infants" t-att-value="infants"/>
+                    <input type="hidden" name="nationality_id" t-att-value="nationality_id"/>
+                    <input type="hidden" name="pricelist_id" t-att-value="pricelist.id"/>
+                    <div class="row g-4">
+                        <div class="col-12" t-foreach="room_cards" t-as="card">
+                            <div class="card border-0 shadow-sm overflow-hidden"><div class="row g-0">
+                                <div class="col-md-4"><img class="w-100 h-100 o_hotel_room_image" t-att-src="'/hotel/media/room-type/%s' % card['room_type'].id" t-att-alt="card['room_type'].name"/></div>
+                                <div class="col-md-5"><div class="card-body">
+                                    <h2 class="h4"><a class="text-decoration-none" t-att-href="'/hotel/room/%s' % card['room_type'].id" t-out="card['room_type'].name"/></h2>
+                                    <div class="text-muted mb-2"><t t-out="card['room_type'].capacity_adults"/> adults · <t t-out="card['room_type'].capacity_children"/> children · up to <t t-out="card['room_type'].max_occupancy"/> guests</div>
+                                    <div t-field="card['room_type'].website_description"/>
+                                    <span class="badge text-bg-success"><t t-out="card['available_qty']"/> available</span>
+                                </div></div>
+                                <div class="col-md-3 bg-light"><div class="card-body h-100 d-flex flex-column justify-content-center">
+                                    <div class="small text-muted">Stay total per room</div><div class="h4" t-out="format_amount(card['quote']['amount_total'], pricelist.currency_id)"/>
+                                    <label class="form-label mt-3">Number of rooms</label><input class="form-control" type="number" min="0" t-att-max="card['available_qty']" value="0" t-att-name="'room_qty_%s' % card['room_type'].id"/>
+                                </div></div>
+                            </div></div>
+                        </div>
+                    </div>
+                    <div class="alert alert-info mt-4" t-if="not room_cards">No published rooms match these dates and filters.</div>
+
+                    <div class="card mt-5" t-if="room_cards"><div class="card-body p-lg-4">
+                        <h2 class="h4">Optional services</h2>
+                        <div class="row g-3 mb-4"><div class="col-md-4" t-foreach="service_cards" t-as="card"><div class="border rounded p-3 h-100">
+                            <strong t-out="card['service'].name"/><div class="text-muted" t-out="format_amount(card['price'], pricelist.currency_id)"/>
+                            <label class="form-label mt-2">Quantity</label><input class="form-control" type="number" min="0" value="0" t-att-name="'service_qty_%s' % card['service'].id"/>
+                        </div></div></div>
+                        <h2 class="h4">Guest details</h2>
+                        <div class="row g-3">
+                            <div class="col-md-6"><label class="form-label">Full name</label><input class="form-control" name="name" required="required" t-att-value="request.env.user.partner_id.name if not request.env.user._is_public() else ''"/></div>
+                            <div class="col-md-6"><label class="form-label">Email</label><input class="form-control" type="email" name="email" required="required" t-att-value="request.env.user.partner_id.email if not request.env.user._is_public() else ''"/></div>
+                            <div class="col-md-4"><label class="form-label">Phone</label><input class="form-control" name="phone" t-att-value="request.env.user.partner_id.phone if not request.env.user._is_public() else ''"/></div>
+                            <div class="col-md-4"><label class="form-label">Country</label><select class="form-select" name="country_id"><option value="">Select</option><option t-foreach="countries" t-as="country" t-att-value="country.id" t-out="country.name"/></select></div>
+                            <div class="col-md-4"><label class="form-label">Nationality</label><select class="form-select" name="nationality_id" required="required"><option value="">Select</option><option t-foreach="countries" t-as="country" t-att-value="country.id" t-att-selected="country.id == nationality_id" t-out="country.name"/></select></div>
+                            <div class="col-12"><label class="form-label">Notes</label><textarea class="form-control" name="customer_note" rows="3"/></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-4"><small class="text-muted">Availability and prices are checked again securely before rooms are held.</small><button class="btn btn-primary btn-lg" type="submit">Continue booking</button></div>
+                    </div></div>
+                </form>
+                <div class="oe_structure" id="oe_structure_hotel_rooms"/>
+            </div></main>
+        </t>
+    </template>
+
+    <template id="hotel_room_detail" name="Hotel Room Details">
+        <t t-call="website.layout"><main id="wrap" class="o_hotel_website">
+            <section class="container py-5"><div class="row g-5">
+                <div class="col-lg-7"><img class="img-fluid rounded w-100 o_hotel_detail_image" t-att-src="'/hotel/media/room-type/%s' % room_type.id" t-att-alt="room_type.name"/></div>
+                <div class="col-lg-5"><h1 t-out="room_type.name"/><div class="lead" t-field="room_type.website_description"/>
+                    <p><strong>Capacity:</strong> <t t-out="room_type.max_occupancy"/> guests</p>
+                    <div class="mb-3"><span class="badge text-bg-light me-1" t-foreach="room_type.amenity_ids" t-as="amenity" t-out="amenity.name"/></div>
+                    <a class="btn btn-primary btn-lg" href="/hotel/rooms">Book now</a>
+                </div>
+            </div></section>
+            <section class="bg-light py-5" t-if="room_type.room_policy"><div class="container"><h2>Room policies</h2><div t-field="room_type.room_policy"/></div></section>
+            <section class="container py-5" t-if="room_type.gallery_attachment_ids"><div class="row g-3"><div class="col-md-4" t-foreach="room_type.gallery_attachment_ids" t-as="attachment"><img class="img-fluid rounded" t-att-src="'/hotel/gallery/image/%s' % attachment.id" t-att-alt="room_type.name"/></div></div></section>
+            <div class="oe_structure" id="oe_structure_hotel_room_detail"/>
+        </main></t>
+    </template>
+
+    <template id="hotel_booking_status" name="Hotel Booking Status">
+        <t t-call="website.layout"><main id="wrap" class="o_hotel_website py-5"><div class="container"><div class="row justify-content-center"><div class="col-lg-8">
+            <div class="card shadow-sm"><div class="card-body p-lg-5">
+                <div class="d-flex justify-content-between align-items-start"><div><div class="text-muted">Booking</div><h1 class="h3" t-out="booking.name"/></div><span class="badge fs-6" t-attf-class="badge fs-6 #{'text-bg-success' if booking.state == 'confirmed' else 'text-bg-warning' if booking.state in ('pending_review', 'held', 'payment_pending') else 'text-bg-danger'}" t-out="dict(booking._fields['state'].selection).get(booking.state)"/></div>
+                <hr/><div class="row g-3"><div class="col-md-6"><strong>Arrival</strong><div t-out="format_datetime(booking.checkin_date)"/></div><div class="col-md-6"><strong>Departure</strong><div t-out="format_datetime(booking.checkout_date)"/></div></div>
+                <h2 class="h5 mt-4">Rooms</h2><div class="d-flex justify-content-between border-bottom py-2" t-foreach="booking.line_ids" t-as="line"><span><t t-out="line.quantity"/> × <t t-out="line.room_type_id.name"/></span><span t-out="format_amount(line.amount_total, booking.currency_id)"/></div>
+                <div class="d-flex justify-content-between h5 mt-3"><span>Total</span><span t-out="format_amount(booking.amount_total, booking.currency_id)"/></div>
+                <div class="alert alert-warning" t-if="booking.state == 'pending_review'">Your request is waiting for hotel approval. No room is blocked until staff approves it.</div>
+                <div class="alert alert-danger" t-if="booking.state == 'payment_exception'" t-out="booking.exception_note"/>
+                <div class="d-flex gap-2 mt-4">
+                    <a class="btn btn-primary" t-if="booking.state in ('held', 'payment_pending')" t-att-href="'/hotel/booking/%s/pay' % booking.access_token">Pay <t t-out="format_amount(booking.amount_due_online, booking.currency_id)"/></a>
+                    <form t-if="can_cancel" method="post" t-att-action="'/hotel/booking/%s/cancel' % booking.access_token"><input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/><button class="btn btn-outline-danger" type="submit">Cancel booking</button></form>
+                    <a class="btn btn-outline-secondary" href="/hotel/rooms">Back to rooms</a>
+                </div>
+            </div></div>
+        </div></div></div></main></t>
+    </template>
+
+    <template id="hotel_facilities" name="Hotel Facilities and Services"><t t-call="website.layout"><main id="wrap" class="o_hotel_website py-5"><div class="container"><h1>Facilities and services</h1><div class="row g-3 mt-3"><div class="col-md-4" t-foreach="amenities" t-as="amenity"><div class="card h-100"><div class="card-body"><h2 class="h5" t-out="amenity.name"/></div></div></div></div><h2 class="mt-5">Guest services</h2><div class="row g-3"><div class="col-md-4" t-foreach="services" t-as="service"><div class="card h-100 overflow-hidden"><img class="card-img-top o_hotel_service_image" t-att-src="'/hotel/media/service/%s' % service.id" t-att-alt="service.name"/><div class="card-body"><h3 class="h5" t-out="service.name"/><p t-out="'Complimentary' if not service.is_paid else format_amount(service.default_price, service.currency_id)"/></div></div></div></div><div class="oe_structure" id="oe_structure_hotel_facilities"/></div></main></t></template>
+    <template id="hotel_gallery" name="Hotel Gallery"><t t-call="website.layout"><main id="wrap" class="o_hotel_website py-5"><div class="container"><h1>Gallery</h1><div class="row g-3 mt-3" t-if="property.website_gallery_attachment_ids"><div class="col-md-4" t-foreach="property.website_gallery_attachment_ids" t-as="attachment"><img class="img-fluid rounded" t-att-src="'/hotel/gallery/image/%s' % attachment.id" t-att-alt="property.company_id.name"/></div></div><div class="row g-3 mt-3" t-foreach="room_types" t-as="room_type"><div class="col-12"><h2 class="h4" t-out="room_type.name"/></div><div class="col-md-4" t-foreach="room_type.gallery_attachment_ids" t-as="attachment"><img class="img-fluid rounded" t-att-src="'/hotel/gallery/image/%s' % attachment.id" t-att-alt="room_type.name"/></div></div><div class="oe_structure" id="oe_structure_hotel_gallery"/></div></main></t></template>
+    <template id="hotel_policies" name="Hotel Policies"><t t-call="website.layout"><main id="wrap" class="o_hotel_website py-5"><div class="container"><h1>Hotel policies</h1><div class="lead" t-field="property.website_policy"/><div class="oe_structure" id="oe_structure_hotel_policies"/></div></main></t></template>
+    <template id="hotel_contact" name="Hotel Contact"><t t-call="website.layout"><main id="wrap" class="o_hotel_website py-5"><div class="container"><h1>Contact</h1><div class="row g-4 mt-3"><div class="col-md-6"><h2 class="h5" t-out="property.company_id.name"/><address><div t-out="property.company_id.street"/><div><t t-out="property.company_id.city"/> <t t-out="property.company_id.zip"/></div><div t-out="property.company_id.country_id.name"/></address><p><a t-att-href="'tel:' + (property.company_id.phone or '')" t-out="property.company_id.phone"/></p><p><a t-att-href="'mailto:' + (property.company_id.email or '')" t-out="property.company_id.email"/></p></div><div class="col-md-6"><div class="p-4 bg-light rounded"><h2 class="h5">Reservations</h2><p>Use our secure availability search for current prices and multi-room requests.</p><a class="btn btn-primary" href="/hotel/rooms">Book rooms</a></div></div></div><div class="oe_structure" id="oe_structure_hotel_contact"/></div></main></t></template>
+
+    <template id="hotel_rating" name="Hotel Guest Feedback"><t t-call="website.layout"><main id="wrap" class="o_hotel_website py-5"><div class="container"><div class="row justify-content-center"><div class="col-lg-7"><div class="card"><div class="card-body p-lg-5"><h1 class="h3">Rate your stay</h1><div class="alert alert-danger" t-if="error" t-out="error"/><div class="alert alert-success" t-if="rating.state != 'draft'">Thank you. Your feedback has been submitted for review.</div><form t-if="rating.state == 'draft'" method="post"><input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/><div class="row g-3"><div class="col-md-6" t-foreach="[('rating', 'Overall'), ('cleanliness_rating', 'Cleanliness'), ('service_rating', 'Service'), ('value_rating', 'Value')]" t-as="metric"><label class="form-label" t-out="metric[1]"/><select class="form-select" t-att-name="metric[0]" required="required"><option value="">Select</option><option t-foreach="range(1, 6)" t-as="score" t-att-value="score"><t t-out="score"/> / 5</option></select></div><div class="col-12"><label class="form-label">Comments</label><textarea class="form-control" name="comments" rows="5"/></div><div class="col-12"><button class="btn btn-primary">Submit feedback</button></div></div></form></div></div></div></div></div></main></t></template>
+
+    <record id="menu_hotel_website_home" model="website.menu"><field name="name">Hotel</field><field name="url">/hotel</field><field name="parent_id" ref="website.main_menu"/><field name="sequence">40</field></record>
+    <record id="menu_hotel_website_rooms" model="website.menu"><field name="name">Rooms</field><field name="url">/hotel/rooms</field><field name="parent_id" ref="menu_hotel_website_home"/><field name="sequence">10</field></record>
+    <record id="menu_hotel_website_facilities" model="website.menu"><field name="name">Facilities</field><field name="url">/hotel/facilities</field><field name="parent_id" ref="menu_hotel_website_home"/><field name="sequence">20</field></record>
+    <record id="menu_hotel_website_gallery" model="website.menu"><field name="name">Gallery</field><field name="url">/hotel/gallery</field><field name="parent_id" ref="menu_hotel_website_home"/><field name="sequence">30</field></record>
+    <record id="menu_hotel_website_policies" model="website.menu"><field name="name">Policies</field><field name="url">/hotel/policies</field><field name="parent_id" ref="menu_hotel_website_home"/><field name="sequence">40</field></record>
+    <record id="menu_hotel_website_contact" model="website.menu"><field name="name">Contact</field><field name="url">/hotel/contact</field><field name="parent_id" ref="menu_hotel_website_home"/><field name="sequence">50</field></record>
+</odoo>

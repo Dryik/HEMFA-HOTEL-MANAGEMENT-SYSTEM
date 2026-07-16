@@ -8,6 +8,25 @@
             <xpath expr="//field[@name='rate_night']" position="before">
                 <field name="rate_locked"/>
             </xpath>
+            <xpath expr="//field[@name='booking_source']" position="after">
+                <field name="booking_source_config_id" options="{'no_create': True}"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Nightly Rates" name="nightly_rates">
+                    <field name="rate_line_ids" readonly="1">
+                        <list create="0" delete="0">
+                            <field name="business_date"/><field name="base_amount"/><field name="hotel_rate_rule_id" optional="show"/>
+                            <field name="occupancy_multiplier" optional="show"/><field name="pricelist_item_id" optional="show"/>
+                            <field name="fiscal_position_id" optional="hide"/>
+                            <field name="superseded" optional="hide"/>
+                            <field name="amendment_id" optional="hide"/>
+                            <field name="reversal_of_id" optional="hide"/>
+                            <field name="room_amount"/><field name="supplement_amount"/><field name="tax_amount"/><field name="amount_total"/>
+                            <field name="currency_id" column_invisible="True"/><field name="posted" optional="show"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
         </field>
     </record>
 </odoo>
