@@ -4,8 +4,8 @@
     --dashboard-text: #071d49;
     --dashboard-muted: #667085;
     --dashboard-border: #dfe4ea;
-    --dashboard-primary: #3366ff;
-    --dashboard-primary-soft: #f3f6ff;
+    --dashboard-primary: #{$o-brand-primary};
+    --dashboard-primary-soft: #{rgba($o-brand-primary, 0.08)};
     --dashboard-teal: #2fc4a5;
     --dashboard-amber: #f59e0b;
     --dashboard-danger: #b42318;
@@ -415,8 +415,7 @@
 
         &:hover:not(:disabled) {
             color: #ffffff;
-            background: #244fda;
-            border-color: #244fda;
+            filter: brightness(0.92);
         }
 
         &.o_is_open {
@@ -619,104 +618,254 @@
     }
 }
 
-.o_hotel_operational_kpis {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+.o_hotel_attention_rail {
+    min-height: var(--dashboard-touch);
+    display: flex;
+    align-items: center;
     gap: 0.75rem;
-    margin-bottom: 1rem;
+    background: var(--dashboard-surface);
+    border: 1px solid var(--dashboard-border);
+    border-radius: 0.75rem;
+    margin-block-end: 1rem;
+    padding: 0.45rem 0.65rem;
+}
 
-    .o_hotel_operational_kpi {
-        display: grid;
-        gap: 0.15rem;
+.o_hotel_attention_title {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border-inline-end: 1px solid var(--dashboard-border);
+    padding-inline: 0.25rem 0.85rem;
+    white-space: nowrap;
+
+    i {
+        color: var(--dashboard-primary);
+    }
+}
+
+.o_hotel_attention_items {
+    min-width: 0;
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 0.25rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.o_hotel_attention_item {
+    min-height: var(--dashboard-touch);
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--dashboard-text);
+    background: transparent;
+    border: 0;
+    border-radius: 0.5rem;
+    padding: 0.35rem 0.55rem;
+    text-align: start;
+
+    strong {
+        min-width: 1.5rem;
+        display: inline-grid;
+        place-items: center;
+        color: var(--dashboard-primary);
+        background: var(--dashboard-primary-soft);
+        border-radius: 999px;
+        padding: 0.15rem 0.4rem;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &:hover {
+        background: var(--dashboard-primary-soft);
+    }
+}
+
+.o_hotel_dashboard_drawer_backdrop {
+    position: fixed;
+    z-index: 1055;
+    inset: 0;
+    background: rgba(7, 29, 73, 0.24);
+}
+
+.o_hotel_dashboard_drawer {
+    width: 32rem;
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--dashboard-surface);
+    border-inline-start: 1px solid var(--dashboard-border);
+    box-shadow: 0 0 2rem rgba(7, 29, 73, 0.2);
+    margin-inline-start: auto;
+    overflow: hidden;
+}
+
+.o_hotel_drawer_header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-block-end: 1px solid var(--dashboard-border);
+    padding: 1rem;
+}
+
+.o_hotel_guest_avatar {
+    width: 3rem;
+    aspect-ratio: 1;
+    display: inline-grid;
+    flex: 0 0 auto;
+    place-items: center;
+    color: var(--dashboard-primary);
+    background: var(--dashboard-primary-soft);
+    border-radius: 50%;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.o_hotel_drawer_identity {
+    min-width: 0;
+    flex: 1 1 auto;
+
+    h2,
+    bdi {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    bdi {
+        color: var(--dashboard-muted);
+        font-size: 0.85rem;
+    }
+}
+
+.o_hotel_drawer_status {
+    min-height: var(--dashboard-touch);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--dashboard-border);
+    border-radius: 999px;
+    margin: 0.85rem 1rem;
+    padding: 0.45rem 0.75rem;
+
+    span {
+        color: var(--dashboard-teal);
+        font-size: 0.55rem;
+    }
+}
+
+.o_hotel_drawer_tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+    border-block-end: 1px solid var(--dashboard-border);
+    padding-inline: 1rem;
+
+    span,
+    button {
+        min-height: var(--dashboard-touch);
+        display: inline-flex;
+        align-items: center;
+        color: var(--dashboard-muted);
+        background: transparent;
         border: 0;
-        padding: 0.85rem 1rem;
-        text-align: start;
+        border-block-end: 0.2rem solid transparent;
+        padding: 0.5rem 0.15rem;
+    }
 
-        strong {
-            color: var(--dashboard-primary);
-            font-size: 1.45rem;
-        }
+    button:hover,
+    .o_is_selected {
+        color: var(--dashboard-primary);
+        border-block-end-color: var(--dashboard-primary);
+    }
 
-        span {
-            color: var(--dashboard-muted);
-        }
+    .o_is_selected {
+        font-weight: 700;
     }
 }
 
-.o_hotel_room_snapshot {
-    margin-top: 1rem;
-    padding: 1.25rem;
+.o_hotel_drawer_body {
+    display: grid;
+    gap: 0.85rem;
+    padding: 1rem;
+    overflow-y: auto;
+}
 
-    .o_hotel_room_snapshot_header {
-        display: flex;
-        align-items: start;
-        justify-content: space-between;
-        gap: 1rem;
-        margin-bottom: 1rem;
+.o_hotel_drawer_card {
+    display: grid;
+    gap: 0.75rem;
+    background: var(--dashboard-surface);
+    border: 1px solid var(--dashboard-border);
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
 
-        h2,
-        p {
-            margin: 0;
-        }
+.o_hotel_drawer_card_title,
+.o_hotel_drawer_balance {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+}
 
-        p {
-            color: var(--dashboard-muted);
-        }
+.o_hotel_drawer_card_title > i,
+.o_hotel_drawer_balance > i {
+    color: var(--dashboard-muted);
+    margin-block-start: 0.15rem;
+}
+
+.o_hotel_drawer_dates {
+    color: var(--dashboard-muted);
+    font-size: 0.85rem;
+}
+
+.o_hotel_drawer_balance {
+    align-items: center;
+
+    div {
+        display: grid;
+        gap: 0.1rem;
     }
 
-    .o_hotel_room_cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-        gap: 0.75rem;
+    strong {
+        font-size: 1.25rem;
+        font-variant-numeric: tabular-nums;
     }
 
-    .o_hotel_room_card {
-        display: grid;
-        gap: 0.65rem;
-        border: 1px solid var(--dashboard-border);
-        border-inline-start: 0.3rem solid var(--dashboard-muted);
-        border-radius: 0.75rem;
-        padding: 0.9rem;
-        background: var(--dashboard-surface);
-
-        &.o_is_available {
-            border-inline-start-color: var(--dashboard-teal);
-        }
-
-        &.o_is_dirty {
-            border-inline-start-color: var(--dashboard-amber);
-        }
-
-        &.o_is_out_of_service {
-            border-inline-start-color: var(--dashboard-danger);
-        }
-
-        dl,
-        dl div {
-            display: grid;
-            gap: 0.2rem;
-            margin: 0;
-        }
-
-        dl div {
-            grid-template-columns: 1fr auto;
-        }
-
-        dt {
-            color: var(--dashboard-muted);
-            font-weight: 400;
-        }
-
-        dd {
-            margin: 0;
-            font-weight: 600;
-        }
+    span {
+        color: var(--dashboard-muted);
+        font-size: 0.8rem;
     }
 }
 
-@media (max-width: 900px) {
-    .o_hotel_operational_kpis {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+.o_hotel_drawer_actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+
+    .btn {
+        min-height: var(--dashboard-touch);
+    }
+}
+
+@media (max-width: 700px) {
+    .o_hotel_attention_rail {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .o_hotel_attention_title {
+        border-inline-end: 0;
+        border-block-end: 1px solid var(--dashboard-border);
+        padding: 0.25rem 0.35rem 0.6rem;
+    }
+
+    .o_hotel_drawer_actions {
+        grid-template-columns: 1fr;
     }
 }
 
