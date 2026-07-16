@@ -1,5 +1,6 @@
 from odoo import models
 
+
 class HotelRoom(models.Model):
     _inherit = "hotel.room"
 
@@ -10,15 +11,17 @@ class HotelRoom(models.Model):
         return res
 
     def _create_housekeeping_task(self):
+        task_model = self.env["hotel.housekeeping.task"].sudo()
+        reservation_model = self.env["hotel.reservation"].sudo()
         for room in self:
-            existing = self.env["hotel.housekeeping.task"].search_count(
+            existing = task_model.search_count(
                 [
                     ("room_id", "=", room.id),
                     ("state", "not in", ("cleaned", "cancel")),
                 ]
             )
             if not existing:
-                reservation = self.env["hotel.reservation"].search(
+                reservation = reservation_model.search(
                     [
                         ("room_id", "=", room.id),
                         ("state", "=", "checked_out"),
@@ -26,7 +29,7 @@ class HotelRoom(models.Model):
                     order="actual_checkout desc, id desc",
                     limit=1,
                 )
-                self.env["hotel.housekeeping.task"].create(
+                task_model.create(
                     {
                         "room_id": room.id,
                         "priority": "2" if room.occupancy_state == "checkout" else "1",

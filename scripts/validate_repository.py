@@ -257,6 +257,20 @@ def check_odoo19_patterns(errors: list[str]) -> None:
                 fail(errors, f"{path.relative_to(ROOT)}:{line}: {description}")
 
 
+def check_scss_compatibility(errors: list[str]) -> None:
+    """Reject CSS math functions that Odoo's Sass compiler evaluates eagerly."""
+    unsupported_math = re.compile(r"\b(?:min|max)\s*\(")
+    for path in [path for addon in ADDONS for path in addon.rglob("*.scss")]:
+        text = path.read_text(encoding="utf-8")
+        if match := unsupported_math.search(text):
+            line = text.count("\n", 0, match.start()) + 1
+            fail(
+                errors,
+                f"{path.relative_to(ROOT)}:{line}: replace CSS min()/max() "
+                "with Sass-compatible width constraints",
+            )
+
+
 def check_sales_free_website_booking(errors: list[str]) -> None:
     """Keep the public hotel workflow independent from Odoo Sales."""
     addon = ROOT / "hotel_website_booking"
@@ -326,6 +340,7 @@ def main() -> int:
     check_manifests(errors)
     check_acl_files(errors)
     check_odoo19_patterns(errors)
+    check_scss_compatibility(errors)
     check_sales_free_website_booking(errors)
     check_arabic_translation_completeness(errors)
 

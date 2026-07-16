@@ -173,6 +173,8 @@ class TestHotelFolio(TransactionCase):
         reservation.action_reset_draft()
         reservation.action_confirm()
         self.assertEqual(folio.amount_total, 800.0)
+        reservation._ensure_stay_charge()
+        self.assertEqual(folio.amount_total, 800.0)
 
     def test_per_night_policy_posts_only_due_snapshot_and_is_idempotent(self):
         self.property.stay_charge_policy = "per_night"
@@ -324,6 +326,11 @@ class TestHotelFolio(TransactionCase):
         )
         wizard.action_apply()
         self.assertAlmostEqual(invoice.invoice_currency_rate, old_rate * 1.1)
+        self.assertTrue(
+            invoice.company_currency_id.is_zero(
+                sum(invoice.line_ids.mapped("balance"))
+            )
+        )
         self.assertEqual(invoice.hotel_manual_fx_user_id, self.manager_user)
         self.assertEqual(
             invoice.hotel_manual_fx_reason,
