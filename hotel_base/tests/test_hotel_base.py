@@ -96,3 +96,27 @@ class TestHotelBase(TransactionCase):
                 }
             )
             self.env["hotel.room"].flush_model()
+
+    def test_company_create_does_not_trip_hotel_property_validation(self):
+        # A plain company create must not push empty hotel operational values
+        # (e.g. online_hold_minutes = 0) into the auto-created property.
+        company = self.env["res.company"].create({"name": "Fresh Hotel Co"})
+        company.flush_recordset()
+        self.assertEqual(
+            company.hotel_property_config_id.online_hold_minutes,
+            15,
+            "Auto-created property should keep its valid default hold.",
+        )
+        # Renaming a company must also stay clear of the constraint.
+        company.write({"name": "Fresh Hotel Co (Renamed)"})
+        company.flush_recordset()
+        self.assertEqual(
+            company.hotel_property_config_id.name, "Fresh Hotel Co (Renamed)"
+        )
+
+    def test_company_create_applies_explicit_hotel_settings(self):
+        company = self.env["res.company"].create(
+            {"name": "Custom Hotel Co", "hotel_online_hold_minutes": 30}
+        )
+        company.flush_recordset()
+        self.assertEqual(company.hotel_property_config_id.online_hold_minutes, 30)
