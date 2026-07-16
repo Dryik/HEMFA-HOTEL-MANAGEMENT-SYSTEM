@@ -18,6 +18,12 @@ class PosPaymentMethod(models.Model):
         default=lambda self: self.env["hotel.property"]._get_default_property(),
     )
 
+    def _load_pos_data_fields(self, config):
+        return super()._load_pos_data_fields(config) + [
+            "is_room_charge",
+            "hotel_property_id",
+        ]
+
     @api.onchange("is_room_charge", "company_id")
     def _onchange_room_charge_company(self):
         for method in self.filtered("is_room_charge"):
@@ -55,6 +61,36 @@ class PosConfig(models.Model):
         domain="[('company_id', '=', company_id)]",
         default=lambda self: self.env["hotel.property"]._get_default_property(),
     )
+
+    def _load_pos_data_fields(self, config):
+        return super()._load_pos_data_fields(config) + ["hotel_property_id"]
+
+    @api.model
+    def get_hotel_room_charge_candidates(self, config_id):
+        config = self.browse(config_id).exists()
+        if not config or config.company_id not in self.env.companies:
+            raise ValidationError(_("The POS configuration is not available in the active company."))
+        property_rec = config.hotel_property_id
+        if not property_rec:
+            return []
+        reservations = self.env["hotel.reservation"].sudo().search(
+            [
+                ("property_id", "=", property_rec.id),
+                ("state", "=", "checked_in"),
+            ],
+            order="room_id, actual_checkin desc",
+        )
+        return [
+            {
+                "id": reservation.id,
+                "reservation": reservation.name,
+                "guest": reservation.partner_id.name,
+                "room": reservation.room_id.name,
+                "room_type": reservation.room_type_id.name,
+                "partner_id": reservation.partner_id.id,
+            }
+            for reservation in reservations
+        ]
 
     @api.onchange("company_id", "payment_method_ids")
     def _onchange_hotel_company(self):

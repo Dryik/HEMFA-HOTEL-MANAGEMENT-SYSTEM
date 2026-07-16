@@ -18,10 +18,21 @@ class HotelRoom(models.Model):
                 ]
             )
             if not existing:
+                reservation = self.env["hotel.reservation"].search(
+                    [
+                        ("room_id", "=", room.id),
+                        ("state", "=", "checked_out"),
+                    ],
+                    order="actual_checkout desc, id desc",
+                    limit=1,
+                )
                 self.env["hotel.housekeeping.task"].create(
                     {
                         "room_id": room.id,
                         "priority": "2" if room.occupancy_state == "checkout" else "1",
+                        "reservation_id": reservation.id,
+                        "trigger_type": "post_checkout" if reservation else "manual",
+                        "source_key": f"post_checkout:{reservation.id}" if reservation else False,
                     }
                 )
         return True

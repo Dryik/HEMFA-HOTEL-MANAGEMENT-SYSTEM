@@ -1,4 +1,6 @@
 from datetime import timedelta
+from pathlib import Path
+from runpy import run_path
 
 from odoo import fields
 from odoo.exceptions import AccessError, UserError, ValidationError
@@ -123,7 +125,40 @@ class TestHotelReservation(TransactionCase):
         self.assertEqual(self.room.occupancy_state, "vacant")
         res.action_cancel()
         self.assertEqual(res.state, "cancelled")
+        self.assertTrue(res.cancelled_at)
         self.assertEqual(self.room.occupancy_state, "vacant")
+        with self.assertRaises(UserError):
+            res.write({"cancelled_at": fields.Datetime.now()})
+        res.action_reset_draft()
+        self.assertFalse(res.cancelled_at)
+
+    def test_expired_payment_hold_records_cancellation_time(self):
+        reservation = self._reservation()
+        reservation._action_hold_for_payment(fields.Datetime.now())
+        reservation._action_expire_payment_hold()
+        self.assertEqual(reservation.state, "cancelled")
+        self.assertTrue(reservation.cancelled_at)
+        self.assertFalse(reservation.hold_expires_at)
+
+    def test_cancellation_migration_backfills_existing_cancelled_records(self):
+        reservation = self._reservation()
+        reservation.action_cancel()
+        self.env.cr.execute(
+            "UPDATE hotel_reservation SET cancelled_at = NULL WHERE id = %s",
+            [reservation.id],
+        )
+        reservation.invalidate_recordset(["cancelled_at"])
+        self.assertFalse(reservation.cancelled_at)
+
+        migration_path = (
+            Path(__file__).parents[1]
+            / "migrations"
+            / "19.0.6.0.0"
+            / "post-migrate.py"
+        )
+        run_path(str(migration_path))["migrate"](self.env.cr, "19.0.6.0.0")
+        reservation.invalidate_recordset(["cancelled_at"])
+        self.assertTrue(reservation.cancelled_at)
 
     def test_state_cannot_bypass_workflow(self):
         reservation = self._reservation()

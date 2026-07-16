@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hotel_service_view_list" model="ir.ui.view">
+        <field name="name">hotel.service.list</field><field name="model">hotel.service</field>
+        <field name="arch" type="xml"><list delete="false"><field name="name"/><field name="charge_policy"/>
+            <field name="is_meal"/><field name="default_price"/><field name="currency_id" column_invisible="True"/>
+            <field name="product_id" optional="hide"/><field name="website_published" optional="show"/><field name="active" optional="hide"/>
+        </list></field>
+    </record>
+    <record id="hotel_service_view_form" model="ir.ui.view">
+        <field name="name">hotel.service.form</field><field name="model">hotel.service</field>
+        <field name="arch" type="xml"><form delete="false"><sheet><group><group><field name="name"/><field name="property_id" invisible="1"/>
+            <field name="charge_policy"/><field name="is_meal"/><field name="website_published"/><field name="active"/></group><group>
+            <field name="default_price"/><field name="currency_id" invisible="1"/><field name="product_id"/><field name="image" widget="image"/>
+        </group></group></sheet><chatter/></form></field>
+    </record>
+    <record id="hotel_service_action" model="ir.actions.act_window">
+        <field name="name">Hotel Services</field><field name="res_model">hotel.service</field><field name="view_mode">list,form</field>
+    </record>
+
+    <record id="hotel_reservation_service_view_list" model="ir.ui.view">
+        <field name="name">hotel.reservation.service.list</field><field name="model">hotel.reservation.service</field>
+        <field name="arch" type="xml"><list decoration-warning="state == 'confirmed'" decoration-success="state == 'done'" decoration-muted="state == 'cancelled'">
+            <field name="name"/><field name="reservation_id"/><field name="room_id"/><field name="service_id"/>
+            <field name="is_meal" optional="show"/><field name="service_date"/><field name="assigned_user_id"/>
+            <field name="quantity"/><field name="complimentary"/><field name="amount_total"/><field name="currency_id" column_invisible="True"/>
+            <field name="state" widget="badge"/>
+        </list></field>
+    </record>
+    <record id="hotel_reservation_service_view_form" model="ir.ui.view">
+        <field name="name">hotel.reservation.service.form</field><field name="model">hotel.reservation.service</field>
+        <field name="arch" type="xml"><form><header>
+            <button name="action_confirm" type="object" string="Confirm" class="btn-primary" invisible="state != 'draft'"/>
+            <button name="action_done" type="object" string="Mark Done" class="btn-primary" invisible="state != 'confirmed'"/>
+            <button name="action_cancel" type="object" string="Cancel" invisible="state not in ('draft', 'confirmed')"/>
+            <field name="state" widget="statusbar"/>
+        </header><sheet><div class="oe_title"><h1><field name="name"/></h1></div><group><group>
+            <field name="reservation_id"/><field name="property_id" invisible="1"/><field name="room_id"/><field name="service_id"/>
+            <field name="is_meal"/><field name="service_date"/><field name="assigned_user_id"/>
+        </group><group><field name="complimentary"/><field name="quantity"/><field name="unit_price"/>
+            <field name="amount_total"/><field name="currency_id" invisible="1"/><field name="folio_line_id" readonly="1"/>
+        </group></group><field name="notes"/></sheet><chatter/></form></field>
+    </record>
+    <record id="hotel_reservation_service_search" model="ir.ui.view">
+        <field name="name">hotel.reservation.service.search</field><field name="model">hotel.reservation.service</field>
+        <field name="arch" type="xml"><search><field name="name"/><field name="reservation_id"/><field name="room_id"/><field name="service_id"/>
+            <filter name="confirmed" string="To Deliver" domain="[('state', '=', 'confirmed')]"/>
+            <filter name="meals" string="Meals to Prepare" domain="[('state', '=', 'confirmed'), ('is_meal', '=', True)]"/>
+            <filter name="my_services" string="My Services" domain="[('assigned_user_id', '=', uid)]"/>
+            <group><filter name="group_service" string="Service" context="{'group_by': 'service_id'}"/>
+                <filter name="group_room" string="Room" context="{'group_by': 'room_id'}"/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+            </group>
+        </search></field>
+    </record>
+    <record id="hotel_reservation_service_action" model="ir.actions.act_window">
+        <field name="name">Allotted Services</field><field name="res_model">hotel.reservation.service</field><field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hotel_reservation_service_search"/>
+    </record>
+    <record id="hotel_meal_queue_action" model="ir.actions.act_window">
+        <field name="name">Meals to Prepare</field><field name="res_model">hotel.reservation.service</field><field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'confirmed'), ('is_meal', '=', True)]</field>
+        <field name="search_view_id" ref="hotel_reservation_service_search"/>
+    </record>
+
+    <record id="hotel_document_type_view_list" model="ir.ui.view">
+        <field name="name">hotel.document.type.list</field><field name="model">hotel.document.type</field>
+        <field name="arch" type="xml"><list><field name="sequence" widget="handle"/><field name="name"/>
+            <field name="required_for_website"/><field name="active"/></list></field>
+    </record>
+    <record id="hotel_document_type_view_form" model="ir.ui.view">
+        <field name="name">hotel.document.type.form</field><field name="model">hotel.document.type</field>
+        <field name="arch" type="xml"><form><sheet><group><field name="name"/><field name="property_id" invisible="1"/>
+            <field name="sequence"/><field name="required_for_website"/><field name="active"/><field name="notes"/>
+        </group></sheet></form></field>
+    </record>
+    <record id="hotel_document_type_action" model="ir.actions.act_window">
+        <field name="name">Required Documents</field><field name="res_model">hotel.document.type</field><field name="view_mode">list,form</field>
+    </record>
+
+    <record id="hotel_guest_rating_view_list" model="ir.ui.view">
+        <field name="name">hotel.guest.rating.list</field><field name="model">hotel.guest.rating</field>
+        <field name="arch" type="xml"><list decoration-success="state == 'approved'" decoration-warning="state == 'submitted'">
+            <field name="reservation_id"/><field name="partner_id"/><field name="rating" widget="priority"/>
+            <field name="cleanliness_rating" optional="hide"/><field name="service_rating" optional="hide"/>
+            <field name="value_rating" optional="hide"/><field name="submitted_at"/><field name="state" widget="badge"/>
+        </list></field>
+    </record>
+    <record id="hotel_guest_rating_view_form" model="ir.ui.view">
+        <field name="name">hotel.guest.rating.form</field><field name="model">hotel.guest.rating</field>
+        <field name="arch" type="xml"><form><header>
+            <button name="action_approve" type="object" string="Publish" class="btn-primary" invisible="state != 'submitted'"/>
+            <button name="action_reject" type="object" string="Reject" invisible="state != 'submitted'"/>
+            <field name="state" widget="statusbar"/>
+        </header><sheet><group><group><field name="reservation_id"/><field name="partner_id"/><field name="submitted_at"/>
+            <field name="rating" widget="priority"/></group><group><field name="cleanliness_rating"/><field name="service_rating"/>
+            <field name="value_rating"/><field name="access_token" groups="base.group_no_one"/></group></group><field name="comments"/></sheet><chatter/></form></field>
+    </record>
+    <record id="hotel_guest_rating_view_pivot" model="ir.ui.view">
+        <field name="name">hotel.guest.rating.pivot</field><field name="model">hotel.guest.rating</field>
+        <field name="arch" type="xml"><pivot><field name="property_id" type="row"/><field name="submitted_at" interval="month" type="col"/>
+            <field name="rating" type="measure"/></pivot></field>
+    </record>
+    <record id="hotel_guest_rating_view_graph" model="ir.ui.view">
+        <field name="name">hotel.guest.rating.graph</field><field name="model">hotel.guest.rating</field>
+        <field name="arch" type="xml"><graph type="line"><field name="submitted_at" interval="month"/><field name="rating" type="measure"/></graph></field>
+    </record>
+    <record id="hotel_guest_rating_action" model="ir.actions.act_window">
+        <field name="name">Guest Ratings</field><field name="res_model">hotel.guest.rating</field><field name="view_mode">list,pivot,graph,form</field>
+    </record>
+
+    <record id="hotel_room_type_form_inherit_services" model="ir.ui.view">
+        <field name="name">hotel.room.type.form.services</field><field name="model">hotel.room.type</field>
+        <field name="inherit_id" ref="hotel_base.hotel_room_type_view_form"/>
+        <field name="arch" type="xml"><xpath expr="//notebook" position="inside">
+            <page string="Guest Services" name="guest_services"><group>
+                <field name="complimentary_service_ids" widget="many2many_tags"/>
+                <field name="optional_service_ids" widget="many2many_tags"/>
+            </group></page>
+        </xpath></field>
+    </record>
+    <record id="hotel_reservation_form_inherit_commercial" model="ir.ui.view">
+        <field name="name">hotel.reservation.form.commercial</field><field name="model">hotel.reservation</field>
+        <field name="inherit_id" ref="hotel_reservation.hotel_reservation_view_form"/>
+        <field name="arch" type="xml"><xpath expr="//notebook" position="inside">
+            <page string="Services" name="allotted_services"><field name="service_line_ids">
+                <list><field name="name"/><field name="service_id"/><field name="service_date"/><field name="assigned_user_id"/>
+                    <field name="complimentary"/><field name="amount_total"/><field name="currency_id" column_invisible="True"/><field name="state" widget="badge"/>
+                </list>
+            </field></page>
+            <page string="Documents" name="guest_documents"><field name="document_ids">
+                <list><field name="document_type_id"/><field name="partner_id"/><field name="attachment_id"/>
+                    <field name="expiry_date"/><field name="verified"/><field name="verified_by_id" optional="hide"/>
+                </list>
+            </field></page>
+            <page string="Rating" name="guest_rating"><field name="rating_ids" readonly="1">
+                <list create="0" delete="0"><field name="rating"/><field name="comments"/><field name="submitted_at"/><field name="state" widget="badge"/></list>
+            </field></page>
+        </xpath></field>
+    </record>
+
+    <menuitem id="menu_hotel_allotted_services" name="Allotted Services" parent="menu_hotel_guest_services"
+        action="hotel_reservation_service_action" sequence="5" groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_fb"/>
+    <menuitem id="menu_hotel_meal_queue" name="Meals to Prepare" parent="menu_hotel_guest_services"
+        action="hotel_meal_queue_action" sequence="6" groups="hotel_base.group_hotel_fb,hotel_base.group_hotel_frontdesk"/>
+    <menuitem id="menu_hotel_ratings" name="Guest Ratings" parent="menu_hotel_guest_services"
+        action="hotel_guest_rating_action" sequence="40" groups="hotel_base.group_hotel_frontdesk"/>
+    <menuitem id="menu_hotel_config_services" name="Services" parent="hotel_base.menu_hotel_config"
+        action="hotel_service_action" sequence="35"/>
+    <menuitem id="menu_hotel_config_documents" name="Required Documents" parent="hotel_base.menu_hotel_config"
+        action="hotel_document_type_action" sequence="40"/>
+</odoo>

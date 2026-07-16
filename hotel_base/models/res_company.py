@@ -56,6 +56,64 @@ class ResCompany(models.Model):
         related="hotel_property_config_id.no_show_fee_value",
         readonly=False,
     )
+    hotel_type = fields.Selection(
+        related="hotel_property_config_id.hotel_type", readonly=False
+    )
+    hotel_tagline = fields.Char(
+        related="hotel_property_config_id.tagline", readonly=False
+    )
+    hotel_website_description = fields.Html(
+        related="hotel_property_config_id.website_description", readonly=False
+    )
+    hotel_website_policy = fields.Html(
+        related="hotel_property_config_id.website_policy", readonly=False
+    )
+    hotel_website_banner = fields.Image(
+        related="hotel_property_config_id.website_banner", readonly=False
+    )
+    hotel_website_gallery_attachment_ids = fields.Many2many(
+        related="hotel_property_config_id.website_gallery_attachment_ids",
+        readonly=False,
+    )
+    hotel_website_published = fields.Boolean(
+        related="hotel_property_config_id.website_published", readonly=False
+    )
+    hotel_website_review_limit = fields.Integer(
+        related="hotel_property_config_id.website_review_limit", readonly=False
+    )
+    hotel_stay_charge_policy = fields.Selection(
+        related="hotel_property_config_id.stay_charge_policy", readonly=False
+    )
+    hotel_online_payment_policy = fields.Selection(
+        related="hotel_property_config_id.online_payment_policy", readonly=False
+    )
+    hotel_online_deposit_value = fields.Float(
+        related="hotel_property_config_id.online_deposit_value", readonly=False
+    )
+    hotel_online_hold_minutes = fields.Integer(
+        related="hotel_property_config_id.online_hold_minutes", readonly=False
+    )
+    hotel_prearrival_housekeeping_hours = fields.Integer(
+        related="hotel_property_config_id.prearrival_housekeeping_hours", readonly=False
+    )
+    hotel_adult_age_min = fields.Integer(
+        related="hotel_property_config_id.adult_age_min", readonly=False
+    )
+    hotel_teenager_age_min = fields.Integer(
+        related="hotel_property_config_id.teenager_age_min", readonly=False
+    )
+    hotel_teenager_age_max = fields.Integer(
+        related="hotel_property_config_id.teenager_age_max", readonly=False
+    )
+    hotel_child_age_min = fields.Integer(
+        related="hotel_property_config_id.child_age_min", readonly=False
+    )
+    hotel_child_age_max = fields.Integer(
+        related="hotel_property_config_id.child_age_max", readonly=False
+    )
+    hotel_infant_age_max = fields.Integer(
+        related="hotel_property_config_id.infant_age_max", readonly=False
+    )
 
     @api.depends("name")
     def _compute_hotel_property_config_id(self):
@@ -114,5 +172,18 @@ class ResCompany(models.Model):
             and manager_group
             and manager_group in self.env.user.group_ids
         ):
-            return super(ResCompany, self.sudo()).write(vals)
-        return super().write(vals)
+            result = super(ResCompany, self.sudo()).write(vals)
+        else:
+            result = super().write(vals)
+        if {"name", "partner_id"}.intersection(vals):
+            properties = self.env["hotel.property"].sudo().search(
+                [("company_id", "in", self.ids)]
+            )
+            for property_rec in properties:
+                property_rec.write(
+                    {
+                        "name": property_rec.company_id.name,
+                        "address_id": property_rec.company_id.partner_id.id,
+                    }
+                )
+        return result

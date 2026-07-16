@@ -9,6 +9,7 @@ _logger = logging.getLogger(__name__)
 
 RESERVATION_STATES = [
     ("draft", "Draft"),
+    ("pending_payment", "Pending Payment"),
     ("confirmed", "Confirmed"),
     ("checked_in", "Checked In"),
     ("checked_out", "Checked Out"),
@@ -17,10 +18,11 @@ RESERVATION_STATES = [
 ]
 
 # Reservations in these states hold the room against other bookings.
-BLOCKING_STATES = ("confirmed", "checked_in")
+BLOCKING_STATES = ("pending_payment", "confirmed", "checked_in")
 
 STATE_COLOR = {
     "draft": 4,        # light blue
+    "pending_payment": 3,
     "confirmed": 2,    # orange
     "checked_in": 10,  # green
     "checked_out": 8,  # purple/grey
@@ -62,7 +64,10 @@ class HotelReservation(models.Model):
         "hotel.reservation.amendment", "reservation_id", string="Amendments"
     )
     guest_nationality_id = fields.Many2one(
-        related="partner_id.guest_nationality_id", readonly=True
+        related="partner_id.guest_nationality_id", store=True, readonly=True
+    )
+    guest_country_id = fields.Many2one(
+        related="partner_id.country_id", store=True, readonly=True
     )
     property_id = fields.Many2one(
         "hotel.property",
@@ -102,7 +107,32 @@ class HotelReservation(models.Model):
     )
     nights = fields.Integer(compute="_compute_nights", store=True)
     adults = fields.Integer(default=1)
+    teenagers = fields.Integer(default=0)
     children = fields.Integer(default=0)
+    infants = fields.Integer(default=0)
+    booking_source = fields.Selection(
+        [
+            ("direct", "Direct"),
+            ("website", "Website"),
+            ("agent", "Agent"),
+            ("ota_manual", "OTA (Manual)"),
+            ("other", "Other"),
+        ],
+        default="direct",
+        required=True,
+        tracking=True,
+    )
+    responsible_id = fields.Many2one(
+        "res.users", default=lambda self: self.env.user, tracking=True
+    )
+    pricelist_id = fields.Many2one(
+        "product.pricelist",
+        string="Pricelist",
+        domain="['|', ('company_id', '=', False), ('company_id', '=', property_id.company_id)]",
+        tracking=True,
+    )
+    hold_expires_at = fields.Datetime(readonly=True, copy=False, index=True)
+    cancelled_at = fields.Datetime(readonly=True, copy=False, index=True)
     state = fields.Selection(
         RESERVATION_STATES,
         default="draft",
@@ -228,7 +258,15 @@ class HotelReservation(models.Model):
         if self.room_id and not self.room_type_id:
             self.room_type_id = self.room_id.room_type_id
 
-    @api.constrains("property_id", "room_type_id", "room_id", "adults", "children")
+    @api.constrains(
+        "property_id",
+        "room_type_id",
+        "room_id",
+        "adults",
+        "teenagers",
+        "children",
+        "infants",
+    )
     def _check_property_and_capacity(self):
         for rec in self:
             if rec.room_type_id.property_id and rec.room_type_id.property_id != rec.property_id:
@@ -239,12 +277,14 @@ class HotelReservation(models.Model):
                 raise ValidationError(_("The room must belong to the reservation property."))
             if rec.room_id and rec.room_type_id and rec.room_id.room_type_id != rec.room_type_id:
                 raise ValidationError(_("The selected room does not match the room type."))
-            if rec.adults < 0 or rec.children < 0:
+            if min(rec.adults, rec.teenagers, rec.children, rec.infants) < 0:
                 raise ValidationError(_("Guest counts cannot be negative."))
             room_type = rec.room_type_id or rec.room_id.room_type_id
             if room_type and (
                 rec.adults > room_type.capacity_adults
+                or rec.teenagers > room_type.capacity_teenagers
                 or rec.children > room_type.capacity_children
+                or rec.infants > room_type.capacity_infants
             ):
                 raise ValidationError(
                     _(
@@ -292,11 +332,19 @@ class HotelReservation(models.Model):
             with cr.savepoint():
                 cr.execute(
                     """
-                    SELECT 1 FROM pg_constraint
+                    SELECT pg_get_constraintdef(oid)
+                    FROM pg_constraint
                     WHERE conname = 'hotel_reservation_room_no_overlap'
                     """
                 )
-                if not cr.fetchone():
+                existing = cr.fetchone()
+                if existing and "pending_payment" not in existing[0]:
+                    cr.execute(
+                        "ALTER TABLE hotel_reservation "
+                        "DROP CONSTRAINT hotel_reservation_room_no_overlap"
+                    )
+                    existing = False
+                if not existing:
                     cr.execute(
                         """
                         ALTER TABLE hotel_reservation
@@ -305,7 +353,7 @@ class HotelReservation(models.Model):
                             room_id WITH =,
                             tsrange(checkin_date, checkout_date) WITH &&
                         )
-                        WHERE (state IN ('confirmed', 'checked_in')
+                        WHERE (state IN ('pending_payment', 'confirmed', 'checked_in')
                                AND room_id IS NOT NULL)
                         """
                     )
@@ -321,6 +369,7 @@ class HotelReservation(models.Model):
                 vals.get("state", "draft") != "draft"
                 or vals.get("actual_checkin")
                 or vals.get("actual_checkout")
+                or vals.get("cancelled_at")
                 or vals.get("name") not in (None, False, _("New"))
             ):
                 raise UserError(
@@ -349,8 +398,8 @@ class HotelReservation(models.Model):
 
     def action_confirm(self):
         for rec in self:
-            if rec.state != "draft":
-                raise UserError(_("Only draft reservations can be confirmed."))
+            if rec.state not in ("draft", "pending_payment"):
+                raise UserError(_("Only draft or held reservations can be confirmed."))
             if not rec.room_id:
                 raise UserError(_("Assign a room before confirming."))
             self.env["hotel.availability.service"].assert_room_available(
@@ -359,7 +408,36 @@ class HotelReservation(models.Model):
                 rec.checkout_date,
                 exclude_reservation_id=rec.id,
             )
-            rec._write_workflow_values({"state": "confirmed"})
+            rec._write_workflow_values(
+                {"state": "confirmed", "hold_expires_at": False}
+            )
+
+    def _action_hold_for_payment(self, expires_at):
+        for rec in self:
+            if rec.state != "draft" or not rec.room_id:
+                raise UserError(_("Only an allocated draft reservation can be held."))
+            self.env["hotel.availability.service"].assert_room_available(
+                rec.room_id,
+                rec.checkin_date,
+                rec.checkout_date,
+                exclude_reservation_id=rec.id,
+            )
+            rec._write_workflow_values(
+                {"state": "pending_payment", "hold_expires_at": expires_at}
+            )
+        return True
+
+    def _action_expire_payment_hold(self):
+        held = self.filtered(lambda rec: rec.state == "pending_payment")
+        held._write_workflow_values(
+            {
+                "state": "cancelled",
+                "hold_expires_at": False,
+                "cancelled_at": fields.Datetime.now(),
+            }
+        )
+        held._release_room()
+        return True
 
     def action_check_in(self):
         for rec in self:
@@ -384,12 +462,18 @@ class HotelReservation(models.Model):
 
     def action_cancel(self):
         for rec in self:
-            if rec.state not in ("draft", "confirmed"):
+            if rec.state not in ("draft", "pending_payment", "confirmed"):
                 raise UserError(
-                    _("Only draft or confirmed reservations can be cancelled.")
+                    _("Only draft, held, or confirmed reservations can be cancelled.")
                 )
             was_blocking = rec.state in BLOCKING_STATES
-            rec._write_workflow_values({"state": "cancelled"})
+            rec._write_workflow_values(
+                {
+                    "state": "cancelled",
+                    "hold_expires_at": False,
+                    "cancelled_at": fields.Datetime.now(),
+                }
+            )
             if was_blocking:
                 rec._release_room()
 
@@ -406,12 +490,18 @@ class HotelReservation(models.Model):
                 raise UserError(
                     _("Only cancelled or no-show reservations can be reset.")
                 )
-            rec._write_workflow_values({"state": "draft"})
+            rec._write_workflow_values({"state": "draft", "cancelled_at": False})
 
     def _write_workflow_values(self, values):
         return super(HotelReservation, self).write(values)
 
     def _write_amendment_values(self, values):
+        return super(HotelReservation, self).write(values)
+
+    def _write_quote_values(self, values):
+        """Apply a server-recomputed quote to draft or payment-held inventory."""
+        if self.filtered(lambda reservation: reservation.state not in ("draft", "pending_payment")):
+            raise UserError(_("Only draft or payment-held reservations can be repriced."))
         return super(HotelReservation, self).write(values)
 
     def _release_room(self):
@@ -448,9 +538,18 @@ class HotelReservation(models.Model):
 
     def write(self, vals):
         migration = self.env.su and self.env.context.get("hotel_migration")
-        if not migration and {"name", "actual_checkin", "actual_checkout"}.intersection(vals):
+        lifecycle_fields = {
+            "name",
+            "actual_checkin",
+            "actual_checkout",
+            "cancelled_at",
+        }
+        if not migration and lifecycle_fields.intersection(vals):
             raise UserError(
-                _("Reservation identity and actual stay times are assigned by the workflow.")
+                _(
+                    "Reservation identity and lifecycle timestamps are assigned "
+                    "by the workflow."
+                )
             )
         protected = {
             "partner_id",
@@ -463,7 +562,12 @@ class HotelReservation(models.Model):
             "checkout_date",
             "rate_night",
             "adults",
+            "teenagers",
             "children",
+            "infants",
+            "booking_source",
+            "responsible_id",
+            "pricelist_id",
             "currency_id",
         }
         locked = self.filtered(

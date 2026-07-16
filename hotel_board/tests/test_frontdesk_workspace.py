@@ -126,6 +126,256 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
         self.assertEqual(current["kpis"]["adr"]["value"], 150.0)
         self.assertEqual(current["kpis"]["revpar"]["value"], 75.0)
 
+    def test_compact_dashboard_snapshot_and_activity_contract(self):
+        snapshot = self.workspace.get_dashboard_snapshot(
+            self.property.id, self.business_date
+        )
+        self.assertEqual(snapshot["version"], 2)
+        self.assertEqual(snapshot["meta"]["property_id"], self.property.id)
+        self.assertEqual(snapshot["occupancy"]["available_units"], 2)
+        self.assertEqual(snapshot["occupancy"]["booked_units"], 2)
+        self.assertEqual(snapshot["occupancy"]["percentage"], 50.0)
+        tabs = {tab["key"]: tab for tab in snapshot["tabs"]}
+        self.assertEqual(
+            set(tabs),
+            {
+                "arrivals",
+                "departures",
+                "in_house",
+                "stayovers",
+                "bookings",
+                "cancellations",
+                "overbookings",
+            },
+        )
+        self.assertEqual(tabs["arrivals"]["count"], 2)
+        self.assertEqual(tabs["arrivals"]["pending_count"], 1)
+        self.assertEqual(tabs["in_house"]["count"], 1)
+        for key, tab in tabs.items():
+            all_activity = self.workspace.get_dashboard_activity(
+                self.property.id, self.business_date, key, True, False, 50
+            )
+            pending_activity = self.workspace.get_dashboard_activity(
+                self.property.id, self.business_date, key, False, False, 50
+            )
+            self.assertEqual(tab["count"], all_activity["total"], key)
+            self.assertEqual(tab["pending_count"], pending_activity["total"], key)
+        self.assertEqual(snapshot["activity"]["key"], "arrivals")
+        self.assertEqual(snapshot["activity"]["total"], 1)
+        self.assertEqual(
+            snapshot["activity"]["rows"][0]["primary_action"]["key"],
+            "check_in",
+        )
+        room_cards = {room["name"]: room for room in snapshot["rooms"]}
+        self.assertEqual(len(room_cards), 4)
+        self.assertEqual(room_cards[self.room_reserved.name]["state"], "booked")
+        self.assertFalse(room_cards[self.room_reserved.name]["action"])
+        self.assertEqual(room_cards[self.room_empty.name]["state"], "available")
+        self.assertTrue(room_cards[self.room_empty.name]["action"])
+        self.assertEqual(room_cards[self.room_empty.name]["current_price"], 150.0)
+        self.assertEqual(room_cards[self.room_dirty.name]["state"], "dirty")
+        self.assertFalse(room_cards[self.room_dirty.name]["action"])
+        operational_keys = {
+            item["key"] for item in snapshot["operational_kpis"]
+        }
+        self.assertEqual(
+            operational_keys,
+            {
+                "booking_requests",
+                "reservations_to_confirm",
+                "meals_to_prepare",
+                "housekeeping_workload",
+            },
+        )
+
+        completed = self.workspace.get_dashboard_activity(
+            self.property.id,
+            self.business_date,
+            "arrivals",
+            True,
+            "Workspace Guest",
+            50,
+        )
+        self.assertEqual(completed["total"], 2)
+        self.assertEqual(
+            self.env[completed["list_action"]["res_model"]].search_count(
+                completed["list_action"]["domain"]
+            ),
+            completed["total"],
+        )
+        by_room = self.workspace.get_dashboard_activity(
+            self.property.id,
+            self.business_date,
+            "arrivals",
+            True,
+            self.room_reserved.name,
+            50,
+        )
+        self.assertEqual([row["id"] for row in by_room["rows"]], [self.reserved.id])
+
+    def test_dashboard_booking_and_cancellation_business_boundaries(self):
+        cancelled = self._create_reservation(self.room_empty)
+        cancelled.action_cancel()
+        booking = self._create_reservation(self.room_empty)
+        outside_cancelled = self._create_reservation(self.room_empty)
+        outside_cancelled.action_cancel()
+        outside_booking = self._create_reservation(self.room_empty)
+        business_start, business_end = self.property.get_business_day_bounds(
+            self.business_date
+        )
+        self.env.cr.execute(
+            "UPDATE hotel_reservation SET cancelled_at = %s WHERE id = %s",
+            [business_start + timedelta(hours=1), cancelled.id],
+        )
+        self.env.cr.execute(
+            "UPDATE hotel_reservation SET create_date = %s WHERE id = %s",
+            [business_start + timedelta(hours=2), booking.id],
+        )
+        self.env.cr.execute(
+            "UPDATE hotel_reservation SET cancelled_at = %s WHERE id = %s",
+            [business_end, outside_cancelled.id],
+        )
+        self.env.cr.execute(
+            "UPDATE hotel_reservation SET create_date = %s WHERE id = %s",
+            [business_end, outside_booking.id],
+        )
+        cancelled.invalidate_recordset(["cancelled_at"])
+        booking.invalidate_recordset(["create_date"])
+
+        cancellations = self.workspace.get_dashboard_activity(
+            self.property.id, self.business_date, "cancellations", False, False, 50
+        )
+        bookings = self.workspace.get_dashboard_activity(
+            self.property.id, self.business_date, "bookings", False, False, 50
+        )
+        self.assertIn(cancelled.id, [row["id"] for row in cancellations["rows"]])
+        self.assertIn(booking.id, [row["id"] for row in bookings["rows"]])
+        self.assertNotIn(
+            outside_cancelled.id, [row["id"] for row in cancellations["rows"]]
+        )
+        self.assertNotIn(
+            outside_booking.id, [row["id"] for row in bookings["rows"]]
+        )
+
+    def test_dashboard_activity_searches_reference_inventory_and_sales_parties(self):
+        agency = self.env["res.partner"].create(
+            {"name": "Searchable Agency", "is_hotel_agency": True}
+        )
+        group = self.env["hotel.reservation.group"].create(
+            {
+                "property_id": self.property.id,
+                "group_partner_id": self.guest.id,
+                "billing_partner_id": self.guest.id,
+                "checkin_date": self.start,
+                "checkout_date": self.end,
+            }
+        )
+        room = self._create_room("WSEARCH")
+        reservation = self.env["hotel.reservation"].create(
+            {
+                "partner_id": self.guest.id,
+                "agency_id": agency.id,
+                "group_id": group.id,
+                "property_id": self.property.id,
+                "room_type_id": self.room_type.id,
+                "room_id": room.id,
+                "checkin_date": self.start,
+                "checkout_date": self.end,
+            }
+        )
+        reservation.action_confirm()
+
+        for query in (
+            reservation.name,
+            room.name,
+            self.room_type.name,
+            agency.name,
+            group.name,
+        ):
+            activity = self.workspace.get_dashboard_activity(
+                self.property.id,
+                self.business_date,
+                "arrivals",
+                False,
+                query,
+                50,
+            )
+            self.assertIn(reservation.id, [row["id"] for row in activity["rows"]])
+
+    def test_dashboard_overbooking_prioritizes_blocked_inventory(self):
+        self.room_reserved._set_maintenance_block(True)
+        self.room_empty._set_maintenance_block(True)
+        self.room_dirty._set_maintenance_block(True)
+        overbookings = self.workspace.get_dashboard_activity(
+            self.property.id, self.business_date, "overbookings", False, False, 50
+        )
+        self.assertEqual(overbookings["total"], 1)
+        self.assertEqual(overbookings["rows"][0]["id"], self.reserved.id)
+
+    def test_dashboard_handles_zero_sellable_inventory(self):
+        for room in self.property.room_ids:
+            room._set_maintenance_block(True)
+        snapshot = self.workspace.get_dashboard_snapshot(
+            self.property.id, self.business_date
+        )
+        self.assertEqual(snapshot["occupancy"]["percentage"], 0.0)
+        self.assertEqual(snapshot["occupancy"]["available_units"], 0)
+        self.assertEqual(snapshot["occupancy"]["booked_units"], 0)
+
+    def test_dashboard_activity_limits_embedded_rows_without_losing_full_domain(self):
+        guest = self.env["res.partner"].create(
+            {"name": "Dashboard Truncation Guest", "is_hotel_guest": True}
+        )
+        reservations = self.env["hotel.reservation"].create(
+            [
+                {
+                    "partner_id": guest.id,
+                    "property_id": self.property.id,
+                    "room_type_id": self.room_type.id,
+                    "checkin_date": self.start,
+                    "checkout_date": self.end,
+                }
+                for _index in range(51)
+            ]
+        )
+        business_start, _business_end = self.property.get_business_day_bounds(
+            self.business_date
+        )
+        for reservation in reservations:
+            self.env.cr.execute(
+                "UPDATE hotel_reservation SET create_date = %s WHERE id = %s",
+                [business_start + timedelta(hours=1), reservation.id],
+            )
+        reservations.invalidate_recordset(["create_date"])
+
+        activity = self.workspace.get_dashboard_activity(
+            self.property.id,
+            self.business_date,
+            "bookings",
+            False,
+            guest.name,
+            50,
+        )
+        self.assertEqual(activity["total"], 51)
+        self.assertEqual(len(activity["rows"]), 50)
+        self.assertTrue(activity["truncated"])
+        self.assertEqual(
+            self.env[activity["list_action"]["res_model"]].search_count(
+                activity["list_action"]["domain"]
+            ),
+            51,
+        )
+
+    def test_dashboard_rejects_unknown_activity_and_excessive_limit(self):
+        with self.assertRaises(ValidationError):
+            self.workspace.get_dashboard_activity(
+                self.property.id, self.business_date, "unknown", False, False, 50
+            )
+        with self.assertRaises(ValidationError):
+            self.workspace.get_dashboard_activity(
+                self.property.id, self.business_date, "arrivals", False, False, 51
+            )
+
     def test_planning_includes_empty_rooms_and_actionable_cells(self):
         planning = self.workspace.get_planning_window(
             self.property.id, self.business_date, 14, {}
@@ -222,6 +472,10 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
         historical_snapshot = self.workspace.get_workspace_snapshot(
             self.property.id, historical_date
         )
+        historical_activity = self.workspace.get_dashboard_activity(
+            self.property.id, historical_date, "in_house", False, False, 50
+        )
+        self.assertIn(historical.id, [row["id"] for row in historical_activity["rows"]])
         historical_payload = next(
             room
             for floor in historical_snapshot["floors"]
@@ -250,6 +504,15 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
         future_departures = self.workspace.get_workspace_snapshot(
             self.property.id, self.business_date + timedelta(days=2)
         )
+        compact_departures = self.workspace.get_dashboard_activity(
+            self.property.id,
+            self.business_date + timedelta(days=2),
+            "departures",
+            False,
+            False,
+            50,
+        )
+        self.assertEqual(compact_departures["total"], 2)
         self.assertEqual(future_departures["kpis"]["departures"]["value"], 2)
         departure_action = future_departures["kpis"]["departures"]["action"]
         self.assertEqual(
@@ -515,10 +778,14 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
         snapshot = self.workspace.with_user(frontdesk).get_workspace_snapshot(
             other_property.id, self.business_date
         )
+        compact = self.workspace.with_user(frontdesk).get_dashboard_snapshot(
+            other_property.id, self.business_date
+        )
         planning = self.workspace.with_user(frontdesk).get_planning_window(
             other_property.id, self.business_date, 14, {}
         )
         self.assertEqual(snapshot["meta"]["property_id"], self.property.id)
+        self.assertEqual(compact["meta"]["property_id"], self.property.id)
         self.assertEqual(planning["meta"]["property_id"], self.property.id)
 
     def test_reservation_dashboard_compatibility_shim(self):

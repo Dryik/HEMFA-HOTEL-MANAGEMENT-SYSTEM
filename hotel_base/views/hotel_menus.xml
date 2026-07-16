@@ -50,6 +50,9 @@
         parent="menu_hotel_config"
         action="action_hotel_company_settings"
         sequence="5"/>
+    <record id="menu_hotel_company_settings" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
 
     <menuitem id="menu_hotel_config_room_type"
         name="Room Types"

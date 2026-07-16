@@ -3,3 +3,14 @@ access_hotel_rate_rule_frontdesk,hotel.rate.rule frontdesk,model_hotel_rate_rule
 access_hotel_rate_rule_manager,hotel.rate.rule manager,model_hotel_rate_rule,hotel_base.group_hotel_manager,1,1,1,1
 access_hotel_rate_occupancy_band_frontdesk,hotel.rate.occupancy.band frontdesk,model_hotel_rate_occupancy_band,hotel_base.group_hotel_frontdesk,1,0,0,0
 access_hotel_rate_occupancy_band_manager,hotel.rate.occupancy.band manager,model_hotel_rate_occupancy_band,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_seasonal_frontdesk,hotel.seasonal.pricing frontdesk,model_hotel_seasonal_pricing,hotel_base.group_hotel_frontdesk,1,0,0,0
+access_hotel_seasonal_manager,hotel.seasonal.pricing manager,model_hotel_seasonal_pricing,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_weekday_user,hotel.rate.weekday user,model_hotel_rate_weekday,base.group_user,1,0,0,0
+access_hotel_weekday_manager,hotel.rate.weekday manager,model_hotel_rate_weekday,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_guest_supplement_frontdesk,hotel.guest.supplement frontdesk,model_hotel_guest_supplement,hotel_base.group_hotel_frontdesk,1,0,0,0
+access_hotel_guest_supplement_manager,hotel.guest.supplement manager,model_hotel_guest_supplement,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_rate_line_frontdesk,hotel.reservation.rate.line frontdesk,model_hotel_reservation_rate_line,hotel_base.group_hotel_frontdesk,1,0,1,1
+access_hotel_rate_line_accountant,hotel.reservation.rate.line accountant,model_hotel_reservation_rate_line,hotel_base.group_hotel_accountant,1,0,0,0
+access_hotel_rate_line_manager,hotel.reservation.rate.line manager,model_hotel_reservation_rate_line,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_booking_source_frontdesk,hotel.booking.source frontdesk,model_hotel_booking_source,hotel_base.group_hotel_frontdesk,1,0,0,0
+access_hotel_booking_source_manager,hotel.booking.source manager,model_hotel_booking_source,hotel_base.group_hotel_manager,1,1,1,1

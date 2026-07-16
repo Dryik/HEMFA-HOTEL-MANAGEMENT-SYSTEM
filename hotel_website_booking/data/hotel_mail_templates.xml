@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mail_template_booking_request" model="mail.template">
+            <field name="name">Hotel: Booking Request Received</field>
+            <field name="model_id" ref="model_hotel_online_booking"/>
+            <field name="email_from">{{ object.company_id.email_formatted or user.email_formatted }}</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">{{ object.company_id.name }} — booking request {{ object.name }}</field>
+            <field name="body_html" type="html">
+                <div><p>Dear <t t-out="object.partner_id.name"/>,</p>
+                <p>We received your booking request <strong t-out="object.name"/>. Its current status is <strong t-out="object.state"/>.</p>
+                <p><a t-att-href="object.website_id.get_base_url() + '/hotel/booking/' + object.access_token">View booking status</a></p></div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_booking_confirmation" model="mail.template">
+            <field name="name">Hotel: Online Booking Confirmation</field>
+            <field name="model_id" ref="model_hotel_online_booking"/>
+            <field name="email_from">{{ object.company_id.email_formatted or user.email_formatted }}</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">{{ object.company_id.name }} — confirmed booking {{ object.name }}</field>
+            <field name="body_html" type="html">
+                <div><p>Dear <t t-out="object.partner_id.name"/>,</p>
+                <p>Your multi-room booking <strong t-out="object.name"/> is confirmed.</p>
+                <p>Arrival: <t t-out="format_datetime(object.checkin_date)"/><br/>Departure: <t t-out="format_datetime(object.checkout_date)"/></p>
+                <p><a t-att-href="object.website_id.get_base_url() + '/hotel/booking/' + object.access_token">Open confirmation</a></p></div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_payment_receipt" model="mail.template">
+            <field name="name">Hotel: Online Payment Receipt</field>
+            <field name="model_id" ref="model_hotel_online_booking"/>
+            <field name="email_from">{{ object.company_id.email_formatted or user.email_formatted }}</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">{{ object.company_id.name }} — payment received for {{ object.name }}</field>
+            <field name="body_html" type="html">
+                <div><p>Dear <t t-out="object.partner_id.name"/>,</p>
+                <p>We received <strong t-out="format_amount(object.amount_due_online, object.currency_id)"/> for booking <strong t-out="object.name"/>.</p>
+                <p>The payment has been recorded as a guest deposit and allocated across the room folios.</p></div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_booking_cancellation" model="mail.template">
+            <field name="name">Hotel: Online Booking Cancellation</field>
+            <field name="model_id" ref="model_hotel_online_booking"/>
+            <field name="email_from">{{ object.company_id.email_formatted or user.email_formatted }}</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">{{ object.company_id.name }} — booking {{ object.name }} cancelled</field>
+            <field name="body_html" type="html">
+                <div><p>Dear <t t-out="object.partner_id.name"/>,</p><p>Your booking <strong t-out="object.name"/> has been cancelled. Any paid deposit will be reviewed under the hotel cancellation policy.</p></div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_reservation_voucher" model="mail.template">
+            <field name="name">Hotel: Reservation Voucher</field>
+            <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
+            <field name="email_from">{{ object.property_id.company_id.email_formatted or user.email_formatted }}</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">{{ object.property_id.company_id.name }} — reservation voucher {{ object.name }}</field>
+            <field name="body_html" type="html">
+                <div><p>Dear <t t-out="object.partner_id.name"/>,</p><p>Your reservation <strong t-out="object.name"/> is confirmed for room <strong t-out="object.room_id.name"/>.</p><p>Arrival: <t t-out="format_datetime(object.checkin_date)"/><br/>Departure: <t t-out="format_datetime(object.checkout_date)"/></p></div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_prearrival" model="mail.template">
+            <field name="name">Hotel: Pre-arrival Information</field>
+            <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
+            <field name="email_from">{{ object.property_id.company_id.email_formatted or user.email_formatted }}</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">{{ object.property_id.company_id.name }} — information before your arrival</field>
+            <field name="body_html" type="html">
+                <div><p>Dear <t t-out="object.partner_id.name"/>,</p><p>We look forward to welcoming you on <t t-out="format_datetime(object.checkin_date)"/>. Please have the documents required by the hotel policy ready at arrival.</p></div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_room_exchange" model="mail.template">
+            <field name="name">Hotel: Room Exchange</field>
+            <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
+            <field name="email_from">{{ object.property_id.company_id.email_formatted or user.email_formatted }}</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">{{ object.property_id.company_id.name }} — room update for {{ object.name }}</field>
+            <field name="body_html" type="html">
+                <div><p>Dear <t t-out="object.partner_id.name"/>,</p><p>Your assigned room for reservation <strong t-out="object.name"/> is now <strong t-out="object.room_id.name"/>.</p></div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_reservation_cancellation" model="mail.template">
+            <field name="name">Hotel: Reservation Cancellation</field>
+            <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
+            <field name="email_from">{{ object.property_id.company_id.email_formatted or user.email_formatted }}</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">{{ object.property_id.company_id.name }} — reservation {{ object.name }} cancelled</field>
+            <field name="body_html" type="html"><div><p>Dear <t t-out="object.partner_id.name"/>,</p><p>Reservation <strong t-out="object.name"/> has been cancelled.</p></div></field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_checkout" model="mail.template">
+            <field name="name">Hotel: Checkout Completed</field>
+            <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
+            <field name="email_from">{{ object.property_id.company_id.email_formatted or user.email_formatted }}</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">Thank you for staying at {{ object.property_id.company_id.name }}</field>
+            <field name="body_html" type="html"><div><p>Dear <t t-out="object.partner_id.name"/>,</p><p>Your checkout for reservation <strong t-out="object.name"/> is complete. Thank you for staying with us.</p></div></field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_feedback_request" model="mail.template">
+            <field name="name">Hotel: Feedback Request</field>
+            <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
+            <field name="email_from">{{ object.property_id.company_id.email_formatted or user.email_formatted }}</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">How was your stay at {{ object.property_id.company_id.name }}?</field>
+            <field name="body_html" type="html">
+                <div><p>Dear <t t-out="object.partner_id.name"/>,</p><p>We value your feedback.</p>
+                <p t-if="object.rating_ids"><a t-att-href="object.property_id.company_id.get_base_url() + '/hotel/rating/' + object.rating_ids[:1].access_token">Rate your stay</a></p></div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

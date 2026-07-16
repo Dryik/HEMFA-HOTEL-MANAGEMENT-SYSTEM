@@ -39,6 +39,12 @@ msgid "Checked Out"
 msgstr "مغادر / مسجل خروج"
 
 #. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__checklist_line_ids
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form_inherit_extended
+msgid "Checklist"
+msgstr "قائمة التحقق"
+
+#. module: hotel_housekeeping
 #: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__hk_status__clean
 msgid "Clean"
 msgstr "نظيفة"
@@ -67,6 +73,18 @@ msgstr "جاري التنظيف"
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard_line__hk_status
 msgid "Cleaning Status"
 msgstr "حالة التنظيف"
+
+#. module: hotel_housekeeping
+#. odoo-python
+#: code:addons/hotel_housekeeping/models/hotel_housekeeping_extension.py:0
+msgid "Closed housekeeping checklists are immutable."
+msgstr "قوائم تحقق التدبير الفندقي المغلقة غير قابلة للتغيير."
+
+#. module: hotel_housekeeping
+#. odoo-python
+#: code:addons/hotel_housekeeping/models/hotel_housekeeping_extension.py:0
+msgid "Complete every housekeeping checklist item first."
+msgstr "أكمل كل بنود قائمة تحقق التدبير الفندقي أولاً."
 
 #. module: hotel_housekeeping
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__date_completed
@@ -115,14 +133,40 @@ msgid "FO Status"
 msgstr "حالة المكتب الأمامي"
 
 #. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__trigger_type__guest_request
+msgid "Guest Request"
+msgstr "طلب نزيل"
+
+#. module: hotel_housekeeping
 #: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__priority__2
 msgid "High"
 msgstr "مرتفع"
 
 #. module: hotel_housekeeping
+#: model:ir.model,name:hotel_housekeeping.model_hotel_housekeeping_team
+msgid "Hotel Housekeeping Team"
+msgstr "فريق التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.cron,name:hotel_housekeeping.ir_cron_hotel_create_prearrival_housekeeping
+msgid "Hotel: Create Pre-arrival Housekeeping"
+msgstr "الفندق: إنشاء تجهيز قبل الوصول"
+
+#. module: hotel_housekeeping
 #: model:ir.ui.menu,name:hotel_housekeeping.menu_hotel_housekeeping_root
 msgid "Housekeeping"
 msgstr "التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.ui.menu,name:hotel_housekeeping.menu_hotel_config_housekeeping_checklist
+#: model:ir.actions.act_window,name:hotel_housekeeping.hotel_housekeeping_checklist_item_action
+msgid "Housekeeping Checklist"
+msgstr "قائمة تحقق التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.model,name:hotel_housekeeping.model_hotel_housekeeping_checklist_item
+msgid "Housekeeping Checklist Template Item"
+msgstr "بند قالب قائمة تحقق التدبير الفندقي"
 
 #. module: hotel_housekeeping
 #: model:ir.model,name:hotel_housekeeping.model_hotel_housekeeping_task
@@ -160,6 +204,11 @@ msgid "Housekeeping Task"
 msgstr "مهمة التدبير الفندقي"
 
 #. module: hotel_housekeeping
+#: model:ir.model,name:hotel_housekeeping.model_hotel_housekeeping_task_line
+msgid "Housekeeping Task Checklist Result"
+msgstr "نتيجة قائمة تحقق مهمة التدبير الفندقي"
+
+#. module: hotel_housekeeping
 #: model:ir.sequence,name:hotel_housekeeping.seq_hotel_housekeeping_task
 msgid "Housekeeping Task Sequence"
 msgstr "تسلسل مهام التدبير الفندقي"
@@ -170,6 +219,17 @@ msgstr "تسلسل مهام التدبير الفندقي"
 #: model:ir.actions.act_window,name:hotel_housekeeping.hotel_housekeeping_task_action
 msgid "Housekeeping Tasks"
 msgstr "مهام التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.ui.menu,name:hotel_housekeeping.menu_hotel_config_housekeeping_teams
+#: model:ir.actions.act_window,name:hotel_housekeeping.hotel_housekeeping_team_action
+msgid "Housekeeping Teams"
+msgstr "فرق التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_checklist_property
+msgid "Housekeeping checklist in active companies"
+msgstr "قوائم تحقق التدبير الفندقي في الشركات النشطة"
 
 #. module: hotel_housekeeping
 #: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_wizard_line_assigned_property
@@ -188,6 +248,11 @@ msgid "Housekeeping status can only be changed through its actions."
 msgstr "لا يمكن تغيير حالة التدبير الفندقي إلا من خلال إجراءاتها."
 
 #. module: hotel_housekeeping
+#: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_task_line_property
+msgid "Housekeeping task lines in active companies"
+msgstr "سطور مهام التدبير الفندقي في الشركات النشطة"
+
+#. module: hotel_housekeeping
 #: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_task_assigned_property
 msgid "Housekeeping tasks in active companies"
 msgstr "مهام التدبير الفندقي في الشركات النشطة"
@@ -199,6 +264,11 @@ msgid "Housekeeping tasks must change status through their actions."
 msgstr "يجب تغيير حالة مهام التدبير الفندقي من خلال إجراءاتها."
 
 #. module: hotel_housekeeping
+#: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_team_property
+msgid "Housekeeping teams in active companies"
+msgstr "فرق التدبير الفندقي في الشركات النشطة"
+
+#. module: hotel_housekeeping
 #: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__hk_status__inspected
 msgid "Inspected"
 msgstr "مفتشة ومفحوصة"
@@ -207,6 +277,11 @@ msgstr "مفتشة ومفحوصة"
 #: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__priority__0
 msgid "Low"
 msgstr "منخفض"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__trigger_type__manual
+msgid "Manual"
+msgstr "يدوي"
 
 #. module: hotel_housekeeping
 #: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_kanban
@@ -255,6 +330,23 @@ msgid "Open Tasks"
 msgstr "المهام المفتوحة"
 
 #. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form_inherit_extended
+msgid "Photos"
+msgstr "الصور"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__trigger_type__post_checkout
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_search_inherit_extended
+msgid "Post-checkout"
+msgstr "بعد المغادرة"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_task__trigger_type__prearrival
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_search_inherit_extended
+msgid "Pre-arrival"
+msgstr "قبل الوصول"
+
+#. module: hotel_housekeeping
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__priority
 msgid "Priority"
 msgstr "الأولوية"
@@ -263,6 +355,11 @@ msgstr "الأولوية"
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard__property_id
 msgid "Property"
 msgstr "الفندق / المنشأة"
+
+#. module: hotel_housekeeping
+#: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form_inherit_extended
+msgid "Remarks"
+msgstr "ملاحظات"
 
 #. module: hotel_housekeeping
 #: model:ir.model.fields.selection,name:hotel_housekeeping.selection__hotel_housekeeping_discrepancy_wizard_line__fo_occupancy__reserved
@@ -324,14 +421,46 @@ msgid "System administrators: all discrepancy wizards"
 msgstr "مديرو النظام: كل معالجات الفروقات"
 
 #. module: hotel_housekeeping
+#: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_checklist_system_unrestricted
+msgid "System administrators: all housekeeping checklist items"
+msgstr "مديرو النظام: كل بنود قوائم تحقق التدبير الفندقي"
+
+#. module: hotel_housekeeping
+#: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_task_line_system_unrestricted
+msgid "System administrators: all housekeeping task lines"
+msgstr "مديرو النظام: كل سطور مهام التدبير الفندقي"
+
+#. module: hotel_housekeeping
 #: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_task_system_unrestricted
 msgid "System administrators: all housekeeping tasks"
 msgstr "مديرو النظام: كل مهام التدبير الفندقي"
 
 #. module: hotel_housekeeping
+#: model:ir.rule,name:hotel_housekeeping.rule_hotel_housekeeping_team_system_unrestricted
+msgid "System administrators: all housekeeping teams"
+msgstr "مديرو النظام: كل فرق التدبير الفندقي"
+
+#. module: hotel_housekeeping
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_task__name
 msgid "Task Reference"
 msgstr "مرجع المهمة"
+
+#. module: hotel_housekeeping
+#: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_team__member_ids
+msgid "Team Members"
+msgstr "أعضاء الفريق"
+
+#. module: hotel_housekeeping
+#. odoo-python
+#: code:addons/hotel_housekeeping/models/hotel_housekeeping_extension.py:0
+msgid "The housekeeping reservation must use the task room."
+msgstr "يجب أن يستخدم حجز التدبير الفندقي غرفة المهمة."
+
+#. module: hotel_housekeeping
+#. odoo-python
+#: code:addons/hotel_housekeeping/models/hotel_housekeeping_extension.py:0
+msgid "The housekeeping team belongs to another hotel."
+msgstr "ينتمي فريق التدبير الفندقي إلى فندق آخر."
 
 #. module: hotel_housekeeping
 #: model_terms:ir.ui.view,arch_db:hotel_housekeeping.hotel_housekeeping_task_view_form

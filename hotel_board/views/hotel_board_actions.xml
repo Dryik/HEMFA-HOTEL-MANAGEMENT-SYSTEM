@@ -10,12 +10,24 @@
         <field name="tag">hotel_board.planning</field>
     </record>
 
+    <record id="action_hotel_owner_dashboard" model="ir.actions.client">
+        <field name="name">Owner Dashboard</field>
+        <field name="tag">hotel_board.owner_dashboard</field>
+    </record>
+
     <menuitem id="menu_hotel_dashboard"
         name="Dashboard"
         parent="hotel_reservation.menu_hotel_frontdesk"
         action="action_hotel_dashboard"
         sequence="5"
         groups="hotel_base.group_hotel_frontdesk"/>
+
+    <menuitem id="menu_hotel_owner_dashboard"
+        name="Owner Dashboard"
+        parent="hotel_base.menu_hotel_root"
+        action="action_hotel_owner_dashboard"
+        sequence="12"
+        groups="hotel_base.group_hotel_manager"/>
 
     <!-- Make the purpose-built inventory tape the primary planning entry point. -->
     <record id="hotel_reservation.menu_hotel_reservation_planning" model="ir.ui.menu">

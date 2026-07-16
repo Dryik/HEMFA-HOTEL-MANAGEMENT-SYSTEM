@@ -1,7 +1,7 @@
 {
     "name": "Hotel Reservations",
     "summary": "Reservation lifecycle, planner, calendar, and availability",
-    "version": "19.0.4.0.0",
+    "version": "19.0.6.0.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",

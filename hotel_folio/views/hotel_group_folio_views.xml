@@ -7,7 +7,11 @@
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
                 <button name="action_create_group_invoice" type="object"
-                    string="Create Group Invoice" class="btn-secondary"
+                    string="Combined Billing" class="btn-secondary"
+                    invisible="state != 'confirmed'"
+                    groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
+                <button name="action_create_isolated_invoices" type="object"
+                    string="Isolated Room Billing" class="btn-secondary"
                     invisible="state != 'confirmed'"
                     groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
             </xpath>
