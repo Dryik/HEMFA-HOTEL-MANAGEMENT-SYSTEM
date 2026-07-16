@@ -4,13 +4,15 @@
         <field name="name">hotel.room.type.list</field>
         <field name="model">hotel.room.type</field>
         <field name="arch" type="xml">
-            <list>
+            <list delete="false">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="code"/>
                 <field name="base_price"/>
                 <field name="capacity_adults"/>
                 <field name="capacity_children"/>
+                <field name="max_occupancy" optional="show"/>
+                <field name="website_published" optional="hide"/>
                 <field name="room_count"/>
             </list>
         </field>
@@ -20,7 +22,7 @@
         <field name="name">hotel.room.type.form</field>
         <field name="model">hotel.room.type</field>
         <field name="arch" type="xml">
-            <form>
+            <form delete="false">
                 <sheet>
                     <group>
                         <group>
@@ -28,10 +30,17 @@
                             <field name="code"/>
                             <field name="property_id" invisible="1"/>
                             <field name="base_price"/>
+                            <field name="website_published"/>
+                            <field name="active"/>
+                            <field name="retired_at" invisible="active"/>
+                            <field name="retirement_reason" invisible="active"/>
                         </group>
                         <group>
                             <field name="capacity_adults"/>
                             <field name="capacity_children"/>
+                            <field name="capacity_teenagers"/>
+                            <field name="capacity_infants"/>
+                            <field name="max_occupancy"/>
                             <field name="product_id" groups="hotel_base.group_hotel_manager"/>
                             <field name="room_count"/>
                         </group>
@@ -40,8 +49,22 @@
                         <field name="amenity_ids" widget="many2many_tags"/>
                     </group>
                     <notebook>
+                        <page string="Occupancy" name="occupancy">
+                            <group>
+                                <field name="base_adults"/>
+                                <field name="base_teenagers"/>
+                                <field name="base_children"/>
+                                <field name="base_infants"/>
+                            </group>
+                        </page>
                         <page string="Description" name="description">
                             <field name="description"/>
+                        </page>
+                        <page string="Website" name="website">
+                            <field name="website_image" widget="image"/>
+                            <field name="website_description"/>
+                            <field name="room_policy"/>
+                            <field name="gallery_attachment_ids" widget="many2many_binary"/>
                         </page>
                     </notebook>
                 </sheet>

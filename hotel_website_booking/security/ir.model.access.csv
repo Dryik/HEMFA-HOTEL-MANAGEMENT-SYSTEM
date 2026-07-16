@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hotel_online_booking_frontdesk,hotel.online.booking frontdesk,model_hotel_online_booking,hotel_base.group_hotel_frontdesk,1,1,1,0
+access_hotel_online_booking_accountant,hotel.online.booking accountant,model_hotel_online_booking,hotel_base.group_hotel_accountant,1,0,0,0
+access_hotel_online_booking_manager,hotel.online.booking manager,model_hotel_online_booking,hotel_base.group_hotel_manager,1,1,1,0
+access_hotel_online_booking_line_frontdesk,hotel.online.booking.line frontdesk,model_hotel_online_booking_line,hotel_base.group_hotel_frontdesk,1,1,1,1
+access_hotel_online_booking_line_manager,hotel.online.booking.line manager,model_hotel_online_booking_line,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_online_booking_service_frontdesk,hotel.online.booking.service frontdesk,model_hotel_online_booking_service,hotel_base.group_hotel_frontdesk,1,1,1,1
+access_hotel_online_booking_service_manager,hotel.online.booking.service manager,model_hotel_online_booking_service,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_payment_allocation_accountant,hotel.payment.allocation accountant,model_hotel_payment_allocation,hotel_base.group_hotel_accountant,1,0,0,0
+access_hotel_payment_allocation_manager,hotel.payment.allocation manager,model_hotel_payment_allocation,hotel_base.group_hotel_manager,1,0,0,0

@@ -50,6 +50,11 @@ msgid "Agency commissions in active companies"
 msgstr "عمولات الوكالات في الشركات النشطة"
 
 #. module: hotel_base
+#: model:ir.model.fields,help:hotel_base.field_hotel_room__website_published
+msgid "Allow this physical room to be assigned by the public booking website."
+msgstr "السماح بتخصيص هذه الغرفة الفعلية عبر موقع الحجز العام."
+
+#. module: hotel_base
 #: model:ir.model.fields,field_description:hotel_base.field_hotel_room_type__amenity_ids
 #: model:ir.actions.act_window,name:hotel_base.hotel_amenity_action
 #: model:ir.ui.menu,name:hotel_base.menu_hotel_config_amenity
@@ -62,9 +67,20 @@ msgid "Amenities beyond the room type's standard set."
 msgstr "الخدمات الإضافية خارج المجموعة الأساسية لنوع الغرفة."
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_property__hotel_type__aparthotel
+msgid "Aparthotel"
+msgstr "فندق شقق"
+
+#. module: hotel_base
 #: model:ir.model.fields,field_description:hotel_base.field_hotel_room_type__base_price
 msgid "Base Nightly Price"
 msgstr "سعر الليلة الأساسي"
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_room_type.py:0
+msgid "Base occupancy cannot exceed the room type capacity."
+msgstr "لا يمكن أن يتجاوز الإشغال الأساسي سعة نوع الغرفة."
 
 #. module: hotel_base
 #: model_terms:ir.ui.view,arch_db:hotel_base.res_company_view_form_hotel
@@ -144,6 +160,12 @@ msgid "Commission percentage must be between 0 and 100."
 msgstr "يجب أن تكون نسبة العمولة بين 0 و‏100."
 
 #. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_property.py:0
+msgid "Company hotel configurations cannot be deleted. Archive the Odoo company when the hotel is no longer active."
+msgstr "لا يمكن حذف إعدادات فندق الشركة. قم بأرشفة شركة أودو عندما يتوقف الفندق عن العمل."
+
+#. module: hotel_base
 #: model:ir.ui.menu,name:hotel_base.menu_hotel_config
 msgid "Configuration"
 msgstr "الإعدادات"
@@ -200,9 +222,19 @@ msgid "Driving License"
 msgstr "رخصة قيادة"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_property__stay_charge_policy__entire_stay
+msgid "Entire Stay on Confirmation"
+msgstr "كامل الإقامة عند التأكيد"
+
+#. module: hotel_base
 #: model:ir.model.fields,help:hotel_base.field_res_partner__hotel_agency_id
 msgid "Entity this guest is usually registered under. The reservation can override it per stay."
 msgstr "الجهة التي يسجل تحتها النزيل غالباً، ويمكن للحجز تجاوزها لكل إقامة."
+
+#. module: hotel_base
+#: model:ir.model.fields,help:hotel_base.field_hotel_property__website_published
+msgid "Expose this company's hotel content on its configured Odoo website."
+msgstr "عرض محتوى فندق هذه الشركة على موقع أودو المحدد لها."
 
 #. module: hotel_base
 #: model:ir.model.fields,field_description:hotel_base.field_hotel_room__amenity_ids
@@ -231,6 +263,11 @@ msgid "Fixed Amount Placeholder"
 msgstr "إعداد المبلغ الثابت"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_property__online_payment_policy__fixed_deposit
+msgid "Fixed Deposit"
+msgstr "عربون ثابت"
+
+#. module: hotel_base
 #: model:ir.model.fields.selection,name:hotel_base.selection__hotel_property__cancellation_policy__fixed
 #: model:ir.model.fields.selection,name:hotel_base.selection__hotel_property__no_show_policy__fixed
 msgid "Fixed Fee"
@@ -255,6 +292,12 @@ msgid "Floors"
 msgstr "الطوابق"
 
 #. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_floor.py:0
+msgid "Floors cannot be deleted. Archive unused floors instead."
+msgstr "لا يمكن حذف الطوابق. قم بأرشفة الطوابق غير المستخدمة بدلاً من ذلك."
+
+#. module: hotel_base
 #: model:res.groups,name:hotel_base.group_hotel_fb
 msgid "Food & Beverage"
 msgstr "الأغذية والمشروبات"
@@ -270,9 +313,41 @@ msgid "Front Office Supervisor"
 msgstr "مشرف المكتب الأمامي"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_property__online_payment_policy__full
+msgid "Full Prepayment"
+msgstr "دفع كامل مقدماً"
+
+#. module: hotel_base
 #: model:ir.model.fields,field_description:hotel_base.field_res_partner__guest_gender
 msgid "Gender"
 msgstr "الجنس"
+
+#. module: hotel_base
+#: model_terms:ir.ui.view,arch_db:hotel_base.res_company_view_form_hotel
+msgid "Guest Age Ranges"
+msgstr "الفئات العمرية للنزلاء"
+
+#. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_property__hotel_type__guest_house
+msgid "Guest House"
+msgstr "بيت ضيافة"
+
+#. module: hotel_base
+#: model_terms:ir.ui.view,arch_db:hotel_base.res_company_view_form_hotel
+msgid "Guest Policies"
+msgstr "سياسات النزلاء"
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_property.py:0
+msgid "Guest age limits cannot be negative."
+msgstr "لا يمكن أن تكون حدود أعمار النزلاء سالبة."
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_property.py:0
+msgid "Guest age ranges must be ordered and must not overlap."
+msgstr "يجب ترتيب نطاقات أعمار النزلاء وألا تتداخل."
 
 #. module: hotel_base
 #: model:ir.ui.menu,name:hotel_base.menu_hotel_guests
@@ -281,6 +356,7 @@ msgid "Guests"
 msgstr "النزلاء"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_property__hotel_type__hotel
 #: model:ir.ui.menu,name:hotel_base.menu_hotel_root
 msgid "Hotel"
 msgstr "الفندق"
@@ -370,6 +446,11 @@ msgstr "إعدادات الفندق"
 #: model:ir.model.fields,field_description:hotel_base.field_res_company__hotel_timezone
 msgid "Hotel Timezone"
 msgstr "المنطقة الزمنية للفندق"
+
+#. module: hotel_base
+#: model_terms:ir.ui.view,arch_db:hotel_base.res_company_view_form_hotel
+msgid "Hotel Website"
+msgstr "موقع الفندق"
 
 #. module: hotel_base
 #: model:ir.rule,name:hotel_base.rule_hotel_property_assigned
@@ -496,6 +577,11 @@ msgid "Manager"
 msgstr "المدير"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_property__online_payment_policy__manual
+msgid "Manual Approval / No Online Payment"
+msgstr "موافقة يدوية / بدون دفع عبر الإنترنت"
+
+#. module: hotel_base
 #: model:ir.model.fields.selection,name:hotel_base.selection__res_partner__guest_id_type__national_id
 msgid "National ID"
 msgstr "البطاقة الشخصية"
@@ -545,6 +631,7 @@ msgid "No-show percentage cannot exceed 100."
 msgstr "لا يمكن أن تتجاوز نسبة عدم الحضور 100."
 
 #. module: hotel_base
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_type_view_form
 #: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_search
 msgid "Occupancy"
 msgstr "الإشغال"
@@ -554,6 +641,11 @@ msgstr "الإشغال"
 #: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_search
 msgid "Occupied"
 msgstr "مشغولة"
+
+#. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_property__online_deposit_value
+msgid "Online Deposit / Percentage"
+msgstr "العربون الإلكتروني / النسبة"
 
 #. module: hotel_base
 #. odoo-python
@@ -583,6 +675,16 @@ msgid "Passport"
 msgstr "جواز سفر"
 
 #. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_property__stay_charge_policy__per_night
+msgid "Per Night"
+msgstr "لكل ليلة"
+
+#. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_property__online_payment_policy__percent_deposit
+msgid "Percentage Deposit"
+msgstr "عربون بنسبة مئوية"
+
+#. module: hotel_base
 #: model:ir.model.fields.selection,name:hotel_base.selection__hotel_agency_commission__commission_type__percent
 msgid "Percentage Placeholder"
 msgstr "إعداد النسبة المئوية"
@@ -605,9 +707,25 @@ msgid "Policy grace periods and fees cannot be negative."
 msgstr "لا يمكن أن تكون فترات السماح والرسوم في السياسة سالبة."
 
 #. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_property__prearrival_housekeeping_hours
+msgid "Pre-arrival Housekeeping Lead (hours)"
+msgstr "مهلة التجهيز قبل الوصول (بالساعات)"
+
+#. module: hotel_base
+#: model:ir.model.fields,help:hotel_base.field_hotel_property__website_gallery_attachment_ids
+msgid "Private gallery images served only through the hotel website media route."
+msgstr "صور معرض خاصة تعرض فقط عبر مسار وسائط موقع الفندق."
+
+#. module: hotel_base
 #: model:ir.model.fields,field_description:hotel_base.field_res_partner__guest_profession
 msgid "Profession"
 msgstr "المهنة"
+
+#. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_property__website_published
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_room__website_published
+msgid "Published on Website"
+msgstr "منشور على الموقع"
 
 #. module: hotel_base
 #: model:ir.model.fields,field_description:hotel_base.field_hotel_room_type__product_id
@@ -618,6 +736,23 @@ msgstr "منتج تسعير الغرفة"
 #: model:ir.model.fields.selection,name:hotel_base.selection__hotel_room__occupancy_state__reserved
 msgid "Reserved"
 msgstr "محجوزة"
+
+#. module: hotel_base
+#: model:ir.model.fields.selection,name:hotel_base.selection__hotel_property__hotel_type__resort
+msgid "Resort"
+msgstr "منتجع"
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_floor.py:0
+msgid "Retire or move all active rooms before retiring a floor."
+msgstr "قم بإيقاف أو نقل كل الغرف النشطة قبل إيقاف الطابق."
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_room_type.py:0
+msgid "Retire or reassign all active rooms before retiring a room type."
+msgstr "قم بإيقاف أو إعادة تعيين كل الغرف النشطة قبل إيقاف نوع الغرفة."
 
 #. module: hotel_base
 #: model:ir.model,name:hotel_base.model_hotel_amenity
@@ -648,6 +783,12 @@ msgid "Room occupancy and maintenance blocks can only be changed by their workfl
 msgstr "لا يمكن تغيير إشغال الغرفة وحجب الصيانة إلا من خلال سير العمل الخاص بهما."
 
 #. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_room_type.py:0
+msgid "Room occupancy values cannot be negative."
+msgstr "لا يمكن أن تكون قيم إشغال الغرفة سالبة."
+
+#. module: hotel_base
 #: model:ir.model.fields,help:hotel_base.field_hotel_room__admin_use
 msgid "Room reserved for hotel / staff use; excluded from sellable inventory and occupancy percentages."
 msgstr "غرفة مخصصة لاستخدام الفندق / الموظفين؛ وهي مستبعدة من المخزون القابل للبيع ونسب الإشغال."
@@ -659,6 +800,18 @@ msgid "Room type %(room_type)s belongs to %(type_property)s and cannot be assign
 msgstr "ينتمي نوع الغرفة %(room_type)s إلى %(type_property)s ولا يمكن إسناده إلى غرفة في %(room_property)s."
 
 #. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_room_type.py:0
+msgid "Room types cannot be deleted. Archive unused room types instead."
+msgstr "لا يمكن حذف أنواع الغرف. قم بأرشفة الأنواع غير المستخدمة بدلاً من ذلك."
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_room_type.py:0
+msgid "Room-type website galleries accept images only."
+msgstr "تقبل معارض أنواع الغرف على الموقع الصور فقط."
+
+#. module: hotel_base
 #: model:ir.model.fields,field_description:hotel_base.field_hotel_floor__room_ids
 #: model:ir.model.fields,field_description:hotel_base.field_hotel_property__room_ids
 #: model:ir.model.fields,field_description:hotel_base.field_hotel_room_type__room_ids
@@ -666,6 +819,12 @@ msgstr "ينتمي نوع الغرفة %(room_type)s إلى %(type_property)s و
 #: model:ir.actions.act_window,name:hotel_base.hotel_room_action
 msgid "Rooms"
 msgstr "الغرف"
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_room.py:0
+msgid "Rooms are permanent hotel inventory records and cannot be deleted. Archive the room and record a retirement reason instead."
+msgstr "الغرف سجلات دائمة لمخزون الفندق ولا يمكن حذفها. قم بأرشفة الغرفة وتسجيل سبب الإيقاف بدلاً من ذلك."
 
 #. module: hotel_base
 #: model:ir.model.fields,help:hotel_base.field_hotel_property__sellable_room_count
@@ -735,6 +894,48 @@ msgid "The hotel partner and property must use the same company."
 msgstr "يجب أن يستخدم شريك الفندق والمنشأة الشركة نفسها."
 
 #. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_property.py:0
+msgid "The hotel website gallery accepts images only."
+msgstr "يقبل معرض موقع الفندق الصور فقط."
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_property.py:0
+msgid "The online deposit cannot be negative."
+msgstr "لا يمكن أن يكون العربون الإلكتروني سالباً."
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_property.py:0
+msgid "The online deposit percentage cannot exceed 100."
+msgstr "لا يمكن أن تتجاوز نسبة العربون الإلكتروني 100."
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_property.py:0
+msgid "The online room hold must be at least one minute."
+msgstr "يجب ألا تقل مهلة حجز الغرفة الإلكتروني عن دقيقة واحدة."
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_property.py:0
+msgid "The pre-arrival housekeeping lead cannot be negative."
+msgstr "لا يمكن أن تكون مهلة التجهيز قبل الوصول سالبة."
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_room_type.py:0
+msgid "The room-rate product must belong to the room type company."
+msgstr "يجب أن ينتمي منتج سعر الغرفة إلى شركة نوع الغرفة."
+
+#. module: hotel_base
+#. odoo-python
+#: code:addons/hotel_base/models/hotel_property.py:0
+msgid "The website review limit cannot be negative."
+msgstr "لا يمكن أن يكون حد تقييمات الموقع سالباً."
+
+#. module: hotel_base
 #: model:ir.model.fields,help:hotel_base.field_hotel_property__timezone
 msgid "Timezone used to convert the company's hotel business day to UTC."
 msgstr "المنطقة الزمنية المستخدمة لتحويل يوم عمل فندق الشركة إلى التوقيت العالمي."
@@ -751,16 +952,20 @@ msgid "Vacant"
 msgstr "شاغرة"
 
 #. module: hotel_base
-#. odoo-python
-#: code:addons/hotel_base/models/hotel_room.py:0
-msgid "You cannot delete room %s because it has active reservations."
-msgstr "لا يمكن حذف الغرفة %s لوجود حجوزات نشطة عليها."
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_type_view_form
+msgid "Website"
+msgstr "الموقع الإلكتروني"
 
 #. module: hotel_base
-#. odoo-python
-#: code:addons/hotel_base/models/hotel_property.py:0
-msgid "You cannot delete the hotel configuration for %s because it has reservations."
-msgstr "لا يمكن حذف إعداد الفندق للشركة %s لوجود حجوزات مرتبطة به."
+#: model_terms:ir.ui.view,arch_db:hotel_base.res_company_view_form_hotel
+msgid "Website Description"
+msgstr "وصف الموقع"
+
+#. module: hotel_base
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_property__website_gallery_attachment_ids
+#: model:ir.model.fields,field_description:hotel_base.field_hotel_room_type__gallery_attachment_ids
+msgid "Website Gallery"
+msgstr "معرض صور الموقع"
 
 #. module: hotel_base
 #: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_form

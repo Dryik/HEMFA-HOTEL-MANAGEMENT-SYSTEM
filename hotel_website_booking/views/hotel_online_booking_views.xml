@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hotel_online_booking_view_list" model="ir.ui.view">
+        <field name="name">hotel.online.booking.list</field>
+        <field name="model">hotel.online.booking</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="state in ('pending_review', 'payment_pending')" decoration-danger="state == 'payment_exception'" delete="false">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="checkin_date"/>
+                <field name="checkout_date"/>
+                <field name="amount_total"/>
+                <field name="amount_due_online"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="expires_at"/>
+                <field name="state" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hotel_online_booking_view_form" model="ir.ui.view">
+        <field name="name">hotel.online.booking.form</field>
+        <field name="model">hotel.online.booking</field>
+        <field name="arch" type="xml">
+            <form delete="false">
+                <header>
+                    <button name="action_reprice" type="object" string="Reprice" invisible="state not in ('draft', 'pending_review')"/>
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve_manual" type="object" string="Approve and Confirm" class="btn-primary" invisible="state != 'pending_review'"/>
+                    <button name="action_cancel_online" type="object" string="Cancel" invisible="state not in ('pending_review', 'held', 'payment_pending', 'confirmed')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending_review,payment_pending,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="website_id"/>
+                            <field name="property_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="nationality_id"/>
+                            <field name="pricelist_id"/>
+                        </group>
+                        <group>
+                            <field name="checkin_date"/>
+                            <field name="checkout_date"/>
+                            <field name="adults"/>
+                            <field name="teenagers"/>
+                            <field name="children"/>
+                            <field name="infants"/>
+                            <field name="expires_at" invisible="not expires_at"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rooms">
+                            <field name="line_ids" readonly="state not in ('draft', 'pending_review')">
+                                <list editable="bottom">
+                                    <field name="room_type_id"/>
+                                    <field name="quantity"/>
+                                    <field name="adults"/>
+                                    <field name="teenagers"/>
+                                    <field name="children"/>
+                                    <field name="infants"/>
+                                    <field name="unit_amount_total"/>
+                                    <field name="amount_total"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Services">
+                            <field name="service_line_ids" readonly="state not in ('draft', 'pending_review')">
+                                <list editable="bottom">
+                                    <field name="service_id"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="amount_total"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Reservations">
+                            <field name="group_id"/>
+                            <field name="reservation_ids" widget="many2many_tags"/>
+                            <field name="transaction_ids" readonly="1"/>
+                            <field name="allocation_ids" readonly="1">
+                                <list>
+                                    <field name="payment_id"/>
+                                    <field name="folio_id"/>
+                                    <field name="amount"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Quote Trace" groups="hotel_base.group_hotel_manager">
+                            <field name="quote_snapshot" widget="json" readonly="1"/>
+                        </page>
+                    </notebook>
+                    <group>
+                        <group>
+                            <field name="customer_note"/>
+                            <field name="exception_note" invisible="not exception_note"/>
+                        </group>
+                        <group string="Totals">
+                            <field name="amount_untaxed"/>
+                            <field name="amount_tax"/>
+                            <field name="amount_total"/>
+                            <field name="amount_due_online"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="payment_policy"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hotel_online_booking_view_search" model="ir.ui.view">
+        <field name="name">hotel.online.booking.search</field>
+        <field name="model">hotel.online.booking</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <filter name="pending_review" string="Pending Review" domain="[('state', '=', 'pending_review')]"/>
+                <filter name="payment_exception" string="Payment Exception" domain="[('state', '=', 'payment_exception')]"/>
+                <group>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hotel_online_booking_action" model="ir.actions.act_window">
+        <field name="name">Online Bookings</field>
+        <field name="res_model">hotel.online.booking</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hotel_online_booking_view_search"/>
+    </record>
+
+    <record id="hotel_reservation_booking_analysis_pivot" model="ir.ui.view">
+        <field name="name">hotel.reservation.booking.analysis.pivot</field>
+        <field name="model">hotel.reservation</field>
+        <field name="arch" type="xml">
+            <pivot string="Booking Analysis">
+                <field name="booking_source" type="row"/>
+                <field name="room_type_id" type="col"/>
+                <field name="amount_total" type="measure"/>
+                <field name="nights" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="hotel_reservation_booking_analysis_graph" model="ir.ui.view">
+        <field name="name">hotel.reservation.booking.analysis.graph</field>
+        <field name="model">hotel.reservation</field>
+        <field name="arch" type="xml">
+            <graph string="Booking Analysis" type="bar">
+                <field name="checkin_business_date" interval="month"/>
+                <field name="booking_source"/>
+                <field name="amount_total" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="hotel_reservation_booking_analysis_action" model="ir.actions.act_window">
+        <field name="name">Booking Analysis</field>
+        <field name="res_model">hotel.reservation</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('state', 'not in', ('draft', 'cancelled'))]</field>
+    </record>
+
+    <menuitem id="menu_hotel_online_booking" name="Online Bookings" parent="hotel_base.menu_hotel_root" action="hotel_online_booking_action" sequence="14" groups="hotel_base.group_hotel_frontdesk"/>
+    <menuitem id="menu_hotel_booking_analysis" name="Booking Analysis" parent="hotel_base.menu_hotel_root" action="hotel_reservation_booking_analysis_action" sequence="75" groups="hotel_base.group_hotel_manager"/>
+
+    <record id="hotel_reservation_form_communication" model="ir.ui.view">
+        <field name="name">hotel.reservation.form.communication</field>
+        <field name="model">hotel.reservation</field>
+        <field name="inherit_id" ref="hotel_reservation.hotel_reservation_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_send_voucher" type="object" string="Send Voucher" invisible="state not in ('confirmed', 'checked_in')"/>
+                <button name="action_send_prearrival" type="object" string="Send Pre-arrival" invisible="state != 'confirmed'"/>
+            </xpath>
+            <xpath expr="//field[@name='hold_expires_at']" position="after">
+                <field name="prearrival_sent_at" readonly="1" invisible="not prearrival_sent_at"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="payment_transaction_form_hotel_booking" model="ir.ui.view">
+        <field name="name">payment.transaction.form.hotel.booking</field>
+        <field name="model">payment.transaction</field>
+        <field name="inherit_id" ref="payment.payment_transaction_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='reference']" position="after">
+                <field name="hotel_online_booking_id" invisible="not hotel_online_booking_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="account_payment_form_hotel_booking" model="ir.ui.view">
+        <field name="name">account.payment.form.hotel.booking</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="hotel_online_booking_id" invisible="not hotel_online_booking_id"/>
+                <field name="hotel_reservation_group_id" invisible="not hotel_reservation_group_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="res_company_form_hotel_website_readiness" model="ir.ui.view">
+        <field name="name">res.company.form.hotel.website.readiness</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="hotel_base.res_company_view_form_hotel"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='hotel_website_published']" position="after">
+                <field name="hotel_website_ready" readonly="1"/>
+                <field name="hotel_website_readiness_message" readonly="1" invisible="hotel_website_ready"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

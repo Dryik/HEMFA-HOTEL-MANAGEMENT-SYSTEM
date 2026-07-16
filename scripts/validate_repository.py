@@ -17,6 +17,20 @@ from xml.etree import ElementTree
 
 ROOT = Path(__file__).resolve().parents[1]
 ADDONS = sorted(path.parent for path in ROOT.glob("*/__manifest__.py"))
+TRANSLATION_REQUIRED_ADDONS = {
+    "hotel_base",
+    "hotel_reservation",
+    "hotel_board",
+    "hotel_folio",
+    "hotel_rate",
+    "hotel_housekeeping",
+    "hotel_maintenance",
+    "hotel_restricted_services",
+    "hotel_pos_room_charge",
+    "hotel_reports",
+    "hotel_guest_services",
+    "hotel_website_booking",
+}
 ACL_HEADER = [
     "id",
     "name",
@@ -243,6 +257,59 @@ def check_odoo19_patterns(errors: list[str]) -> None:
                 fail(errors, f"{path.relative_to(ROOT)}:{line}: {description}")
 
 
+def check_sales_free_website_booking(errors: list[str]) -> None:
+    """Keep the public hotel workflow independent from Odoo Sales."""
+    addon = ROOT / "hotel_website_booking"
+    if not addon.is_dir():
+        return
+    manifest = load_manifest(addon / "__manifest__.py", errors)
+    forbidden_dependencies = {"sale", "sale_management", "website_sale"}
+    found_dependencies = forbidden_dependencies.intersection(manifest.get("depends", []))
+    if found_dependencies:
+        fail(
+            errors,
+            "hotel_website_booking: forbidden Sales dependencies: "
+            + ", ".join(sorted(found_dependencies)),
+        )
+    forbidden_source = {
+        "sale.order": re.compile(r"\bsale\.order\b", re.IGNORECASE),
+        "Sales URL route": re.compile(r"@(?:http\.)?route\([^\n]*[\"']/sale(?:/|[\"'])"),
+        "Sales menu/action reference": re.compile(
+            r"(?:ref|parent|action)\s*=\s*[\"'][^\"']*(?:website_sale|sale\.)",
+            re.IGNORECASE,
+        ),
+    }
+    for path in sorted(addon.rglob("*")):
+        if (
+            path.suffix not in {".py", ".xml", ".js"}
+            or "__pycache__" in path.parts
+            or "tests" in path.parts
+        ):
+            continue
+        text = path.read_text(encoding="utf-8")
+        for label, pattern in forbidden_source.items():
+            if match := pattern.search(text):
+                line = text.count("\n", 0, match.start()) + 1
+                fail(errors, f"{path.relative_to(ROOT)}:{line}: forbidden {label}")
+
+
+def check_arabic_translation_completeness(errors: list[str]) -> None:
+    """Reject English fallback entries in supported hotel addon catalogs."""
+    empty_translation = re.compile(
+        r'^msgid "(?P<term>.+)"\r?\nmsgstr ""$', re.MULTILINE
+    )
+    for addon_name in sorted(TRANSLATION_REQUIRED_ADDONS):
+        path = ROOT / addon_name / "i18n" / "ar.po"
+        if not path.is_file():
+            fail(errors, f"{addon_name}: missing Arabic translation catalog")
+            continue
+        for match in empty_translation.finditer(path.read_text(encoding="utf-8")):
+            fail(
+                errors,
+                f'{path.relative_to(ROOT)}: untranslated Arabic term "{match.group("term")}"',
+            )
+
+
 def count_tests() -> int:
     pattern = re.compile(r"^\s+def\s+test_", re.MULTILINE)
     return sum(
@@ -259,6 +326,8 @@ def main() -> int:
     check_manifests(errors)
     check_acl_files(errors)
     check_odoo19_patterns(errors)
+    check_sales_free_website_booking(errors)
+    check_arabic_translation_completeness(errors)
 
     if errors:
         print("Static validation failed:", file=sys.stderr)

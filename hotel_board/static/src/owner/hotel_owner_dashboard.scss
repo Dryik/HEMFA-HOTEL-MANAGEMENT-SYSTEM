@@ -1,0 +1,49 @@
+.o_hotel_owner_dashboard {
+    background: var(--o-view-background-color, #f7f8fa);
+
+    .o_owner_kpis {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+        gap: 1rem;
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+        }
+
+        strong {
+            font-size: 1.65rem;
+        }
+    }
+
+    .o_owner_trends {
+        display: grid;
+        gap: .7rem;
+        max-height: 35rem;
+        overflow-y: auto;
+    }
+
+    .o_owner_trend {
+        display: grid;
+        grid-template-columns: 6rem 1fr;
+        gap: .25rem .75rem;
+        align-items: center;
+    }
+
+    .o_owner_trend_date {
+        grid-row: span 2;
+        color: var(--bs-secondary-color);
+    }
+
+    .o_owner_bar {
+        min-height: 1.35rem;
+        border-radius: .25rem;
+        padding: .1rem .4rem;
+        white-space: nowrap;
+        font-size: .75rem;
+
+        &.o_revenue { background: rgba(var(--bs-primary-rgb), .22); }
+        &.o_bookings { background: rgba(var(--bs-success-rgb), .22); }
+    }
+}

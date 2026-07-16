@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_company_view_form_hotel_website" model="ir.ui.view">
+        <field name="name">res.company.form.hotel.website.booking</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="hotel_base.res_company_view_form_hotel"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='hotel_type']" position="before">
+                <field name="hotel_website_id" options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

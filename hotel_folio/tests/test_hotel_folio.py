@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from odoo import fields
+from odoo import Command, fields
 from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
@@ -102,6 +102,40 @@ class TestHotelFolio(TransactionCase):
             }
         )
 
+    def _group_reservation(self, offset_days=0):
+        second_room = self.env["hotel.room"].search(
+            [("property_id", "=", self.property.id), ("name", "=", "R202")],
+            limit=1,
+        ) or self.env["hotel.room"].create(
+            {
+                "name": "R202",
+                "floor_id": self.floor.id,
+                "room_type_id": self.room_type.id,
+            }
+        )
+        checkin = self.checkin + timedelta(days=offset_days)
+        group = self.env["hotel.reservation.group"].create(
+            {
+                "property_id": self.property.id,
+                "group_partner_id": self.guest.id,
+                "billing_partner_id": self.guest.id,
+                "checkin_date": checkin,
+                "checkout_date": checkin + timedelta(days=2),
+                "allocation_line_ids": [
+                    Command.create(
+                        {"room_type_id": self.room_type.id, "requested_qty": 2}
+                    )
+                ],
+            }
+        )
+        group.action_allocate_available()
+        group.action_confirm()
+        self.assertEqual(
+            set(group.member_ids.mapped("room_id").ids),
+            {self.room.id, second_room.id},
+        )
+        return group
+
     def test_folio_auto_creation(self):
         res = self._reservation()
         self.assertEqual(res.folio_count, 0)
@@ -114,8 +148,8 @@ class TestHotelFolio(TransactionCase):
         stay_line = folio.line_ids.filtered(
             lambda line: line.source_type == "room_night"
         )
-        self.assertEqual(stay_line.qty, 2.0)
-        self.assertEqual(stay_line.amount_total, 800.0)
+        self.assertEqual(sum(stay_line.mapped("qty")), 2.0)
+        self.assertEqual(sum(stay_line.mapped("amount_total")), 800.0)
 
     def test_cancellation_reverses_contracted_stay(self):
         reservation = self._reservation()
@@ -130,15 +164,68 @@ class TestHotelFolio(TransactionCase):
         reversal = folio.line_ids.filtered(
             lambda line: line.source_type == "reversal"
         )
-        self.assertEqual(len(reversal), 1)
-        self.assertEqual(reversal.qty, -stay_line.qty)
-        self.assertEqual(reversal.payee_partner_id, stay_line.payee_partner_id)
-        self.assertEqual(reversal.reversal_of_id, stay_line)
+        self.assertEqual(len(reversal), len(stay_line))
+        self.assertEqual(sum(reversal.mapped("qty")), -sum(stay_line.mapped("qty")))
+        self.assertEqual(reversal.mapped("payee_partner_id"), self.guest)
+        self.assertEqual(reversal.mapped("reversal_of_id"), stay_line)
         self.assertEqual(folio.amount_total, 0.0)
 
         reservation.action_reset_draft()
         reservation.action_confirm()
         self.assertEqual(folio.amount_total, 800.0)
+
+    def test_per_night_policy_posts_only_due_snapshot_and_is_idempotent(self):
+        self.property.stay_charge_policy = "per_night"
+        business_date = self.property.get_business_date()
+        checkin, _unused = self.property.get_business_day_bounds(business_date)
+        reservation = self.env["hotel.reservation"].create(
+            {
+                "partner_id": self.guest.id,
+                "property_id": self.property.id,
+                "room_id": self.room.id,
+                "room_type_id": self.room_type.id,
+                "checkin_date": checkin,
+                "checkout_date": checkin + timedelta(days=2),
+            }
+        )
+        reservation.action_confirm()
+
+        self.assertEqual(len(reservation.rate_line_ids), 2)
+        self.assertEqual(len(reservation.rate_line_ids.filtered("posted")), 1)
+        stay_lines = reservation.folio_ids.line_ids.filtered(
+            lambda line: line.source_type == "room_night"
+        )
+        self.assertEqual(len(stay_lines), 1)
+
+        self.env["hotel.reservation"]._cron_post_due_nightly_rates()
+        self.assertEqual(
+            len(
+                reservation.folio_ids.line_ids.filtered(
+                    lambda line: line.source_type == "room_night"
+                )
+            ),
+            1,
+        )
+
+    def test_group_combined_and_isolated_invoice_workflows(self):
+        combined_group = self._group_reservation()
+        combined_action = combined_group.action_create_group_invoice()
+        combined_invoice = self.env["account.move"].browse(combined_action["res_id"])
+        self.assertEqual(combined_invoice.hotel_reservation_group_id, combined_group)
+        self.assertEqual(len(combined_invoice.invoice_line_ids), 4)
+        self.assertEqual(
+            combined_group.member_ids.mapped("folio_ids.invoice_ids"),
+            combined_invoice,
+        )
+
+        isolated_group = self._group_reservation(offset_days=10)
+        isolated_action = isolated_group.action_create_isolated_invoices()
+        isolated_invoices = self.env["account.move"].search(isolated_action["domain"])
+        self.assertEqual(len(isolated_invoices), 2)
+        self.assertEqual(
+            set(isolated_invoices.mapped("hotel_folio_id").ids),
+            set(isolated_group.member_ids.mapped("folio_ids").ids),
+        )
 
     def test_new_folio_totals_are_safe_before_reservation_selection(self):
         folio = self.env["hotel.folio"].new({})
@@ -322,7 +409,7 @@ class TestHotelFolio(TransactionCase):
         action = folio.action_create_invoice()
         invoice = self.env["account.move"].browse(action["res_id"])
         self.assertEqual(invoice.partner_id, self.guest)
-        self.assertEqual(len(invoice.invoice_line_ids), 3)
+        self.assertEqual(len(invoice.invoice_line_ids), 4)
         self.assertEqual(invoice.amount_untaxed, 835.0)
 
         # All lines should now be marked as posted

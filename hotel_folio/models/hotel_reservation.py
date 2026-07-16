@@ -42,6 +42,40 @@ class HotelReservation(models.Model):
             if not reservation.folio_ids or not reservation.room_type_id.product_id:
                 continue
             folio = reservation.folio_ids[:1]
+            if "rate_line_ids" in reservation._fields and reservation.rate_line_ids:
+                due_lines = reservation.rate_line_ids.filtered(
+                    lambda line: not line.posted
+                    and not line.superseded
+                    and not line.reversal_of_id
+                )
+                if reservation.property_id.stay_charge_policy == "per_night":
+                    business_date = reservation.property_id.get_business_date()
+                    due_lines = due_lines.filtered(
+                        lambda line: line.business_date <= business_date
+                    )
+                for rate_line in due_lines:
+                    source_key = (
+                        f"stay:{reservation.id}:night:{rate_line.business_date.isoformat()}"
+                    )
+                    existing = self.env["hotel.folio.line"].search(
+                        [("source_key", "=", source_key)], limit=1
+                    )
+                    if not existing:
+                        night_start, _night_end = reservation.property_id.get_business_day_bounds(
+                            rate_line.business_date
+                        )
+                        folio._add_workflow_charge(
+                            reservation.room_type_id.product_id,
+                            qty=1.0,
+                            price_unit=rate_line.amount_untaxed,
+                            date=night_start,
+                            tax_ids=rate_line.tax_ids.ids,
+                            source_type="room_night",
+                            source_reference=reservation.name,
+                            source_key=source_key,
+                        )
+                    rate_line._mark_posted()
+                continue
             room_lines = folio.line_ids.filtered(
                 lambda line: line.source_type == "room_night"
                 and not line.reversal_of_id
@@ -74,6 +108,20 @@ class HotelReservation(models.Model):
                 source_reference=reservation.name,
                 source_key=source_key,
             )
+
+    @api.model
+    def _cron_post_due_nightly_rates(self):
+        if "rate_line_ids" not in self._fields:
+            return True
+        reservations = self.search(
+            [
+                ("state", "in", ("confirmed", "checked_in")),
+                ("property_id.stay_charge_policy", "=", "per_night"),
+                ("rate_line_ids.posted", "=", False),
+            ]
+        )
+        reservations._ensure_stay_charge()
+        return True
 
     def _reverse_stay_charge(self, policy_type):
         for reservation in self:

@@ -320,7 +320,7 @@ class HotelReservationGroup(models.Model):
     def action_cancel(self):
         for group in self:
             for reservation in group.member_ids.filtered(
-                lambda member: member.state in ("draft", "confirmed")
+                lambda member: member.state in ("draft", "pending_payment", "confirmed")
             ):
                 reservation.action_cancel()
             group._write_group_state("cancelled")

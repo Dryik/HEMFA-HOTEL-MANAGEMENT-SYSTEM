@@ -26,6 +26,45 @@
                                 invisible="hotel_no_show_policy == 'none'"/>
                         </group>
                     </group>
+                    <group string="Hotel Website">
+                        <group>
+                            <field name="hotel_type"/>
+                            <field name="hotel_tagline"/>
+                            <field name="hotel_website_published"/>
+                            <field name="hotel_website_review_limit"/>
+                            <field name="hotel_website_banner" widget="image"/>
+                            <field name="hotel_website_gallery_attachment_ids" widget="many2many_binary"/>
+                        </group>
+                        <group>
+                            <field name="hotel_stay_charge_policy"/>
+                            <field name="hotel_online_payment_policy"/>
+                            <field name="hotel_online_deposit_value"
+                                invisible="hotel_online_payment_policy not in ('fixed_deposit', 'percent_deposit')"/>
+                            <field name="hotel_online_hold_minutes"
+                                invisible="hotel_online_payment_policy == 'manual'"/>
+                            <field name="hotel_prearrival_housekeeping_hours"/>
+                        </group>
+                    </group>
+                    <group string="Guest Age Ranges">
+                        <group>
+                            <field name="hotel_adult_age_min"/>
+                            <field name="hotel_teenager_age_min"/>
+                            <field name="hotel_teenager_age_max"/>
+                        </group>
+                        <group>
+                            <field name="hotel_child_age_min"/>
+                            <field name="hotel_child_age_max"/>
+                            <field name="hotel_infant_age_max"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Website Description">
+                            <field name="hotel_website_description"/>
+                        </page>
+                        <page string="Guest Policies">
+                            <field name="hotel_website_policy"/>
+                        </page>
+                    </notebook>
                 </page>
             </xpath>
         </field>

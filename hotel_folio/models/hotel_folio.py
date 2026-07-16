@@ -316,6 +316,7 @@ class HotelFolio(models.Model):
         if source_type not in {
             "room_night",
             "pos",
+            "service",
             "amendment",
             "stay_policy",
             "reversal",
