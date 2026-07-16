@@ -29,11 +29,36 @@ msgid "Active"
 msgstr "نشط"
 
 #. module: hotel_guest_services
+#: model:ir.sequence,name:hotel_guest_services.seq_hotel_reservation_service
+#: model:ir.model,name:hotel_guest_services.model_hotel_reservation_service
+msgid "Allotted Hotel Service"
+msgstr "خدمة فندقية مخصصة"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields,field_description:hotel_guest_services.field_hotel_reservation__service_line_ids
+#: model:ir.ui.menu,name:hotel_guest_services.menu_hotel_allotted_services
+#: model:ir.actions.act_window,name:hotel_guest_services.hotel_reservation_service_action
+msgid "Allotted Services"
+msgstr "الخدمات المخصصة"
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_reservation_service_property
+msgid "Allotted services in active companies"
+msgstr "الخدمات المخصصة في الشركات النشطة"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields,field_description:hotel_guest_services.field_hotel_reservation_service__assigned_user_id
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_search
 msgid "Assigned To"
 msgstr "مسند إلى"
 
 #. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_guest_rating__state__draft
+msgid "Awaiting Feedback"
+msgstr "بانتظار التقييم"
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_service_view_form
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_dnd_view_list
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_dnd_view_form
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_form
@@ -41,6 +66,7 @@ msgid "Cancel"
 msgstr "إلغاء"
 
 #. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_reservation_service__state__cancelled
 #: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_do_not_disturb__state__cancelled
 #: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_wakeup_call__state__cancelled
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_dnd_view_search
@@ -73,6 +99,18 @@ msgstr "مكتملة"
 
 #. module: hotel_guest_services
 #. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Completed or cancelled hotel services are immutable."
+msgstr "خدمات الفندق المكتملة أو الملغاة غير قابلة للتغيير."
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Completed services must be reversed from their folio charge."
+msgstr "يجب عكس الخدمات المكتملة من رسم الفوليو الخاص بها."
+
+#. module: hotel_guest_services
+#. odoo-python
 #: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
 msgid "Completed wake-up calls are immutable."
 msgstr "مكالمات الإيقاظ المكتملة غير قابلة للتعديل."
@@ -84,9 +122,35 @@ msgid "Completed wake-up calls cannot be deleted."
 msgstr "لا يمكن حذف مكالمات الإيقاظ المكتملة."
 
 #. module: hotel_guest_services
+#: model:ir.model.fields,field_description:hotel_guest_services.field_hotel_room_type__complimentary_service_ids
+msgid "Complimentary Services"
+msgstr "الخدمات المجانية"
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_service_view_form
+msgid "Confirm"
+msgstr "تأكيد"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Confirm the reservation before posting a paid service."
+msgstr "أكد الحجز قبل ترحيل خدمة مدفوعة."
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_reservation_service__state__confirmed
+msgid "Confirmed"
+msgstr "مؤكد"
+
+#. module: hotel_guest_services
 #: model_terms:ir.actions.act_window,help:hotel_guest_services.hotel_dnd_action
 msgid "Create a request for an in-house stay and end it through the workflow action."
 msgstr "أنشئ طلباً لإقامة حالية وأنهه عبر إجراء سير العمل."
+
+#. module: hotel_guest_services
+#: model:ir.model.fields,field_description:hotel_guest_services.field_hotel_service__tax_ids
+msgid "Customer Taxes"
+msgstr "ضرائب العميل"
 
 #. module: hotel_guest_services
 #. odoo-python
@@ -129,6 +193,27 @@ msgid "Do Not Disturb"
 msgstr "عدم الإزعاج"
 
 #. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Document verification is controlled by its actions."
+msgstr "تتحكم إجراءات المستند في التحقق منه."
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_form_inherit_commercial
+msgid "Documents"
+msgstr "المستندات"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_reservation_service__state__done
+msgid "Done"
+msgstr "منجز"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_reservation_service__state__draft
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: hotel_guest_services
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_dnd_view_list
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_dnd_view_form
 msgid "End DND"
@@ -153,6 +238,12 @@ msgid "Ended DND requests cannot be deleted."
 msgstr "لا يمكن حذف طلبات عدم الإزعاج المنتهية."
 
 #. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Feedback is available only once after checkout."
+msgstr "يتاح التقييم مرة واحدة فقط بعد المغادرة."
+
+#. module: hotel_guest_services
 #: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_lost_found__state__found
 msgid "Found"
 msgstr "موجود"
@@ -163,14 +254,57 @@ msgid "Found Date"
 msgstr "تاريخ العثور"
 
 #. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_service__charge_policy__free
+msgid "Free"
+msgstr "مجاني"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields,field_description:hotel_guest_services.field_hotel_reservation__document_ids
+msgid "Guest Documents"
+msgstr "مستندات النزيل"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields,field_description:hotel_guest_services.field_hotel_reservation__rating_ids
+msgid "Guest Rating"
+msgstr "تقييم النزيل"
+
+#. module: hotel_guest_services
+#: model:ir.ui.menu,name:hotel_guest_services.menu_hotel_ratings
+#: model:ir.actions.act_window,name:hotel_guest_services.hotel_guest_rating_action
+msgid "Guest Ratings"
+msgstr "تقييمات النزلاء"
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_room_type_form_inherit_services
 #: model:ir.ui.menu,name:hotel_guest_services.menu_hotel_guest_services
 msgid "Guest Services"
 msgstr "خدمات النزلاء"
 
 #. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_guest_rating_property
+msgid "Guest ratings in active companies"
+msgstr "تقييمات النزلاء في الشركات النشطة"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Guest ratings must be between 1 and 5."
+msgstr "يجب أن تكون تقييمات النزلاء بين 1 و5."
+
+#. module: hotel_guest_services
 #: model:ir.model,name:hotel_guest_services.model_hotel_do_not_disturb
 msgid "Hotel Do Not Disturb Request"
 msgstr "طلب عدم إزعاج"
+
+#. module: hotel_guest_services
+#: model:ir.model,name:hotel_guest_services.model_hotel_guest_rating
+msgid "Hotel Guest Rating"
+msgstr "تقييم نزيل الفندق"
+
+#. module: hotel_guest_services
+#: model:ir.model,name:hotel_guest_services.model_hotel_service
+msgid "Hotel Guest Service"
+msgstr "خدمة نزيل الفندق"
 
 #. module: hotel_guest_services
 #: model:ir.sequence,name:hotel_guest_services.seq_hotel_lost_found
@@ -183,10 +317,37 @@ msgid "Hotel Lost and Found Item"
 msgstr "سجل مفقودات وموجودات الفندق"
 
 #. module: hotel_guest_services
+#: model:ir.actions.act_window,name:hotel_guest_services.hotel_service_action
+msgid "Hotel Services"
+msgstr "خدمات الفندق"
+
+#. module: hotel_guest_services
 #: model:ir.sequence,name:hotel_guest_services.seq_hotel_wakeup_call
 #: model:ir.model,name:hotel_guest_services.model_hotel_wakeup_call
 msgid "Hotel Wake-up Call"
 msgstr "مكالمة إيقاظ الفندق"
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_document_type_property
+msgid "Hotel document types in active companies"
+msgstr "أنواع مستندات الفندق في الشركات النشطة"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Hotel service status is controlled by workflow actions."
+msgstr "تتحكم إجراءات سير العمل في حالة خدمة الفندق."
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Hotel services cannot be deleted. Archive them instead."
+msgstr "لا يمكن حذف خدمات الفندق. قم بأرشفتها بدلاً من ذلك."
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_service_property
+msgid "Hotel services in active companies"
+msgstr "خدمات الفندق في الشركات النشطة"
 
 #. module: hotel_guest_services
 #: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_wakeup_call__urgency__later
@@ -222,6 +383,23 @@ msgid "Mark Claimed"
 msgstr "تحديد كمسلم"
 
 #. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_service_view_form
+msgid "Mark Done"
+msgstr "إنهاء العمل"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields,field_description:hotel_guest_services.field_hotel_service__is_meal
+msgid "Meal / Kitchen Item"
+msgstr "وجبة / صنف مطبخ"
+
+#. module: hotel_guest_services
+#: model:ir.ui.menu,name:hotel_guest_services.menu_hotel_meal_queue
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_service_search
+#: model:ir.actions.act_window,name:hotel_guest_services.hotel_meal_queue_action
+msgid "Meals to Prepare"
+msgstr "وجبات قيد التحضير"
+
+#. module: hotel_guest_services
 #: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_wakeup_call__state__missed
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_list
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_form
@@ -235,7 +413,13 @@ msgid "My Calls"
 msgstr "مكالماتي"
 
 #. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_service_search
+msgid "My Services"
+msgstr "خدماتي"
+
+#. module: hotel_guest_services
 #. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
 #: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
 msgid "New"
 msgstr "جديد"
@@ -267,15 +451,106 @@ msgid "Older than 7 Days"
 msgstr "أقدم من 7 أيام"
 
 #. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Only a hotel manager can reset document verification."
+msgstr "يمكن لمدير الفندق فقط إعادة تعيين التحقق من المستند."
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Only confirmed hotel services can be completed."
+msgstr "يمكن إكمال خدمات الفندق المؤكدة فقط."
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Only draft hotel services can be confirmed."
+msgstr "يمكن تأكيد خدمات الفندق المسودة فقط."
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Only draft hotel services can be deleted."
+msgstr "يمكن حذف خدمات الفندق المسودة فقط."
+
+#. module: hotel_guest_services
+#: model:ir.model.fields,field_description:hotel_guest_services.field_hotel_room_type__optional_service_ids
+msgid "Optional Services"
+msgstr "الخدمات الاختيارية"
+
+#. module: hotel_guest_services
 #: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_wakeup_call__urgency__overdue
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_search
 msgid "Overdue"
 msgstr "متأخر"
 
 #. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_service__charge_policy__paid
+msgid "Paid"
+msgstr "مدفوع"
+
+#. module: hotel_guest_services
+#: model:ir.model,name:hotel_guest_services.model_hotel_reservation_document
+msgid "Private Reservation Document"
+msgstr "مستند حجز خاص"
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_guest_rating_view_form
+msgid "Publish"
+msgstr "نشر"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_guest_rating__state__approved
+msgid "Published"
+msgstr "منشور"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields,field_description:hotel_guest_services.field_hotel_service__website_published
+msgid "Published on Website"
+msgstr "منشور على الموقع"
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_form_inherit_commercial
+msgid "Rating"
+msgstr "التقييم"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Rating publication is controlled by its actions."
+msgstr "تتحكم إجراءات التقييم في نشره."
+
+#. module: hotel_guest_services
 #: model_terms:ir.actions.act_window,help:hotel_guest_services.hotel_lost_found_action
 msgid "Register found property with its storage location so it can be traced and returned."
 msgstr "سجّل الممتلكات الموجودة ومكان حفظها كي يمكن تتبعها وإعادتها."
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_guest_rating_view_form
+msgid "Reject"
+msgstr "رفض"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_guest_rating__state__rejected
+msgid "Rejected"
+msgstr "مرفوض"
+
+#. module: hotel_guest_services
+#: model:ir.ui.menu,name:hotel_guest_services.menu_hotel_config_documents
+#: model:ir.actions.act_window,name:hotel_guest_services.hotel_document_type_action
+msgid "Required Documents"
+msgstr "المستندات المطلوبة"
+
+#. module: hotel_guest_services
+#: model:ir.model,name:hotel_guest_services.model_hotel_document_type
+msgid "Required Hotel Document Type"
+msgstr "نوع مستند فندقي مطلوب"
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_reservation_document_property
+msgid "Reservation documents in active companies"
+msgstr "مستندات الحجوزات في الشركات النشطة"
 
 #. module: hotel_guest_services
 #. odoo-python
@@ -290,11 +565,18 @@ msgid "Resolved lost-and-found records cannot be deleted."
 msgstr "لا يمكن حذف سجلات المفقودات والموجودات المحلولة."
 
 #. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_service_search
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_lost_found_view_search
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_dnd_view_search
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_search
 msgid "Room"
 msgstr "الغرفة"
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "Room-type services must belong to the same hotel."
+msgstr "يجب أن تنتمي خدمات نوع الغرفة إلى الفندق نفسه."
 
 #. module: hotel_guest_services
 #: model_terms:ir.actions.act_window,help:hotel_guest_services.hotel_wakeup_call_action
@@ -324,6 +606,23 @@ msgid "Select a claimant on a currently found item."
 msgstr "حدد مستلماً لعنصر موجود حالياً."
 
 #. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_service_search
+msgid "Service"
+msgstr "الخدمة"
+
+#. module: hotel_guest_services
+#: model:ir.ui.menu,name:hotel_guest_services.menu_hotel_config_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_form_inherit_commercial
+msgid "Services"
+msgstr "الخدمات"
+
+#. module: hotel_guest_services
+#: model:ir.model.fields,help:hotel_guest_services.field_hotel_service__website_published
+msgid "Show this service on the public hotel website and booking basket."
+msgstr "عرض هذه الخدمة على موقع الفندق العام وسلة الحجز."
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_service_search
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_lost_found_view_search
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_dnd_view_search
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_search
@@ -341,14 +640,44 @@ msgid "Storage Location"
 msgstr "مكان الحفظ"
 
 #. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_guest_rating__state__submitted
+msgid "Submitted"
+msgstr "مقدم"
+
+#. module: hotel_guest_services
 #: model:ir.rule,name:hotel_guest_services.rule_hotel_dnd_system_unrestricted
 msgid "System administrators: all DND requests"
 msgstr "مديرو النظام: كل طلبات عدم الإزعاج"
 
 #. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_reservation_service_system_unrestricted
+msgid "System administrators: all allotted services"
+msgstr "مديرو النظام: كل الخدمات المخصصة"
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_guest_rating_system_unrestricted
+msgid "System administrators: all guest ratings"
+msgstr "مديرو النظام: كل تقييمات النزلاء"
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_document_type_system_unrestricted
+msgid "System administrators: all hotel document types"
+msgstr "مديرو النظام: كل أنواع مستندات الفندق"
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_service_system_unrestricted
+msgid "System administrators: all hotel services"
+msgstr "مديرو النظام: كل خدمات الفندق"
+
+#. module: hotel_guest_services
 #: model:ir.rule,name:hotel_guest_services.rule_hotel_lost_found_system_unrestricted
 msgid "System administrators: all lost and found"
 msgstr "مديرو النظام: كل سجلات المفقودات والموجودات"
+
+#. module: hotel_guest_services
+#: model:ir.rule,name:hotel_guest_services.rule_hotel_reservation_document_system_unrestricted
+msgid "System administrators: all reservation documents"
+msgstr "مديرو النظام: كل مستندات الحجوزات"
 
 #. module: hotel_guest_services
 #: model:ir.rule,name:hotel_guest_services.rule_hotel_wakeup_system_unrestricted
@@ -360,6 +689,12 @@ msgstr "مديرو النظام: كل مكالمات الإيقاظ"
 #: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
 msgid "The DND request and stay must use the same property."
 msgstr "يجب أن يستخدم طلب عدم الإزعاج والإقامة المنشأة نفسها."
+
+#. module: hotel_guest_services
+#. odoo-python
+#: code:addons/hotel_guest_services/models/hotel_commercial.py:0
+msgid "The hotel service product must belong to the hotel company."
+msgstr "يجب أن ينتمي منتج خدمة الفندق إلى شركة الفندق."
 
 #. module: hotel_guest_services
 #. odoo-python
@@ -378,6 +713,11 @@ msgstr "يجب أن تنتمي الإقامة إلى الشركة النشطة."
 #: code:addons/hotel_guest_services/models/hotel_guest_services.py:0
 msgid "The wake-up call and stay must use the same property."
 msgstr "يجب أن تستخدم مكالمة الإيقاظ والإقامة المنشأة نفسها."
+
+#. module: hotel_guest_services
+#: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_service_search
+msgid "To Deliver"
+msgstr "بانتظار التسليم"
 
 #. module: hotel_guest_services
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_search

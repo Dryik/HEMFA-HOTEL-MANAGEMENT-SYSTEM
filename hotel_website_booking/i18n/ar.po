@@ -1,0 +1,1033 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following module:
+# 	* hotel_website_booking
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-11 12:00+0000\n"
+"PO-Revision-Date: 2026-07-11 12:00+0000\n"
+"Last-Translator: Antigravity <antigravity@gemini.google>\n"
+"Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/website_readiness.py:0
+msgid "Add the hotel website description."
+msgstr "أضف وصف موقع الفندق."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/website_readiness.py:0
+msgid "Add the public hotel policies."
+msgstr "أضف سياسات الفندق العامة."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Adults"
+msgstr "البالغون"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_home
+msgid "Adults per room"
+msgstr "البالغون لكل غرفة"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "All room types"
+msgstr "كل أنواع الغرف"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Allocated online bookings are immutable."
+msgstr "الحجوزات الإلكترونية المخصصة غير قابلة للتغيير."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Amenities"
+msgstr "الخدمات المرافقة"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Any"
+msgstr "الكل"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Apply filters"
+msgstr "تطبيق عوامل التصفية"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_form
+msgid "Approve and Confirm"
+msgstr "الموافقة والتأكيد"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_bookings
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_home
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_booking_status
+msgid "Arrival"
+msgstr "الوصول"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/controllers/main.py:0
+msgid "Arrival cannot be in the past."
+msgstr "لا يمكن أن يكون الوصول في الماضي."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "At least one adult is required."
+msgstr "يلزم بالغ واحد على الأقل."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Availability and prices are checked again securely before rooms are held."
+msgstr "يتم التحقق الآمن من التوفر والأسعار مرة أخرى قبل حجز الغرف مؤقتاً."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_booking_status
+msgid "Back to rooms"
+msgstr "العودة إلى الغرف"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_room_detail
+msgid "Book now"
+msgstr "احجز الآن"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_contact
+msgid "Book rooms"
+msgstr "احجز الغرف"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_booking_status
+msgid "Booking"
+msgstr "الحجز"
+
+#. module: hotel_website_booking
+#: model:ir.ui.menu,name:hotel_website_booking.menu_hotel_booking_analysis
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_reservation_booking_analysis_pivot
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_reservation_booking_analysis_graph
+#: model:ir.actions.act_window,name:hotel_website_booking.hotel_reservation_booking_analysis_action
+msgid "Booking Analysis"
+msgstr "تحليل الحجوزات"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Booking total"
+msgstr "إجمالي الحجز"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_booking_status
+msgid "Cancel booking"
+msgstr "إلغاء الحجز"
+
+#. module: hotel_website_booking
+#: model:ir.model.fields.selection,name:hotel_website_booking.selection__hotel_online_booking__state__cancelled
+msgid "Cancelled"
+msgstr "ملغي"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_room_detail
+msgid "Capacity:"
+msgstr "السعة:"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_home
+msgid "Check availability"
+msgstr "تحقق من التوفر"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Children"
+msgstr "الأطفال"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_home
+msgid "Children per room"
+msgstr "الأطفال لكل غرفة"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rating
+msgid "Comments"
+msgstr "التعليقات"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_search
+msgid "Company"
+msgstr "الشركة"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/website_readiness.py:0
+msgid "Configure an active hotel pricelist."
+msgstr "اضبط قائمة أسعار فندق نشطة."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/website_readiness.py:0
+msgid "Configure at least one website document type."
+msgstr "اضبط نوع مستند واحداً على الأقل للموقع."
+
+#. module: hotel_website_booking
+#: model:ir.model.fields.selection,name:hotel_website_booking.selection__hotel_online_booking__state__confirmed
+msgid "Confirmed"
+msgstr "مؤكد"
+
+#. module: hotel_website_booking
+#: model:website.menu,name:hotel_website_booking.menu_hotel_website_contact
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_contact
+msgid "Contact"
+msgstr "اتصل بنا"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Contact the hotel to cancel after the arrival time."
+msgstr "تواصل مع الفندق للإلغاء بعد وقت الوصول."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Continue booking"
+msgstr "متابعة الحجز"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Country"
+msgstr "الدولة"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_bookings
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_home
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_booking_status
+msgid "Departure"
+msgstr "المغادرة"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/controllers/main.py:0
+msgid "Departure must be after arrival."
+msgstr "يجب أن تكون المغادرة بعد الوصول."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Document type"
+msgstr "نوع المستند"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/controllers/portal.py:0
+msgid "Documents cannot exceed 10 MB."
+msgstr "لا يمكن أن تتجاوز المستندات 10 ميغابايت."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Download"
+msgstr "تنزيل"
+
+#. module: hotel_website_booking
+#: model:ir.model.fields.selection,name:hotel_website_booking.selection__hotel_online_booking__state__draft
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/website_readiness.py:0
+msgid "Enable an online payment provider for this company."
+msgstr "فعّل مزود دفع إلكتروني لهذه الشركة."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Every room needs at least one adult and valid guest counts."
+msgstr "تحتاج كل غرفة إلى بالغ واحد على الأقل وأعداد نزلاء صحيحة."
+
+#. module: hotel_website_booking
+#: model:ir.model.fields.selection,name:hotel_website_booking.selection__hotel_online_booking__state__expired
+msgid "Expired"
+msgstr "منتهي الصلاحية"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Expiry date"
+msgstr "تاريخ الانتهاء"
+
+#. module: hotel_website_booking
+#: model:website.menu,name:hotel_website_booking.menu_hotel_website_facilities
+msgid "Facilities"
+msgstr "المرافق"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_facilities
+msgid "Facilities and services"
+msgstr "المرافق والخدمات"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Find your rooms"
+msgstr "ابحث عن غرفك"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Folio statements"
+msgstr "كشوفات الفوليو"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Full name"
+msgstr "الاسم الكامل"
+
+#. module: hotel_website_booking
+#: model:website.menu,name:hotel_website_booking.menu_hotel_website_gallery
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_gallery
+msgid "Gallery"
+msgstr "معرض الصور"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Guest counts cannot be negative."
+msgstr "لا يمكن أن تكون أعداد النزلاء سالبة."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Guest counts exceed the room type capacity."
+msgstr "تتجاوز أعداد النزلاء سعة نوع الغرفة."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Guest details"
+msgstr "بيانات النزيل"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/controllers/main.py:0
+msgid "Guest name and email are required."
+msgstr "اسم النزيل وبريده الإلكتروني مطلوبان."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_home
+msgid "Guest reviews"
+msgstr "تقييمات النزلاء"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_facilities
+msgid "Guest services"
+msgstr "خدمات النزلاء"
+
+#. module: hotel_website_booking
+#: model:ir.model.fields.selection,name:hotel_website_booking.selection__hotel_online_booking__state__held
+msgid "Held"
+msgstr "محجوز مؤقتاً"
+
+#. module: hotel_website_booking
+#: model:website.menu,name:hotel_website_booking.menu_hotel_website_home
+msgid "Hotel"
+msgstr "الفندق"
+
+#. module: hotel_website_booking
+#: model:ir.model,name:hotel_website_booking.model_hotel_payment_allocation
+msgid "Hotel Group Payment Allocation"
+msgstr "تخصيص دفعة مجموعة الفندق"
+
+#. module: hotel_website_booking
+#: model:ir.sequence,name:hotel_website_booking.seq_hotel_online_booking
+#: model:ir.model.fields,field_description:hotel_website_booking.field_payment_transaction__hotel_online_booking_id
+msgid "Hotel Online Booking"
+msgstr "حجز الفندق الإلكتروني"
+
+#. module: hotel_website_booking
+#: model:ir.model,name:hotel_website_booking.model_hotel_online_booking_line
+msgid "Hotel Online Booking Room"
+msgstr "غرفة حجز الفندق الإلكتروني"
+
+#. module: hotel_website_booking
+#: model:ir.model,name:hotel_website_booking.model_hotel_online_booking_service
+msgid "Hotel Online Booking Service"
+msgstr "خدمة حجز الفندق الإلكتروني"
+
+#. module: hotel_website_booking
+#: model:ir.model.fields,field_description:hotel_website_booking.field_hotel_property__website_id
+msgid "Hotel Website"
+msgstr "موقع الفندق"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Hotel booking"
+msgstr "حجز الفندق"
+
+#. module: hotel_website_booking
+#: model:ir.rule,name:hotel_website_booking.rule_hotel_payment_allocation_company
+msgid "Hotel payment allocations in active companies"
+msgstr "تخصيصات مدفوعات الفندق في الشركات النشطة"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_policies
+msgid "Hotel policies"
+msgstr "سياسات الفندق"
+
+#. module: hotel_website_booking
+#: model:mail.template,name:hotel_website_booking.mail_template_booking_request
+msgid "Hotel: Booking Request Received"
+msgstr "الفندق: تم استلام طلب الحجز"
+
+#. module: hotel_website_booking
+#: model:mail.template,name:hotel_website_booking.mail_template_checkout
+msgid "Hotel: Checkout Completed"
+msgstr "الفندق: اكتملت المغادرة"
+
+#. module: hotel_website_booking
+#: model:ir.cron,name:hotel_website_booking.ir_cron_hotel_expire_online_holds
+msgid "Hotel: Expire Online Room Holds"
+msgstr "الفندق: إنهاء حجوزات الغرف الإلكترونية المؤقتة"
+
+#. module: hotel_website_booking
+#: model:mail.template,name:hotel_website_booking.mail_template_feedback_request
+msgid "Hotel: Feedback Request"
+msgstr "الفندق: طلب تقييم"
+
+#. module: hotel_website_booking
+#: model:mail.template,name:hotel_website_booking.mail_template_booking_cancellation
+msgid "Hotel: Online Booking Cancellation"
+msgstr "الفندق: إلغاء الحجز الإلكتروني"
+
+#. module: hotel_website_booking
+#: model:mail.template,name:hotel_website_booking.mail_template_booking_confirmation
+msgid "Hotel: Online Booking Confirmation"
+msgstr "الفندق: تأكيد الحجز الإلكتروني"
+
+#. module: hotel_website_booking
+#: model:mail.template,name:hotel_website_booking.mail_template_payment_receipt
+msgid "Hotel: Online Payment Receipt"
+msgstr "الفندق: إيصال الدفع الإلكتروني"
+
+#. module: hotel_website_booking
+#: model:mail.template,name:hotel_website_booking.mail_template_prearrival
+msgid "Hotel: Pre-arrival Information"
+msgstr "الفندق: معلومات ما قبل الوصول"
+
+#. module: hotel_website_booking
+#: model:mail.template,name:hotel_website_booking.mail_template_reservation_cancellation
+msgid "Hotel: Reservation Cancellation"
+msgstr "الفندق: إلغاء الحجز"
+
+#. module: hotel_website_booking
+#: model:mail.template,name:hotel_website_booking.mail_template_reservation_voucher
+msgid "Hotel: Reservation Voucher"
+msgstr "الفندق: قسيمة الحجز"
+
+#. module: hotel_website_booking
+#: model:mail.template,name:hotel_website_booking.mail_template_room_exchange
+msgid "Hotel: Room Exchange"
+msgstr "الفندق: تبديل الغرفة"
+
+#. module: hotel_website_booking
+#: model:ir.cron,name:hotel_website_booking.ir_cron_hotel_send_prearrival
+msgid "Hotel: Send Pre-arrival Information"
+msgstr "الفندق: إرسال معلومات ما قبل الوصول"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Infants"
+msgstr "الرضع"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Maximum price"
+msgstr "الحد الأقصى للسعر"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Meal service available"
+msgstr "خدمة وجبات متاحة"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Minimum price"
+msgstr "الحد الأدنى للسعر"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_home_hotel
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_bookings
+msgid "My Bookings"
+msgstr "حجوزاتي"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Nationality"
+msgstr "الجنسية"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Nationality / residency"
+msgstr "الجنسية / الإقامة"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "New"
+msgstr "جديد"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "No published rooms match these dates and filters."
+msgstr "لا توجد غرف منشورة تطابق هذه التواريخ وعوامل التصفية."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Notes"
+msgstr "ملاحظات"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Number of rooms"
+msgstr "عدد الغرف"
+
+#. module: hotel_website_booking
+#: model:ir.ui.menu,name:hotel_website_booking.menu_hotel_online_booking
+#: model:ir.actions.act_window,name:hotel_website_booking.hotel_online_booking_action
+msgid "Online Bookings"
+msgstr "الحجوزات عبر الإنترنت"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Online booking workflow fields cannot be edited directly."
+msgstr "لا يمكن تعديل حقول سير عمل الحجز الإلكتروني مباشرة."
+
+#. module: hotel_website_booking
+#: model:ir.rule,name:hotel_website_booking.rule_hotel_online_booking_company
+msgid "Online bookings in active companies"
+msgstr "الحجوزات الإلكترونية في الشركات النشطة"
+
+#. module: hotel_website_booking
+#: model:ir.rule,name:hotel_website_booking.rule_hotel_online_booking_line_company
+msgid "Online room lines in active companies"
+msgstr "سطور الغرف الإلكترونية في الشركات النشطة"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Online room prices are set by the quote service."
+msgstr "تحدد خدمة عرض الأسعار أسعار الغرف الإلكترونية."
+
+#. module: hotel_website_booking
+#: model:ir.rule,name:hotel_website_booking.rule_hotel_online_booking_service_company
+msgid "Online service lines in active companies"
+msgstr "سطور الخدمات الإلكترونية في الشركات النشطة"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Online service prices are set by the quote service."
+msgstr "تحدد خدمة عرض الأسعار أسعار الخدمات الإلكترونية."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/controllers/portal.py:0
+msgid "Only PDF, JPEG, and PNG documents are accepted."
+msgstr "تقبل مستندات PDF وJPEG وPNG فقط."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Only a draft booking can be submitted."
+msgstr "يمكن تقديم الحجز المسودة فقط."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Only a successful transaction linked to this booking can confirm it."
+msgstr "يمكن فقط لمعاملة ناجحة مرتبطة بهذا الحجز تأكيده."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Only draft basket lines can be changed."
+msgstr "يمكن تغيير سطور السلة المسودة فقط."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Only draft basket lines can be deleted."
+msgstr "يمكن حذف سطور السلة المسودة فقط."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Only draft booking requests can be repriced."
+msgstr "يمكن إعادة تسعير طلبات الحجز المسودة فقط."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Only draft service selections can be changed."
+msgstr "يمكن تغيير اختيارات الخدمات المسودة فقط."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Only draft service selections can be deleted."
+msgstr "يمكن حذف اختيارات الخدمات المسودة فقط."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Only pending booking requests can be approved."
+msgstr "يمكن اعتماد طلبات الحجز المعلقة فقط."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Optional services"
+msgstr "خدمات اختيارية"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "PDF / JPEG / PNG"
+msgstr "PDF / JPEG / PNG"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/controllers/payment.py:0
+msgid "Pay and Confirm"
+msgstr "الدفع والتأكيد"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Pay now"
+msgstr "ادفع الآن"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Payment"
+msgstr "الدفع"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Payment %(reference)s succeeded after the room hold was no longer valid."
+msgstr "نجحت الدفعة %(reference)s بعد انتهاء صلاحية حجز الغرفة المؤقت."
+
+#. module: hotel_website_booking
+#: model:ir.model.fields.selection,name:hotel_website_booking.selection__hotel_online_booking__state__payment_exception
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_search
+msgid "Payment Exception"
+msgstr "استثناء في الدفع"
+
+#. module: hotel_website_booking
+#: model:ir.model.fields.selection,name:hotel_website_booking.selection__hotel_online_booking__state__payment_pending
+msgid "Payment Pending"
+msgstr "بانتظار الدفع"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Payment allocations"
+msgstr "تخصيصات الدفع"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Payment allocations are immutable."
+msgstr "تخصيصات الدفعات غير قابلة للتغيير."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Payment allocations cannot be deleted."
+msgstr "لا يمكن حذف تخصيصات الدفعات."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Payment arrived after the inventory hold expired. Staff must rebook or refund it."
+msgstr "وصلت الدفعة بعد انتهاء حجز المخزون المؤقت. يجب على الموظفين إعادة الحجز أو رد المبلغ."
+
+#. module: hotel_website_booking
+#: model:ir.model.fields.selection,name:hotel_website_booking.selection__hotel_online_booking__state__pending_review
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_search
+msgid "Pending Review"
+msgstr "بانتظار المراجعة"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Phone"
+msgstr "الهاتف"
+
+#. module: hotel_website_booking
+#: model:website.menu,name:hotel_website_booking.menu_hotel_website_policies
+msgid "Policies"
+msgstr "السياسات"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/payment_transaction.py:0
+msgid "Posted online hotel payment references are immutable."
+msgstr "مراجع مدفوعات الفندق الإلكترونية المرحلة غير قابلة للتغيير."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Pricelist"
+msgstr "قائمة الأسعار"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Private documents"
+msgstr "المستندات الخاصة"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Public confirmation"
+msgstr "التأكيد العام"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/website_readiness.py:0
+msgid "Publish at least one room type."
+msgstr "انشر نوع غرفة واحداً على الأقل."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/website_readiness.py:0
+msgid "Publish at least one sellable physical room."
+msgstr "انشر غرفة فعلية واحدة قابلة للبيع على الأقل."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Quantity"
+msgstr "الكمية"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_form
+msgid "Quote Trace"
+msgstr "مسار عرض السعر"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rating
+msgid "Rate your stay"
+msgstr "قيّم إقامتك"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_bookings
+msgid "Reference"
+msgstr "المرجع"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_form
+msgid "Reprice"
+msgstr "إعادة التسعير"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_form
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_contact
+msgid "Reservations"
+msgstr "الحجوزات"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_home_hotel
+msgid "Reservations, payments, folios, and documents"
+msgstr "الحجوزات والمدفوعات والفوليوهات والمستندات"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Review hotel payment exception"
+msgstr "مراجعة استثناء دفعة الفندق"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_room_detail
+msgid "Room policies"
+msgstr "سياسات الغرفة"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Room type"
+msgstr "نوع الغرفة"
+
+#. module: hotel_website_booking
+#: model:ir.model.fields,field_description:hotel_website_booking.field_hotel_online_booking__line_ids
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_form
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+#: model:website.menu,name:hotel_website_booking.menu_hotel_website_rooms
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_booking_status
+msgid "Rooms"
+msgstr "الغرف"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Rooms have already been allocated to this booking."
+msgstr "تم تخصيص الغرف لهذا الحجز بالفعل."
+
+#. module: hotel_website_booking
+#: model:ir.model,name:hotel_website_booking.model_hotel_online_booking
+msgid "Sales-free Hotel Online Booking"
+msgstr "حجز فندقي إلكتروني دون تطبيق المبيعات"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rating
+msgid "Select"
+msgstr "اختيار"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/controllers/portal.py:0
+msgid "Select a valid document type and file."
+msgstr "اختر نوع مستند وملفاً صالحين."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/controllers/main.py:0
+msgid "Select at least one available room."
+msgstr "اختر غرفة متاحة واحدة على الأقل."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Select at least one room."
+msgstr "اختر غرفة واحدة على الأقل."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/website_readiness.py:0
+msgid "Select the Odoo website for this hotel company."
+msgstr "اختر موقع أودو لشركة الفندق هذه."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_reservation_form_communication
+msgid "Send Pre-arrival"
+msgstr "إرسال ما قبل الوصول"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_reservation_form_communication
+msgid "Send Voucher"
+msgstr "إرسال القسيمة"
+
+#. module: hotel_website_booking
+#: model:ir.model.fields,field_description:hotel_website_booking.field_hotel_online_booking__service_line_ids
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_form
+msgid "Services"
+msgstr "الخدمات"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_search
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_bookings
+msgid "Status"
+msgstr "الحالة"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Stay total per room"
+msgstr "إجمالي الإقامة لكل غرفة"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_form
+msgid "Submit"
+msgstr "إرسال"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rating
+msgid "Submit feedback"
+msgstr "إرسال التقييم"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "Submitted online bookings cannot be deleted."
+msgstr "لا يمكن حذف الحجوزات الإلكترونية المقدمة."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rooms
+msgid "Teenagers"
+msgstr "المراهقون"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_rating
+msgid "Thank you. Your feedback has been submitted for review."
+msgstr "شكراً لك. تم إرسال تقييمك للمراجعة."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "The allocated folio does not belong to the booking."
+msgstr "لا ينتمي الفوليو المخصص إلى الحجز."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "The allocation currency must match the booking currency."
+msgstr "يجب أن تطابق عملة التخصيص عملة الحجز."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "The booking website is not assigned to this hotel."
+msgstr "موقع الحجز غير مخصص لهذا الفندق."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "The guest must belong to the booking company."
+msgstr "يجب أن ينتمي النزيل إلى شركة الحجز."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/controllers/payment.py:0
+msgid "The hotel booking payment details are no longer valid."
+msgstr "لم تعد تفاصيل دفع حجز الفندق صالحة."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/website_readiness.py:0
+msgid "The hotel website is not ready to publish:\n- %s"
+msgstr "موقع الفندق غير جاهز للنشر:\n- %s"
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/website_readiness.py:0
+msgid "The hotel website must use the hotel company."
+msgstr "يجب أن يستخدم موقع الفندق شركة الفندق."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/payment_transaction.py:0
+msgid "The online payment must use the booking hotel company."
+msgstr "يجب أن تستخدم الدفعة الإلكترونية شركة فندق الحجز."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "The payment and booking must use the same company."
+msgstr "يجب أن تستخدم الدفعة والحجز الشركة نفسها."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/payment_transaction.py:0
+msgid "The payment reservation group must match the booking."
+msgstr "يجب أن تطابق مجموعة حجز الدفعة الحجز."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/payment_transaction.py:0
+msgid "The payment transaction must belong to the booking guest."
+msgstr "يجب أن تنتمي معاملة الدفع إلى نزيل الحجز."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/payment_transaction.py:0
+msgid "The payment transaction must use the hotel company."
+msgstr "يجب أن تستخدم معاملة الدفع شركة الفندق."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "The pricelist must belong to the booking company."
+msgstr "يجب أن تنتمي قائمة الأسعار إلى شركة الحجز."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "The room type does not belong to this hotel."
+msgstr "لا ينتمي نوع الغرفة إلى هذا الفندق."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "The room type is not published for this hotel website."
+msgstr "نوع الغرفة غير منشور لموقع الفندق هذا."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "The selected service is not published for this hotel website."
+msgstr "الخدمة المحددة غير منشورة لموقع الفندق هذا."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "The successful transaction amount or currency is invalid."
+msgstr "مبلغ أو عملة المعاملة الناجحة غير صالح."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/payment_transaction.py:0
+msgid "The transaction and booking currencies must match."
+msgstr "يجب أن تتطابق عملتا المعاملة والحجز."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "The website and hotel must use the same company."
+msgstr "يجب أن يستخدم الموقع والفندق الشركة نفسها."
+
+#. module: hotel_website_booking
+#. odoo-python
+#: code:addons/hotel_website_booking/models/hotel_online_booking.py:0
+msgid "This booking can no longer be cancelled online."
+msgstr "لم يعد من الممكن إلغاء هذا الحجز إلكترونياً."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_bookings
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_booking_status
+msgid "Total"
+msgstr "الإجمالي"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_online_booking_view_form
+msgid "Totals"
+msgstr "الإجماليات"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Upload securely"
+msgstr "رفع آمن"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_contact
+msgid "Use our secure availability search for current prices and multi-room requests."
+msgstr "استخدم بحث التوفر الآمن لمعرفة الأسعار الحالية وطلبات الغرف المتعددة."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_booking
+msgid "Verified"
+msgstr "معتمد"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_home
+msgid "Welcome"
+msgstr "مرحباً"
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.portal_my_hotel_bookings
+msgid "You do not have any hotel bookings yet."
+msgstr "ليس لديك حجوزات فندقية بعد."
+
+#. module: hotel_website_booking
+#: model_terms:ir.ui.view,arch_db:hotel_website_booking.hotel_booking_status
+msgid "Your request is waiting for hotel approval. No room is blocked until staff approves it."
+msgstr "طلبك بانتظار اعتماد الفندق. لن تحجب أي غرفة حتى يعتمد الموظفون الطلب."

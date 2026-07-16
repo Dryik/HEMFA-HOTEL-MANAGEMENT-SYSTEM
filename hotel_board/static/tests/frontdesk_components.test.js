@@ -1,5 +1,5 @@
 import { after, describe, expect, test } from "@odoo/hoot";
-import { animationFrame, Deferred } from "@odoo/hoot-mock";
+import { advanceTime, animationFrame, Deferred } from "@odoo/hoot-mock";
 import {
     contains,
     mockService,
@@ -40,15 +40,15 @@ function mockAction(callback = () => {}) {
     }));
 }
 
-function dashboardSnapshot() {
+function dashboardSnapshot(businessDate = BUSINESS_DATE) {
     return {
-        version: 1,
+        version: 2,
         meta: {
             property_id: PROPERTY_ID,
             property_name: "Tripoli Hotel",
-            business_date: BUSINESS_DATE,
+            business_date: businessDate,
+            current_business_date: BUSINESS_DATE,
             timezone: "Africa/Tripoli",
-            metric_label: "Forecast",
             currency: {
                 name: "LYD",
                 symbol: "LYD",
@@ -56,47 +56,146 @@ function dashboardSnapshot() {
                 decimal_places: 3,
             },
         },
-        properties: [
-            { id: PROPERTY_ID, name: "Tripoli Hotel" },
-            { id: 3, name: "Coastal Hotel" },
+        occupancy: {
+            percentage: 50,
+            available_units: 20,
+            booked_units: 10,
+            out_of_service: 1,
+            house_use: 0,
+        },
+        tabs: [
+            { key: "arrivals", label: "Arrivals", count: 1, pending_count: 1 },
+            { key: "departures", label: "Departures", count: 0, pending_count: 0 },
+            { key: "in_house", label: "In-house", count: 10, pending_count: 10 },
+            { key: "stayovers", label: "Stayovers", count: 3, pending_count: 3 },
+            { key: "bookings", label: "Bookings", count: 0, pending_count: 0 },
+            { key: "cancellations", label: "Cancellations", count: 0, pending_count: 0 },
+            { key: "overbookings", label: "Overbookings", count: 0, pending_count: 0 },
         ],
-        kpis: {
-            arrivals: {
-                label: "Arrivals",
-                value: 2,
-                available: true,
-                format: "integer",
+        activity: {
+            key: "arrivals",
+            label: "Arrivals",
+            include_completed: false,
+            supports_completed: true,
+            total: 1,
+            pending_total: 1,
+            truncated: false,
+            rows: [
+                    {
+                        id: 72,
+                        reference: "RES-00072",
+                        guest: { id: 7, name: "Ahmed Al-Mansouri" },
+                        room: { id: 105, name: "105" },
+                        room_type: { id: 10, name: "Double Suite" },
+                        housekeeping_status: "clean",
+                        checkin: "2026-07-13 12:00:00",
+                        checkout: "2026-07-16 12:00:00",
+                        nights: 3,
+                        adults: 2,
+                        teenagers: 0,
+                        children: 0,
+                        infants: 0,
+                        state: "confirmed",
+                        state_label: "Confirmed",
+                        has_notes: false,
+                        finance: false,
+                        primary_action: { key: "check_in", label: "Check-in" },
+                        actions: {
+                            reservation: {
+                                type: "ir.actions.act_window",
+                                res_model: "hotel.reservation",
+                                res_id: 72,
+                                context: {
+                                    hotel_property_id: 99,
+                                    business_date: "2020-01-01",
+                                },
+                            },
+                            guest: {
+                                type: "ir.actions.act_window",
+                                res_model: "res.partner",
+                                res_id: 7,
+                            },
+                            folio: false,
+                        },
+                    },
+            ],
+            list_action: {
+                type: "ir.actions.act_window",
+                res_model: "hotel.reservation",
+                domain: [["id", "in", [72]]],
+                context: {},
+            },
+        },
+        operational_kpis: [
+            {
+                key: "booking_requests",
+                label: "Booking Requests",
+                count: 2,
+                action: {
+                    type: "ir.actions.act_window",
+                    res_model: "hotel.online.booking",
+                    domain: [["state", "=", "pending_review"]],
+                },
+            },
+        ],
+        rooms: [
+            {
+                id: 101,
+                name: "101",
+                room_type: { id: 10, name: "Double Suite" },
+                floor: { id: 1, name: "First Floor" },
+                state: "available",
+                state_label: "Available",
+                capacity: 4,
+                current_price: 150,
+                future_bookings: 1,
+                guest_name: false,
                 action: {
                     type: "ir.actions.act_window",
                     res_model: "hotel.reservation",
-                    context: {
-                        hotel_property_id: 99,
-                        business_date: "2020-01-01",
-                    },
+                    views: [[false, "form"]],
+                    context: { default_room_id: 101 },
                 },
             },
-        },
-        attention: { total: 0, items: [] },
-        floors: [
-            {
-                id: 1,
-                name: "First Floor",
-                rooms: [
-                    {
-                        id: 101,
-                        name: "101",
-                        room_type: { id: 10, name: "King" },
-                        primary_status: "vacant",
-                        primary_label: "Vacant",
-                        hk_status: "clean",
-                        hk_label: "Clean",
-                        alerts: [],
-                    },
-                ],
-            },
         ],
-        legend: { primary: [], housekeeping: [], alerts: [] },
-        actions: {},
+        actions: {
+            open_list: {
+                type: "ir.actions.act_window",
+                res_model: "hotel.reservation",
+                domain: [["id", "in", [72]]],
+                context: {},
+            },
+            new_reservation: {
+                type: "ir.actions.act_window",
+                res_model: "hotel.reservation",
+                views: [[false, "form"]],
+                context: {},
+            },
+            planning: {
+                type: "ir.actions.client",
+                tag: "hotel_board.planning",
+                context: {},
+            },
+        },
+    };
+}
+
+function departureActivity() {
+    return {
+        key: "departures",
+        label: "Departures",
+        include_completed: false,
+        supports_completed: true,
+        total: 0,
+        pending_total: 0,
+        truncated: false,
+        rows: [],
+        list_action: {
+            type: "ir.actions.act_window",
+            res_model: "hotel.reservation",
+            domain: [["id", "in", []]],
+            context: {},
+        },
     };
 }
 
@@ -176,7 +275,7 @@ function planningWindow() {
     };
 }
 
-test("Dashboard renders loading data and opens drill-downs with snapshot context", async () => {
+test("Dashboard renders the compact activity workspace and preserves action context", async () => {
     const response = new Deferred();
     const getFrontdeskState = mockFrontdeskState();
     let openedAction;
@@ -185,12 +284,17 @@ test("Dashboard renders loading data and opens drill-downs with snapshot context
     });
     onRpc(
         "hotel.frontdesk.workspace",
-        "get_workspace_snapshot",
+        "get_dashboard_snapshot",
         ({ args }) => {
             expect(args).toEqual([false, BUSINESS_DATE]);
             return response;
         }
     );
+    let activityArgs;
+    onRpc("hotel.frontdesk.workspace", "get_dashboard_activity", ({ args }) => {
+        activityArgs = args;
+        return departureActivity();
+    });
 
     await mountWithCleanup(HotelDashboard, {
         props: {
@@ -202,30 +306,39 @@ test("Dashboard renders loading data and opens drill-downs with snapshot context
             },
         },
     });
-    expect(".o_hotel_loading_state").toHaveCount(1);
+    expect(".o_hotel_dashboard_loading").toHaveCount(1);
 
     response.resolve(dashboardSnapshot());
     await animationFrame();
-    expect(".o_hotel_loading_state").toHaveCount(0);
-    expect(".o_hotel_room_tile").toHaveText(/101/);
+    expect(".o_hotel_dashboard_loading").toHaveCount(0);
+    expect(".o_hotel_activity_row").toHaveText(/Ahmed Al-Mansouri/);
+    expect(".o_hotel_occupancy_ring").toHaveText(/50%/);
+    expect(".o_hotel_operational_kpi").toHaveText(/Booking Requests/);
+    expect(".o_hotel_room_card").toHaveText(/Double Suite/);
+    expect(".o_hotel_room_card").toHaveText(/150/);
     expect(getFrontdeskState()).toEqual({
         businessDate: BUSINESS_DATE,
     });
 
-    await contains(".o_hotel_kpi_button").click();
+    await contains(".o_hotel_text_action").click();
     expect(openedAction.context).toMatchObject({
         default_property_id: PROPERTY_ID,
         hotel_property_id: PROPERTY_ID,
         business_date: BUSINESS_DATE,
         hotel_business_date: BUSINESS_DATE,
     });
+
+    await contains('[data-dashboard-activity="departures"]').click();
+    await animationFrame();
+    expect(activityArgs).toEqual([false, BUSINESS_DATE, "departures", false, false, 50]);
+    expect(".o_hotel_activity_empty").toHaveCount(1);
 });
 
-test("Dashboard keeps the last snapshot visible when a refresh fails", async () => {
+test("Dashboard keeps the last activity visible when a refresh fails", async () => {
     let requestCount = 0;
     mockFrontdeskState();
     mockAction();
-    onRpc("hotel.frontdesk.workspace", "get_workspace_snapshot", () => {
+    onRpc("hotel.frontdesk.workspace", "get_dashboard_snapshot", () => {
         requestCount += 1;
         if (requestCount === 1) {
             return dashboardSnapshot();
@@ -244,13 +357,138 @@ test("Dashboard keeps the last snapshot visible when a refresh fails", async () 
         },
     });
     await animationFrame();
-    expect(".o_hotel_room_tile").toHaveCount(1);
+    expect(".o_hotel_activity_row").toHaveCount(1);
 
-    await contains(".o_hotel_header_actions button:first-child").click();
+    await contains('button[aria-label^="Refresh dashboard"]').click();
     await animationFrame();
-    expect(".o_hotel_room_tile").toHaveCount(1);
-    expect(".o_hotel_workspace_alert.alert-danger").toHaveCount(1);
-    expect(".o_hotel_workspace_alert.alert-warning").toHaveCount(1);
+    expect(".o_hotel_activity_row").toHaveCount(1);
+    expect(".o_hotel_dashboard_stale").toHaveCount(1);
+});
+
+test("Dashboard ignores an older snapshot that resolves after a newer refresh", async () => {
+    const older = new Deferred();
+    const newer = new Deferred();
+    const requests = [older, newer];
+    mockFrontdeskState();
+    mockAction();
+    onRpc("hotel.frontdesk.workspace", "get_dashboard_snapshot", () => requests.shift());
+
+    await mountWithCleanup(HotelDashboard, {
+        props: {
+            action: { context: { default_business_date: BUSINESS_DATE } },
+        },
+    });
+    await contains('button[aria-label="Refresh dashboard"]').click();
+    const newerSnapshot = dashboardSnapshot();
+    newerSnapshot.occupancy.percentage = 75;
+    newer.resolve(newerSnapshot);
+    await animationFrame();
+    older.resolve(dashboardSnapshot());
+    await animationFrame();
+    expect(".o_hotel_occupancy_ring").toHaveText(/75%/);
+});
+
+test("Dashboard executes direct check-in once and refreshes the snapshot", async () => {
+    let workflowCalls = 0;
+    const workflow = new Deferred();
+    mockFrontdeskState();
+    mockAction();
+    onRpc("hotel.frontdesk.workspace", "get_dashboard_snapshot", () => dashboardSnapshot());
+    onRpc("hotel.reservation", "action_check_in", ({ args }) => {
+        workflowCalls += 1;
+        expect(args).toEqual([[72]]);
+        return workflow;
+    });
+
+    await mountWithCleanup(HotelDashboard, {
+        props: {
+            action: { context: { default_business_date: BUSINESS_DATE } },
+        },
+    });
+    await animationFrame();
+    const button = document.querySelector(".o_hotel_primary_workflow");
+    button.click();
+    button.click();
+    await animationFrame();
+    expect(workflowCalls).toBe(1);
+    expect(".o_hotel_primary_workflow").toHaveAttribute("disabled");
+    workflow.resolve(true);
+    await animationFrame();
+    expect(".o_hotel_activity_row").toHaveCount(1);
+});
+
+test("Dashboard date controls request the adjacent business day", async () => {
+    const requestedDates = [];
+    mockFrontdeskState();
+    mockAction();
+    onRpc("hotel.frontdesk.workspace", "get_dashboard_snapshot", ({ args }) => {
+        requestedDates.push(args[1]);
+        return dashboardSnapshot(args[1]);
+    });
+
+    await mountWithCleanup(HotelDashboard, {
+        props: {
+            action: { context: { default_business_date: BUSINESS_DATE } },
+        },
+    });
+    await animationFrame();
+    await contains('button[aria-label="Next day"]').click();
+    await animationFrame();
+    expect(requestedDates).toEqual([BUSINESS_DATE, "2026-07-14"]);
+    expect(".o_hotel_date_day").toHaveText("14");
+});
+
+test("Dashboard activity search is debounced before reaching the server", async () => {
+    const activityRequests = [];
+    mockFrontdeskState();
+    mockAction();
+    onRpc("hotel.frontdesk.workspace", "get_dashboard_snapshot", () => dashboardSnapshot());
+    onRpc("hotel.frontdesk.workspace", "get_dashboard_activity", ({ args }) => {
+        activityRequests.push(args);
+        return dashboardSnapshot().activity;
+    });
+
+    await mountWithCleanup(HotelDashboard, {
+        props: {
+            action: { context: { default_business_date: BUSINESS_DATE } },
+        },
+    });
+    await animationFrame();
+    await contains('button[aria-label="Search activity"]').click();
+    await contains("#hotel-dashboard-search").edit("Ahmed", { confirm: false });
+    await advanceTime(299);
+    expect(activityRequests).toHaveLength(0);
+    await advanceTime(1);
+    expect(activityRequests).toHaveLength(1);
+    expect(activityRequests[0]).toEqual([
+        false,
+        BUSINESS_DATE,
+        "arrivals",
+        false,
+        "Ahmed",
+        50,
+    ]);
+});
+
+test("Dashboard completed-arrival toggle requests the expanded activity", async () => {
+    let activityArgs;
+    mockFrontdeskState();
+    mockAction();
+    onRpc("hotel.frontdesk.workspace", "get_dashboard_snapshot", () => dashboardSnapshot());
+    onRpc("hotel.frontdesk.workspace", "get_dashboard_activity", ({ args }) => {
+        activityArgs = args;
+        return { ...dashboardSnapshot().activity, include_completed: true };
+    });
+
+    await mountWithCleanup(HotelDashboard, {
+        props: {
+            action: { context: { default_business_date: BUSINESS_DATE } },
+        },
+    });
+    await animationFrame();
+    await contains(".o_hotel_completed_toggle input").click();
+    await animationFrame();
+    expect(activityArgs).toEqual([false, BUSINESS_DATE, "arrivals", true, false, 50]);
 });
 
 test("Planning exposes read-only cells to RTL arrow-key navigation", async () => {

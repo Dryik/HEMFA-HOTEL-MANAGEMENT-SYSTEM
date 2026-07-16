@@ -54,10 +54,12 @@
                 <field name="checkout_date"/>
                 <field name="nights"/>
                 <field name="agency_id" optional="show"/>
+                <field name="booking_source" optional="show"/>
+                <field name="responsible_id" optional="hide"/>
                 <field name="amount_total" optional="show"/>
                 <field name="state" widget="badge"
                     decoration-info="state == 'draft'"
-                    decoration-warning="state == 'confirmed'"
+                    decoration-warning="state in ('pending_payment', 'confirmed')"
                     decoration-success="state == 'checked_in'"
                     decoration-danger="state in ('cancelled', 'no_show')"/>
             </list>
@@ -71,7 +73,7 @@
             <form>
                 <header>
                     <button name="action_confirm" type="object" string="Confirm"
-                        class="btn-primary" invisible="state != 'draft'"/>
+                        class="btn-primary" invisible="state not in ('draft', 'pending_payment')"/>
                     <button name="action_check_in" type="object" string="Check In"
                         class="btn-primary" invisible="state != 'confirmed'"/>
                     <button name="action_check_out" type="object" string="Confirm Check Out"
@@ -80,14 +82,14 @@
                         invisible="state != 'confirmed'"
                         groups="hotel_base.group_hotel_fo_supervisor"/>
                     <button name="action_cancel" type="object" string="Cancel"
-                        invisible="state not in ('draft', 'confirmed')"/>
+                        invisible="state not in ('draft', 'pending_payment', 'confirmed')"/>
                     <button name="action_reset_draft" type="object" string="Reset to Draft"
                         invisible="state not in ('cancelled', 'no_show')"
                         groups="hotel_base.group_hotel_fo_supervisor"/>
                     <button name="action_open_available_rooms" type="object"
                         string="Available Rooms" invisible="state not in ('draft', 'confirmed')"/>
                     <field name="state" widget="statusbar"
-                        statusbar_visible="draft,confirmed,checked_in,checked_out"/>
+                        statusbar_visible="draft,pending_payment,confirmed,checked_in,checked_out"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -101,7 +103,9 @@
                             <field name="group_id"/>
                             <field name="accommodation_type"/>
                             <field name="adults"/>
+                            <field name="teenagers"/>
                             <field name="children"/>
+                            <field name="infants"/>
                         </group>
                         <group string="Stay">
                             <field name="property_id" invisible="1"/>
@@ -110,6 +114,9 @@
                             <field name="nights"/>
                             <field name="room_type_id"/>
                             <field name="room_id"/>
+                            <field name="booking_source"/>
+                            <field name="responsible_id"/>
+                            <field name="hold_expires_at" invisible="state != 'pending_payment'"/>
                         </group>
                     </group>
                     <group>
@@ -119,6 +126,7 @@
                             <field name="trip_number"/>
                         </group>
                         <group string="Pricing">
+                            <field name="pricelist_id"/>
                             <field name="rate_night"
                                 readonly="state not in ('draft', 'confirmed')"/>
                             <field name="amount_total"/>
@@ -170,6 +178,8 @@
                     domain="[('state', '=', 'checked_in'), ('checkout_business_date', '=', context.get('hotel_business_date') or context_today())]"/>
                 <separator/>
                 <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Pending Payment" name="pending_payment"
+                    domain="[('state', '=', 'pending_payment')]"/>
                 <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
                 <filter string="In House" name="in_house" domain="[('state', '=', 'checked_in')]"/>
                 <filter string="Checked Out" name="checked_out" domain="[('state', '=', 'checked_out')]"/>

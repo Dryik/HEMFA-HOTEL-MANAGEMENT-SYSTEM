@@ -51,6 +51,12 @@ class HotelRateRule(models.Model):
     )
     date_start = fields.Date(string="Start Date", required=True)
     date_end = fields.Date(string="End Date", required=True)
+    seasonal_pricing_id = fields.Many2one(
+        "hotel.seasonal.pricing", string="Seasonal Plan", ondelete="set null"
+    )
+    weekday_ids = fields.Many2many(
+        "hotel.rate.weekday", string="Weekdays"
+    )
     guest_type = fields.Selection(
         [
             ("all", "All Nationalities"),
@@ -83,19 +89,23 @@ class HotelRateRule(models.Model):
 
     def init(self):
         super().init()
-        _install_exclusion_constraint(
-            self.env,
-            "hotel_rate_rule",
-            "hotel_rate_rule_no_overlap",
-            """EXCLUDE USING gist (
-                property_id WITH =,
-                room_type_id WITH =,
-                guest_type WITH =,
-                daterange(date_start, date_end, '[]') WITH &&
-            )""",
+        # Weekday-specific rules may legitimately share the same calendar
+        # range.  The former date-only exclusion constraint could not express
+        # the M2M weekday intersection, so concurrency is serialized by the
+        # advisory property lock in the ORM constraint below.
+        self.env.cr.execute(
+            "ALTER TABLE hotel_rate_rule "
+            "DROP CONSTRAINT IF EXISTS hotel_rate_rule_no_overlap"
         )
 
-    @api.constrains("date_start", "date_end", "property_id", "room_type_id", "guest_type")
+    @api.constrains(
+        "date_start",
+        "date_end",
+        "property_id",
+        "room_type_id",
+        "guest_type",
+        "seasonal_pricing_id",
+    )
     def _check_overlapping_rules(self):
         # Serialize rate configuration per property.  A Python-only overlap
         # search can otherwise let two concurrent transactions validate
@@ -112,7 +122,15 @@ class HotelRateRule(models.Model):
                 raise ValidationError(
                     _("The room type must be shared or belong to the rate rule property.")
                 )
-            overlapping = self.search(
+            if rule.seasonal_pricing_id and (
+                rule.seasonal_pricing_id.property_id != rule.property_id
+                or rule.date_start < rule.seasonal_pricing_id.date_start
+                or rule.date_end > rule.seasonal_pricing_id.date_end
+            ):
+                raise ValidationError(
+                    _("A rate rule must stay within its seasonal plan and hotel.")
+                )
+            overlapping_candidates = self.search(
                 [
                     ("id", "!=", rule.id),
                     ("property_id", "=", rule.property_id.id),
@@ -121,6 +139,14 @@ class HotelRateRule(models.Model):
                     ("date_start", "<=", rule.date_end),
                     ("date_end", ">=", rule.date_start),
                 ]
+            )
+            rule_weekdays = set(rule.weekday_ids.mapped("code"))
+            overlapping = overlapping_candidates.filtered(
+                lambda candidate: (
+                    not rule_weekdays
+                    or not candidate.weekday_ids
+                    or bool(rule_weekdays.intersection(candidate.weekday_ids.mapped("code")))
+                )
             )
             if overlapping:
                 raise ValidationError(

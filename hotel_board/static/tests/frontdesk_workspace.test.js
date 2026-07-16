@@ -8,6 +8,7 @@ import {
 import {
     actionWithFrontdeskContext,
     addIsoDays,
+    formatBusinessDateParts,
     formatOperationalDateTime,
     refreshFailureViewState,
     westernDigits,
@@ -38,6 +39,10 @@ function makeStorage(initialValue = null) {
 test("operational values always use Western digits", () => {
     expect(westernDigits("Room ١٢٣ / ۴۵۶")).toBe("Room 123 / 456");
     expect(addIsoDays("2026-07-31", 1)).toBe("2026-08-01");
+    expect(formatBusinessDateParts("2026-07-13")).toMatchObject({
+        day: "13",
+        year: "2026",
+    });
 });
 
 test("Front Desk date is persisted and invalid storage is ignored", () => {

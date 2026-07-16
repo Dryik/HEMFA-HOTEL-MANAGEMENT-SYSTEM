@@ -1,7 +1,7 @@
 {
     "name": "Hotel Housekeeping",
     "summary": "Cleaning tasks, dirty/clean/inspected flow, discrepancy report",
-    "version": "19.0.4.0.0",
+    "version": "19.0.5.0.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",
@@ -10,7 +10,9 @@
         "security/hotel_record_rules.xml",
         "security/ir.model.access.csv",
         "data/ir_sequence_data.xml",
+        "data/hotel_housekeeping_cron.xml",
         "views/hotel_housekeeping_views.xml",
+        "views/hotel_housekeeping_extension_views.xml",
         "wizard/hotel_housekeeping_discrepancy_views.xml",
         "views/hotel_housekeeping_menus.xml",
     ],

@@ -1,6 +1,9 @@
+from datetime import timedelta
+
+from odoo import fields
+from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
-from odoo.exceptions import UserError
 
 
 @tagged('post_install', '-at_install')
@@ -185,3 +188,46 @@ class TestHotelHousekeeping(TransactionCase):
             self.cleaner
         ).search([])
         self.assertNotIn(hidden_task, visible)
+
+    def test_checklist_must_be_completed_before_closing_task(self):
+        template_item = self.env["hotel.housekeeping.checklist.item"].create(
+            {"name": "Inspect bathroom", "property_id": self.property.id}
+        )
+        task = self.env["hotel.housekeeping.task"].create(
+            {"room_id": self.room.id, "trigger_type": "guest_request"}
+        )
+        self.assertEqual(task.checklist_line_ids.item_id, template_item)
+        task.action_start()
+        with self.assertRaises(UserError):
+            task.action_complete()
+        task.checklist_line_ids.done = True
+        task.action_complete()
+        self.assertEqual(task.state, "cleaned")
+        with self.assertRaises(UserError):
+            task.checklist_line_ids.write({"note": "Changed"})
+
+    def test_prearrival_generation_is_idempotent(self):
+        checkin = fields.Datetime.now() + timedelta(hours=2)
+        reservation = self.env["hotel.reservation"].create(
+            {
+                "partner_id": self.env["res.partner"].create(
+                    {"name": "Pre-arrival Guest", "is_hotel_guest": True}
+                ).id,
+                "property_id": self.property.id,
+                "room_type_id": self.room_type.id,
+                "room_id": self.room.id,
+                "checkin_date": checkin,
+                "checkout_date": checkin + timedelta(days=1),
+            }
+        )
+        reservation.action_confirm()
+        task_model = self.env["hotel.housekeeping.task"]
+        task_model._cron_create_prearrival_tasks()
+        task_model._cron_create_prearrival_tasks()
+        tasks = task_model.search(
+            [("source_key", "=", f"prearrival:{reservation.id}")]
+        )
+        self.assertEqual(len(tasks), 1)
+        self.assertEqual(tasks.reservation_id, reservation)
+        self.assertEqual(tasks.trigger_type, "prearrival")
+        self.assertEqual(tasks.deadline, reservation.checkin_date)

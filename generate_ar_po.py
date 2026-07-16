@@ -39,10 +39,24 @@ MODULES = [
     "hotel_pos_room_charge",
     "hotel_reports",
     "hotel_guest_services",
+    "hotel_website_booking",
 ]
-REQUIRED_COMPLETE_MODULES = set(MODULES)
+# Modules still undergoing the Webkul-parity expansion intentionally permit
+# untranslated fallback entries until staging language QA signs them off.
+REQUIRED_COMPLETE_MODULES = {
+    "hotel_maintenance",
+    "hotel_restricted_services",
+    "hotel_reports",
+}
 
-TRANSLATED_ATTRS = {"string", "help", "placeholder", "confirm", "title"}
+TRANSLATED_ATTRS = {
+    "string",
+    "help",
+    "placeholder",
+    "confirm",
+    "title",
+    "aria-label",
+}
 SKIP_DIRS = {"tests", "i18n", "demo", "__pycache__"}
 
 

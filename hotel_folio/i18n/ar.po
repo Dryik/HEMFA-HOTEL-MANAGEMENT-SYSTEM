@@ -218,6 +218,23 @@ msgid "Closed Folios"
 msgstr "الفوليوهات المغلقة"
 
 #. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_reservation_group_view_form_folio
+msgid "Combined Billing"
+msgstr "فوترة مجمعة"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
+msgid "Combined Group Invoice"
+msgstr "فاتورة مجموعة مجمعة"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
+msgid "Combined Group Invoices"
+msgstr "فواتير المجموعة المجمعة"
+
+#. module: hotel_folio
 #: model:ir.model.fields,help:hotel_folio.field_hotel_folio_line__amount
 msgid "Compatibility alias for Total; use amount_total in new integrations."
 msgstr "اسم مستعار للتوافق للإجمالي؛ استخدم amount_total في التكاملات الجديدة."
@@ -234,20 +251,9 @@ msgid "Create Agency Invoice"
 msgstr "إنشاء فاتورة الوكالة"
 
 #. module: hotel_folio
-#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_reservation_group_view_form_folio
-msgid "Create Group Invoice"
-msgstr "إنشاء فاتورة مجموعة"
-
-#. module: hotel_folio
 #: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
 msgid "Create Guest Invoice"
 msgstr "إنشاء فاتورة النزيل"
-
-#. module: hotel_folio
-#. odoo-python
-#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
-msgid "Create a separate group invoice for each folio currency."
-msgstr "أنشئ فاتورة مجموعة منفصلة لكل عملة فوليو."
 
 #. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__date
@@ -411,12 +417,6 @@ msgid "Generated Folio Lines"
 msgstr "سطور الفوليو المنشأة"
 
 #. module: hotel_folio
-#. odoo-python
-#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
-msgid "Group Invoice"
-msgstr "فاتورة المجموعة"
-
-#. module: hotel_folio
 #: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_reservation_group_view_form_folio
 msgid "Group Invoices"
 msgstr "فواتير المجموعة"
@@ -520,6 +520,11 @@ msgid "Hotel payments in active companies"
 msgstr "مدفوعات الفندق في الشركات النشطة"
 
 #. module: hotel_folio
+#: model:ir.cron,name:hotel_folio.ir_cron_hotel_post_due_nightly_rates
+msgid "Hotel: Post Due Nightly Rates"
+msgstr "الفندق: ترحيل أسعار الليالي المستحقة"
+
+#. module: hotel_folio
 #: model:ir.model.fields,help:hotel_folio.field_hotel_folio_line__is_posted
 msgid "If checked, the charge is locked by an accounting or operational workflow."
 msgstr "عند التفعيل، يقفل الرسم بواسطة سير عمل محاسبي أو تشغيلي."
@@ -545,6 +550,17 @@ msgstr "المفوتر / المحول"
 #: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
 msgid "Invoices"
 msgstr "الفواتير"
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_reservation_group_view_form_folio
+msgid "Isolated Room Billing"
+msgstr "فوترة منفصلة لكل غرفة"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
+msgid "Isolated Room Invoices"
+msgstr "فواتير الغرف المنفصلة"
 
 #. module: hotel_folio
 #: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
@@ -606,6 +622,12 @@ msgstr "لا توجد فوليوهات بعد"
 #: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
 msgid "No invoiceable group folio lines are available."
 msgstr "لا توجد سطور فوليو مجموعة قابلة للفوترة."
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_reservation_amendment.py:0
+msgid "No invoiceable room-folio lines are available."
+msgstr "لا توجد سطور فوليو غرف قابلة للفوترة."
 
 #. module: hotel_folio
 #. odoo-python

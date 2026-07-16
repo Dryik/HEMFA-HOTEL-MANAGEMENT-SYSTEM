@@ -7,3 +7,15 @@ access_hotel_dnd_housekeeping,hotel.do.not.disturb housekeeping,model_hotel_do_n
 access_hotel_dnd_manager,hotel.do.not.disturb manager,model_hotel_do_not_disturb,hotel_base.group_hotel_manager,1,1,1,1
 access_hotel_wakeup_frontdesk,hotel.wakeup.call frontdesk,model_hotel_wakeup_call,hotel_base.group_hotel_frontdesk,1,1,1,0
 access_hotel_wakeup_manager,hotel.wakeup.call manager,model_hotel_wakeup_call,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_service_frontdesk,hotel.service frontdesk,model_hotel_service,hotel_base.group_hotel_frontdesk,1,0,0,0
+access_hotel_service_fb,hotel.service food beverage,model_hotel_service,hotel_base.group_hotel_fb,1,0,0,0
+access_hotel_service_manager,hotel.service manager,model_hotel_service,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_reservation_service_frontdesk,hotel.reservation.service frontdesk,model_hotel_reservation_service,hotel_base.group_hotel_frontdesk,1,1,1,1
+access_hotel_reservation_service_fb,hotel.reservation.service food beverage,model_hotel_reservation_service,hotel_base.group_hotel_fb,1,1,1,0
+access_hotel_reservation_service_manager,hotel.reservation.service manager,model_hotel_reservation_service,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_document_type_frontdesk,hotel.document.type frontdesk,model_hotel_document_type,hotel_base.group_hotel_frontdesk,1,0,0,0
+access_hotel_document_type_manager,hotel.document.type manager,model_hotel_document_type,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_reservation_document_frontdesk,hotel.reservation.document frontdesk,model_hotel_reservation_document,hotel_base.group_hotel_frontdesk,1,1,1,0
+access_hotel_reservation_document_manager,hotel.reservation.document manager,model_hotel_reservation_document,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_guest_rating_frontdesk,hotel.guest.rating frontdesk,model_hotel_guest_rating,hotel_base.group_hotel_frontdesk,1,0,1,0
+access_hotel_guest_rating_manager,hotel.guest.rating manager,model_hotel_guest_rating,hotel_base.group_hotel_manager,1,1,1,1

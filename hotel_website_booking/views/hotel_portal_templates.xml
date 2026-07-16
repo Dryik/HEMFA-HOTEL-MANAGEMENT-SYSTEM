@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_hotel" inherit_id="portal.portal_my_home" name="Hotel Bookings Portal Entry">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_service_category_enable" t-value="True"/>
+        </xpath>
+        <xpath expr="//div[@id='portal_service_category']" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">My Bookings</t>
+                <t t-set="text">Reservations, payments, folios, and documents</t>
+                <t t-set="url" t-value="'/my/hotel-bookings'"/>
+                <t t-set="placeholder_count" t-value="'hotel_booking_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_hotel_bookings" name="My Hotel Bookings">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">My Bookings</t>
+            </t>
+            <div class="alert alert-info" t-if="not bookings">You do not have any hotel bookings yet.</div>
+            <t t-if="bookings" t-call="portal.portal_table">
+                <thead><tr><th>Reference</th><th>Arrival</th><th>Departure</th><th class="text-end">Total</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr t-foreach="bookings" t-as="booking">
+                        <td><a t-att-href="'/my/hotel-bookings/%s' % booking.access_token" t-out="booking.name"/></td>
+                        <td t-out="format_datetime(booking.checkin_date)"/>
+                        <td t-out="format_datetime(booking.checkout_date)"/>
+                        <td class="text-end" t-out="format_amount(booking.amount_total, booking.currency_id)"/>
+                        <td><span class="badge text-bg-light" t-out="dict(booking._fields['state'].selection).get(booking.state)"/></td>
+                    </tr>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_hotel_booking" name="My Hotel Booking">
+        <t t-call="portal.portal_layout">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div><div class="text-muted">Hotel booking</div><h1 class="h3 mb-0" t-out="booking.name"/></div>
+                <span class="badge text-bg-light fs-6" t-out="dict(booking._fields['state'].selection).get(booking.state)"/>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="card mb-4"><div class="card-body">
+                        <div class="row g-3"><div class="col-md-6"><strong>Arrival</strong><div t-out="format_datetime(booking.checkin_date)"/></div><div class="col-md-6"><strong>Departure</strong><div t-out="format_datetime(booking.checkout_date)"/></div></div>
+                        <h2 class="h5 mt-4">Rooms</h2>
+                        <div class="d-flex justify-content-between border-bottom py-2" t-foreach="booking.reservation_ids" t-as="reservation"><span><t t-out="reservation.room_id.name"/> — <t t-out="reservation.room_type_id.name"/></span><span t-out="dict(reservation._fields['state'].selection).get(reservation.state)"/></div>
+                    </div></div>
+                    <div class="card mb-4"><div class="card-body">
+                        <h2 class="h5">Folio statements</h2>
+                        <div t-foreach="booking.reservation_ids" t-as="reservation" class="mb-3"><strong t-out="reservation.name"/><div class="d-flex justify-content-between" t-foreach="reservation.folio_ids" t-as="folio"><span t-out="folio.name"/><span><t t-out="format_amount(folio.amount_total, folio.currency_id)"/> · Due <t t-out="format_amount(folio.amount_due, folio.currency_id)"/></span></div></div>
+                        <h3 class="h6 mt-3">Payment allocations</h3><div class="d-flex justify-content-between" t-foreach="booking.allocation_ids" t-as="allocation"><span t-out="allocation.folio_id.name"/><span t-out="format_amount(allocation.amount, allocation.currency_id)"/></div>
+                    </div></div>
+                    <div class="card"><div class="card-body">
+                        <h2 class="h5">Private documents</h2>
+                        <div t-foreach="booking.reservation_ids.mapped('document_ids')" t-as="document" class="d-flex justify-content-between border-bottom py-2"><span><t t-out="document.document_type_id.name"/> <span class="badge text-bg-success" t-if="document.verified">Verified</span></span><a t-att-href="'/my/hotel-documents/%s/%s' % (document.id, booking.access_token)">Download</a></div>
+                        <form class="row g-3 mt-3" method="post" enctype="multipart/form-data" t-att-action="'/my/hotel-bookings/%s/documents' % booking.access_token" t-if="booking.reservation_ids and document_types">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="col-md-4"><label class="form-label">Document type</label><select class="form-select" name="document_type_id" required="required"><option t-foreach="document_types" t-as="document_type" t-att-value="document_type.id" t-out="document_type.name"/></select></div>
+                            <div class="col-md-4"><label class="form-label">Expiry date</label><input class="form-control" type="date" name="expiry_date"/></div>
+                            <div class="col-md-4"><label class="form-label">PDF / JPEG / PNG</label><input class="form-control" type="file" name="document" accept="application/pdf,image/jpeg,image/png" required="required"/></div>
+                            <div class="col-12"><button class="btn btn-primary">Upload securely</button></div>
+                        </form>
+                    </div></div>
+                </div>
+                <div class="col-lg-4"><div class="card"><div class="card-body"><h2 class="h5">Payment</h2><div class="display-6" t-out="format_amount(booking.amount_total, booking.currency_id)"/><p class="text-muted">Booking total</p><a class="btn btn-primary w-100" t-if="booking.state in ('held', 'payment_pending')" t-att-href="'/hotel/booking/%s/pay' % booking.access_token">Pay now</a><a class="btn btn-outline-secondary w-100 mt-2" t-att-href="'/hotel/booking/%s' % booking.access_token">Public confirmation</a></div></div></div>
+            </div>
+        </t>
+    </template>
+</odoo>
