@@ -239,6 +239,33 @@ class TestHotelReservation(TransactionCase):
         with self.assertRaises(UserError):
             amendment.write({"reason": "Changed"})
 
+    def test_amendment_rejection_is_immutable_and_traceable(self):
+        reservation = self._reservation()
+        reservation.action_confirm()
+        amendment = self.env["hotel.reservation.amendment"].with_user(
+            self.manager
+        ).create(
+            {
+                "reservation_id": reservation.id,
+                "amendment_type": "room_move",
+                "new_room_id": self.room_2.id,
+                "reason": "Guest requested a quieter room",
+            }
+        )
+        with self.assertRaises(UserError):
+            amendment.with_user(self.manager).action_reject()
+        amendment.with_user(self.manager).write(
+            {"rejection_reason": "Room R102 is committed to a group block"}
+        )
+        amendment.with_user(self.manager).action_reject()
+        self.assertEqual(amendment.state, "rejected")
+        self.assertEqual(amendment.rejected_by_id, self.manager)
+        self.assertEqual(reservation.room_id, self.room)
+        with self.assertRaises(UserError):
+            amendment.write({"reason": "Changed"})
+        with self.assertRaises(UserError):
+            amendment.unlink()
+
     def test_group_partial_allocation_and_confirmation(self):
         group = self.env["hotel.reservation.group"].create(
             {

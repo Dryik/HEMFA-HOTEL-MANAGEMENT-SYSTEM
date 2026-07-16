@@ -6,7 +6,7 @@
         <field name="model">hotel.reservation</field>
         <field name="inherit_id" ref="hotel_reservation.hotel_reservation_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//sheet/notebook[1]" position="inside">
+            <xpath expr="//page[@name='amendments']" position="before">
                 <page string="Restricted Services" name="restricted_services"
                       groups="hotel_base.group_hotel_frontdesk">
                     <field name="service_restriction_ids">
@@ -83,8 +83,8 @@
 
     <menuitem id="menu_hotel_config_entity_ceilings"
         name="Entity Service Ceilings"
-        parent="hotel_base.menu_hotel_config"
+        parent="hotel_base.menu_hotel_config_section_services"
         action="hotel_entity_service_ceiling_action"
-        sequence="65"
+        sequence="30"
         groups="hotel_base.group_hotel_fo_supervisor"/>
 </odoo>

@@ -18,8 +18,10 @@
                         <div class="row g-3 align-items-end">
                             <div class="col-md-3"><label class="form-label">Arrival</label><input class="form-control" type="date" name="checkin" required="required"/></div>
                             <div class="col-md-3"><label class="form-label">Departure</label><input class="form-control" type="date" name="checkout" required="required"/></div>
-                            <div class="col-md-2"><label class="form-label">Adults per room</label><input class="form-control" type="number" name="adults" min="1" value="1"/></div>
-                            <div class="col-md-2"><label class="form-label">Children per room</label><input class="form-control" type="number" name="children" min="0" value="0"/></div>
+                            <div class="col-6 col-md-1"><label class="form-label">Adults</label><input class="form-control" type="number" name="adults" min="1" value="1"/></div>
+                            <div class="col-6 col-md-1"><label class="form-label">Teens</label><input class="form-control" type="number" name="teenagers" min="0" value="0"/></div>
+                            <div class="col-6 col-md-1"><label class="form-label">Children</label><input class="form-control" type="number" name="children" min="0" value="0"/></div>
+                            <div class="col-6 col-md-1"><label class="form-label">Infants</label><input class="form-control" type="number" name="infants" min="0" value="0"/></div>
                             <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Check availability</button></div>
                         </div>
                     </form>
@@ -66,7 +68,7 @@
                         <div class="col-6 col-md-2"><label class="form-label">Children</label><input class="form-control" type="number" name="children" min="0" t-att-value="children"/></div>
                         <div class="col-6 col-md-2"><label class="form-label">Infants</label><input class="form-control" type="number" name="infants" min="0" t-att-value="infants"/></div>
                         <div class="col-md-3"><label class="form-label">Nationality / residency</label><select class="form-select" name="nationality_id"><option value="">Any</option><option t-foreach="countries" t-as="country" t-att-value="country.id" t-att-selected="country.id == nationality_id" t-out="country.name"/></select></div>
-                        <div class="col-md-3"><label class="form-label">Pricelist</label><select class="form-select" name="pricelist_id"><option t-foreach="pricelists" t-as="item" t-att-value="item.id" t-att-selected="item == pricelist" t-out="item.name"/></select></div>
+                        <div class="col-md-3"><label class="form-label">Rate plan</label><select class="form-select" name="pricelist_id"><option t-foreach="pricelists" t-as="item" t-att-value="item.id" t-att-selected="item == pricelist" t-out="item.name"/></select></div>
                         <div class="col-md-3"><label class="form-label">Room type</label><select class="form-select" name="room_type_id"><option value="">All room types</option><option t-foreach="room_type_options" t-as="option" t-att-value="option.id" t-att-selected="option.id == selected_room_type_id" t-out="option.name"/></select></div>
                         <div class="col-md-2"><label class="form-label">Minimum price</label><input class="form-control" type="number" step="0.01" name="min_price"/></div>
                         <div class="col-md-2"><label class="form-label">Maximum price</label><input class="form-control" type="number" step="0.01" name="max_price"/></div>
@@ -91,14 +93,14 @@
                             <div class="card border-0 shadow-sm overflow-hidden"><div class="row g-0">
                                 <div class="col-md-4"><img class="w-100 h-100 o_hotel_room_image" t-att-src="'/hotel/media/room-type/%s' % card['room_type'].id" t-att-alt="card['room_type'].name"/></div>
                                 <div class="col-md-5"><div class="card-body">
-                                    <h2 class="h4"><a class="text-decoration-none" t-att-href="'/hotel/room/%s' % card['room_type'].id" t-out="card['room_type'].name"/></h2>
+                                    <h2 class="h4"><a class="text-decoration-none" t-att-href="'/hotel/room/%s?checkin=%s&amp;checkout=%s' % (card['room_type'].id, arrival or '', departure or '')" t-out="card['room_type'].name"/></h2>
                                     <div class="text-muted mb-2"><t t-out="card['room_type'].capacity_adults"/> adults · <t t-out="card['room_type'].capacity_children"/> children · up to <t t-out="card['room_type'].max_occupancy"/> guests</div>
                                     <div t-field="card['room_type'].website_description"/>
                                     <span class="badge text-bg-success"><t t-out="card['available_qty']"/> available</span>
                                 </div></div>
                                 <div class="col-md-3 bg-light"><div class="card-body h-100 d-flex flex-column justify-content-center">
                                     <div class="small text-muted">Stay total per room</div><div class="h4" t-out="format_amount(card['quote']['amount_total'], pricelist.currency_id)"/>
-                                    <label class="form-label mt-3">Number of rooms</label><input class="form-control" type="number" min="0" t-att-max="card['available_qty']" value="0" t-att-name="'room_qty_%s' % card['room_type'].id"/>
+                                    <label class="form-label mt-3">Number of rooms</label><input class="form-control" type="number" min="0" t-att-max="card['available_qty']" value="0" t-att-name="'room_qty_%s' % card['room_type'].id" t-att-data-hotel-room-price="card['quote']['amount_total']"/>
                                 </div></div>
                             </div></div>
                         </div>
@@ -109,7 +111,7 @@
                         <h2 class="h4">Optional services</h2>
                         <div class="row g-3 mb-4"><div class="col-md-4" t-foreach="service_cards" t-as="card"><div class="border rounded p-3 h-100">
                             <strong t-out="card['service'].name"/><div class="text-muted" t-out="format_amount(card['price'], pricelist.currency_id)"/>
-                            <label class="form-label mt-2">Quantity</label><input class="form-control" type="number" min="0" value="0" t-att-name="'service_qty_%s' % card['service'].id"/>
+                            <label class="form-label mt-2">Quantity</label><input class="form-control" type="number" min="0" value="0" t-att-name="'service_qty_%s' % card['service'].id" t-att-data-hotel-service-price="card['price']"/>
                         </div></div></div>
                         <h2 class="h4">Guest details</h2>
                         <div class="row g-3">
@@ -119,6 +121,16 @@
                             <div class="col-md-4"><label class="form-label">Country</label><select class="form-select" name="country_id"><option value="">Select</option><option t-foreach="countries" t-as="country" t-att-value="country.id" t-out="country.name"/></select></div>
                             <div class="col-md-4"><label class="form-label">Nationality</label><select class="form-select" name="nationality_id" required="required"><option value="">Select</option><option t-foreach="countries" t-as="country" t-att-value="country.id" t-att-selected="country.id == nationality_id" t-out="country.name"/></select></div>
                             <div class="col-12"><label class="form-label">Notes</label><textarea class="form-control" name="customer_note" rows="3"/></div>
+                        </div>
+                        <div class="o_hotel_booking_summary alert alert-secondary d-none d-flex justify-content-between align-items-center mt-4"
+                             t-att-data-currency-symbol="pricelist.currency_id.symbol"
+                             t-att-data-currency-position="pricelist.currency_id.position">
+                            <span>
+                                <strong data-summary-rooms="1">0</strong> <span>Rooms</span>
+                                <span aria-hidden="true">·</span>
+                                <strong data-summary-services="1">0</strong> <span>Services</span>
+                            </span>
+                            <span class="h5 mb-0"><span>Total</span> <strong data-summary-total="1">—</strong></span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mt-4"><small class="text-muted">Availability and prices are checked again securely before rooms are held.</small><button class="btn btn-primary btn-lg" type="submit">Continue booking</button></div>
                     </div></div>
@@ -135,7 +147,7 @@
                 <div class="col-lg-5"><h1 t-out="room_type.name"/><div class="lead" t-field="room_type.website_description"/>
                     <p><strong>Capacity:</strong> <t t-out="room_type.max_occupancy"/> guests</p>
                     <div class="mb-3"><span class="badge text-bg-light me-1" t-foreach="room_type.amenity_ids" t-as="amenity" t-out="amenity.name"/></div>
-                    <a class="btn btn-primary btn-lg" href="/hotel/rooms">Book now</a>
+                    <a class="btn btn-primary btn-lg" t-att-href="'/hotel/rooms?checkin=%s&amp;checkout=%s' % (request.params.get('checkin', ''), request.params.get('checkout', ''))">Book now</a>
                 </div>
             </div></section>
             <section class="bg-light py-5" t-if="room_type.room_policy"><div class="container"><h2>Room policies</h2><div t-field="room_type.room_policy"/></div></section>
@@ -152,7 +164,10 @@
                 <h2 class="h5 mt-4">Rooms</h2><div class="d-flex justify-content-between border-bottom py-2" t-foreach="booking.line_ids" t-as="line"><span><t t-out="line.quantity"/> × <t t-out="line.room_type_id.name"/></span><span t-out="format_amount(line.amount_total, booking.currency_id)"/></div>
                 <div class="d-flex justify-content-between h5 mt-3"><span>Total</span><span t-out="format_amount(booking.amount_total, booking.currency_id)"/></div>
                 <div class="alert alert-warning" t-if="booking.state == 'pending_review'">Your request is waiting for hotel approval. No room is blocked until staff approves it.</div>
-                <div class="alert alert-danger" t-if="booking.state == 'payment_exception'" t-out="booking.exception_note"/>
+                <div class="alert alert-danger" t-if="booking.state == 'payment_exception'">
+                    <div t-out="booking.exception_note"/>
+                    <div class="mt-2">The hotel has been notified and will contact you to complete or refund this booking. You can also cancel it below.</div>
+                </div>
                 <div class="d-flex gap-2 mt-4">
                     <a class="btn btn-primary" t-if="booking.state in ('held', 'payment_pending')" t-att-href="'/hotel/booking/%s/pay' % booking.access_token">Pay <t t-out="format_amount(booking.amount_due_online, booking.currency_id)"/></a>
                     <form t-if="can_cancel" method="post" t-att-action="'/hotel/booking/%s/cancel' % booking.access_token"><input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/><button class="btn btn-outline-danger" type="submit">Cancel booking</button></form>

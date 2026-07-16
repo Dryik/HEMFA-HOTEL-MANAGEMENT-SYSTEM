@@ -27,6 +27,7 @@
     "assets": {
         "web.assets_frontend": [
             "hotel_website_booking/static/src/scss/hotel_website.scss",
+            "hotel_website_booking/static/src/js/hotel_booking_summary.js",
         ],
     },
     "installable": True,

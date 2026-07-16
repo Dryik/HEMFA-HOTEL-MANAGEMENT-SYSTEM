@@ -32,9 +32,10 @@
                 <header>
                     <button name="action_create_invoice" type="object" string="Create Guest Invoice"
                         class="btn-primary" context="{'partner_id': partner_id}"
+                        invisible="not is_open"
                         groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
                     <button name="action_create_invoice" type="object" string="Create Agency Invoice"
-                        class="btn-secondary" invisible="not agency_id" context="{'partner_id': agency_id}"
+                        class="btn-secondary" invisible="not agency_id or not is_open" context="{'partner_id': agency_id}"
                         groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
                     <button name="action_open_allocate_advance" type="object"
                         string="Allocate Deposit / Advance" class="btn-secondary"
@@ -70,19 +71,19 @@
                         <page string="Ledger / Charges">
                             <field name="line_ids">
                                 <list editable="bottom">
-                                    <field name="date"/>
-                                    <field name="product_id"/>
-                                    <field name="name"/>
-                                    <field name="qty"/>
-                                    <field name="price_unit"/>
-                                    <field name="discount"/>
-                                    <field name="tax_ids" widget="many2many_tags" readonly="is_posted"/>
-                                    <field name="payee_partner_id" readonly="is_posted"/>
+                                    <field name="date" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="product_id" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="name" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="qty" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="price_unit" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="discount" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="tax_ids" widget="many2many_tags" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="payee_partner_id" readonly="is_posted or lock_state != 'unlocked'"/>
                                     <field name="amount_untaxed" optional="hide"/>
                                     <field name="amount_tax" optional="show"/>
                                     <field name="amount_total"/>
-                                    <field name="service_date" optional="hide"/>
-                                    <field name="source_type" optional="show"/>
+                                    <field name="service_date" optional="hide" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="source_type" optional="hide"/>
                                     <field name="source_reference" optional="hide"/>
                                     <field name="invoiceable" optional="hide"/>
                                     <field name="lock_state" optional="show"/>
@@ -161,7 +162,6 @@
         <field name="search_view_id" ref="hotel_folio_view_search"/>
         <field name="context">{
             'search_default_open': 1,
-            'search_default_property_id': context.get('hotel_property_id'),
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">No folios created yet</p>
@@ -228,7 +228,7 @@
 
     <menuitem id="menu_hotel_config_folio_routing"
         name="Folio Routing Rules"
-        parent="hotel_base.menu_hotel_config"
+        parent="hotel_base.menu_hotel_config_section_billing"
         action="hotel_folio_routing_rule_action"
-        sequence="70"/>
+        sequence="10"/>
 </odoo>

@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from odoo import Command, fields
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -203,6 +203,38 @@ class TestHotelOnlineBooking(TransactionCase):
 
         self.assertFalse(booking._confirm_paid_transaction(transaction))
         self.assertEqual(len(booking.activity_ids), 1)
+
+    def test_payment_exception_returns_to_review(self):
+        self.property.write(
+            {"online_payment_policy": "fixed_deposit", "online_deposit_value": 50.0}
+        )
+        booking = self._booking()
+        booking.action_submit()
+        booking._expire_hold(payment_exception=True)
+        self.assertEqual(booking.state, "payment_exception")
+
+        booking.action_return_to_review()
+        self.assertEqual(booking.state, "pending_review")
+        self.assertFalse(booking.exception_note)
+        self.assertFalse(
+            booking.reservation_ids.filtered(
+                lambda reservation: reservation.state == "pending_payment"
+            )
+        )
+        with self.assertRaises(UserError):
+            booking.action_return_to_review()
+
+    def test_payment_exception_can_be_cancelled(self):
+        self.property.write(
+            {"online_payment_policy": "fixed_deposit", "online_deposit_value": 50.0}
+        )
+        booking = self._booking()
+        booking.action_submit()
+        booking._expire_hold(payment_exception=True)
+        self.assertEqual(booking.state, "payment_exception")
+
+        booking.action_cancel_online()
+        self.assertEqual(booking.state, "cancelled")
 
     def test_quote_snapshots_are_per_night_and_tax_ready(self):
         booking = self._booking()

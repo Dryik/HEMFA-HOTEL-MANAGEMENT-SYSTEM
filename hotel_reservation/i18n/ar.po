@@ -23,6 +23,18 @@ msgid "A Front Office Supervisor approval is required."
 msgstr "تلزم موافقة مشرف المكتب الأمامي."
 
 #. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "A Front Office Supervisor is required to reject."
+msgstr "يتطلب الرفض مشرف المكتب الأمامي."
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "A rejection reason is required."
+msgstr "يلزم إدخال سبب الرفض."
+
+#. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Actual Times"
 msgstr "الأوقات الفعلية"
@@ -64,6 +76,12 @@ msgstr "طبّق %(user)s التعديل %(amendment)s. السبب: %(reason)s"
 #. module: hotel_reservation
 #. odoo-python
 #: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Amendment %(amendment)s rejected by %(user)s. Reason: %(reason)s"
+msgstr "رفض التعديل %(amendment)s بواسطة %(user)s. السبب: %(reason)s"
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
 msgid "Amendment approval fields can only be set by the apply action."
 msgstr "لا يمكن تعيين حقول اعتماد التعديل إلا من خلال إجراء التطبيق."
 
@@ -80,6 +98,11 @@ msgid "Amendments must be approved through the apply action."
 msgstr "يجب اعتماد التعديلات من خلال إجراء التطبيق."
 
 #. module: hotel_reservation
+#: model_terms:ir.actions.act_window,help:hotel_reservation.hotel_reservation_amendment_action
+msgid "Amendments record room moves, stay changes and repricing. A supervisor approves and applies them, or rejects them with a reason."
+msgstr "تسجل التعديلات نقل الغرف وتغييرات الإقامة وإعادة التسعير. يعتمدها المشرف ويطبقها، أو يرفضها مع ذكر السبب."
+
+#. module: hotel_reservation
 #. odoo-python
 #: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
 msgid "An amendment reason is required."
@@ -94,14 +117,14 @@ msgstr "مطبق"
 #. module: hotel_reservation
 #. odoo-python
 #: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
-msgid "Applied reservation amendments are immutable."
-msgstr "تعديلات الحجز المطبقة غير قابلة للتغيير."
+msgid "Applied or rejected reservation amendments cannot be deleted."
+msgstr "لا يمكن حذف تعديلات الحجز المطبقة أو المرفوضة."
 
 #. module: hotel_reservation
 #. odoo-python
 #: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
-msgid "Applied reservation amendments cannot be deleted."
-msgstr "لا يمكن حذف تعديلات الحجز المطبقة."
+msgid "Applied reservation amendments are immutable."
+msgstr "تعديلات الحجز المطبقة غير قابلة للتغيير."
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_form
@@ -161,6 +184,16 @@ msgid "Cancel"
 msgstr "إلغاء"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_group_view_form
+msgid "Cancel this group reservation? All member stays in the group are affected."
+msgstr "هل تريد إلغاء حجز المجموعة؟ سيؤثر ذلك على جميع إقامات أعضاء المجموعة."
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
+msgid "Cancel this reservation?"
+msgstr "هل تريد إلغاء هذا الحجز؟"
+
+#. module: hotel_reservation
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__cancelled
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_group__state__cancelled
 msgid "Cancelled"
@@ -170,6 +203,16 @@ msgstr "ملغي"
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
 msgid "Check In"
 msgstr "تسجيل دخول"
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
+msgid "Check Out"
+msgstr "تسجيل مغادرة"
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
+msgid "Check this guest out now? Checkout ends the stay and cannot be undone."
+msgstr "هل تريد تسجيل مغادرة هذا النزيل الآن؟ تسجيل المغادرة ينهي الإقامة ولا يمكن التراجع عنه."
 
 #. module: hotel_reservation
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__checked_in
@@ -199,13 +242,8 @@ msgstr "تأكيد"
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_group_view_form
-msgid "Confirm Block"
-msgstr "تأكيد الحصة"
-
-#. module: hotel_reservation
-#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
-msgid "Confirm Check Out"
-msgstr "تأكيد تسجيل الخروج"
+msgid "Confirm Group"
+msgstr "تأكيد المجموعة"
 
 #. module: hotel_reservation
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__confirmed
@@ -259,7 +297,6 @@ msgstr "مباشر"
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation__state__draft
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_amendment__state__draft
 #: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_group__state__draft
-#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_search
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_group_view_search
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "Draft"
@@ -320,17 +357,13 @@ msgid "Group / Block"
 msgstr "مجموعة / حجز كتلي"
 
 #. module: hotel_reservation
-#: model:ir.actions.act_window,name:hotel_reservation.hotel_reservation_group_action
-msgid "Group / Block Reservations"
-msgstr "حجوزات المجموعات / الحصص"
-
-#. module: hotel_reservation
 #: model:ir.model,name:hotel_reservation.model_hotel_reservation_group_allocation
 msgid "Group Reservation Room-type Allocation"
 msgstr "تخصيص نوع الغرفة لحجز المجموعة"
 
 #. module: hotel_reservation
 #: model:ir.ui.menu,name:hotel_reservation.menu_hotel_reservation_groups
+#: model:ir.actions.act_window,name:hotel_reservation.hotel_reservation_group_action
 msgid "Group Reservations"
 msgstr "حجوزات المجموعات"
 
@@ -433,6 +466,11 @@ msgid "Manager Repricing"
 msgstr "إعادة التسعير بواسطة المدير"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form
+msgid "Mark this reservation as a no-show?"
+msgstr "هل تريد تسجيل هذا الحجز كعدم حضور؟"
+
+#. module: hotel_reservation
 #. odoo-python
 #: code:addons/hotel_reservation/models/hotel_reservation.py:0
 #: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
@@ -455,6 +493,11 @@ msgstr "سعر الليلة"
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_search
 msgid "No Show"
 msgstr "عدم حضور"
+
+#. module: hotel_reservation
+#: model_terms:ir.actions.act_window,help:hotel_reservation.hotel_reservation_amendment_action
+msgid "No amendments waiting for approval."
+msgstr "لا توجد تعديلات بانتظار الاعتماد."
 
 #. module: hotel_reservation
 #: model_terms:ir.actions.act_window,help:hotel_reservation.action_hotel_reservation
@@ -507,6 +550,12 @@ msgstr "يمكن فقط تسجيل عدم حضور للحجوزات المؤكد
 #: code:addons/hotel_reservation/models/hotel_reservation.py:0
 msgid "Only confirmed reservations can check in."
 msgstr "يمكن فقط تسجيل الدخول للحجوزات المؤكدة."
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Only draft amendments can be rejected."
+msgstr "لا يمكن رفض إلا التعديلات في حالة المسودة."
 
 #. module: hotel_reservation
 #. odoo-python
@@ -572,6 +621,33 @@ msgid "Pricing"
 msgstr "التسعير"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_form
+msgid "Reject"
+msgstr "رفض"
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_form
+msgid "Reject this amendment? Fill in the rejection reason first — the requester will see it in the stay's log."
+msgstr "هل تريد رفض هذا التعديل؟ أدخل سبب الرفض أولاً — سيظهر لمقدم الطلب في سجل الإقامة."
+
+#. module: hotel_reservation
+#: model:ir.model.fields.selection,name:hotel_reservation.selection__hotel_reservation_amendment__state__rejected
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_search
+msgid "Rejected"
+msgstr "مرفوض"
+
+#. module: hotel_reservation
+#. odoo-python
+#: code:addons/hotel_reservation/models/hotel_reservation_amendment.py:0
+msgid "Rejected reservation amendments are immutable."
+msgstr "تعديلات الحجز المرفوضة غير قابلة للتغيير."
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_form
+msgid "Rejection"
+msgstr "الرفض"
+
+#. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_search
 msgid "Requested By"
 msgstr "مقدم الطلب"
@@ -581,6 +657,11 @@ msgstr "مقدم الطلب"
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_group_view_form
 msgid "Requested Rooms"
 msgstr "الغرف المطلوبة"
+
+#. module: hotel_reservation
+#: model:ir.model.fields,help:hotel_reservation.field_hotel_reservation_amendment__rejection_reason
+msgid "Required when a supervisor rejects the requested amendment."
+msgstr "مطلوب عندما يرفض المشرف التعديل المطلوب."
 
 #. module: hotel_reservation
 #: model:ir.ui.menu,name:hotel_reservation.menu_hotel_reservation_amendments
@@ -594,7 +675,6 @@ msgid "Reservation Number"
 msgstr "رقم الحجز"
 
 #. module: hotel_reservation
-#: model:ir.ui.menu,name:hotel_reservation.menu_hotel_reservation_gantt_readonly
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_gantt
 #: model:ir.actions.act_window,name:hotel_reservation.action_hotel_reservation
 msgid "Reservation Planner"
@@ -706,6 +786,11 @@ msgid "Stay"
 msgstr "الحجز والإقامة"
 
 #. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_form
+msgid "Supervisor: fill this in before rejecting…"
+msgstr "للمشرف: يرجى التعبئة قبل الرفض…"
+
+#. module: hotel_reservation
 #: model:ir.rule,name:hotel_reservation.rule_hotel_amendment_system_unrestricted
 msgid "System administrators: all amendments"
 msgstr "مديرو النظام: كل التعديلات"
@@ -765,6 +850,11 @@ msgstr "سبق تطبيق هذا التعديل."
 #: model_terms:ir.actions.act_window,help:hotel_reservation.action_hotel_reservation
 msgid "This fallback timeline is read-only. Use Planning to create or change room stays."
 msgstr "هذا الخط الزمني الاحتياطي للقراءة فقط. استخدم التخطيط لإنشاء إقامات الغرف أو تغييرها."
+
+#. module: hotel_reservation
+#: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_amendment_view_search
+msgid "To Approve"
+msgstr "بانتظار الاعتماد"
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.hotel_reservation_view_form

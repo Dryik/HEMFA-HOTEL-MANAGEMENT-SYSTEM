@@ -158,7 +158,6 @@
         <field name="view_mode">kanban,list,form</field>
         <field name="context">{
             'search_default_open': 1,
-            'search_default_property_id': context.get('hotel_property_id'),
             'default_property_id': context.get('hotel_property_id'),
         }</field>
         <field name="help" type="html">

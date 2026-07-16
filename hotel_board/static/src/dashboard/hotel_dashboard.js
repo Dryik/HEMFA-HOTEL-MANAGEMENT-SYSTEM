@@ -1,5 +1,6 @@
 import { Component, onMounted, onWillUnmount, useState } from "@odoo/owl";
 import { browser } from "@web/core/browser/browser";
+import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
@@ -80,6 +81,7 @@ export class HotelDashboard extends Component {
         this.orm = useService("orm");
         this.action = useService("action");
         this.notification = useService("notification");
+        this.dialog = useService("dialog");
         this.frontdeskState = useService("hotel_frontdesk_state");
         const stored = this.frontdeskState.get();
         const actionContext = this.props.action?.context || {};
@@ -472,6 +474,24 @@ export class HotelDashboard extends Component {
         const method = key === "check_in" ? "action_check_in" : key === "check_out" ? "action_check_out" : null;
         if (!method || this.state.busyRows[row.id]) {
             return;
+        }
+        if (key === "check_out") {
+            const confirmed = await new Promise((resolve) => {
+                this.dialog.add(ConfirmationDialog, {
+                    title: _t("Check out"),
+                    body: _t(
+                        "Check out %(guest)s from room %(room)s? Checkout ends the stay and cannot be undone.",
+                        { guest: row.guest?.name || "", room: row.room?.name || "—" }
+                    ),
+                    confirmLabel: _t("Check Out"),
+                    cancelLabel: _t("Keep Stay"),
+                    confirm: () => resolve(true),
+                    cancel: () => resolve(false),
+                });
+            });
+            if (!confirmed) {
+                return;
+            }
         }
         this.state.busyRows[row.id] = true;
         try {
