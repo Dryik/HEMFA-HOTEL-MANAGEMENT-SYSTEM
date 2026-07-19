@@ -30,15 +30,9 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_create_invoice" type="object" string="Create Guest Invoice"
-                        class="btn-primary" context="{'partner_id': partner_id}"
+                    <button name="action_open_add_charge" type="object"
+                        string="Add Charge" class="btn-primary"
                         invisible="not is_open"
-                        groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
-                    <button name="action_create_invoice" type="object" string="Create Agency Invoice"
-                        class="btn-secondary" invisible="not agency_id or not is_open" context="{'partner_id': agency_id}"
-                        groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
-                    <button name="action_open_allocate_advance" type="object"
-                        string="Allocate Deposit / Advance" class="btn-secondary"
                         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
                     <button name="action_open_register_deposit" type="object"
                         string="Register Deposit" class="btn-secondary"
@@ -48,9 +42,15 @@
                         string="Register Advance" class="btn-secondary"
                         invisible="not agency_id or not is_open"
                         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
-                    <button name="action_open_add_charge" type="object"
-                        string="Add Charge" class="btn-secondary"
+                    <button name="action_create_invoice" type="object" string="Create Guest Invoice"
+                        class="btn-secondary" context="{'partner_id': partner_id}"
                         invisible="not is_open"
+                        groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
+                    <button name="action_create_invoice" type="object" string="Create Agency Invoice"
+                        class="btn-secondary" invisible="not agency_id or not is_open" context="{'partner_id': agency_id}"
+                        groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
+                    <button name="action_open_allocate_advance" type="object"
+                        string="Allocate Deposit / Advance" class="btn-secondary"
                         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
                     <field name="is_open" invisible="1"/>
                 </header>
