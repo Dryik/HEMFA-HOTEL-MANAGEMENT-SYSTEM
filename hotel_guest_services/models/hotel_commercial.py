@@ -150,7 +150,7 @@ class HotelReservationService(models.Model):
         [
             ("draft", "Draft"),
             ("confirmed", "Confirmed"),
-            ("done", "Done"),
+            ("done", "Completed"),
             ("cancelled", "Cancelled"),
         ],
         default="draft",

@@ -73,10 +73,10 @@
                     <button name="action_start" type="object" string="Start Work"
                         class="btn-primary" invisible="state != 'confirmed'"
                         groups="hotel_base.group_hotel_maintenance"/>
-                    <button name="action_done" type="object" string="Mark Done"
+                    <button name="action_done" type="object" string="Mark Completed"
                         class="btn-primary" invisible="state != 'in_progress'"
                         groups="hotel_base.group_hotel_maintenance"
-                        confirm="Are you sure you want to mark this maintenance request as done?"/>
+                        confirm="Are you sure you want to mark this maintenance request as completed?"/>
                     <button name="action_verify" type="object" string="Verify"
                         class="btn-primary" invisible="state != 'done'"
                         groups="hotel_base.group_hotel_manager"

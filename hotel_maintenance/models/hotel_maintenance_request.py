@@ -5,7 +5,7 @@ REQUEST_STATES = [
     ("new", "New"),
     ("confirmed", "Confirmed"),
     ("in_progress", "In Progress"),
-    ("done", "Done"),
+    ("done", "Completed"),
     ("verified", "Verified"),
     ("cancel", "Cancelled"),
 ]
@@ -116,7 +116,7 @@ class HotelMaintenanceRequest(models.Model):
     )
     date_confirmed = fields.Datetime(string="Confirmed On", readonly=True)
     date_started = fields.Datetime(string="Started On", readonly=True)
-    date_done = fields.Datetime(string="Done On", readonly=True)
+    date_done = fields.Datetime(string="Completed On", readonly=True)
     date_verified = fields.Datetime(string="Verified On", readonly=True)
     resolution_notes = fields.Text(
         help="What the technician actually did.",
@@ -225,7 +225,7 @@ class HotelMaintenanceRequest(models.Model):
         for rec in self:
             if rec.state != "in_progress":
                 raise UserError(
-                    _("Only in-progress requests can be marked done.")
+                    _("Only in-progress requests can be marked completed.")
                 )
             rec._write_transition(
                 {"state": "done", "date_done": fields.Datetime.now()}
@@ -238,7 +238,7 @@ class HotelMaintenanceRequest(models.Model):
             )
         for rec in self:
             if rec.state != "done":
-                raise UserError(_("Only done requests can be verified."))
+                raise UserError(_("Only completed requests can be verified."))
             rec._write_transition(
                 {"state": "verified", "date_verified": fields.Datetime.now()}
             )

@@ -67,3 +67,8 @@ Agency Commissions (70), Guest Services (80), Housekeeping (90), Maintenance
 Property. Without `hotel_board`, Reporting
 contains Reports and Booking Analysis; the board adds Owner Dashboard. Empty or
 unauthorized entries are hidden by Odoo.
+
+## Related workflow reference
+
+See [Hotel State-Machine Glossary](state_glossary.md) for every workflow state,
+stored key, and user-facing label.
