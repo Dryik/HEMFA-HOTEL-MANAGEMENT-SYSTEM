@@ -2,7 +2,7 @@ import io
 
 import xlsxwriter
 
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -18,6 +18,25 @@ REPORT_TYPES = [
     ("pos_room_charges", "POS Room Charges"),
     ("folio_statement", "Consolidated Folio Statement"),
 ]
+
+REPORT_ACCESS_GROUPS = {
+    "hotel_base.group_hotel_frontdesk": {
+        "arrivals",
+        "departures",
+        "inhouse",
+        "security",
+        "occupancy",
+        "folio_statement",
+    },
+    "hotel_base.group_hotel_housekeeping": {"discrepancy"},
+    "hotel_base.group_hotel_accountant": {
+        "occupancy",
+        "debtors",
+        "agency_advances",
+        "pos_room_charges",
+        "folio_statement",
+    },
+}
 
 REPORT_FAMILIES = {
     "security": "landscape",
@@ -90,7 +109,31 @@ class HotelReportWizard(models.TransientModel):
     _name = "hotel.report.wizard"
     _description = "Hotel Report Wizard"
 
-    report_type = fields.Selection(REPORT_TYPES, required=True, default="arrivals")
+    @api.model
+    def _allowed_report_type_keys(self):
+        if self.env.user.has_group("hotel_base.group_hotel_manager"):
+            return {key for key, _label in REPORT_TYPES}
+        allowed = set()
+        for group_xmlid, report_types in REPORT_ACCESS_GROUPS.items():
+            if self.env.user.has_group(group_xmlid):
+                allowed.update(report_types)
+        return allowed
+
+    @api.model
+    def _selection_report_types(self):
+        allowed = self._allowed_report_type_keys()
+        return [(key, label) for key, label in REPORT_TYPES if key in allowed]
+
+    @api.model
+    def _default_report_type(self):
+        selection = self._selection_report_types()
+        return selection[0][0] if selection else False
+
+    report_type = fields.Selection(
+        selection=REPORT_TYPES,
+        required=True,
+        default=_default_report_type,
+    )
     date = fields.Date(required=True, default=fields.Date.context_today)
     property_id = fields.Many2one(
         "hotel.property",
@@ -103,6 +146,19 @@ class HotelReportWizard(models.TransientModel):
     folio_id = fields.Many2one(
         "hotel.folio", domain="[('property_id', '=', property_id)]"
     )
+
+    @api.model
+    def fields_get(self, allfields=None, attributes=None):
+        result = super().fields_get(allfields, attributes)
+        report_type = result.get("report_type") or {}
+        if "selection" in report_type:
+            allowed = self._allowed_report_type_keys()
+            report_type["selection"] = [
+                (key, label)
+                for key, label in report_type["selection"]
+                if key in allowed
+            ]
+        return result
 
     def _day_window(self):
         self.ensure_one()
@@ -187,34 +243,7 @@ class HotelReportWizard(models.TransientModel):
 
     def _check_report_access(self):
         self.ensure_one()
-        user = self.env.user
-        if user.has_group("hotel_base.group_hotel_manager"):
-            return
-        allowed = set()
-        if user.has_group("hotel_base.group_hotel_frontdesk"):
-            allowed.update(
-                {
-                    "arrivals",
-                    "departures",
-                    "inhouse",
-                    "security",
-                    "occupancy",
-                    "folio_statement",
-                }
-            )
-        if user.has_group("hotel_base.group_hotel_housekeeping"):
-            allowed.add("discrepancy")
-        if user.has_group("hotel_base.group_hotel_accountant"):
-            allowed.update(
-                {
-                    "occupancy",
-                    "debtors",
-                    "agency_advances",
-                    "pos_room_charges",
-                    "folio_statement",
-                }
-            )
-        if self.report_type not in allowed:
+        if self.report_type not in self._allowed_report_type_keys():
             raise UserError(_("Your hotel role cannot access this report type."))
 
     @staticmethod
