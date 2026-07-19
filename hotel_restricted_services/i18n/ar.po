@@ -29,6 +29,12 @@ msgid "%(violation)s\nOverriding an entity ceiling requires the Front Office Sup
 msgstr "%(violation)s\nتجاوز سقف الجهة يتطلب صلاحية مشرف المكتب الأمامي."
 
 #. module: hotel_restricted_services
+#. odoo-python
+#: code:addons/hotel_restricted_services/models/hotel_folio.py:0
+msgid "A valid immutable workflow source is required."
+msgstr "يلزم مصدر سير عمل صالح وغير قابل للتغيير."
+
+#. module: hotel_restricted_services
 #: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_entity_service_ceiling__partner_id
 msgid "Agency / Entity"
 msgstr "الوكالة / الجهة"
@@ -45,9 +51,30 @@ msgid "Allowed with Limit"
 msgstr "مسموحة بحد أقصى"
 
 #. module: hotel_restricted_services
+#: model:ir.model.fields.selection,name:hotel_restricted_services.selection__hotel_entity_service_ceiling__on_excess__block
+msgid "Block"
+msgstr "حظر"
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,help:hotel_restricted_services.field_hotel_entity_service_ceiling__on_excess
+msgid "Block requires a Front Office Supervisor override to exceed the ceiling. Charge guest for excess keeps the allowed portion on the entity and bills the remainder to the stay's guest."
+msgstr "يتطلب الحظر موافقة مشرف المكتب الأمامي لتجاوز السقف. أما تحميل الزيادة على النزيل فيبقي الحصة المسموح بها على الجهة ويفوتر الباقي على نزيل الإقامة."
+
+#. module: hotel_restricted_services
 #: model:ir.model.fields.selection,name:hotel_restricted_services.selection__hotel_service_restriction__restriction_type__blocked
 msgid "Blocked"
 msgstr "محظورة"
+
+#. module: hotel_restricted_services
+#. odoo-python
+#: code:addons/hotel_restricted_services/models/hotel_folio.py:0
+msgid "Charge %(product)s split by ceiling %(ceiling)s: total %(total)s, entity %(entity)s, guest %(guest)s."
+msgstr "تم تقسيم رسم %(product)s حسب السقف %(ceiling)s: الإجمالي %(total)s، حصة الجهة %(entity)s، وحصة النزيل %(guest)s."
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields.selection,name:hotel_restricted_services.selection__hotel_entity_service_ceiling__on_excess__charge_guest
+msgid "Charge guest for excess"
+msgstr "تحميل الزيادة على النزيل"
 
 #. module: hotel_restricted_services
 #: model:ir.model.fields,help:hotel_restricted_services.field_hotel_service_restriction__category_id
@@ -110,6 +137,17 @@ msgstr "أقصى إجمالي رسوم لكامل الإقامة لهذه الف
 #: model:ir.model.fields,help:hotel_restricted_services.field_hotel_service_restriction__daily_limit
 msgid "Maximum charge total per calendar day for this category. Zero means no daily limit."
 msgstr "أقصى إجمالي رسوم في اليوم لهذه الفئة؛ الصفر يعني بلا حد يومي."
+
+#. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_entity_service_ceiling__on_excess
+msgid "On Excess"
+msgstr "عند تجاوز السقف"
+
+#. module: hotel_restricted_services
+#. odoo-python
+#: code:addons/hotel_restricted_services/models/hotel_folio.py:0
+msgid "Operational charge sources can only be assigned by their hotel workflows."
+msgstr "لا يمكن إسناد مصادر الرسوم التشغيلية إلا من خلال سير عمل الفندق الخاص بها."
 
 #. module: hotel_restricted_services
 #: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_service_restriction__note

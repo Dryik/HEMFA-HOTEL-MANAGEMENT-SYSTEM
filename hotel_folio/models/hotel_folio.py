@@ -357,20 +357,7 @@ class HotelFolio(models.Model):
         if price_unit is None:
             price_unit = product.list_price
 
-        # Determine payee using routing rules
-        if not payee:
-            payee = self.partner_id
-            if self.reservation_id.agency_id:
-                rule = self.env["hotel.folio.routing.rule"].search(
-                    [
-                        ("property_id", "=", self.reservation_id.property_id.id),
-                        ("category_id", "=", product.categ_id.id),
-                        ("active", "=", True),
-                    ],
-                    limit=1,
-                )
-                if rule and rule.routing_type == "agency":
-                    payee = rule.agency_id or self.reservation_id.agency_id
+        payee = self._get_charge_payee(product, payee=payee)
 
         # Determine taxes
         company = self.property_id.company_id
@@ -404,6 +391,25 @@ class HotelFolio(models.Model):
             else line_model._create_manual_charge(values)
         )
         return line
+
+    def _get_charge_payee(self, product, payee=None):
+        """Resolve the routed payee without creating a folio line."""
+        self.ensure_one()
+        if payee:
+            return payee
+        payee = self.partner_id
+        if self.reservation_id.agency_id:
+            rule = self.env["hotel.folio.routing.rule"].search(
+                [
+                    ("property_id", "=", self.reservation_id.property_id.id),
+                    ("category_id", "=", product.categ_id.id),
+                    ("active", "=", True),
+                ],
+                limit=1,
+            )
+            if rule and rule.routing_type == "agency":
+                payee = rule.agency_id or self.reservation_id.agency_id
+        return payee
 
     def action_create_invoice(self, partner_id=None):
         self.ensure_one()
