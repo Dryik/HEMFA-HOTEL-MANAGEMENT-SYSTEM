@@ -27,6 +27,14 @@
         sequence="70"
         groups="hotel_base.group_hotel_manager,hotel_base.group_hotel_accountant"/>
 
+    <!-- hotel_board moves this donor entry into Operations when installed. -->
+    <menuitem id="menu_hotel_room_status"
+        name="Room Status"
+        parent="menu_hotel_root"
+        action="hotel_room_status_action"
+        sequence="40"
+        groups="hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_maintenance"/>
+
     <menuitem id="menu_hotel_reporting"
         name="Reporting"
         parent="menu_hotel_root"
