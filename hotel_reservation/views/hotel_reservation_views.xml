@@ -91,6 +91,10 @@
                         groups="hotel_base.group_hotel_fo_supervisor"/>
                     <button name="action_open_available_rooms" type="object"
                         string="Available Rooms" invisible="state not in ('draft', 'confirmed')"/>
+                    <button name="action_request_amendment" type="object"
+                        string="Request Amendment" class="btn-secondary"
+                        invisible="state not in ('confirmed', 'checked_in')"
+                        groups="hotel_base.group_hotel_frontdesk"/>
                     <field name="state" widget="statusbar"
                         statusbar_visible="draft,pending_payment,confirmed,checked_in,checked_out"/>
                 </header>
