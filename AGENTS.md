@@ -53,7 +53,7 @@ technical names.
 - `hotel.housekeeping.task`: States are `new`, `cleaning`, `cleaned`, `cancel`.
 - `hotel.maintenance.request`: States are `new`, `confirmed`, `in_progress`, `done`, `verified`, `cancel`; blocking starts at `confirmed`, verify needs `group_hotel_manager`.
 - `hotel.service.restriction`: `restriction_type` is `blocked` or `limited` (with `daily_limit` / `stay_limit`); enforcement lives in `hotel.folio.add_charge`.
-- `hotel.entity.service.ceiling`: per-agency `daily_limit`, empty `category_id` = all services.
+- `hotel.entity.service.ceiling`: per-agency `daily_limit`, empty `category_id` = all services; `on_excess` is `block` or `charge_guest`.
 
 ## Dependency Graph
 
@@ -137,19 +137,19 @@ hotel_frontdesk_session   <- base (migration tombstone)
 
 | Module | Tests |
 |---|---|
-| `hotel_base` | 14 tests |
+| `hotel_base` | 20 tests |
 | `hotel_board` | 17 tests |
 | `hotel_reservation` | 19 tests |
 | `hotel_folio` | 15 tests |
 | `hotel_rate` | 12 tests |
 | `hotel_guest_services` | 8 tests |
 | `hotel_housekeeping` | 12 tests |
-| `hotel_restricted_services` | 8 tests |
+| `hotel_restricted_services` | 13 tests |
 | `hotel_maintenance` | 13 tests |
-| `hotel_pos_room_charge` | 9 tests |
+| `hotel_pos_room_charge` | 10 tests |
 | `hotel_reports` | 14 tests |
 | `hotel_website_booking` | 13 tests |
-| **Total** | **154 tests** |
+| **Total** | **166 tests** |
 
 ## Local Checks
 

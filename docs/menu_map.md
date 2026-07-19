@@ -75,3 +75,6 @@ unauthorized entries are hidden by Odoo.
 
 See [Hotel State-Machine Glossary](state_glossary.md) for every workflow state,
 stored key, and user-facing label.
+
+See [Corporate Billing Policy](billing_policy.md) for the relationship between
+partner hierarchy, per-stay agency billing, and entity ceiling overflow.
