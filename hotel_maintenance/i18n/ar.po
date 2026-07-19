@@ -30,8 +30,8 @@ msgstr "لا يمكن إلغاء طلب معتمد."
 
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
-msgid "Are you sure you want to mark this maintenance request as done?"
-msgstr "هل أنت متأكد من تحديد طلب الصيانة هذا كمنجز؟"
+msgid "Are you sure you want to mark this maintenance request as completed?"
+msgstr "هل أنت متأكد من تحديد طلب الصيانة هذا كمكتمل؟"
 
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
@@ -59,6 +59,16 @@ msgid "Cancelled"
 msgstr "ملغي"
 
 #. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__state__done
+msgid "Completed"
+msgstr "مكتملة"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__date_done
+msgid "Completed On"
+msgstr "تاريخ الإكمال"
+
+#. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
 msgid "Confirm"
 msgstr "تأكيد"
@@ -77,16 +87,6 @@ msgstr "تاريخ التأكيد"
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
 msgid "Describe the problem..."
 msgstr "صف المشكلة..."
-
-#. module: hotel_maintenance
-#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__state__done
-msgid "Done"
-msgstr "منجز"
-
-#. module: hotel_maintenance
-#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__date_done
-msgid "Done On"
-msgstr "تاريخ الإنجاز"
 
 #. module: hotel_maintenance
 #: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__request_source__guest
@@ -169,8 +169,8 @@ msgstr "لا يمكن تغيير حالة الصيانة إلا من خلال إ
 
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
-msgid "Mark Done"
-msgstr "إنهاء العمل"
+msgid "Mark Completed"
+msgstr "تحديد كمكتمل"
 
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
@@ -209,20 +209,20 @@ msgstr "يمكن فقط إعادة الطلبات الملغاة إلى جديد
 #. module: hotel_maintenance
 #. odoo-python
 #: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Only completed requests can be verified."
+msgstr "يمكن فقط اعتماد الطلبات المكتملة."
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
 msgid "Only confirmed requests can be started."
 msgstr "يمكن فقط بدء الطلبات المؤكدة."
 
 #. module: hotel_maintenance
 #. odoo-python
 #: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
-msgid "Only done requests can be verified."
-msgstr "يمكن فقط اعتماد الطلبات المنجزة."
-
-#. module: hotel_maintenance
-#. odoo-python
-#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
-msgid "Only in-progress requests can be marked done."
-msgstr "يمكن فقط إنهاء الطلبات قيد التنفيذ."
+msgid "Only in-progress requests can be marked completed."
+msgstr "يمكن فقط تحديد الطلبات قيد التنفيذ كمكتملة."
 
 #. module: hotel_maintenance
 #. odoo-python

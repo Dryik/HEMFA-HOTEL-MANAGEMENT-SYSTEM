@@ -166,6 +166,9 @@ class TestHotelGuestServices(TransactionCase):
         paid_delivery.action_confirm()
         paid_delivery.action_done()
         self.assertEqual(paid_delivery.state, "done")
+        self.assertEqual(
+            dict(paid_delivery._fields["state"].selection)["done"], "Completed"
+        )
         self.assertEqual(paid_delivery.folio_line_id.amount_untaxed, 150.0)
         self.assertEqual(paid_delivery.folio_line_id.source_type, "service")
 

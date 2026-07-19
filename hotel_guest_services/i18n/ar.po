@@ -93,6 +93,7 @@ msgid "Closed"
 msgstr "مغلقة"
 
 #. module: hotel_guest_services
+#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_reservation_service__state__done
 #: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_wakeup_call__state__completed
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_list
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_wakeup_call_view_form
@@ -210,11 +211,6 @@ msgstr "تتحكم إجراءات المستند في التحقق منه."
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_form_inherit_commercial
 msgid "Documents"
 msgstr "المستندات"
-
-#. module: hotel_guest_services
-#: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_reservation_service__state__done
-msgid "Done"
-msgstr "منجز"
 
 #. module: hotel_guest_services
 #: model:ir.model.fields.selection,name:hotel_guest_services.selection__hotel_reservation_service__state__draft
@@ -392,8 +388,8 @@ msgstr "تحديد كمسلم"
 
 #. module: hotel_guest_services
 #: model_terms:ir.ui.view,arch_db:hotel_guest_services.hotel_reservation_service_view_form
-msgid "Mark Done"
-msgstr "إنهاء العمل"
+msgid "Mark Completed"
+msgstr "تحديد كمكتمل"
 
 #. module: hotel_guest_services
 #: model:ir.model.fields,field_description:hotel_guest_services.field_hotel_service__is_meal
