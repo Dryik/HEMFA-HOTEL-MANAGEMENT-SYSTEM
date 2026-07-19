@@ -81,10 +81,12 @@
         </field>
     </record>
 
+    <!-- Operational billing policy belongs in Front Desk so supervisors can
+         reach it; Configuration is manager-only and would hide this menu. -->
     <menuitem id="menu_hotel_config_entity_ceilings"
         name="Entity Service Ceilings"
-        parent="hotel_base.menu_hotel_config_section_services"
+        parent="hotel_reservation.menu_hotel_frontdesk"
         action="hotel_entity_service_ceiling_action"
-        sequence="30"
+        sequence="80"
         groups="hotel_base.group_hotel_fo_supervisor"/>
 </odoo>
