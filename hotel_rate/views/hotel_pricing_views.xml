@@ -43,6 +43,10 @@
     </record>
     <record id="hotel_seasonal_pricing_action" model="ir.actions.act_window">
         <field name="name">Seasonal Pricing</field><field name="res_model">hotel.seasonal.pricing</field><field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Step 2: define active seasonal windows</p>
+            <p>A seasonal plan gates its nightly rate and pricelist rules by date and status. The plan does not set a price by itself.</p>
+        </field>
     </record>
 
     <record id="hotel_guest_supplement_view_list" model="ir.ui.view">
@@ -58,6 +62,10 @@
     </record>
     <record id="hotel_guest_supplement_action" model="ir.actions.act_window">
         <field name="name">Extra Guest Supplements</field><field name="res_model">hotel.guest.supplement</field><field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Step 6: define extra-guest supplements</p>
+            <p>Fixed or percentage supplements are added after the pricelist result. Taxes are then computed on the room price plus supplements.</p>
+        </field>
     </record>
 
     <record id="hotel_booking_source_view_list" model="ir.ui.view">
@@ -84,6 +92,22 @@
         <field name="name">Booking Source Pricing</field>
         <field name="res_model">hotel.booking.source</field>
         <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Step 1: choose the reservation pricelist</p>
+            <p>The booking source supplies the default pricelist. A guest-specific Hotel Pricelist overrides it; the guest's standard pricelist is the final fallback.</p>
+        </field>
+    </record>
+
+    <record id="hotel_pricelist_action" model="ir.actions.act_window">
+        <field name="name">Pricelists</field>
+        <field name="res_model">product.pricelist</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="product.product_pricelist_view_search"/>
+        <field name="context">{"default_base": "list_price"}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Step 5: define pricelist adjustments</p>
+            <p>The selected pricelist adjusts the occupancy-adjusted room price. Hotel seasonal-plan and weekday conditions can further limit a rule.</p>
+        </field>
     </record>
 
     <record id="res_partner_view_form_hotel_pricelist" model="ir.ui.view">
@@ -121,12 +145,12 @@
         </field>
     </record>
 
-    <menuitem id="menu_hotel_seasonal_pricing" name="Seasonal Pricing" parent="hotel_base.menu_hotel_config_section_pricing"
-        action="hotel_seasonal_pricing_action" sequence="10"/>
-    <menuitem id="menu_hotel_guest_supplements" name="Extra Guest Supplements" parent="hotel_base.menu_hotel_config_section_pricing"
-        action="hotel_guest_supplement_action" sequence="40"/>
-    <menuitem id="menu_hotel_booking_sources" name="Booking Source Pricing" parent="hotel_base.menu_hotel_config_section_pricing"
-        action="hotel_booking_source_action" sequence="50"/>
-    <menuitem id="menu_hotel_pricelists" name="Pricelists" parent="hotel_base.menu_hotel_config_section_pricing"
-        action="product.product_pricelist_action2" sequence="60"/>
+    <menuitem id="menu_hotel_booking_sources" name="1. Booking Source Pricing" parent="hotel_base.menu_hotel_config_section_pricing"
+        action="hotel_booking_source_action" sequence="10"/>
+    <menuitem id="menu_hotel_seasonal_pricing" name="2. Seasonal Pricing Plans" parent="hotel_base.menu_hotel_config_section_pricing"
+        action="hotel_seasonal_pricing_action" sequence="20"/>
+    <menuitem id="menu_hotel_pricelists" name="5. Pricelists" parent="hotel_base.menu_hotel_config_section_pricing"
+        action="hotel_pricelist_action" sequence="50"/>
+    <menuitem id="menu_hotel_guest_supplements" name="6. Extra Guest Supplements" parent="hotel_base.menu_hotel_config_section_pricing"
+        action="hotel_guest_supplement_action" sequence="60"/>
 </odoo>
