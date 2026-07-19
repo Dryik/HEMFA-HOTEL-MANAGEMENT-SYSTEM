@@ -21,7 +21,7 @@ installation without `hotel_board` still degrades into a predictable order.
   Group Reservations, Folios, Reservation Amendments
 - Online Bookings
 - Operations: Maintenance
-- Rooms; Guests; Agencies / Entities
+- Guests; Agencies / Entities
 - Guest Services: Service Orders, Meals to Prepare, Do Not Disturb, Wake-up Calls,
   Lost and Found, Guest Ratings
 - Reporting: Reports
@@ -30,42 +30,40 @@ installation without `hotel_board` still degrades into a predictable order.
 
 - Everything available to Receptionist
 - Front Desk: Entity Service Ceilings
-- Operations: Housekeeping (Tasks, Discrepancy), Maintenance
+- Operations: Housekeeping Tasks, Discrepancies, Maintenance
 
 ### Housekeeping
 
-- Operations: Housekeeping (Tasks, Discrepancy), Maintenance
-- Rooms
+- Operations: Housekeeping Tasks, Discrepancies, Maintenance
 - Guest Services: Do Not Disturb, Lost and Found
 - Reporting: Reports
 
 ### Maintenance
 
 - Operations: Maintenance
-- Rooms
 
 ### F&B
 
-- Rooms
 - Guest Services: Service Orders, Meals to Prepare
 
 ### Accountant
 
 - Front Desk: Folios
-- Rooms; Agencies / Entities; Agency Commissions
+- Agencies / Entities; Agency Commissions
 - Reporting: Reports
 
 ### Manager
 
 - All role menus above
 - Reporting: Reports, Booking Analysis, Owner Dashboard
-- Configuration: Property, Pricing, Services, Housekeeping, Billing, and Technical
-  configuration entries supplied by the installed modules
+- Configuration: Property (including the Rooms inventory), Pricing, Services,
+  Housekeeping, Billing, and technical entries supplied by installed modules
 
 ## Root order without `hotel_board`
 
-Front Desk (10), Online Bookings (20), Rooms (40), Guests (50), Agencies / Entities
-(60), Agency Commissions (70), Guest Services (80), Housekeeping (90), Maintenance
-(100), Reporting (110), Configuration (120). Without `hotel_board`, Reporting
+Front Desk (10), Online Bookings (20), Guests (50), Agencies / Entities (60),
+Agency Commissions (70), Guest Services (80), Housekeeping (90), Maintenance
+(100), Reporting (110), Configuration (120). Rooms is under Configuration →
+Property. Without `hotel_board`, Reporting
 contains Reports and Booking Analysis; the board adds Owner Dashboard. Empty or
 unauthorized entries are hidden by Odoo.

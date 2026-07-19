@@ -17,7 +17,7 @@
 
     <!-- Housekeeping Discrepancy sub-menu -->
     <menuitem id="menu_hotel_housekeeping_discrepancy"
-        name="Discrepancy Reconciliation"
+        name="Discrepancies"
         parent="menu_hotel_housekeeping_root"
         action="hotel_housekeeping_discrepancy_wizard_action"
         sequence="20"/>

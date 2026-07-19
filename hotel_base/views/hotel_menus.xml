@@ -6,12 +6,6 @@
         web_icon="hotel_base,static/description/icon.png"
         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_maintenance,hotel_base.group_hotel_fb,hotel_base.group_hotel_accountant"/>
 
-    <menuitem id="menu_hotel_rooms"
-        name="Rooms"
-        parent="menu_hotel_root"
-        action="hotel_room_action"
-        sequence="40"/>
-
     <menuitem id="menu_hotel_guests"
         name="Guests"
         parent="menu_hotel_root"
@@ -76,6 +70,12 @@
         name="Billing"
         parent="menu_hotel_config"
         sequence="50"/>
+
+    <menuitem id="menu_hotel_rooms"
+        name="Rooms"
+        parent="menu_hotel_config_section_property"
+        action="hotel_room_action"
+        sequence="40"/>
 
     <menuitem id="menu_hotel_config_floor"
         name="Floors"
