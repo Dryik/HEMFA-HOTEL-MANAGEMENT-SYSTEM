@@ -50,11 +50,6 @@ msgid "Blocked"
 msgstr "محظورة"
 
 #. module: hotel_restricted_services
-#: model_terms:ir.actions.act_window,help:hotel_restricted_services.hotel_entity_service_ceiling_action
-msgid "Ceilings cap what may be billed to an agency or company per guest per day. Front desk needs a supervisor override to exceed them."
-msgstr "تحد السقوف الحد الأقصى الذي يمكن فوترته لوكالة أو شركة لكل نزيل يومياً. يحتاج مكتب الاستقبال إلى تجاوز من المشرف لتخطيها."
-
-#. module: hotel_restricted_services
 #: model:ir.model.fields,help:hotel_restricted_services.field_hotel_service_restriction__category_id
 msgid "Charges whose product belongs to this category (or a child of it) are restricted."
 msgstr "تقيد الرسوم التي ينتمي منتجها إلى هذه الفئة أو إحدى فئاتها الفرعية."
@@ -82,20 +77,9 @@ msgid "Daily limit of %(limit)s for '%(category)s' exceeded (already charged %(c
 msgstr "تم تجاوز الحد اليومي %(limit)s لفئة '%(category)s' (المحمل سابقاً %(charged)s، والرسم الجديد %(amount)s)."
 
 #. module: hotel_restricted_services
-#: model_terms:ir.actions.act_window,help:hotel_restricted_services.hotel_entity_service_ceiling_action
-msgid "Define per-entity daily charge ceilings"
-msgstr "تحديد سقوف يومية للرسوم لكل جهة"
-
-#. module: hotel_restricted_services
 #: model:ir.model,name:hotel_restricted_services.model_hotel_entity_service_ceiling
 msgid "Entity Service Ceiling"
 msgstr "سقف خدمات الجهة"
-
-#. module: hotel_restricted_services
-#: model:ir.ui.menu,name:hotel_restricted_services.menu_hotel_config_entity_ceilings
-#: model:ir.actions.act_window,name:hotel_restricted_services.hotel_entity_service_ceiling_action
-msgid "Entity Service Ceilings"
-msgstr "سقوف خدمات الجهات"
 
 #. module: hotel_restricted_services
 #: model:ir.rule,name:hotel_restricted_services.rule_hotel_entity_ceiling_assigned_property

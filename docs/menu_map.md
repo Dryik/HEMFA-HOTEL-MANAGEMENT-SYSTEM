@@ -29,7 +29,7 @@ installation without `hotel_board` still degrades into a predictable order.
 ### Front Office Supervisor
 
 - Everything available to Receptionist
-- Front Desk: Entity Service Ceilings
+- Agencies / Entities contact: Service Ceilings tab (editable)
 - Operations: Housekeeping Tasks, Discrepancies, Maintenance
 
 ### Housekeeping
@@ -50,11 +50,13 @@ installation without `hotel_board` still degrades into a predictable order.
 
 - Front Desk: Folios
 - Directory: Agencies / Entities, Agency Commissions
+- Agencies / Entities contact: Service Ceilings tab (read-only)
 - Reporting: Reports
 
 ### Manager
 
 - All role menus above
+- Agencies / Entities contact: Service Ceilings tab (editable)
 - Reporting: Reports, Booking Analysis, Owner Dashboard
 - Configuration: Property (including the Rooms inventory), Pricing, Services,
   Housekeeping, Billing, and technical entries supplied by installed modules
