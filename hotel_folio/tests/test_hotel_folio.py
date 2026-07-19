@@ -522,7 +522,7 @@ class TestHotelFolio(TransactionCase):
         with self.assertRaises(UserError):
             folio.write({"invoice_ids": [(5, 0, 0)]})
         with self.assertRaises(UserError):
-            folio.line_ids[0].unlink()
+            folio.line_ids[0].with_user(self.frontdesk_user).unlink()
 
         # Trying to invoice again should raise error since there are no uninvoiced lines
         with self.assertRaises(UserError):
@@ -540,9 +540,23 @@ class TestHotelFolio(TransactionCase):
         with self.assertRaises(UserError):
             posted_line.with_user(self.frontdesk_user).action_reverse("Not authorized")
 
-        reversal = posted_line.with_user(self.manager_user).action_reverse(
-            "Incorrect charge"
+        reverse_action = posted_line.with_user(
+            self.manager_user
+        ).action_open_reverse_wizard()
+        self.assertEqual(
+            reverse_action["res_model"], "hotel.folio.line.reverse.wizard"
         )
+        self.assertEqual(
+            reverse_action["context"]["default_folio_line_id"], posted_line.id
+        )
+        reverse_wizard = self.env["hotel.folio.line.reverse.wizard"].with_user(
+            self.manager_user
+        ).create({"folio_line_id": posted_line.id, "reason": "Incorrect charge"})
+        with self.assertRaises(UserError):
+            reverse_wizard.with_user(self.frontdesk_user).action_reverse()
+        close_action = reverse_wizard.with_user(self.manager_user).action_reverse()
+        self.assertEqual(close_action["type"], "ir.actions.act_window_close")
+        reversal = posted_line.reversal_line_ids
         self.assertEqual(reversal.reversal_of_id, posted_line)
         self.assertEqual(reversal.amount, -posted_line.amount)
         self.assertTrue(reversal.is_posted)
@@ -564,7 +578,7 @@ class TestHotelFolio(TransactionCase):
             workflow_line.unlink()
         with self.assertRaises(UserError):
             folio2.unlink()
-        manual_line.unlink()
+        manual_line.with_user(self.frontdesk_user).unlink()
 
         draft_reservation = self._reservation(offset_days=8)
         empty_folio = self.env["hotel.folio"].create(

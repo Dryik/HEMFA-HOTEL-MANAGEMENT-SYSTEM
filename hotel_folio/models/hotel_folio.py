@@ -1032,6 +1032,19 @@ class HotelFolioLine(models.Model):
             reversals |= reversal
         return reversals
 
+    def action_open_reverse_wizard(self):
+        self.ensure_one()
+        if not self.env.user.has_group("hotel_base.group_hotel_manager"):
+            raise UserError(_("Only a Hotel Manager can reverse a folio line."))
+        return {
+            "name": _("Reverse Folio Line"),
+            "type": "ir.actions.act_window",
+            "res_model": "hotel.folio.line.reverse.wizard",
+            "view_mode": "form",
+            "target": "new",
+            "context": {"default_folio_line_id": self.id},
+        }
+
     def _create_reversal_line(self, reason):
         self.ensure_one()
         reversal_time = fields.Datetime.now()

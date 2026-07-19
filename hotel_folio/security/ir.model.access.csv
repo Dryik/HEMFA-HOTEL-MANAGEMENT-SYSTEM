@@ -18,3 +18,4 @@ access_hotel_register_payment_wizard_manager,hotel.register.payment.wizard manag
 access_hotel_add_charge_wizard_frontdesk,hotel.add.charge.wizard frontdesk,model_hotel_add_charge_wizard,hotel_base.group_hotel_frontdesk,1,1,1,1
 access_hotel_add_charge_wizard_accountant,hotel.add.charge.wizard accountant,model_hotel_add_charge_wizard,hotel_base.group_hotel_accountant,1,1,1,1
 access_hotel_add_charge_wizard_manager,hotel.add.charge.wizard manager,model_hotel_add_charge_wizard,hotel_base.group_hotel_manager,1,1,1,1
+access_hotel_folio_line_reverse_wizard_manager,hotel.folio.line.reverse.wizard manager,model_hotel_folio_line_reverse_wizard,hotel_base.group_hotel_manager,1,1,1,1
