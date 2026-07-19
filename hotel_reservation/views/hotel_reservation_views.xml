@@ -246,6 +246,8 @@
         }</field>
     </record>
 
+    <!-- hotel_board replaces the Planning action and preserves this Front Desk
+         child order when its composition workspace is installed. -->
     <menuitem id="menu_hotel_frontdesk"
         name="Front Desk"
         parent="hotel_base.menu_hotel_root"

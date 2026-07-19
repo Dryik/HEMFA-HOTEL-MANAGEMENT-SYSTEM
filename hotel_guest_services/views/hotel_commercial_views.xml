@@ -144,12 +144,13 @@
         </xpath></field>
     </record>
 
+    <!-- hotel_board preserves these guest-facing queues under Guest Services. -->
     <menuitem id="menu_hotel_allotted_services" name="Service Orders" parent="menu_hotel_guest_services"
-        action="hotel_reservation_service_action" sequence="5" groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_fb"/>
+        action="hotel_reservation_service_action" sequence="10" groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_fb"/>
     <menuitem id="menu_hotel_meal_queue" name="Meals to Prepare" parent="menu_hotel_guest_services"
-        action="hotel_meal_queue_action" sequence="6" groups="hotel_base.group_hotel_fb,hotel_base.group_hotel_frontdesk"/>
+        action="hotel_meal_queue_action" sequence="20" groups="hotel_base.group_hotel_fb,hotel_base.group_hotel_frontdesk"/>
     <menuitem id="menu_hotel_ratings" name="Guest Ratings" parent="menu_hotel_guest_services"
-        action="hotel_guest_rating_action" sequence="40" groups="hotel_base.group_hotel_frontdesk"/>
+        action="hotel_guest_rating_action" sequence="60" groups="hotel_base.group_hotel_frontdesk"/>
     <menuitem id="menu_hotel_config_services" name="Service Catalog" parent="hotel_base.menu_hotel_config_section_services"
         action="hotel_service_action" sequence="10"/>
     <menuitem id="menu_hotel_config_documents" name="Required Documents" parent="hotel_base.menu_hotel_config_section_services"
