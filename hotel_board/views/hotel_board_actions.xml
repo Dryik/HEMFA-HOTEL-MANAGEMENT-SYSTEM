@@ -24,9 +24,9 @@
 
     <menuitem id="menu_hotel_owner_dashboard"
         name="Owner Dashboard"
-        parent="hotel_base.menu_hotel_root"
+        parent="hotel_base.menu_hotel_reporting"
         action="action_hotel_owner_dashboard"
-        sequence="12"
+        sequence="30"
         groups="hotel_base.group_hotel_manager"/>
 
     <!-- Make the purpose-built inventory tape the primary planning entry point. -->
