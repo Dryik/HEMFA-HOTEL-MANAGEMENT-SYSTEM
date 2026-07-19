@@ -18,6 +18,6 @@ class HotelFolioLine(models.Model):
     )
 
     _pos_order_line_uniq = models.Constraint(
-        "unique (pos_order_line_id)",
+        "unique (pos_order_line_id, payee_partner_id)",
         "A POS order line can be transferred to a folio only once.",
     )

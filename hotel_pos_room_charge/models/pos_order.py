@@ -96,7 +96,8 @@ class PosOrder(models.Model):
                 source_key=f"pos:{pos_line.uuid}",
                 invoiceable=False,
             )
-            folio_line._set_pos_source(self, pos_line)
+            for charge_line in folio_line:
+                charge_line._set_pos_source(self, pos_line)
             created_lines |= folio_line
 
         transfer = self._create_room_charge_transfer(folio, created_lines)

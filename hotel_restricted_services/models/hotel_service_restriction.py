@@ -112,6 +112,18 @@ class HotelEntityServiceCeiling(models.Model):
         help="Maximum billed to the entity across all folios in this property "
         "and hotel business day. Zero means no daily limit.",
     )
+    on_excess = fields.Selection(
+        [
+            ("block", "Block"),
+            ("charge_guest", "Charge guest for excess"),
+        ],
+        string="On Excess",
+        default="block",
+        required=True,
+        help="Block requires a Front Office Supervisor override to exceed the "
+        "ceiling. Charge guest for excess keeps the allowed portion on the "
+        "entity and bills the remainder to the stay's guest.",
+    )
     currency_id = fields.Many2one(
         "res.currency",
         related="property_id.company_id.currency_id",
