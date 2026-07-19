@@ -24,6 +24,12 @@ msgstr "خصّص %(user)s الدفعة %(payment)s للغرض %(purpose)s للف
 
 #. module: hotel_folio
 #. odoo-python
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "%(purpose)s %(payment)s for %(amount)s %(currency)s registered by %(user)s."
+msgstr "سجل %(user)s %(purpose)s %(payment)s بمبلغ %(amount)s %(currency)s."
+
+#. module: hotel_folio
+#. odoo-python
 #: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "A POS lock requires its posted room-charge accounting transfer."
 msgstr "يتطلب قفل نقاط البيع الترحيل المحاسبي المرحل لرسوم الغرفة."
@@ -93,6 +99,7 @@ msgstr "الوكالة / الجهة"
 
 #. module: hotel_folio
 #: model:ir.model.fields.selection,name:hotel_folio.selection__account_payment__hotel_payment_purpose__agency_advance
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_register_payment_wizard__payment_purpose__agency_advance
 msgid "Agency Advance"
 msgstr "دفعة جهة مقدمة"
 
@@ -176,6 +183,7 @@ msgstr "مفوتر إلى"
 #. module: hotel_folio
 #: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_manual_fx_wizard_view_form
 #: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_allocate_advance_wizard_view_form
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_register_payment_wizard_view_form
 msgid "Cancel"
 msgstr "إلغاء"
 
@@ -235,9 +243,26 @@ msgid "Combined Group Invoices"
 msgstr "فواتير المجموعة المجمعة"
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_register_payment_wizard__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: hotel_folio
 #: model:ir.model.fields,help:hotel_folio.field_hotel_folio_line__amount
 msgid "Compatibility alias for Total; use amount_total in new integrations."
 msgstr "اسم مستعار للتوافق للإجمالي؛ استخدم amount_total في التكاملات الجديدة."
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Configure a Guest Deposit Journal before registering deposits."
+msgstr "قم بإعداد يومية عربون النزلاء قبل تسجيل العربونات."
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Configure an Agency Advance Journal before registering advances."
+msgstr "قم بإعداد يومية الدفعات المقدمة للجهات قبل تسجيلها."
 
 #. module: hotel_folio
 #. odoo-python
@@ -254,6 +279,11 @@ msgstr "إنشاء فاتورة الوكالة"
 #: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
 msgid "Create Guest Invoice"
 msgstr "إنشاء فاتورة النزيل"
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_register_payment_wizard__currency_id
+msgid "Currency"
+msgstr "العملة"
 
 #. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__date
@@ -435,6 +465,7 @@ msgstr "النزيل / الضيف"
 
 #. module: hotel_folio
 #: model:ir.model.fields.selection,name:hotel_folio.selection__account_payment__hotel_payment_purpose__guest_deposit
+#: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_register_payment_wizard__payment_purpose__guest_deposit
 msgid "Guest Deposit"
 msgstr "عربون النزيل"
 
@@ -649,6 +680,12 @@ msgstr "منتج رسم عدم الحضور"
 
 #. module: hotel_folio
 #. odoo-python
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "Only Front Desk, Hotel Accountant, or Manager users can register hotel deposits and advances."
+msgstr "يمكن فقط لمستخدمي مكتب الاستقبال أو محاسب الفندق أو المدير تسجيل العربونات والدفعات المقدمة."
+
+#. module: hotel_folio
+#. odoo-python
 #: code:addons/hotel_folio/models/account_move.py:0
 #: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
 msgid "Only a Hotel Accountant or Manager can approve manual FX."
@@ -678,6 +715,12 @@ msgstr "يمكن لمدير الفندق فقط عكس سطر الفوليو."
 #: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "Only a workflow reversal can receive a reversal accounting link."
 msgstr "لا يمكن أن يتلقى رابط محاسبة العكس إلا عكس منشأ من سير العمل."
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Only an open folio can receive a deposit or advance."
+msgstr "يمكن تسجيل العربون أو الدفعة المقدمة على حساب فندقي مفتوح فقط."
 
 #. module: hotel_folio
 #. odoo-python
@@ -712,6 +755,21 @@ msgstr "لا يمكن إسناد مصادر الرسوم التشغيلية إل
 #: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__lock_state__pos
 msgid "POS"
 msgstr "نقاط البيع"
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_register_payment_wizard__payment_date
+msgid "Payment Date"
+msgstr "تاريخ الدفع"
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_register_payment_wizard__journal_id
+msgid "Payment Journal"
+msgstr "يومية الدفع"
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_register_payment_wizard__payment_reference
+msgid "Payment Reference"
+msgstr "مرجع الدفع"
 
 #. module: hotel_folio
 #. odoo-python
@@ -772,6 +830,7 @@ msgstr "فئة المنتج التي تفعل قاعدة التوجيه الفو
 #. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__property_id
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_routing_rule__property_id
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_register_payment_wizard__property_id
 msgid "Property"
 msgstr "الفندق / المنشأة"
 
@@ -782,15 +841,54 @@ msgid "Provide exactly one reversal accounting document."
 msgstr "قدّم مستنداً محاسبياً واحداً فقط للعكس."
 
 #. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_register_payment_wizard__payment_purpose
+msgid "Purpose"
+msgstr "الغرض"
+
+#. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio_line__qty
 msgid "Quantity"
 msgstr "الكمية"
+
+#. module: hotel_folio
+#: model:ir.model.fields,field_description:hotel_folio.field_hotel_register_payment_wizard__partner_id
+msgid "Received From"
+msgstr "مستلم من"
 
 #. module: hotel_folio
 #. odoo-python
 #: code:addons/hotel_folio/models/account_move.py:0
 msgid "Refunds and payouts must be outbound payments."
 msgstr "يجب أن تكون المبالغ المستردة والمدفوعات المصروفة مدفوعات صادرة."
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_register_payment_wizard_view_form
+msgid "Register"
+msgstr "تسجيل"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
+msgid "Register Advance"
+msgstr "تسجيل دفعة مقدمة للجهة"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_folio_view_form
+msgid "Register Deposit"
+msgstr "تسجيل عربون النزيل"
+
+#. module: hotel_folio
+#: model:ir.model,name:hotel_folio.model_hotel_register_payment_wizard
+msgid "Register Hotel Deposit or Agency Advance"
+msgstr "تسجيل عربون فندقي أو دفعة مقدمة للجهة"
+
+#. module: hotel_folio
+#: model_terms:ir.ui.view,arch_db:hotel_folio.hotel_register_payment_wizard_view_form
+msgid "Register Hotel Payment"
+msgstr "تسجيل دفعة فندقية"
 
 #. module: hotel_folio
 #: model:ir.model.fields,field_description:hotel_folio.field_hotel_folio__reservation_id
@@ -898,6 +996,12 @@ msgstr "معلومات قاعدة التسعير"
 #: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "Select a valid guest or routed payee."
 msgstr "حدد نزيلاً صالحاً أو جهة دفع موجهة."
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Select an agency or entity on the folio before registering an advance."
+msgstr "حدد وكالة أو جهة على الحساب الفندقي قبل تسجيل دفعة مقدمة."
 
 #. module: hotel_folio
 #. odoo-python
@@ -1024,6 +1128,12 @@ msgstr "يجب أن يكون سعر العملة أكبر من صفر."
 
 #. module: hotel_folio
 #. odoo-python
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "The deposit or advance details no longer match the folio."
+msgstr "لم تعد تفاصيل العربون أو الدفعة المقدمة مطابقة للحساب الفندقي."
+
+#. module: hotel_folio
+#. odoo-python
 #: code:addons/hotel_folio/models/account_move.py:0
 msgid "The entry is not balanced."
 msgstr "القيد غير متوازن."
@@ -1087,6 +1197,12 @@ msgstr "لا يطابق عكس القيد عكس الفوليو هذا."
 #: code:addons/hotel_folio/models/hotel_folio.py:0
 msgid "The original transfer has no clearing account to reverse."
 msgstr "لا يحتوي الترحيل الأصلي على حساب مقاصة لعكسه."
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/wizard/hotel_finance_wizard.py:0
+msgid "The payment amount must be greater than zero."
+msgstr "يجب أن يكون مبلغ الدفع أكبر من صفر."
 
 #. module: hotel_folio
 #. odoo-python
@@ -1178,6 +1294,12 @@ msgstr "سعر الوحدة"
 #: model:ir.model.fields.selection,name:hotel_folio.selection__hotel_folio_line__lock_state__unlocked
 msgid "Unlocked"
 msgstr "غير مقفل"
+
+#. module: hotel_folio
+#. odoo-python
+#: code:addons/hotel_folio/models/hotel_folio.py:0
+msgid "Unsupported hotel payment purpose."
+msgstr "غرض الدفع الفندقي غير مدعوم."
 
 #. module: hotel_folio
 #. odoo-python

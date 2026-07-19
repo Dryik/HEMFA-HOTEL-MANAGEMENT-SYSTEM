@@ -85,3 +85,119 @@ class HotelAllocateAdvanceWizard(models.TransientModel):
             )
         )
         return {"type": "ir.actions.act_window_close"}
+
+
+class HotelRegisterPaymentWizard(models.TransientModel):
+    _name = "hotel.register.payment.wizard"
+    _description = "Register Hotel Deposit or Agency Advance"
+
+    folio_id = fields.Many2one("hotel.folio", required=True, readonly=True)
+    payment_purpose = fields.Selection(
+        [
+            ("guest_deposit", "Guest Deposit"),
+            ("agency_advance", "Agency Advance"),
+        ],
+        string="Purpose",
+        required=True,
+        readonly=True,
+    )
+    partner_id = fields.Many2one(
+        "res.partner", string="Received From", required=True, readonly=True
+    )
+    property_id = fields.Many2one(
+        related="folio_id.property_id", string="Property", readonly=True
+    )
+    company_id = fields.Many2one(
+        related="property_id.company_id", string="Company", readonly=True
+    )
+    journal_id = fields.Many2one(
+        "account.journal",
+        string="Payment Journal",
+        required=True,
+        readonly=True,
+        check_company=True,
+        domain="[('company_id', '=', company_id), ('type', 'in', ('bank', 'cash'))]",
+    )
+    currency_id = fields.Many2one(
+        related="folio_id.currency_id", string="Currency", readonly=True
+    )
+    amount = fields.Monetary(required=True, currency_field="currency_id")
+    payment_date = fields.Date(
+        string="Payment Date", required=True, default=fields.Date.context_today
+    )
+    payment_reference = fields.Char(string="Payment Reference")
+
+    @api.constrains("amount")
+    def _check_amount(self):
+        if any(wizard.amount <= 0 for wizard in self):
+            raise ValidationError(_("The payment amount must be greater than zero."))
+
+    def _check_registration_role(self):
+        allowed = any(
+            self.env.user.has_group(group)
+            for group in (
+                "hotel_base.group_hotel_frontdesk",
+                "hotel_base.group_hotel_accountant",
+                "hotel_base.group_hotel_manager",
+            )
+        )
+        if not allowed:
+            raise UserError(
+                _(
+                    "Only Front Desk, Hotel Accountant, or Manager users can "
+                    "register hotel deposits and advances."
+                )
+            )
+
+    def action_register(self):
+        self.ensure_one()
+        self._check_registration_role()
+        expected = self.folio_id._payment_registration_defaults(
+            self.payment_purpose
+        )
+        if (
+            self.folio_id.id != expected["folio_id"]
+            or self.partner_id.id != expected["partner_id"]
+            or self.journal_id.id != expected["journal_id"]
+        ):
+            raise UserError(
+                _("The deposit or advance details no longer match the folio.")
+            )
+        payment = (
+            self.env["account.payment"]
+            .sudo()
+            .with_company(self.company_id)
+            .create(
+                {
+                    "company_id": self.company_id.id,
+                    "amount": self.amount,
+                    "date": self.payment_date,
+                    "payment_type": "inbound",
+                    "partner_type": "customer",
+                    "partner_id": self.partner_id.id,
+                    "currency_id": self.currency_id.id,
+                    "journal_id": self.journal_id.id,
+                    "memo": self.payment_reference or self.folio_id.name,
+                    "payment_reference": self.payment_reference,
+                    "hotel_property_id": self.property_id.id,
+                    "hotel_folio_id": self.folio_id.id,
+                    "hotel_payment_purpose": self.payment_purpose,
+                }
+            )
+        )
+        payment.action_post()
+        purpose_label = dict(
+            self._fields["payment_purpose"]._description_selection(self.env)
+        )[self.payment_purpose]
+        self.folio_id.message_post(
+            body=_(
+                "%(purpose)s %(payment)s for %(amount)s %(currency)s registered "
+                "by %(user)s.",
+                purpose=purpose_label,
+                payment=payment.display_name,
+                amount=self.amount,
+                currency=self.currency_id.name,
+                user=self.env.user.name,
+            )
+        )
+        return {"type": "ir.actions.act_window_close"}
