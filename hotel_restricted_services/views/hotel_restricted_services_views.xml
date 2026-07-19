@@ -42,6 +42,7 @@
                             <field name="property_id" column_invisible="True"/>
                             <field name="category_id"/>
                             <field name="daily_limit"/>
+                            <field name="on_excess"/>
                             <field name="active" column_invisible="True"/>
                             <field name="currency_id" column_invisible="True"/>
                         </list>
@@ -52,6 +53,7 @@
                             <field name="property_id" column_invisible="True"/>
                             <field name="category_id"/>
                             <field name="daily_limit"/>
+                            <field name="on_excess"/>
                             <field name="active" column_invisible="True"/>
                             <field name="currency_id" column_invisible="True"/>
                         </list>

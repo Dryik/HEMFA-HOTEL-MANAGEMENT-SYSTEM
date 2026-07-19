@@ -32,6 +32,9 @@ class TestPosRoomCharge(TransactionCase):
         cls.guest = cls.env["res.partner"].create(
             {"name": "POS Guest", "is_hotel_guest": True}
         )
+        cls.agency = cls.env["res.partner"].create(
+            {"name": "POS Billing Entity", "is_hotel_agency": True}
+        )
 
         cls.restaurant_categ = cls.env["product.category"].create(
             {"name": "POS Restaurant"}
@@ -150,10 +153,11 @@ class TestPosRoomCharge(TransactionCase):
             hour=12, minute=0, second=0, microsecond=0
         )
 
-    def _checked_in_reservation(self):
+    def _checked_in_reservation(self, use_agency=False):
         reservation = self.env["hotel.reservation"].create(
             {
                 "partner_id": self.guest.id,
+                "agency_id": self.agency.id if use_agency else False,
                 "property_id": self.property.id,
                 "room_id": self.room.id,
                 "room_type_id": self.room_type.id,
@@ -244,6 +248,72 @@ class TestPosRoomCharge(TransactionCase):
         order._post_room_charges()
         charged = folio.line_ids.filtered(lambda l: l.pos_order_id == order)
         self.assertEqual(len(charged), 1)
+
+    def test_room_charge_split_reconciles_entity_and_guest_receivables(self):
+        self.env["hotel.folio.routing.rule"].create(
+            {
+                "name": "POS Restaurant to Entity",
+                "property_id": self.property.id,
+                "category_id": self.restaurant_categ.id,
+                "routing_type": "agency",
+            }
+        )
+        self.env["hotel.entity.service.ceiling"].create(
+            {
+                "partner_id": self.agency.id,
+                "category_id": self.restaurant_categ.id,
+                "daily_limit": 10.0,
+                "on_excess": "charge_guest",
+            }
+        )
+        reservation = self._checked_in_reservation(use_agency=True)
+        folio = reservation.folio_ids[0]
+        order = self._pos_order(partner=self.guest)
+
+        order.action_pos_order_paid()
+
+        charged = folio.line_ids.filtered(lambda line: line.pos_order_id == order)
+        self.assertEqual(len(charged), 2)
+        entity_line = charged.filtered(
+            lambda line: line.payee_partner_id == self.agency
+        )
+        guest_line = charged.filtered(
+            lambda line: line.payee_partner_id == self.guest
+        )
+        self.assertEqual(entity_line.amount_total, 10.0)
+        self.assertEqual(guest_line.amount_total, 15.0)
+        self.assertTrue(all(line.lock_state == "pos" for line in charged))
+        self.assertTrue(
+            all(
+                line.accounting_move_id == order.hotel_room_charge_move_id
+                for line in charged
+            )
+        )
+        receivables = order.hotel_room_charge_move_id.line_ids.filtered(
+            lambda line: line.partner_id in (self.agency | self.guest)
+        )
+        self.assertEqual(len(receivables), 2)
+        self.assertEqual(
+            sum(
+                receivables.filtered(
+                    lambda line: line.partner_id == self.agency
+                ).mapped("debit")
+            ),
+            10.0,
+        )
+        self.assertEqual(
+            sum(
+                receivables.filtered(
+                    lambda line: line.partner_id == self.guest
+                ).mapped("debit")
+            ),
+            15.0,
+        )
+        order._post_room_charges()
+        self.assertEqual(
+            len(folio.line_ids.filtered(lambda line: line.pos_order_id == order)),
+            2,
+        )
 
     def test_split_payment_rejected(self):
         self._checked_in_reservation()
