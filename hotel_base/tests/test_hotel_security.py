@@ -72,6 +72,7 @@ class TestHotelCompanySecurity(TransactionCase):
                 "name": "Restricted Contact Editor",
                 "login": "restricted_contact_editor_test",
                 "group_ids": [
+                    (4, cls.env.ref("base.group_user").id),
                     (4, cls.env.ref("base.group_partner_manager").id)
                 ],
             }
