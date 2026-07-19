@@ -487,6 +487,82 @@ class HotelFolio(models.Model):
             },
         }
 
+    def _payment_registration_defaults(self, purpose):
+        self.ensure_one()
+        if not self.is_open:
+            raise UserError(
+                _("Only an open folio can receive a deposit or advance.")
+            )
+        company = self.property_id.company_id
+        if purpose == "guest_deposit":
+            partner = self.partner_id
+            journal = company.hotel_deposit_journal_id
+            if not journal:
+                raise UserError(
+                    _(
+                        "Configure a Guest Deposit Journal before registering "
+                        "deposits."
+                    )
+                )
+        elif purpose == "agency_advance":
+            partner = self.agency_id
+            if not partner:
+                raise UserError(
+                    _(
+                        "Select an agency or entity on the folio before "
+                        "registering an advance."
+                    )
+                )
+            journal = company.hotel_advance_journal_id
+            if not journal:
+                raise UserError(
+                    _(
+                        "Configure an Agency Advance Journal before registering "
+                        "advances."
+                    )
+                )
+        else:
+            raise UserError(_("Unsupported hotel payment purpose."))
+        return {
+            "folio_id": self.id,
+            "payment_purpose": purpose,
+            "partner_id": partner.id,
+            "journal_id": journal.id,
+        }
+
+    def _open_payment_registration(self, purpose, title):
+        self.ensure_one()
+        defaults = self._payment_registration_defaults(purpose)
+        return {
+            "name": title,
+            "type": "ir.actions.act_window",
+            "res_model": "hotel.register.payment.wizard",
+            "views": [
+                (
+                    self.env.ref(
+                        "hotel_folio.hotel_register_payment_wizard_view_form"
+                    ).id,
+                    "form",
+                )
+            ],
+            "view_mode": "form",
+            "target": "new",
+            "context": {
+                f"default_{field_name}": value
+                for field_name, value in defaults.items()
+            },
+        }
+
+    def action_open_register_deposit(self):
+        return self._open_payment_registration(
+            "guest_deposit", _("Register Deposit")
+        )
+
+    def action_open_register_advance(self):
+        return self._open_payment_registration(
+            "agency_advance", _("Register Advance")
+        )
+
     def unlink(self):
         for folio in self:
             if any(
