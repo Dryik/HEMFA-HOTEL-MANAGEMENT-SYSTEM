@@ -63,13 +63,21 @@
         name="Operations"
         parent="hotel_base.menu_hotel_root"
         sequence="30"/>
-    <record id="hotel_housekeeping.menu_hotel_housekeeping_root" model="ir.ui.menu">
+    <record id="hotel_housekeeping.menu_hotel_housekeeping_tasks" model="ir.ui.menu">
         <field name="parent_id" ref="menu_hotel_operations"/>
+        <field name="name">Housekeeping Tasks</field>
         <field name="sequence">10</field>
+        <field name="group_ids" eval="[(6, 0, [ref('hotel_base.group_hotel_housekeeping'), ref('hotel_base.group_hotel_fo_supervisor'), ref('hotel_base.group_hotel_manager')])]"/>
+    </record>
+    <record id="hotel_housekeeping.menu_hotel_housekeeping_discrepancy" model="ir.ui.menu">
+        <field name="parent_id" ref="menu_hotel_operations"/>
+        <field name="name">Discrepancies</field>
+        <field name="sequence">20</field>
+        <field name="group_ids" eval="[(6, 0, [ref('hotel_base.group_hotel_housekeeping'), ref('hotel_base.group_hotel_fo_supervisor'), ref('hotel_base.group_hotel_manager')])]"/>
     </record>
     <record id="hotel_maintenance.menu_hotel_maintenance" model="ir.ui.menu">
         <field name="parent_id" ref="menu_hotel_operations"/>
-        <field name="sequence">20</field>
+        <field name="sequence">30</field>
     </record>
 
     <!-- Guest Services contains every guest-facing service queue. -->
@@ -99,9 +107,6 @@
     </record>
 
     <!-- Keep secondary areas stable and remove root-level sequence collisions. -->
-    <record id="hotel_base.menu_hotel_rooms" model="ir.ui.menu">
-        <field name="sequence">40</field>
-    </record>
     <record id="hotel_base.menu_hotel_guests" model="ir.ui.menu">
         <field name="sequence">50</field>
     </record>

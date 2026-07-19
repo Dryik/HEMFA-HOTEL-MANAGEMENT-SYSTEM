@@ -109,14 +109,14 @@ msgid "Dirty"
 msgstr "غير نظيفة"
 
 #. module: hotel_housekeeping
+#: model:ir.ui.menu,name:hotel_housekeeping.menu_hotel_housekeeping_discrepancy
+msgid "Discrepancies"
+msgstr "الفروقات"
+
+#. module: hotel_housekeeping
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard__line_ids
 msgid "Discrepancy Lines"
 msgstr "سطور الفروقات"
-
-#. module: hotel_housekeeping
-#: model:ir.ui.menu,name:hotel_housekeeping.menu_hotel_housekeeping_discrepancy
-msgid "Discrepancy Reconciliation"
-msgstr "مطابقة الفروقات"
 
 #. module: hotel_housekeeping
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_discrepancy_wizard_line__is_discrepancy
