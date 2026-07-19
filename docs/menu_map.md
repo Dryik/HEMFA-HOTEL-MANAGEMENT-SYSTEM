@@ -29,6 +29,7 @@ installation without `hotel_board` still degrades into a predictable order.
 ### Front Office Supervisor
 
 - Everything available to Receptionist
+- Front Desk: Entity Service Ceilings
 - Operations: Housekeeping (Tasks, Discrepancy), Maintenance
 
 ### Housekeeping
