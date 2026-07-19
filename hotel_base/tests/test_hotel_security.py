@@ -171,6 +171,16 @@ class TestHotelCompanySecurity(TransactionCase):
         with self.assertRaises(AccessError):
             self.guest.with_user(self.accountant).read(["guest_id_number"])
 
+    def test_parent_agency_default_is_safe_for_restricted_user(self):
+        agency = self.env["res.partner"].create(
+            {"name": "Restricted User Agency", "is_hotel_agency": True}
+        )
+        guest = self.env["res.partner"].create(
+            {"name": "Restricted User Guest", "is_hotel_guest": True}
+        )
+        guest.with_user(self.housekeeper).write({"parent_id": agency.id})
+        self.assertEqual(guest.sudo().hotel_agency_id, agency)
+
     def test_housekeeping_cannot_mutate_front_office_room_state(self):
         room = self.room_a.with_user(self.housekeeper)
         room.write({"hk_status": "dirty"})
