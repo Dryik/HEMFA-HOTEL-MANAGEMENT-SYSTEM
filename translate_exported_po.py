@@ -178,6 +178,8 @@ TRANSLATIONS = {
     "Reservation": "الحجز",
     "Reservation Number": "رقم الحجز",
     "Reservation Planning": "مخطط الحجوزات",
+    "Request Amendment": "طلب تعديل",
+    "Only confirmed or in-house reservations can be amended.": "يمكن طلب تعديل فقط للحجوزات المؤكدة أو للنزلاء المقيمين.",
     "Reservations": "الحجوزات",
     "Reserved": "محجوزة",
     "Reset to Draft": "إعادة إلى مسودة",

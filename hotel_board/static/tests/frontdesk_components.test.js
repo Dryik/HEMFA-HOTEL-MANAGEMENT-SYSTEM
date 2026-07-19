@@ -116,6 +116,12 @@ function dashboardSnapshot(businessDate = BUSINESS_DATE) {
                                 res_id: 7,
                             },
                             folio: false,
+                            amendment: {
+                                type: "ir.actions.act_window",
+                                res_model: "hotel.reservation.amendment",
+                                views: [[false, "form"]],
+                                context: { default_reservation_id: 72 },
+                            },
                         },
                     },
             ],
@@ -303,6 +309,20 @@ test("Dashboard renders the compact activity workspace and preserves action cont
     expect(".o_hotel_dashboard_drawer").toHaveCount(1);
     expect(".o_hotel_dashboard_drawer").toHaveText(/Ahmed Al-Mansouri/);
     expect(".o_hotel_dashboard_drawer").toHaveText(/Double Suite/);
+    await contains('[data-dashboard-drawer-action="amendment"]').click();
+    expect(".o_hotel_dashboard_drawer").toHaveCount(0);
+    expect(openedAction).toMatchObject({
+        res_model: "hotel.reservation.amendment",
+        context: {
+            default_reservation_id: 72,
+            default_property_id: PROPERTY_ID,
+            hotel_property_id: PROPERTY_ID,
+            business_date: BUSINESS_DATE,
+            hotel_business_date: BUSINESS_DATE,
+        },
+    });
+
+    await contains(".o_hotel_text_action").click();
     await contains('[data-dashboard-drawer-action="reservation"]').click();
     expect(".o_hotel_dashboard_drawer").toHaveCount(0);
     expect(openedAction.context).toMatchObject({

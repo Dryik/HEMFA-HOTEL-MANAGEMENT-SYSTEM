@@ -239,6 +239,25 @@ class TestHotelReservation(TransactionCase):
         with self.assertRaises(UserError):
             amendment.write({"reason": "Changed"})
 
+    def test_request_amendment_action_is_scoped_to_amendable_stays(self):
+        reservation = self._reservation()
+        with self.assertRaises(UserError):
+            reservation.action_request_amendment()
+
+        reservation.action_confirm()
+        action = reservation.action_request_amendment()
+        self.assertEqual(action["res_model"], "hotel.reservation.amendment")
+        self.assertEqual(action["views"][0][1], "form")
+        self.assertEqual(action["context"]["default_reservation_id"], reservation.id)
+
+        reservation.action_check_in()
+        self.assertEqual(
+            reservation.action_request_amendment()["context"][
+                "default_reservation_id"
+            ],
+            reservation.id,
+        )
+
     def test_amendment_rejection_is_immutable_and_traceable(self):
         reservation = self._reservation()
         reservation.action_confirm()
