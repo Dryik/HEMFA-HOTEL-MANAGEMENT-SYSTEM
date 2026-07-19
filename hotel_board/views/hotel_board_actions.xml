@@ -109,15 +109,4 @@
         <field name="parent_id" ref="hotel_guest_services.menu_hotel_guest_services"/>
         <field name="sequence">60</field>
     </record>
-
-    <!-- Keep secondary areas stable and remove root-level sequence collisions. -->
-    <record id="hotel_base.menu_hotel_guests" model="ir.ui.menu">
-        <field name="sequence">50</field>
-    </record>
-    <record id="hotel_base.menu_hotel_agencies" model="ir.ui.menu">
-        <field name="sequence">60</field>
-    </record>
-    <record id="hotel_base.menu_hotel_agency_commissions" model="ir.ui.menu">
-        <field name="sequence">70</field>
-    </record>
 </odoo>

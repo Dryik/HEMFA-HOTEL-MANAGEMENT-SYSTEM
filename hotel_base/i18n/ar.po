@@ -216,6 +216,11 @@ msgid "Description"
 msgstr "الوصف"
 
 #. module: hotel_base
+#: model:ir.ui.menu,name:hotel_base.menu_hotel_directory
+msgid "Directory"
+msgstr "الدليل"
+
+#. module: hotel_base
 #: model:ir.model.fields.selection,name:hotel_base.selection__hotel_room__hk_status__dirty
 #: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_search
 msgid "Dirty"
