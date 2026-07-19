@@ -401,7 +401,7 @@ class HotelFolio(models.Model):
         line = (
             line_model._create_workflow_charge(values)
             if workflow
-            else line_model.create(values)
+            else line_model._create_manual_charge(values)
         )
         return line
 
@@ -562,6 +562,27 @@ class HotelFolio(models.Model):
         return self._open_payment_registration(
             "agency_advance", _("Register Advance")
         )
+
+    def action_open_add_charge(self):
+        self.ensure_one()
+        if not self.is_open:
+            raise UserError(_("Only an open folio can receive a charge."))
+        return {
+            "name": _("Add Charge"),
+            "type": "ir.actions.act_window",
+            "res_model": "hotel.add.charge.wizard",
+            "views": [
+                (
+                    self.env.ref(
+                        "hotel_folio.hotel_add_charge_wizard_view_form"
+                    ).id,
+                    "form",
+                )
+            ],
+            "view_mode": "form",
+            "target": "new",
+            "context": {"default_folio_id": self.id},
+        }
 
     def unlink(self):
         for folio in self:
@@ -726,6 +747,8 @@ class HotelFolioLine(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        if self.env.su and self.env.context.get("hotel_migration"):
+            return super().create(vals_list)
         action_fields = {
             "invoice_line_id",
             "accounting_move_id",
@@ -737,6 +760,12 @@ class HotelFolioLine(models.Model):
             "pos_order_id",
             "pos_order_line_id",
         }
+        if any(
+            vals.get("source_type", "manual") == "manual" for vals in vals_list
+        ):
+            raise UserError(
+                _("Manual folio charges must be added with the Add Charge action.")
+            )
         if not self.env.su:
             for vals in vals_list:
                 if (
@@ -752,6 +781,19 @@ class HotelFolioLine(models.Model):
                         _("Financial lock and source links can only be set by their hotel workflow.")
                     )
         return super().create(vals_list)
+
+    @api.model
+    def _create_manual_charge(self, values):
+        if (
+            values.get("source_type", "manual") != "manual"
+            or values.get("source_reference")
+            or values.get("source_key")
+            or values.get("invoiceable") is False
+            or values.get("is_posted")
+            or values.get("lock_state") not in (None, False, "unlocked")
+        ):
+            raise UserError(_("A valid unlocked manual charge is required."))
+        return super(HotelFolioLine, self).create(values)
 
     @api.model
     def _create_workflow_charge(self, values):
