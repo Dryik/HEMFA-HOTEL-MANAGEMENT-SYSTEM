@@ -66,6 +66,7 @@ TRANSLATIONS = {
     "Departure": "المغادرة",
     "Departures Today": "المغادرون اليوم",
     "Description": "الوصف",
+    "Directory": "الدليل",
     "Difference": "الفارق",
     "Dirty": "غير نظيفة",
     "Draft": "مسودة",
