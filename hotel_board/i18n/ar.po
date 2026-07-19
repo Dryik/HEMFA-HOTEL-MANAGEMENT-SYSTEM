@@ -886,6 +886,12 @@ msgstr "جارٍ تحديث لوحة مكتب الاستقبال."
 
 #. module: hotel_board
 #. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Request Amendment"
+msgstr "طلب تعديل"
+
+#. module: hotel_board
+#. odoo-javascript
 #. odoo-python
 #: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0

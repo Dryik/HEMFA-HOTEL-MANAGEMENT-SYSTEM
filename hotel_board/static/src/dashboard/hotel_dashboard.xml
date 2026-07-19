@@ -373,6 +373,12 @@
                                 t-on-click="() => this.openDrawerAction('reservation')">
                                 Open reservation
                             </button>
+                            <button t-if="state.drawerRow.actions?.amendment" type="button"
+                                class="btn btn-outline-primary"
+                                data-dashboard-drawer-action="amendment"
+                                t-on-click="() => this.openDrawerAction('amendment')">
+                                Request Amendment
+                            </button>
                             <button t-if="state.drawerRow.actions?.guest" type="button"
                                 class="btn btn-outline-primary"
                                 t-on-click="() => this.openDrawerAction('guest')">Open guest</button>
