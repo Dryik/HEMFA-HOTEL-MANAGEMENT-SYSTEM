@@ -231,6 +231,7 @@
         </field>
     </record>
 
+    <!-- hotel_board positions Folios after reservation groups in Front Desk. -->
     <!-- Menu Items -->
     <menuitem id="menu_hotel_folios"
         name="Folios"

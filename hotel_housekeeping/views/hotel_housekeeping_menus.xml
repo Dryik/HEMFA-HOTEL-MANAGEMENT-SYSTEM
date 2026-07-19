@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- hotel_board re-parents this workflow under Hotel > Operations. -->
     <!-- Housekeeping parent menu -->
     <menuitem id="menu_hotel_housekeeping_root"
         name="Housekeeping"
         parent="hotel_base.menu_hotel_root"
-        sequence="35"
+        sequence="90"
         groups="hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_fo_supervisor,hotel_base.group_hotel_manager"/>
 
     <!-- Housekeeping Tasks sub-menu -->
