@@ -166,6 +166,19 @@ class TestHotelFrontdeskWorkspace(TransactionCase):
             snapshot["activity"]["rows"][0]["primary_action"]["key"],
             "check_in",
         )
+        amendment_action = snapshot["activity"]["rows"][0]["actions"][
+            "amendment"
+        ]
+        self.assertEqual(
+            amendment_action["res_model"], "hotel.reservation.amendment"
+        )
+        self.assertEqual(
+            amendment_action["context"]["default_reservation_id"], self.reserved.id
+        )
+        self.assertEqual(
+            amendment_action["context"]["hotel_business_date"],
+            fields.Date.to_string(self.business_date),
+        )
         self.assertNotIn("rooms", snapshot)
         operational_keys = {
             item["key"] for item in snapshot["operational_kpis"]

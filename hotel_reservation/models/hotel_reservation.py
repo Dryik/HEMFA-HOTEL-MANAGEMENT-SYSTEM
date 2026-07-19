@@ -536,6 +536,29 @@ class HotelReservation(models.Model):
             "context": {"create": False},
         }
 
+    def action_request_amendment(self):
+        self.ensure_one()
+        if self.state not in ("confirmed", "checked_in"):
+            raise UserError(
+                _("Only confirmed or in-house reservations can be amended.")
+            )
+        return {
+            "name": _("Request Amendment"),
+            "type": "ir.actions.act_window",
+            "res_model": "hotel.reservation.amendment",
+            "views": [
+                (
+                    self.env.ref(
+                        "hotel_reservation.hotel_reservation_amendment_view_form"
+                    ).id,
+                    "form",
+                )
+            ],
+            "view_mode": "form",
+            "target": "current",
+            "context": {"default_reservation_id": self.id},
+        }
+
     def write(self, vals):
         migration = self.env.su and self.env.context.get("hotel_migration")
         lifecycle_fields = {

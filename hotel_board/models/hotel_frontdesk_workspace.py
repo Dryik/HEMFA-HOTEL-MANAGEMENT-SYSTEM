@@ -1164,6 +1164,14 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
                     context=context,
                 )
 
+        amendment_action = False
+        if reservation.state in ("confirmed", "checked_in"):
+            amendment_action = reservation.action_request_amendment()
+            amendment_action["context"] = {
+                **context,
+                **amendment_action.get("context", {}),
+            }
+
         return {
             "id": reservation.id,
             "reference": reservation.name,
@@ -1199,6 +1207,7 @@ class HotelFrontdeskWorkspace(models.AbstractModel):
                     reservation.partner_id, _("Guest"), context=context
                 ),
                 "folio": folio_action,
+                "amendment": amendment_action,
             },
         }
 
