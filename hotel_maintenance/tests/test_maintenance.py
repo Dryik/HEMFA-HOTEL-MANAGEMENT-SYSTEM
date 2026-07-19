@@ -70,6 +70,7 @@ class TestHotelMaintenance(TransactionCase):
         self.assertTrue(req.technician_id)
         req.action_done()
         self.assertEqual(req.state, "done")
+        self.assertEqual(dict(req._fields["state"].selection)["done"], "Completed")
         req.with_user(self.manager).action_verify()
         self.assertEqual(req.state, "verified")
 
