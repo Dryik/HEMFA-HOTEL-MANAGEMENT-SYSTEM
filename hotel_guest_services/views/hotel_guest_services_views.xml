@@ -232,16 +232,18 @@
         </field>
     </record>
 
+    <!-- hotel_board keeps all guest-facing queues under this section and
+         normalizes their sequence when its composition workspace is installed. -->
     <menuitem id="menu_hotel_guest_services" name="Guest Services"
-        parent="hotel_base.menu_hotel_root" sequence="55"
+        parent="hotel_base.menu_hotel_root" sequence="80"
         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_fb"/>
     <menuitem id="menu_hotel_lost_found" name="Lost and Found"
-        parent="menu_hotel_guest_services" action="hotel_lost_found_action" sequence="30"
+        parent="menu_hotel_guest_services" action="hotel_lost_found_action" sequence="50"
         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping"/>
     <menuitem id="menu_hotel_dnd" name="Do Not Disturb"
-        parent="menu_hotel_guest_services" action="hotel_dnd_action" sequence="10"
+        parent="menu_hotel_guest_services" action="hotel_dnd_action" sequence="30"
         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping"/>
     <menuitem id="menu_hotel_wakeup" name="Wake-up Calls"
-        parent="menu_hotel_guest_services" action="hotel_wakeup_call_action" sequence="20"
+        parent="menu_hotel_guest_services" action="hotel_wakeup_call_action" sequence="40"
         groups="hotel_base.group_hotel_frontdesk"/>
 </odoo>

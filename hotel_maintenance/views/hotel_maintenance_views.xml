@@ -173,10 +173,11 @@
         </field>
     </record>
 
+    <!-- hotel_board re-parents this workflow under Hotel > Operations. -->
     <menuitem id="menu_hotel_maintenance"
         name="Maintenance"
         parent="hotel_base.menu_hotel_root"
         action="hotel_maintenance_request_action"
-        sequence="60"
+        sequence="100"
         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_maintenance,hotel_base.group_hotel_housekeeping"/>
 </odoo>

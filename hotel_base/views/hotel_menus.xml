@@ -10,33 +10,33 @@
         name="Rooms"
         parent="menu_hotel_root"
         action="hotel_room_action"
-        sequence="20"/>
+        sequence="40"/>
 
     <menuitem id="menu_hotel_guests"
         name="Guests"
         parent="menu_hotel_root"
         action="hotel_guest_action"
-        sequence="30"
+        sequence="50"
         groups="hotel_base.group_hotel_frontdesk"/>
 
     <menuitem id="menu_hotel_agencies"
         name="Agencies / Entities"
         parent="menu_hotel_root"
         action="hotel_agency_action"
-        sequence="40"
+        sequence="60"
         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant"/>
 
     <menuitem id="menu_hotel_agency_commissions"
         name="Agency Commissions"
         parent="menu_hotel_root"
         action="hotel_agency_commission_action"
-        sequence="45"
+        sequence="70"
         groups="hotel_base.group_hotel_manager,hotel_base.group_hotel_accountant"/>
 
     <menuitem id="menu_hotel_config"
         name="Configuration"
         parent="menu_hotel_root"
-        sequence="100"
+        sequence="120"
         groups="hotel_base.group_hotel_manager"/>
 
     <!-- Company management (name, address, currency) is handled from Odoo's

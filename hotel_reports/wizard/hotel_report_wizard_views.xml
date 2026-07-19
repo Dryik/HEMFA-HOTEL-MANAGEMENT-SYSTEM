@@ -39,6 +39,6 @@
         name="Reports"
         parent="hotel_base.menu_hotel_root"
         action="hotel_report_wizard_action"
-        sequence="90"
+        sequence="110"
         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_accountant"/>
 </odoo>
