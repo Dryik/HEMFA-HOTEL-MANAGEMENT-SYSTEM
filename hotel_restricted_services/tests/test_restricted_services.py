@@ -512,4 +512,5 @@ class TestRestrictedServices(TransactionCase):
         self.assertEqual(entity_line.invoice_line_id.move_id, entity_invoice)
         self.assertEqual(guest_line.invoice_line_id.move_id, guest_invoice)
         self.assertEqual(entity_invoice.amount_total, 15.0)
+        self.assertEqual(entity_line.invoice_line_id.price_total, 15.0)
         self.assertEqual(guest_line.invoice_line_id.price_total, 25.0)

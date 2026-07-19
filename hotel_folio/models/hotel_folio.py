@@ -462,6 +462,7 @@ class HotelFolio(models.Model):
 
         # Link folio lines to invoice lines
         for line, inv_line in zip(lines_to_invoice, invoice.invoice_line_ids):
+            self._normalize_invoice_line_total(line, inv_line)
             line._link_invoice_line(inv_line)
 
         return {
@@ -472,6 +473,20 @@ class HotelFolio(models.Model):
             "res_id": invoice.id,
             "target": "current",
         }
+
+    def _normalize_invoice_line_total(self, folio_line, invoice_line):
+        """Preserve a split charge total across invoice quantity precision."""
+        folio_line.ensure_one()
+        invoice_line.ensure_one()
+        if self.currency_id.compare_amounts(
+            invoice_line.price_total, folio_line.amount_total
+        ):
+            invoice_line.write(
+                {
+                    "quantity": 1.0,
+                    "price_unit": folio_line.price_unit * folio_line.qty,
+                }
+            )
 
     def action_open_allocate_advance(self):
         self.ensure_one()
