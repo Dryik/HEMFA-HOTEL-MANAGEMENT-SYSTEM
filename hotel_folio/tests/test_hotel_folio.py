@@ -400,6 +400,98 @@ class TestHotelFolio(TransactionCase):
         self.assertAlmostEqual(folio.amount_paid, 10.0)
         self.assertAlmostEqual(folio.amount_due, 820.0)
 
+    def test_frontdesk_registers_guest_deposit_from_folio(self):
+        reservation = self._reservation()
+        reservation.action_confirm()
+        folio = reservation.folio_ids[0]
+        journal = self.env["account.journal"].search(
+            [
+                ("company_id", "=", self.property.company_id.id),
+                ("type", "in", ("bank", "cash")),
+            ],
+            limit=1,
+        )
+        self.assertTrue(journal)
+        self.property.deposit_journal_id = journal
+
+        action = folio.with_user(
+            self.frontdesk_user
+        ).action_open_register_deposit()
+        wizard_model = (
+            self.env["hotel.register.payment.wizard"]
+            .with_user(self.frontdesk_user)
+            .with_context(action["context"])
+        )
+        defaults = wizard_model.default_get(
+            [
+                "folio_id",
+                "payment_purpose",
+                "partner_id",
+                "journal_id",
+                "payment_date",
+            ]
+        )
+        self.assertEqual(defaults["folio_id"], folio.id)
+        self.assertEqual(defaults["payment_purpose"], "guest_deposit")
+        self.assertEqual(defaults["partner_id"], self.guest.id)
+        self.assertEqual(defaults["journal_id"], journal.id)
+        wizard = wizard_model.create(
+            {
+                **defaults,
+                "amount": 125.0,
+                "payment_reference": "Front desk receipt 42",
+            }
+        )
+        wizard.action_register()
+
+        payment = folio.sudo().payment_ids.filtered(
+            lambda record: record.hotel_payment_purpose == "guest_deposit"
+            and record.amount == 125.0
+        )
+        self.assertEqual(len(payment), 1)
+        self.assertEqual(payment.partner_id, self.guest)
+        self.assertEqual(payment.journal_id, journal)
+        self.assertIn(payment.state, ("in_process", "paid"))
+        self.assertTrue(
+            folio.message_ids.filtered(
+                lambda message: "Front Desk" in (message.body or "")
+            )
+        )
+
+    def test_frontdesk_registers_agency_advance_from_folio(self):
+        reservation = self._reservation(use_agency=True)
+        reservation.action_confirm()
+        folio = reservation.folio_ids[0]
+        journal = self.env["account.journal"].search(
+            [
+                ("company_id", "=", self.property.company_id.id),
+                ("type", "in", ("bank", "cash")),
+            ],
+            limit=1,
+        )
+        self.assertTrue(journal)
+        self.property.advance_journal_id = journal
+
+        action = folio.with_user(
+            self.frontdesk_user
+        ).action_open_register_advance()
+        wizard = (
+            self.env["hotel.register.payment.wizard"]
+            .with_user(self.frontdesk_user)
+            .with_context(action["context"])
+            .create({"amount": 300.0})
+        )
+        wizard.action_register()
+
+        payment = folio.sudo().payment_ids.filtered(
+            lambda record: record.hotel_payment_purpose == "agency_advance"
+            and record.amount == 300.0
+        )
+        self.assertEqual(len(payment), 1)
+        self.assertEqual(payment.partner_id, self.agency)
+        self.assertEqual(payment.journal_id, journal)
+        self.assertIn(payment.state, ("in_process", "paid"))
+
     def test_invoicing(self):
         res = self._reservation()
         res.action_confirm()
