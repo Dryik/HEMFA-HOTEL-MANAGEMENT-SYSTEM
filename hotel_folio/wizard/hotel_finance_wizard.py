@@ -292,3 +292,20 @@ class HotelAddChargeWizard(models.TransientModel):
             tax_ids=self.tax_ids.ids,
         )
         return {"type": "ir.actions.act_window_close"}
+
+
+class HotelFolioLineReverseWizard(models.TransientModel):
+    _name = "hotel.folio.line.reverse.wizard"
+    _description = "Hotel Folio Line Reversal"
+
+    folio_line_id = fields.Many2one(
+        "hotel.folio.line", required=True, readonly=True
+    )
+    reason = fields.Text(string="Reversal Reason", required=True)
+
+    def action_reverse(self):
+        self.ensure_one()
+        if not self.env.user.has_group("hotel_base.group_hotel_manager"):
+            raise UserError(_("Only a Hotel Manager can reverse a folio line."))
+        self.folio_line_id.action_reverse(self.reason)
+        return {"type": "ir.actions.act_window_close"}

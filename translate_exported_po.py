@@ -1725,6 +1725,15 @@ TRANSLATIONS.update({
     "Teens": "المراهقون",
 })
 
+# Post-remediation audit fixes (round 2).
+TRANSLATIONS.update({
+    "Explain why this posted charge is being reversed…": "اشرح سبب عكس هذا الرسم المرحل…",
+    "Hotel Folio Line Reversal": "عكس سطر حساب الفندق",
+    "Reversal Reason": "سبب العكس",
+    "Reverse Folio Line": "عكس سطر حساب الفندق",
+    "Reverse Line": "عكس السطر",
+})
+
 header_template = """# Translation of Odoo Server.
 # This file contains the translation of the following module:
 # 	* {module_name}
