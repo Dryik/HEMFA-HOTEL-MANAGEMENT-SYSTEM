@@ -302,6 +302,7 @@ TRANSLATIONS.update({
     "Pay and Confirm": "الدفع والتأكيد",
     "Approve and Confirm": "الموافقة والتأكيد",
     "Booking Analysis": "تحليل الحجوزات",
+    "Discrepancies": "الفروقات",
     "Owner Dashboard": "لوحة تحكم المالك",
     "Reporting": "التقارير",
     "Meals to Prepare": "وجبات قيد التحضير",
