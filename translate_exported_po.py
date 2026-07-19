@@ -391,11 +391,13 @@ TRANSLATIONS.update({
     "Handling": "المعالجة",
     "Start Work": "بدء العمل",
     "Mark Done": "إنهاء العمل",
+    "Mark Completed": "تحديد كمكتمل",
     "Verify": "اعتماد",
     "Reset to New": "إعادة إلى جديد",
     "Confirmed On": "تاريخ التأكيد",
     "Started On": "تاريخ البدء",
     "Done On": "تاريخ الإنجاز",
+    "Completed On": "تاريخ الإكمال",
     "Verified On": "تاريخ الاعتماد",
     "In Progress": "قيد التنفيذ",
     "Done": "منجز",
@@ -538,6 +540,8 @@ TRANSLATIONS.update({
     "Only confirmed requests can be started.": "يمكن فقط بدء الطلبات المؤكدة.",
     "Only done requests can be verified.": "يمكن فقط اعتماد الطلبات المنجزة.",
     "Only in-progress requests can be marked done.": "يمكن فقط إنهاء الطلبات قيد التنفيذ.",
+    "Only completed requests can be verified.": "يمكن فقط اعتماد الطلبات المكتملة.",
+    "Only in-progress requests can be marked completed.": "يمكن فقط تحديد الطلبات قيد التنفيذ كمكتملة.",
     "Only new or cancelled maintenance requests can be deleted.": "يمكن فقط حذف طلبات الصيانة الجديدة أو الملغاة.",
     "Only new requests can be confirmed.": "يمكن فقط تأكيد الطلبات الجديدة.",
     # hotel_restricted_services
@@ -1207,6 +1211,7 @@ TRANSLATIONS.update({
 TRANSLATIONS.update({
     # hotel_maintenance
     "Are you sure you want to mark this maintenance request as done?": "هل أنت متأكد من تحديد طلب الصيانة هذا كمنجز؟",
+    "Are you sure you want to mark this maintenance request as completed?": "هل أنت متأكد من تحديد طلب الصيانة هذا كمكتمل؟",
     "Are you sure you want to verify this maintenance request as complete?": "هل أنت متأكد من التحقق من اكتمال طلب الصيانة هذا؟",
     "Maintenance requests in assigned hotel properties": "طلبات الصيانة في المنشآت الفندقية المخصصة",
     "Maintenance requests must change status through their actions.": "يجب تغيير حالة طلبات الصيانة من خلال إجراءاتها.",
