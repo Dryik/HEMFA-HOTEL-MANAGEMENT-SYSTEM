@@ -46,7 +46,8 @@ class HotelReservationAmendment(models.Model):
             source_reference=self.name,
             source_key=f"amendment:{self.id}",
         )
-        line._set_amendment_source(self)
+        for charge_line in line:
+            charge_line._set_amendment_source(self)
         return result
 
 

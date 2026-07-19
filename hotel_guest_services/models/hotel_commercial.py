@@ -213,7 +213,7 @@ class HotelReservationService(models.Model):
                     source_reference=line.name,
                     source_key=f"reservation_service:{line.id}",
                 )
-            line._write_state("done", folio_line_id=folio_line.id)
+            line._write_state("done", folio_line_id=folio_line[:1].id)
         return True
 
     def action_cancel(self):
