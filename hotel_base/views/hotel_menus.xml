@@ -6,25 +6,30 @@
         web_icon="hotel_base,static/description/icon.png"
         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_maintenance,hotel_base.group_hotel_fb,hotel_base.group_hotel_accountant"/>
 
+    <menuitem id="menu_hotel_directory"
+        name="Directory"
+        parent="menu_hotel_root"
+        sequence="50"/>
+
     <menuitem id="menu_hotel_guests"
         name="Guests"
-        parent="menu_hotel_root"
+        parent="menu_hotel_directory"
         action="hotel_guest_action"
-        sequence="50"
+        sequence="10"
         groups="hotel_base.group_hotel_frontdesk"/>
 
     <menuitem id="menu_hotel_agencies"
         name="Agencies / Entities"
-        parent="menu_hotel_root"
+        parent="menu_hotel_directory"
         action="hotel_agency_action"
-        sequence="60"
+        sequence="20"
         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant"/>
 
     <menuitem id="menu_hotel_agency_commissions"
         name="Agency Commissions"
-        parent="menu_hotel_root"
+        parent="menu_hotel_directory"
         action="hotel_agency_commission_action"
-        sequence="70"
+        sequence="30"
         groups="hotel_base.group_hotel_manager,hotel_base.group_hotel_accountant"/>
 
     <!-- hotel_board moves this donor entry into Operations when installed. -->
