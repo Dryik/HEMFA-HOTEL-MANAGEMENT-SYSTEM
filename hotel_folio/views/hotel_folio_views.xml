@@ -82,7 +82,7 @@
                     <notebook>
                         <page string="Ledger / Charges">
                             <field name="line_ids">
-                                <list create="0" edit="0" delete="0">
+                                <list create="0" edit="0">
                                     <field name="date" readonly="is_posted or lock_state != 'unlocked'"/>
                                     <field name="product_id" readonly="is_posted or lock_state != 'unlocked'"/>
                                     <field name="name" readonly="is_posted or lock_state != 'unlocked'"/>
@@ -101,6 +101,11 @@
                                     <field name="lock_state" optional="show"/>
                                     <field name="is_posted" readonly="1"/>
                                     <field name="reversal_of_id" optional="hide" readonly="1"/>
+                                    <field name="reversal_line_ids" column_invisible="True"/>
+                                    <button name="action_open_reverse_wizard" type="object"
+                                        string="Reverse Line" class="btn-link"
+                                        invisible="not is_posted or reversal_of_id or reversal_line_ids"
+                                        groups="hotel_base.group_hotel_manager"/>
                                 </list>
                             </field>
                         </page>
