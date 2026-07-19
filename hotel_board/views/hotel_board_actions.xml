@@ -79,6 +79,10 @@
         <field name="parent_id" ref="menu_hotel_operations"/>
         <field name="sequence">30</field>
     </record>
+    <record id="hotel_base.menu_hotel_room_status" model="ir.ui.menu">
+        <field name="parent_id" ref="menu_hotel_operations"/>
+        <field name="sequence">40</field>
+    </record>
 
     <!-- Guest Services contains every guest-facing service queue. -->
     <record id="hotel_guest_services.menu_hotel_allotted_services" model="ir.ui.menu">

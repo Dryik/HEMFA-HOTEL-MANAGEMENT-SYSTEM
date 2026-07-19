@@ -34,13 +34,13 @@ installation without `hotel_board` still degrades into a predictable order.
 
 ### Housekeeping
 
-- Operations: Housekeeping Tasks, Discrepancies, Maintenance
+- Operations: Housekeeping Tasks, Discrepancies, Maintenance, Room Status
 - Guest Services: Do Not Disturb, Lost and Found
 - Reporting: Reports
 
 ### Maintenance
 
-- Operations: Maintenance
+- Operations: Maintenance, Room Status
 
 ### F&B
 
@@ -61,10 +61,10 @@ installation without `hotel_board` still degrades into a predictable order.
 
 ## Root order without `hotel_board`
 
-Front Desk (10), Online Bookings (20), Guests (50), Agencies / Entities (60),
-Agency Commissions (70), Guest Services (80), Housekeeping (90), Maintenance
-(100), Reporting (110), Configuration (120). Rooms is under Configuration →
-Property. Without `hotel_board`, Reporting
+Front Desk (10), Online Bookings (20), Room Status (40), Guests (50), Agencies /
+Entities (60), Agency Commissions (70), Guest Services (80), Housekeeping (90),
+Maintenance (100), Reporting (110), Configuration (120). Rooms is under
+Configuration → Property. Without `hotel_board`, Reporting
 contains Reports and Booking Analysis; the board adds Owner Dashboard. Empty or
 unauthorized entries are hidden by Odoo.
 
