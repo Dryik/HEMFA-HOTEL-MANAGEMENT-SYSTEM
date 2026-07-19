@@ -40,6 +40,14 @@
                     <button name="action_open_allocate_advance" type="object"
                         string="Allocate Deposit / Advance" class="btn-secondary"
                         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
+                    <button name="action_open_register_deposit" type="object"
+                        string="Register Deposit" class="btn-secondary"
+                        invisible="not is_open"
+                        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
+                    <button name="action_open_register_advance" type="object"
+                        string="Register Advance" class="btn-secondary"
+                        invisible="not agency_id or not is_open"
+                        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
                     <field name="is_open" invisible="1"/>
                 </header>
                 <sheet>
