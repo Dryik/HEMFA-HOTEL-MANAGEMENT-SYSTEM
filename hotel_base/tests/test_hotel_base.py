@@ -120,3 +120,75 @@ class TestHotelBase(TransactionCase):
         )
         company.flush_recordset()
         self.assertEqual(company.hotel_property_config_id.online_hold_minutes, 30)
+
+    def test_guest_defaults_agency_from_parent_on_create(self):
+        agency = self.env["res.partner"].create(
+            {"name": "Default Parent Agency", "is_hotel_agency": True}
+        )
+        guest = self.env["res.partner"].create(
+            {
+                "name": "Agency Guest",
+                "is_hotel_guest": True,
+                "parent_id": agency.id,
+            }
+        )
+        self.assertEqual(guest.hotel_agency_id, agency)
+
+    def test_guest_keeps_explicit_agency_on_create(self):
+        parent_agency = self.env["res.partner"].create(
+            {"name": "Parent Agency", "is_hotel_agency": True}
+        )
+        explicit_agency = self.env["res.partner"].create(
+            {"name": "Explicit Agency", "is_hotel_agency": True}
+        )
+        guest = self.env["res.partner"].create(
+            {
+                "name": "Explicit Agency Guest",
+                "is_hotel_guest": True,
+                "parent_id": parent_agency.id,
+                "hotel_agency_id": explicit_agency.id,
+            }
+        )
+        self.assertEqual(guest.hotel_agency_id, explicit_agency)
+        second_parent = self.env["res.partner"].create(
+            {"name": "Second Parent Agency", "is_hotel_agency": True}
+        )
+        guest.parent_id = second_parent
+        self.assertEqual(guest.hotel_agency_id, explicit_agency)
+
+    def test_guest_does_not_default_non_agency_parent(self):
+        company = self.env["res.partner"].create(
+            {"name": "Ordinary Parent Company", "is_company": True}
+        )
+        guest = self.env["res.partner"].create(
+            {
+                "name": "Ordinary Company Guest",
+                "is_hotel_guest": True,
+                "parent_id": company.id,
+            }
+        )
+        self.assertFalse(guest.hotel_agency_id)
+
+    def test_guest_defaults_agency_when_parent_changes(self):
+        agency = self.env["res.partner"].create(
+            {"name": "Changed Parent Agency", "is_hotel_agency": True}
+        )
+        guest = self.env["res.partner"].create(
+            {"name": "Changed Parent Guest", "is_hotel_guest": True}
+        )
+        guest.parent_id = agency
+        self.assertEqual(guest.hotel_agency_id, agency)
+
+    def test_parent_agency_onchange_defaults_before_save(self):
+        agency = self.env["res.partner"].create(
+            {"name": "Onchange Parent Agency", "is_hotel_agency": True}
+        )
+        guest = self.env["res.partner"].new(
+            {
+                "name": "Onchange Guest",
+                "is_hotel_guest": True,
+                "parent_id": agency.id,
+            }
+        )
+        guest._onchange_parent_hotel_agency()
+        self.assertEqual(guest.hotel_agency_id, agency)
