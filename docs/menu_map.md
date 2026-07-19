@@ -24,7 +24,7 @@ installation without `hotel_board` still degrades into a predictable order.
 - Rooms; Guests; Agencies / Entities
 - Guest Services: Service Orders, Meals to Prepare, Do Not Disturb, Wake-up Calls,
   Lost and Found, Guest Ratings
-- Reports
+- Reporting: Reports
 
 ### Front Office Supervisor
 
@@ -37,7 +37,7 @@ installation without `hotel_board` still degrades into a predictable order.
 - Operations: Housekeeping (Tasks, Discrepancy), Maintenance
 - Rooms
 - Guest Services: Do Not Disturb, Lost and Found
-- Reports
+- Reporting: Reports
 
 ### Maintenance
 
@@ -53,12 +53,12 @@ installation without `hotel_board` still degrades into a predictable order.
 
 - Front Desk: Folios
 - Rooms; Agencies / Entities; Agency Commissions
-- Reports
+- Reporting: Reports
 
 ### Manager
 
 - All role menus above
-- Owner Dashboard; Booking Analysis
+- Reporting: Reports, Booking Analysis, Owner Dashboard
 - Configuration: Property, Pricing, Services, Housekeeping, Billing, and Technical
   configuration entries supplied by the installed modules
 
@@ -66,5 +66,6 @@ installation without `hotel_board` still degrades into a predictable order.
 
 Front Desk (10), Online Bookings (20), Rooms (40), Guests (50), Agencies / Entities
 (60), Agency Commissions (70), Guest Services (80), Housekeeping (90), Maintenance
-(100), Reports (110), Booking Analysis (115), Configuration (120). Empty or
+(100), Reporting (110), Configuration (120). Without `hotel_board`, Reporting
+contains Reports and Booking Analysis; the board adds Owner Dashboard. Empty or
 unauthorized entries are hidden by Odoo.

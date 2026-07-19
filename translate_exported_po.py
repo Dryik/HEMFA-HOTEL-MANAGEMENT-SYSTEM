@@ -303,6 +303,7 @@ TRANSLATIONS.update({
     "Approve and Confirm": "الموافقة والتأكيد",
     "Booking Analysis": "تحليل الحجوزات",
     "Owner Dashboard": "لوحة تحكم المالك",
+    "Reporting": "التقارير",
     "Meals to Prepare": "وجبات قيد التحضير",
     "Housekeeping Workload": "عبء عمل التدبير الفندقي",
     "Online Payment Exceptions": "استثناءات الدفع عبر الإنترنت",
