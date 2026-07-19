@@ -67,6 +67,15 @@ class TestHotelCompanySecurity(TransactionCase):
                 ],
             }
         )
+        cls.contact_editor = cls.env["res.users"].create(
+            {
+                "name": "Restricted Contact Editor",
+                "login": "restricted_contact_editor_test",
+                "group_ids": [
+                    (4, cls.env.ref("base.group_partner_manager").id)
+                ],
+            }
+        )
         cls.accountant = cls.env["res.users"].create(
             {
                 "name": "Property Accountant",
@@ -178,7 +187,9 @@ class TestHotelCompanySecurity(TransactionCase):
         guest = self.env["res.partner"].create(
             {"name": "Restricted User Guest", "is_hotel_guest": True}
         )
-        guest.with_user(self.housekeeper).write({"parent_id": agency.id})
+        with self.assertRaises(AccessError):
+            guest.with_user(self.contact_editor).read(["hotel_agency_id"])
+        guest.with_user(self.contact_editor).write({"parent_id": agency.id})
         self.assertEqual(guest.sudo().hotel_agency_id, agency)
 
     def test_housekeeping_cannot_mutate_front_office_room_state(self):
