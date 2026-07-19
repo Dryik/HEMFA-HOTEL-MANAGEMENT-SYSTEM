@@ -125,15 +125,80 @@ class TestRestrictedServices(TransactionCase):
                 "restriction_type": "blocked",
             }
         )
-        line = folio.with_user(self.supervisor_user).with_context(
-            service_override_reason="Manager approved minibar"
-        ).add_charge(self.soda)
+        action = folio.with_user(
+            self.supervisor_user
+        ).action_open_add_charge()
+        wizard = (
+            self.env["hotel.add.charge.wizard"]
+            .with_user(self.supervisor_user)
+            .with_context(action["context"])
+            .create(
+                {
+                    "product_id": self.soda.id,
+                    "quantity": 1.0,
+                    "price_unit": self.soda.list_price,
+                    "override_reason": "Manager approved minibar",
+                }
+            )
+        )
+        wizard.action_add_charge()
+        line = folio.line_ids.filtered(
+            lambda charge: charge.product_id == self.soda
+            and charge.source_type == "manual"
+        )
+        self.assertEqual(len(line), 1)
         self.assertEqual(line.amount, 5.0)
         # Override must be logged in the chatter.
         override_messages = folio.message_ids.filtered(
             lambda m: "Manager approved minibar" in (m.body or "")
         )
         self.assertTrue(override_messages)
+
+    def test_manual_ui_charge_cannot_bypass_blocked_category(self):
+        reservation, folio = self._confirmed_folio()
+        self.env["hotel.service.restriction"].create(
+            {
+                "reservation_id": reservation.id,
+                "category_id": self.minibar_categ.id,
+                "restriction_type": "blocked",
+            }
+        )
+        direct_values = {
+            "folio_id": folio.id,
+            "product_id": self.soda.id,
+            "name": self.soda.display_name,
+            "qty": 1.0,
+            "price_unit": self.soda.list_price,
+            "payee_partner_id": self.guest.id,
+        }
+        with self.assertRaises(UserError):
+            self.env["hotel.folio.line"].with_user(
+                self.frontdesk_user
+            ).create(direct_values)
+
+        action = folio.with_user(
+            self.frontdesk_user
+        ).action_open_add_charge()
+        wizard = (
+            self.env["hotel.add.charge.wizard"]
+            .with_user(self.frontdesk_user)
+            .with_context(action["context"])
+            .create(
+                {
+                    "product_id": self.soda.id,
+                    "quantity": 1.0,
+                    "price_unit": self.soda.list_price,
+                }
+            )
+        )
+        with self.assertRaises(UserError):
+            wizard.action_add_charge()
+        self.assertFalse(
+            folio.line_ids.filtered(
+                lambda charge: charge.product_id == self.soda
+                and charge.source_type == "manual"
+            )
+        )
 
     def test_override_requires_supervisor(self):
         reservation, folio = self._confirmed_folio()

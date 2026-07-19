@@ -48,6 +48,10 @@
                         string="Register Advance" class="btn-secondary"
                         invisible="not agency_id or not is_open"
                         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
+                    <button name="action_open_add_charge" type="object"
+                        string="Add Charge" class="btn-secondary"
+                        invisible="not is_open"
+                        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
                     <field name="is_open" invisible="1"/>
                 </header>
                 <sheet>
@@ -78,7 +82,7 @@
                     <notebook>
                         <page string="Ledger / Charges">
                             <field name="line_ids">
-                                <list editable="bottom">
+                                <list create="0" edit="0" delete="0">
                                     <field name="date" readonly="is_posted or lock_state != 'unlocked'"/>
                                     <field name="product_id" readonly="is_posted or lock_state != 'unlocked'"/>
                                     <field name="name" readonly="is_posted or lock_state != 'unlocked'"/>

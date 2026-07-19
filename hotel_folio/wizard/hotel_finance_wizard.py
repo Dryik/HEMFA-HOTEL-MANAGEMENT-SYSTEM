@@ -201,3 +201,94 @@ class HotelRegisterPaymentWizard(models.TransientModel):
             )
         )
         return {"type": "ir.actions.act_window_close"}
+
+
+class HotelAddChargeWizard(models.TransientModel):
+    _name = "hotel.add.charge.wizard"
+    _description = "Add Hotel Folio Charge"
+
+    folio_id = fields.Many2one("hotel.folio", required=True, readonly=True)
+    product_id = fields.Many2one("product.product", required=True)
+    quantity = fields.Float(default=1.0, required=True)
+    price_unit = fields.Monetary(
+        string="Unit Price", required=True, currency_field="currency_id"
+    )
+    discount = fields.Float(string="Discount (%)", default=0.0)
+    tax_ids = fields.Many2many(
+        "account.tax",
+        string="Taxes",
+        domain="[('company_id', '=', company_id), ('type_tax_use', 'in', ('sale', 'none'))]",
+    )
+    charge_date = fields.Datetime(
+        string="Charge Date", required=True, default=fields.Datetime.now
+    )
+    override_reason = fields.Text(
+        string="Supervisor Override Reason",
+        help="Explain why this restricted charge is approved.",
+    )
+    property_id = fields.Many2one(
+        related="folio_id.property_id", string="Property", readonly=True
+    )
+    company_id = fields.Many2one(
+        related="property_id.company_id", string="Company", readonly=True
+    )
+    currency_id = fields.Many2one(
+        related="folio_id.currency_id", string="Currency", readonly=True
+    )
+
+    @api.onchange("product_id")
+    def _onchange_product_id(self):
+        for wizard in self.filtered("product_id"):
+            wizard.price_unit = wizard.product_id.list_price
+            wizard.tax_ids = wizard.product_id.taxes_id.filtered(
+                lambda tax: tax.company_id == wizard.company_id
+            )
+
+    @api.constrains("quantity", "price_unit", "discount")
+    def _check_charge_values(self):
+        for wizard in self:
+            if wizard.quantity <= 0:
+                raise ValidationError(_("Charge quantity must be greater than zero."))
+            if wizard.price_unit < 0:
+                raise ValidationError(_("Charge unit price cannot be negative."))
+            if not 0 <= wizard.discount <= 100:
+                raise ValidationError(_("Discount must be between 0 and 100 percent."))
+
+    def _check_add_charge_role(self):
+        allowed = any(
+            self.env.user.has_group(group)
+            for group in (
+                "hotel_base.group_hotel_frontdesk",
+                "hotel_base.group_hotel_accountant",
+                "hotel_base.group_hotel_manager",
+            )
+        )
+        if not allowed:
+            raise UserError(
+                _(
+                    "Only Front Desk, Hotel Accountant, or Manager users can "
+                    "add folio charges."
+                )
+            )
+
+    def action_add_charge(self):
+        self.ensure_one()
+        self._check_add_charge_role()
+        if not self.folio_id.is_open:
+            raise UserError(_("Only an open folio can receive a charge."))
+        reason = (self.override_reason or "").strip()
+        if reason and not self.env.user.has_group(
+            "hotel_base.group_hotel_fo_supervisor"
+        ):
+            raise UserError(
+                _("Only a Front Office Supervisor can enter an override reason.")
+            )
+        self.folio_id.with_context(service_override_reason=reason).add_charge(
+            self.product_id,
+            qty=self.quantity,
+            price_unit=self.price_unit,
+            date=self.charge_date,
+            discount=self.discount,
+            tax_ids=self.tax_ids.ids,
+        )
+        return {"type": "ir.actions.act_window_close"}
