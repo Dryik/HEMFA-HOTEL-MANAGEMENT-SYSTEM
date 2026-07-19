@@ -226,7 +226,15 @@ def extract_arch_terms(module, xmlid, elem, entries, occurrence):
                 add(entries, value.strip(), occurrence)
         # Leaf text only: mixed inline content is segmented differently
         # by odoo.tools.xml_translate and would not byte-match.
-        if len(node) == 0 and node.text and node.text.strip():
+        if (
+            len(node) == 0
+            and (
+                node.tag != "attribute"
+                or node.get("name") in TRANSLATED_ATTRS
+            )
+            and node.text
+            and node.text.strip()
+        ):
             add(entries, node.text.strip(), occurrence)
 
 

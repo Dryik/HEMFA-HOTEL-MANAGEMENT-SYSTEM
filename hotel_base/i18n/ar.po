@@ -801,6 +801,13 @@ msgid "Room Number"
 msgstr "رقم الغرفة"
 
 #. module: hotel_base
+#: model:ir.ui.menu,name:hotel_base.menu_hotel_room_status
+#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_status_view_list
+#: model:ir.actions.act_window,name:hotel_base.hotel_room_status_action
+msgid "Room Status"
+msgstr "حالة الغرفة"
+
+#. module: hotel_base
 #: model:ir.model,name:hotel_base.model_hotel_room_type
 #: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_search
 msgid "Room Type"
