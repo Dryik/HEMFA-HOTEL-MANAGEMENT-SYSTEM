@@ -62,7 +62,7 @@
     <menuitem id="menu_hotel_operations"
         name="Operations"
         parent="hotel_base.menu_hotel_root"
-        sequence="20"/>
+        sequence="30"/>
     <record id="hotel_housekeeping.menu_hotel_housekeeping_root" model="ir.ui.menu">
         <field name="parent_id" ref="menu_hotel_operations"/>
         <field name="sequence">10</field>
@@ -100,15 +100,15 @@
 
     <!-- Keep secondary areas stable and remove root-level sequence collisions. -->
     <record id="hotel_base.menu_hotel_rooms" model="ir.ui.menu">
-        <field name="sequence">30</field>
-    </record>
-    <record id="hotel_base.menu_hotel_guests" model="ir.ui.menu">
         <field name="sequence">40</field>
     </record>
-    <record id="hotel_base.menu_hotel_agencies" model="ir.ui.menu">
+    <record id="hotel_base.menu_hotel_guests" model="ir.ui.menu">
         <field name="sequence">50</field>
     </record>
-    <record id="hotel_base.menu_hotel_agency_commissions" model="ir.ui.menu">
+    <record id="hotel_base.menu_hotel_agencies" model="ir.ui.menu">
         <field name="sequence">60</field>
+    </record>
+    <record id="hotel_base.menu_hotel_agency_commissions" model="ir.ui.menu">
+        <field name="sequence">70</field>
     </record>
 </odoo>

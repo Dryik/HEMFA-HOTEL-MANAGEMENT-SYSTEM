@@ -187,8 +187,8 @@
         <field name="domain">[('state', 'not in', ('draft', 'cancelled'))]</field>
     </record>
 
-    <menuitem id="menu_hotel_online_booking" name="Online Bookings" parent="hotel_base.menu_hotel_root" action="hotel_online_booking_action" sequence="14" groups="hotel_base.group_hotel_frontdesk"/>
-    <menuitem id="menu_hotel_booking_analysis" name="Booking Analysis" parent="hotel_base.menu_hotel_root" action="hotel_reservation_booking_analysis_action" sequence="75" groups="hotel_base.group_hotel_manager"/>
+    <menuitem id="menu_hotel_online_booking" name="Online Bookings" parent="hotel_base.menu_hotel_root" action="hotel_online_booking_action" sequence="20" groups="hotel_base.group_hotel_frontdesk"/>
+    <menuitem id="menu_hotel_booking_analysis" name="Booking Analysis" parent="hotel_base.menu_hotel_root" action="hotel_reservation_booking_analysis_action" sequence="115" groups="hotel_base.group_hotel_manager"/>
 
     <record id="hotel_reservation_form_communication" model="ir.ui.view">
         <field name="name">hotel.reservation.form.communication</field>
