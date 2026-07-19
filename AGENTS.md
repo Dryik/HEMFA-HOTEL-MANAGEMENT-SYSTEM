@@ -21,16 +21,26 @@ Deployment target: Odoo.sh (dev / staging / production branches).
 | Module | Phase | Status | Purpose |
 |---|---|---|---|
 | `hotel_base` | 1 | done | Company-scoped hotel configuration, floors, room types, rooms, amenities, guest/agency partner extensions |
-| `hotel_reservation` | 4 | implemented | Shared availability, physical occupancy, amendments, groups and rooming lists |
-| `hotel_board` | 5 | implemented | Front Desk composition workspace, operational KPIs, attention queues and complete-room Planning tape |
 | `hotel_folio` | 3 | implemented (finance approval pending) | Tax-aware folio, native accounting, deposits/advances, FX, credits/reversals |
-| `hotel_rate` | 5 | implemented | Deterministic seasonal/occupancy pricing and confirmed-rate lock |
-| `hotel_housekeeping` | 4 | implemented | Cleaning/discrepancy workflow with immutable completion |
-| `hotel_maintenance` | 4 | implemented | Maintenance workflow and verified immutable room-block release |
-| `hotel_guest_services` | 4 | implemented | Lost-and-found, DND and wake-up calls |
 | `hotel_restricted_services` | 3 | implemented | Property/business-day aggregate ceilings with row locking |
 | `hotel_pos_room_charge` | 3 | implemented | Idempotent discounted/taxed folio transfer from clearing to receivable |
+| `l10n_ly_hemfa` | 3 | gated; not installable | Finance-approved Libyan chart, taxes and hotel accounting templates; intentionally disabled until sign-off |
+| `hotel_reservation` | 4 | implemented | Shared availability, physical occupancy, amendments, groups and rooming lists |
+| `hotel_housekeeping` | 4 | implemented | Cleaning/discrepancy workflow with immutable completion |
+| `hotel_maintenance` | 4 | implemented | Maintenance workflow and verified immutable room-block release |
+| `hotel_guest_services` | 4 | implemented | Guest operations, allotted services, documents and ratings |
+| `hotel_rate` | 5 | implemented | Deterministic seasonal/occupancy/pricelist pricing and confirmed-rate lock |
+| `hotel_website_booking` | 5 | implemented | Sales-free public/portal multi-room booking, online payments and booking analysis |
+| `hotel_board` | 5 | implemented | Front Desk composition workspace, operational KPIs, attention queues and complete-room Planning tape |
 | `hotel_reports` | 6 | implemented | Bilingual PDF/XLSX operational, finance and folio reports |
+| `hotel_night_audit` | retired | migration tombstone | Empty installable shell for databases upgrading from the removed daily-rollover workflow |
+| `hotel_frontdesk_session` | retired | migration tombstone | Empty installable shell for databases upgrading from the removed cashier-session workflow |
+
+Retain both tombstones while any supported database may still have either legacy
+module installed or queued for upgrade. They can be dropped only after the
+migration inventory confirms every supported database reports the modules as
+uninstalled/absent and no upgrade script or release path references their
+technical names.
 
 ## Key Field Name Conventions
 
@@ -48,19 +58,24 @@ Deployment target: Odoo.sh (dev / staging / production branches).
 ## Dependency Graph
 
 ```
-hotel_base (foundation)
-  ├── hotel_reservation (booking engine)
-  │     ├── hotel_rate (dynamic pricing override)
-  │     ├── hotel_housekeeping (auto-triggered on checkout)
-  │     ├── hotel_guest_services (lost/found, DND, wake-up)
-  │     └── hotel_folio (auto-created on confirm)
-  │           ├── hotel_restricted_services (charge validation)
-  │           │     └── hotel_pos_room_charge (+ point_of_sale)
-  │           └── hotel_reports (+ hotel_housekeeping)
-  ├── hotel_maintenance (room out-of-order driver)
-  └── hotel_board (Front Desk composition layer)
-        └── reservation, folio, housekeeping, maintenance,
-              guest-service and report operations
+hotel_base                <- base, mail, product, contacts
+hotel_reservation         <- hotel_base, web_gantt
+hotel_rate                <- hotel_reservation, product, account
+hotel_folio               <- hotel_rate, account
+hotel_housekeeping        <- hotel_reservation
+hotel_maintenance         <- hotel_base
+hotel_guest_services      <- hotel_folio
+hotel_restricted_services <- hotel_folio
+hotel_pos_room_charge     <- hotel_folio, hotel_restricted_services, point_of_sale
+hotel_reports             <- hotel_housekeeping, hotel_pos_room_charge
+hotel_website_booking     <- hotel_rate, hotel_guest_services,
+                             website, portal, payment, account_payment
+hotel_board               <- hotel_reservation, hotel_folio, hotel_housekeeping,
+                             hotel_maintenance, hotel_guest_services, hotel_reports,
+                             hotel_website_booking, web
+l10n_ly_hemfa             <- account
+hotel_night_audit         <- base (migration tombstone)
+hotel_frontdesk_session   <- base (migration tombstone)
 ```
 
 ## Odoo 19 Breaking Changes — MUST FOLLOW
@@ -122,18 +137,19 @@ hotel_base (foundation)
 
 | Module | Tests |
 |---|---|
-| `hotel_base` | 11 tests |
-| `hotel_board` | 10 tests |
-| `hotel_reservation` | 15 tests |
-| `hotel_folio` | 11 tests |
-| `hotel_rate` | 6 tests |
-| `hotel_guest_services` | 5 tests |
-| `hotel_housekeeping` | 10 tests |
-| `hotel_restricted_services` | 7 tests |
+| `hotel_base` | 14 tests |
+| `hotel_board` | 17 tests |
+| `hotel_reservation` | 19 tests |
+| `hotel_folio` | 15 tests |
+| `hotel_rate` | 12 tests |
+| `hotel_guest_services` | 8 tests |
+| `hotel_housekeeping` | 12 tests |
+| `hotel_restricted_services` | 8 tests |
 | `hotel_maintenance` | 13 tests |
 | `hotel_pos_room_charge` | 9 tests |
-| `hotel_reports` | 13 tests |
-| **Total** | **110 tests** |
+| `hotel_reports` | 14 tests |
+| `hotel_website_booking` | 13 tests |
+| **Total** | **154 tests** |
 
 ## Local Checks
 
