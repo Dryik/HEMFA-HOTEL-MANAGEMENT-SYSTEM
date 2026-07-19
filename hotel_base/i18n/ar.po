@@ -764,6 +764,11 @@ msgid "Record agency commission terms"
 msgstr "سجل شروط عمولات الوكالات"
 
 #. module: hotel_base
+#: model:ir.ui.menu,name:hotel_base.menu_hotel_reporting
+msgid "Reporting"
+msgstr "التقارير"
+
+#. module: hotel_base
 #: model:ir.model.fields.selection,name:hotel_base.selection__hotel_room__occupancy_state__reserved
 msgid "Reserved"
 msgstr "محجوزة"

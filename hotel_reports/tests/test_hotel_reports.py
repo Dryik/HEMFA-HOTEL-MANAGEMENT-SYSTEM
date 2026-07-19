@@ -274,6 +274,44 @@ class TestHotelReports(TransactionCase):
         with self.assertRaises(UserError):
             debtors._get_report_payload()
 
+    def test_report_type_options_are_filtered_by_role(self):
+        expected = [
+            (self.housekeeper, ["discrepancy"]),
+            (
+                self.frontdesk,
+                [
+                    "arrivals",
+                    "departures",
+                    "inhouse",
+                    "security",
+                    "occupancy",
+                    "folio_statement",
+                ],
+            ),
+            (
+                self.accountant,
+                [
+                    "occupancy",
+                    "debtors",
+                    "agency_advances",
+                    "pos_room_charges",
+                    "folio_statement",
+                ],
+            ),
+        ]
+        for user, report_types in expected:
+            wizard_model = self.env["hotel.report.wizard"].with_user(user)
+            self.assertEqual(
+                [
+                    key
+                    for key, _label in wizard_model.fields_get(
+                        ["report_type"], ["selection"]
+                    )["report_type"]["selection"]
+                ],
+                report_types,
+            )
+            self.assertEqual(wizard_model._default_report_type(), report_types[0])
+
     def test_consolidated_statement_pdf_xlsx_payload_has_balances(self):
         reservation = self._reservation(self.rooms[0], self.guests[0])
         reservation.action_confirm()
