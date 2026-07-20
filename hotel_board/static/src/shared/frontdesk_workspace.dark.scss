@@ -1,0 +1,12 @@
+// Dark-mode overrides for the shared front-desk workspace shell.  The
+// layout/gray custom properties in frontdesk_workspace.scss are derived
+// from $o-* variables and swap automatically in this bundle; only the
+// hex-based semantic accents need brighter dark-friendly values.
+.o_hotel_workspace {
+    --hotel-success: #4cc38a;
+    --hotel-warning: #e2b45a;
+    --hotel-danger: #f16a5c;
+    --hotel-info: #6ab5fb;
+    --hotel-vacant: #2f9e68;
+    --hotel-checkout: #b9822e;
+}

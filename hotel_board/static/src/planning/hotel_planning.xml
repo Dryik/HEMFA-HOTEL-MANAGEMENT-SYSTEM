@@ -19,7 +19,7 @@
                         <label for="hotel-planning-start-date">Start Date</label>
                         <input id="hotel-planning-start-date" type="date" class="form-control" lang="en" dir="ltr"
                             t-att-value="state.startDate" t-on-change="onStartDateChange"
-                            t-att-disabled="!state.data or state.refreshing"/>
+                            t-att-disabled="!state.data"/>
                     </div>
                     <div class="o_hotel_day_count" role="group" aria-label="Planning period">
                         <span class="o_hotel_control_label">Days</span>
@@ -29,19 +29,12 @@
                                 t-attf-class="btn {{ state.dayCount === dayCount ? 'btn-secondary' : 'btn-outline-secondary' }} o_hotel_touch_target"
                                 t-att-aria-pressed="state.dayCount === dayCount"
                                 t-on-click="() => this.setDayCount(dayCount)"
-                                t-att-disabled="state.refreshing">
+                                t-att-disabled="!state.data">
                                 <t t-esc="dayCount"/>
                             </button>
                         </div>
                     </div>
                     <div class="o_hotel_header_actions">
-                        <button type="button" class="btn btn-outline-secondary o_hotel_touch_target"
-                            t-on-click="() => this.loadData({ preserveScroll: true })"
-                            t-att-disabled="state.refreshing" aria-label="Refresh planning">
-                            <i t-attf-class="fa {{ state.refreshing ? 'fa-spinner fa-spin' : 'fa-refresh' }}"
-                                aria-hidden="true"/>
-                            <span>Refresh</span>
-                        </button>
                         <button type="button" class="btn btn-primary o_hotel_touch_target"
                             t-on-click="newReservation" t-att-disabled="!state.data">
                             <i class="fa fa-plus" aria-hidden="true"/>
@@ -54,9 +47,6 @@
                             <span>Reservation Planner</span>
                         </button>
                     </div>
-                    <small t-if="state.updatedAt" class="o_hotel_updated_at text-muted">
-                        Last updated <t t-esc="updatedAtLabel()"/>
-                    </small>
                 </div>
             </header>
 
@@ -73,20 +63,26 @@
                 role="status">
                 <span>
                     <i class="fa fa-clock-o" aria-hidden="true"/>
-                    Showing previously loaded planning. Refresh to confirm availability.
+                    Showing previously loaded planning. Reconnecting…
                 </span>
             </div>
 
             <t t-if="state.data">
                 <details class="o_hotel_planning_filters o_hotel_card">
                     <summary>
-                        <span>
-                            <i class="fa fa-filter" aria-hidden="true"/> Filters
-                            <span t-if="activeFilterCount()" class="badge text-bg-primary">
+                        <span class="o_hotel_filter_summary_label">
+                            <span class="o_hotel_filter_icon" aria-hidden="true">
+                                <i class="fa fa-sliders"/>
+                            </span>
+                            <span class="o_hotel_filter_title">Filters</span>
+                            <span t-if="activeFilterCount()" class="o_hotel_filter_count">
                                 <t t-esc="activeFilterCount()"/>
                             </span>
                         </span>
-                        <span class="text-muted">Narrow rooms and reservations</span>
+                        <span class="o_hotel_filter_summary_side">
+                            <span class="text-muted">Narrow rooms and reservations</span>
+                            <i class="fa fa-chevron-down o_hotel_filter_chevron" aria-hidden="true"/>
+                        </span>
                     </summary>
                     <form class="o_hotel_filter_form" t-on-submit.prevent="applyFilters">
                         <div class="o_hotel_filter_field">
@@ -189,10 +185,10 @@
                                 placeholder="Reservation reference" t-model="state.filters.reference_query"/>
                         </div>
                         <div class="o_hotel_filter_actions">
-                            <button type="submit" class="btn btn-secondary o_hotel_touch_target"
-                                t-att-disabled="state.refreshing">Apply Filters</button>
+                            <button type="submit" class="btn btn-primary o_hotel_touch_target"
+                                t-att-disabled="!state.data">Apply Filters</button>
                             <button type="button" class="btn btn-link o_hotel_touch_target"
-                                t-on-click="clearFilters" t-att-disabled="!activeFilterCount() or state.refreshing">
+                                t-on-click="clearFilters" t-att-disabled="!activeFilterCount()">
                                 Clear All
                             </button>
                         </div>
@@ -200,28 +196,58 @@
                 </details>
 
                 <div class="o_hotel_planning_summary">
-                    <div>
+                    <div class="o_hotel_planning_totals">
                         <strong><t t-esc="formatCount(state.data.totals.rooms)"/></strong> rooms
                         <span aria-hidden="true">·</span>
                         <strong><t t-esc="formatCount(state.data.totals.reservations)"/></strong> reservations
                     </div>
-                    <div class="o_hotel_planning_legend" aria-label="Planning legend">
-                        <span t-foreach="state.data.legend.reservation_states || []" t-as="item"
-                            t-key="`reservation-${item.key}`" t-attf-class="o_reservation_{{ item.key }}">
-                            <i aria-hidden="true"/><t t-esc="item.label"/>
-                        </span>
-                        <span t-foreach="state.data.legend.primary || []" t-as="item"
-                            t-key="`primary-${item.key}`" t-attf-class="o_primary_{{ item.key }}">
-                            <i aria-hidden="true"/><t t-esc="item.label"/>
-                        </span>
-                        <span t-foreach="state.data.legend.housekeeping || []" t-as="item"
-                            t-key="`housekeeping-${item.key}`" t-attf-class="o_hk_{{ item.key }}">
-                            <i class="fa fa-bed" aria-hidden="true"/><t t-esc="item.label"/>
-                        </span>
-                        <span t-foreach="state.data.legend.alerts || []" t-as="item"
-                            t-key="`alert-${item.key}`" class="o_has_alert">
-                            <i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="item.label"/>
-                        </span>
+                    <button type="button" class="btn o_hotel_legend_toggle o_hotel_touch_target"
+                        t-on-click="toggleLegend"
+                        t-att-aria-expanded="state.legendOpen"
+                        aria-controls="hotel-planning-legend">
+                        <i class="fa fa-info-circle" aria-hidden="true"/>
+                        <span>Legend</span>
+                        <i t-attf-class="fa fa-chevron-down o_hotel_filter_chevron {{ state.legendOpen ? 'o_is_open' : '' }}"
+                            aria-hidden="true"/>
+                    </button>
+                </div>
+                <div t-if="state.legendOpen" id="hotel-planning-legend"
+                    class="o_hotel_planning_legend o_hotel_card" aria-label="Planning legend">
+                    <div t-if="(state.data.legend.reservation_states || []).length" class="o_hotel_legend_group">
+                        <span class="o_hotel_legend_title">Reservations</span>
+                        <div class="o_hotel_legend_items">
+                            <span t-foreach="state.data.legend.reservation_states" t-as="item"
+                                t-key="`reservation-${item.key}`" t-attf-class="o_reservation_{{ item.key }}">
+                                <i aria-hidden="true"/><t t-esc="item.label"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div t-if="(state.data.legend.primary || []).length" class="o_hotel_legend_group">
+                        <span class="o_hotel_legend_title">Room Status</span>
+                        <div class="o_hotel_legend_items">
+                            <span t-foreach="state.data.legend.primary" t-as="item"
+                                t-key="`primary-${item.key}`" t-attf-class="o_primary_{{ item.key }}">
+                                <i aria-hidden="true"/><t t-esc="item.label"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div t-if="(state.data.legend.housekeeping || []).length" class="o_hotel_legend_group">
+                        <span class="o_hotel_legend_title">Housekeeping</span>
+                        <div class="o_hotel_legend_items">
+                            <span t-foreach="state.data.legend.housekeeping" t-as="item"
+                                t-key="`housekeeping-${item.key}`" t-attf-class="o_hk_{{ item.key }}">
+                                <i class="fa fa-bed" aria-hidden="true"/><t t-esc="item.label"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div t-if="(state.data.legend.alerts || []).length" class="o_hotel_legend_group">
+                        <span class="o_hotel_legend_title">Indicators</span>
+                        <div class="o_hotel_legend_items">
+                            <span t-foreach="state.data.legend.alerts" t-as="item"
+                                t-key="`alert-${item.key}`" class="o_has_alert">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="item.label"/>
+                            </span>
+                        </div>
                     </div>
                 </div>
 

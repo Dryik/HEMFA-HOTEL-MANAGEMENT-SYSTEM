@@ -22,6 +22,12 @@
         "web.assets_backend": [
             "hotel_board/static/src/shared/frontdesk_workspace.scss",
             "hotel_board/static/src/**/*",
+            ("remove", "hotel_board/static/src/**/*.dark.scss"),
+        ],
+        # Dark-mode bundle recompiles every SCSS with the dark $o-* palette;
+        # these files only override the hex-based custom properties.
+        "web.assets_web_dark": [
+            "hotel_board/static/src/**/*.dark.scss",
         ],
         "web.assets_unit_tests": [
             "hotel_board/static/tests/**/*.test.js",

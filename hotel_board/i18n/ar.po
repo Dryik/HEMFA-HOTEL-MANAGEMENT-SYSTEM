@@ -385,6 +385,12 @@ msgstr "عدم الإزعاج"
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Filters"
+msgstr "عوامل التصفية"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
 msgid "Floor"
 msgstr "الطابق"
 
@@ -551,6 +557,12 @@ msgstr "النزلاء المقيمون"
 
 #. module: hotel_board
 #. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Indicators"
+msgstr "المؤشرات"
+
+#. module: hotel_board
+#. odoo-javascript
 #: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
 msgid "Inspected"
 msgstr "مفتشة ومفحوصة"
@@ -566,6 +578,12 @@ msgstr "إبقاء الإقامة"
 #: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
 msgid "Late Arrivals"
 msgstr "وصولات متأخرة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Legend"
+msgstr "دليل الرموز"
 
 #. module: hotel_board
 #. odoo-python
@@ -838,24 +856,6 @@ msgstr "المرجع"
 
 #. module: hotel_board
 #. odoo-javascript
-#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
-msgid "Refresh"
-msgstr "تحديث"
-
-#. module: hotel_board
-#. odoo-javascript
-#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
-msgid "Refresh dashboard"
-msgstr "تحديث لوحة التحكم"
-
-#. module: hotel_board
-#. odoo-javascript
-#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
-msgid "Refresh dashboard. Last updated at %(time)s."
-msgstr "تحديث لوحة التحكم. آخر تحديث عند %(time)s."
-
-#. module: hotel_board
-#. odoo-javascript
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
 msgid "Refresh failed. Previously loaded data remains visible."
 msgstr "فشل التحديث. ستبقى البيانات المحملة سابقاً ظاهرة."
@@ -865,12 +865,6 @@ msgstr "فشل التحديث. ستبقى البيانات المحملة ساب
 #: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
 msgid "Refresh failed. Previously loaded planning remains visible."
 msgstr "فشل التحديث. سيبقى التخطيط المحمل سابقاً ظاهراً."
-
-#. module: hotel_board
-#. odoo-javascript
-#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
-msgid "Refresh planning"
-msgstr "تحديث التخطيط"
 
 #. module: hotel_board
 #. odoo-javascript
@@ -942,6 +936,12 @@ msgstr "مرجع الحجز"
 #: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
 msgid "Reservation warning"
 msgstr "تحذير الحجز"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Reservations"
+msgstr "الحجوزات"
 
 #. module: hotel_board
 #. odoo-python

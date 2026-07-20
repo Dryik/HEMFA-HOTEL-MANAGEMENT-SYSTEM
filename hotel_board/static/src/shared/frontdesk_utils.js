@@ -107,20 +107,6 @@ export function formatOperationalDateTime(value, timezone = null) {
     }
 }
 
-export function formatUpdatedAt(timestamp) {
-    if (!timestamp) {
-        return "";
-    }
-    return westernDigits(
-        new Intl.DateTimeFormat(localeCode(), {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            numberingSystem: "latn",
-        }).format(timestamp)
-    );
-}
-
 export function formatWeekday(value) {
     const dateValue = isoDate(value);
     if (!dateValue) {
