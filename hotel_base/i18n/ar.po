@@ -498,7 +498,6 @@ msgstr "الساعات الممنوحة بعد بداية يوم العمل لت
 
 #. module: hotel_base
 #: model:ir.model.fields,field_description:hotel_base.field_hotel_room__admin_use
-#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_kanban
 msgid "House Use"
 msgstr "استخدام الفندق"
 
@@ -685,7 +684,6 @@ msgid "Other"
 msgstr "أخرى"
 
 #. module: hotel_base
-#: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_kanban
 #: model_terms:ir.ui.view,arch_db:hotel_base.hotel_room_view_search
 msgid "Out of Order"
 msgstr "خارج الخدمة"
