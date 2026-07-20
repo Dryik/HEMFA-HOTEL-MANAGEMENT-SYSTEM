@@ -137,11 +137,6 @@
         gap: 0.5rem;
     }
 
-    .o_hotel_updated_at {
-        flex-basis: 100%;
-        text-align: end;
-    }
-
     .o_hotel_workspace_alert {
         display: flex;
         align-items: center;
@@ -189,10 +184,6 @@
 
         .o_hotel_workspace_controls {
             justify-content: flex-start;
-        }
-
-        .o_hotel_updated_at {
-            text-align: start;
         }
     }
 }

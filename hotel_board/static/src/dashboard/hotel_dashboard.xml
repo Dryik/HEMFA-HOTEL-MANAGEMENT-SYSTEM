@@ -10,14 +10,6 @@
                 <h1>Dashboard</h1>
                 <nav class="o_hotel_dashboard_date_controls" aria-label="Dashboard date controls">
                     <button type="button" class="btn o_hotel_icon_button"
-                        t-on-click="() => this.refreshDashboard()"
-                        t-att-disabled="state.refreshing"
-                        t-att-title="refreshLabel()"
-                        t-att-aria-label="refreshLabel()">
-                        <i t-attf-class="fa {{ state.refreshing ? 'fa-spinner fa-spin' : 'fa-refresh' }}"
-                            aria-hidden="true"/>
-                    </button>
-                    <button type="button" class="btn o_hotel_icon_button"
                         t-on-click="() => this.changeDate(-1)" aria-label="Previous day">
                         <i class="fa fa-angle-left" aria-hidden="true"/>
                     </button>
@@ -165,7 +157,9 @@
                             </button>
                         </div>
 
-                        <div class="o_hotel_activity_table" role="tabpanel"
+                        <div t-attf-class="o_hotel_activity_table {{ state.activityLoading ? 'o_is_busy' : '' }}"
+                            role="tabpanel"
+                            t-att-aria-busy="state.activityLoading"
                             t-att-aria-label="state.activity?.label || ''">
                             <div class="o_hotel_activity_table_head" aria-hidden="true">
                                 <strong>Guest</strong>
@@ -175,7 +169,8 @@
                                 <span/>
                             </div>
 
-                            <div t-if="state.activityLoading" class="o_hotel_activity_loading" role="status">
+                            <div t-if="state.activityLoading and !(state.activity and state.activity.rows.length)"
+                                class="o_hotel_activity_loading" role="status">
                                 <i class="fa fa-spinner fa-spin" aria-hidden="true"/>
                                 <span>Loading activity…</span>
                             </div>

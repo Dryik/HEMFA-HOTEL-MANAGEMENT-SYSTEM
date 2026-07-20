@@ -1,0 +1,26 @@
+// Dark-mode palette for the Front Desk dashboard.  This file is only part
+// of web.assets_web_dark, where the $o-* SCSS variables already hold the
+// dark values, so every custom property below compiles to its dark shade.
+// Properties derived from $o-* in hotel_dashboard.scss (e.g. the brand
+// primary) swap automatically and are not repeated here.
+.o_hotel_dashboard {
+    --dashboard-canvas: #{$o-gray-200};
+    --dashboard-surface: #{$o-gray-100};
+    --dashboard-text: #{$o-gray-900};
+    --dashboard-muted: #{$o-gray-700};
+    --dashboard-border: #{$o-gray-300};
+    --dashboard-primary-soft: #{rgba($o-brand-primary, 0.22)};
+    --dashboard-danger: #{$o-danger};
+    --dashboard-danger-soft: #{rgba($o-danger, 0.18)};
+    --dashboard-chip: #{$o-gray-300};
+    --dashboard-surface-subtle: #{$o-gray-200};
+    --dashboard-surface-hover: #{$o-gray-200};
+    --dashboard-subtle-text: #{$o-gray-700};
+    --dashboard-faded-text: #{$o-gray-600};
+    --dashboard-ring-track: #{$o-gray-300};
+    --dashboard-warn-text: #{$o-warning};
+    --dashboard-warn-bg: #{rgba($o-warning, 0.12)};
+    --dashboard-warn-border: #{rgba($o-warning, 0.35)};
+    --dashboard-backdrop: rgba(0, 0, 0, 0.55);
+    --dashboard-shadow: rgba(0, 0, 0, 0.45);
+}

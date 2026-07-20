@@ -20,7 +20,6 @@ import {
     formatCurrency,
     formatNumber,
     formatOperationalDateTime,
-    formatUpdatedAt,
     formatWeekday,
     isoDate,
     refreshFailureViewState,
@@ -28,7 +27,7 @@ import {
 } from "../shared/frontdesk_utils";
 import "../shared/frontdesk_state_service";
 
-const REFRESH_INTERVAL_MS = 60_000;
+const REFRESH_INTERVAL_MS = 30_000;
 const ALLOWED_DAY_COUNTS = [7, 14, 30];
 const DAY_WIDTH_PX = 84;
 const ROOM_COLUMN_WIDTH_PX = 200;
@@ -270,6 +269,7 @@ export class HotelPlanning extends Component {
                 stored.businessDate,
             dayCount: ALLOWED_DAY_COUNTS.includes(contextDayCount) ? contextDayCount : 14,
             filters: normaliseFilters(actionParams.filters || actionContext.filters),
+            legendOpen: false,
         });
         this._request = null;
         this._requestSequence = 0;
@@ -461,6 +461,10 @@ export class HotelPlanning extends Component {
         return Object.values(this.state.filters).filter((value) =>
             Array.isArray(value) ? value.length : String(value || "").trim()
         ).length;
+    }
+
+    toggleLegend() {
+        this.state.legendOpen = !this.state.legendOpen;
     }
 
     planningStyle() {
@@ -762,10 +766,6 @@ export class HotelPlanning extends Component {
 
     formatCount(value) {
         return formatNumber(value, { maximumFractionDigits: 0 });
-    }
-
-    updatedAtLabel() {
-        return formatUpdatedAt(this.state.updatedAt ? new Date(this.state.updatedAt) : null);
     }
 }
 

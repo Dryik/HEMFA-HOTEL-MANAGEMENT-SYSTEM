@@ -15,13 +15,12 @@ import {
     formatCurrency,
     formatNumber,
     formatOperationalDateTime,
-    formatUpdatedAt,
     refreshFailureViewState,
     westernDigits,
 } from "../shared/frontdesk_utils";
 import "../shared/frontdesk_state_service";
 
-const REFRESH_INTERVAL_MS = 60_000;
+const REFRESH_INTERVAL_MS = 30_000;
 const STALE_AFTER_MS = REFRESH_INTERVAL_MS * 2;
 const SEARCH_DEBOUNCE_MS = 300;
 const ACTIVITY_LIMIT = 50;
@@ -578,17 +577,6 @@ export class HotelDashboard extends Component {
         return this.state.activeTab === "departures"
             ? _t("Show checked-out guests")
             : _t("Show completed arrivals");
-    }
-
-    updatedAtLabel() {
-        return formatUpdatedAt(this.state.updatedAt ? new Date(this.state.updatedAt) : null);
-    }
-
-    refreshLabel() {
-        const time = this.updatedAtLabel();
-        return time
-            ? _t("Refresh dashboard. Last updated at %(time)s.", { time })
-            : _t("Refresh dashboard");
     }
 }
 
