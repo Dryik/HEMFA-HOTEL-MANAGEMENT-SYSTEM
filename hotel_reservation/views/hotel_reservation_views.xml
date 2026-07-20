@@ -116,6 +116,7 @@
                         </group>
                         <group string="Stay">
                             <field name="property_id" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
                             <field name="checkin_date"/>
                             <field name="checkout_date"/>
                             <field name="nights"/>

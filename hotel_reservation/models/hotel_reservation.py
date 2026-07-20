@@ -74,6 +74,17 @@ class HotelReservation(models.Model):
         required=True,
         default=lambda self: self.env["hotel.property"]._get_default_property(),
     )
+    # Exposed so client-side domains (e.g. the pricelist company filter) can
+    # reference the property's company directly. A Many2one is only an id in
+    # the web domain evaluator, so a dotted path like ``property_id.company_id``
+    # cannot be traversed there and yields an invalid domain term.
+    company_id = fields.Many2one(
+        "res.company",
+        related="property_id.company_id",
+        store=True,
+        index=True,
+        readonly=True,
+    )
     room_type_id = fields.Many2one("hotel.room.type", tracking=True)
     room_id = fields.Many2one(
         "hotel.room",
@@ -128,7 +139,7 @@ class HotelReservation(models.Model):
     pricelist_id = fields.Many2one(
         "product.pricelist",
         string="Pricelist",
-        domain="['|', ('company_id', '=', False), ('company_id', '=', property_id.company_id)]",
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
         tracking=True,
     )
     hold_expires_at = fields.Datetime(readonly=True, copy=False, index=True)

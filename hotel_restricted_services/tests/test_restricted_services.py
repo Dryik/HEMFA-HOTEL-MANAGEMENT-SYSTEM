@@ -120,11 +120,11 @@ class TestRestrictedServices(TransactionCase):
             }
         )
 
-    def _entity_ceiling(self, daily_limit, category=None, on_excess="block"):
+    def _entity_ceiling(self, daily_limit, product=None, on_excess="block"):
         return self.env["hotel.entity.service.ceiling"].create(
             {
                 "partner_id": self.agency.id,
-                "category_id": category.id if category else False,
+                "product_id": product.id if product else False,
                 "daily_limit": daily_limit,
                 "on_excess": on_excess,
             }
@@ -291,7 +291,7 @@ class TestRestrictedServices(TransactionCase):
         ceiling = self.env["hotel.entity.service.ceiling"].create(
             {
                 "partner_id": self.agency.id,
-                "category_id": self.restaurant_categ.id,
+                "product_id": self.dinner.id,
                 "daily_limit": 50.0,
             }
         )
@@ -337,7 +337,7 @@ class TestRestrictedServices(TransactionCase):
         self._route_to_agency()
         ceiling = self._entity_ceiling(
             15.0,
-            category=self.restaurant_categ,
+            product=self.dinner,
             on_excess="charge_guest",
         )
         tax = self.env["account.tax"].create(
@@ -414,7 +414,7 @@ class TestRestrictedServices(TransactionCase):
         self._route_to_agency()
         self._entity_ceiling(
             40.0,
-            category=self.restaurant_categ,
+            product=self.dinner,
             on_excess="charge_guest",
         )
         _reservation, folio = self._confirmed_folio(use_agency=True)
@@ -447,7 +447,7 @@ class TestRestrictedServices(TransactionCase):
         self._route_to_agency()
         self._entity_ceiling(
             10.0,
-            category=self.restaurant_categ,
+            product=self.dinner,
             on_excess="charge_guest",
         )
         _reservation, folio = self._confirmed_folio(use_agency=True)
@@ -486,7 +486,7 @@ class TestRestrictedServices(TransactionCase):
         self._route_to_agency()
         self._entity_ceiling(
             15.0,
-            category=self.restaurant_categ,
+            product=self.dinner,
             on_excess="charge_guest",
         )
         _reservation, folio = self._confirmed_folio(use_agency=True)
