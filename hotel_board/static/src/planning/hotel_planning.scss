@@ -1,6 +1,9 @@
 .o_hotel_planning {
     --hotel-day-width: 84px;
     --hotel-room-column: 200px;
+    --hotel-business-tint: rgba(243, 234, 215, 0.9);
+    --hotel-business-tint-soft: rgba(255, 244, 221, 0.55);
+    --hotel-business-text: #6b4100;
 
     .o_hotel_day_count {
         display: flex;
@@ -19,32 +22,98 @@
     }
 
     .o_hotel_planning_filters {
+        background: var(--hotel-surface-raised);
+        border-radius: calc(var(--hotel-radius) + 0.25rem);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
         margin-block-end: 1rem;
+        overflow: hidden;
 
         summary {
-            min-height: var(--hotel-touch-target);
+            min-height: calc(var(--hotel-touch-target) + 0.5rem);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
             cursor: pointer;
-            padding: 0.65rem 0.75rem;
+            list-style: none;
+            padding: 0.65rem 1rem;
+            transition: background-color 120ms ease;
 
-            > span:first-child {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.45rem;
-                font-weight: 700;
+            &::-webkit-details-marker {
+                display: none;
+            }
+
+            &:hover {
+                background: rgba($o-brand-primary, 0.04);
             }
 
             &:focus-visible {
                 outline: 2px solid var(--hotel-focus);
-                outline-offset: 1px;
+                outline-offset: -2px;
             }
         }
 
         &[open] summary {
             border-block-end: 1px solid var(--hotel-border);
+        }
+
+        &[open] .o_hotel_filter_chevron {
+            transform: rotate(180deg);
+        }
+    }
+
+    .o_hotel_filter_summary_label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .o_hotel_filter_icon {
+        width: 2rem;
+        aspect-ratio: 1;
+        display: inline-grid;
+        flex: 0 0 auto;
+        place-items: center;
+        color: var(--hotel-brand);
+        background: rgba($o-brand-primary, 0.1);
+        border-radius: 50%;
+    }
+
+    .o_hotel_filter_title {
+        font-weight: 700;
+        letter-spacing: 0.01em;
+    }
+
+    .o_hotel_filter_count {
+        min-width: 1.4rem;
+        display: inline-grid;
+        place-items: center;
+        color: #fff;
+        background: var(--hotel-brand);
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.12rem 0.4rem;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .o_hotel_filter_summary_side {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        .text-muted {
+            font-size: 0.82rem;
+        }
+    }
+
+    .o_hotel_filter_chevron {
+        color: var(--hotel-muted);
+        font-size: 0.72rem;
+        transition: transform 160ms ease;
+
+        &.o_is_open {
+            transform: rotate(180deg);
         }
     }
 
@@ -52,8 +121,8 @@
         display: grid;
         grid-template-columns: repeat(5, minmax(9.5rem, 1fr));
         align-items: end;
-        gap: 0.7rem;
-        padding: 0.75rem;
+        gap: 0.85rem 0.8rem;
+        padding: 1rem;
     }
 
     .o_hotel_filter_field {
@@ -63,7 +132,26 @@
         .form-select {
             width: 100%;
             min-height: var(--hotel-touch-target);
+            background-color: var(--hotel-surface-raised);
+            border: 1px solid var(--hotel-border);
+            border-radius: 0.5rem;
+            transition: border-color 120ms ease;
+
+            &:hover {
+                border-color: var(--hotel-border-strong);
+            }
+
+            &:focus {
+                border-color: var(--hotel-brand);
+            }
         }
+    }
+
+    .o_hotel_filter_field label,
+    .o_hotel_control_label {
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-size: 0.68rem;
     }
 
     .o_hotel_filter_actions {
@@ -71,11 +159,16 @@
         align-items: center;
         flex-wrap: wrap;
         gap: 0.35rem;
+
+        .btn-primary {
+            border-radius: 999px;
+            padding-inline: 1.15rem;
+        }
     }
 
     .o_hotel_planning_summary {
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         justify-content: space-between;
         flex-wrap: wrap;
         gap: 0.65rem 1rem;
@@ -85,12 +178,53 @@
         font-variant-numeric: tabular-nums;
     }
 
+    .o_hotel_legend_toggle {
+        color: var(--hotel-text);
+        background: var(--hotel-surface);
+        border: 1px solid var(--hotel-border);
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding-inline: 0.9rem;
+
+        > .fa-info-circle {
+            color: var(--hotel-muted);
+        }
+
+        &:hover {
+            border-color: var(--hotel-border-strong);
+            background: rgba($o-brand-primary, 0.06);
+        }
+    }
+
     .o_hotel_planning_legend {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+        gap: 0.85rem 1.5rem;
+        margin-block-end: 0.65rem;
+        padding: 0.85rem 1rem;
+        font-size: 0.8rem;
+    }
+
+    .o_hotel_legend_group {
+        min-width: 0;
+    }
+
+    .o_hotel_legend_title {
+        display: block;
+        color: var(--hotel-muted);
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        margin-block-end: 0.4rem;
+    }
+
+    .o_hotel_legend_items {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
         flex-wrap: wrap;
-        gap: 0.35rem 0.8rem;
+        gap: 0.35rem 0.85rem;
 
         > span {
             display: inline-flex;
@@ -120,12 +254,15 @@
         }
     }
 
+    // Stretch to the viewport when it is wider than the fixed day grid so
+    // the tape uses the full screen; day columns grow evenly past 84px.
+    // width 100% with a min-width floor picks the larger of the two.
     .o_hotel_planning_header,
     .o_hotel_planning_row {
-        width: var(--hotel-total-width);
+        width: 100%;
         min-width: var(--hotel-total-width);
         display: grid;
-        grid-template-columns: var(--hotel-room-column) var(--hotel-timeline-width);
+        grid-template-columns: var(--hotel-room-column) minmax(var(--hotel-timeline-width), 1fr);
     }
 
     .o_hotel_planning_header {
@@ -152,9 +289,10 @@
 
     .o_hotel_planning_days,
     .o_hotel_planning_timeline {
-        width: var(--hotel-timeline-width);
+        width: 100%;
+        min-width: var(--hotel-timeline-width);
         display: grid;
-        grid-template-columns: repeat(var(--hotel-days), var(--hotel-day-width));
+        grid-template-columns: repeat(var(--hotel-days), minmax(var(--hotel-day-width), 1fr));
     }
 
     .o_hotel_planning_day {
@@ -188,7 +326,7 @@
         }
 
         &.o_is_business_date {
-            background: #f3ead7;
+            background: var(--hotel-business-tint);
         }
     }
 
@@ -209,7 +347,7 @@
         align-items: center;
         justify-content: center;
         gap: 0.18rem;
-        color: #343a40;
+        color: var(--hotel-text);
         font-size: 0.58rem;
         font-weight: 800;
         overflow-wrap: anywhere;
@@ -220,14 +358,14 @@
         }
 
         &.o_business_marker {
-            color: #6b4100;
+            color: var(--hotel-business-text);
         }
     }
 
     .o_hotel_planning_floor {
         position: relative;
         z-index: 8;
-        width: var(--hotel-total-width);
+        width: 100%;
         min-width: var(--hotel-total-width);
         min-height: 2.35rem;
         display: flex;
@@ -354,7 +492,7 @@
 
             &:hover {
                 background: rgba($o-brand-primary, 0.1);
-                color: var(--hotel-brand-dark);
+                color: var(--hotel-brand);
 
                 > .fa-plus {
                     opacity: 1;
@@ -370,25 +508,25 @@
             cursor: default;
 
             &:hover {
-                background-color: rgba(23, 33, 43, 0.025);
+                background-color: rgba($o-gray-900, 0.03);
             }
         }
 
         &.o_hk_dirty {
-            background-image: linear-gradient(to top, rgba(180, 35, 24, 0.11) 0.4rem, transparent 0.4rem);
+            background-image: linear-gradient(to top, rgba($o-danger, 0.12) 0.4rem, transparent 0.4rem);
         }
 
         &.o_blocker_out_of_order,
         &.o_blocker_house_use {
-            background-color: #e9ecef;
+            background-color: $o-gray-200;
             background-image: repeating-linear-gradient(
                 -45deg,
                 transparent,
                 transparent 0.4rem,
-                rgba(23, 33, 43, 0.06) 0.4rem,
-                rgba(23, 33, 43, 0.06) 0.8rem
+                rgba($o-gray-900, 0.06) 0.4rem,
+                rgba($o-gray-900, 0.06) 0.8rem
             );
-            color: #343a40;
+            color: $o-gray-800;
         }
 
         &.o_has_alert {
@@ -401,7 +539,7 @@
         }
 
         &.o_is_business_date {
-            background-color: rgba(255, 244, 221, 0.55);
+            background-color: var(--hotel-business-tint-soft);
         }
     }
 
@@ -508,8 +646,8 @@
         .o_primary_reserved > i { background: var(--hotel-reserved) !important; }
         .o_primary_occupied > i { background: var(--hotel-occupied) !important; }
         .o_primary_checkout > i { background: var(--hotel-checkout) !important; }
-        .o_primary_out_of_order > i { background: #343a40 !important; }
-        .o_primary_house_use > i { background: #6c757d !important; }
+        .o_primary_out_of_order > i { background: #{$o-gray-800} !important; }
+        .o_primary_house_use > i { background: #{$o-gray-600} !important; }
     }
 }
 
@@ -531,12 +669,8 @@
             grid-template-columns: repeat(3, minmax(8.5rem, 1fr));
         }
 
-        .o_hotel_planning_filters summary > .text-muted {
+        .o_hotel_filter_summary_side .text-muted {
             display: none;
-        }
-
-        .o_hotel_planning_legend {
-            justify-content: flex-start;
         }
     }
 }
