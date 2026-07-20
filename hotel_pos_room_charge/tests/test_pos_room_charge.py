@@ -261,7 +261,7 @@ class TestPosRoomCharge(TransactionCase):
         self.env["hotel.entity.service.ceiling"].create(
             {
                 "partner_id": self.agency.id,
-                "category_id": self.restaurant_categ.id,
+                "product_id": self.meal.id,
                 "daily_limit": 10.0,
                 "on_excess": "charge_guest",
             }

@@ -119,7 +119,7 @@ msgid "Guest Service Restriction"
 msgstr "قيد خدمة النزيل"
 
 #. module: hotel_restricted_services
-#: model:ir.model.fields,help:hotel_restricted_services.field_hotel_entity_service_ceiling__category_id
+#: model:ir.model.fields,help:hotel_restricted_services.field_hotel_entity_service_ceiling__product_id
 msgid "Leave empty to apply the ceiling to all services."
 msgstr "اتركه فارغاً لتطبيق السقف على كل الخدمات."
 
@@ -170,6 +170,11 @@ msgid "Restriction"
 msgstr "القيد"
 
 #. module: hotel_restricted_services
+#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_entity_service_ceiling__product_id
+msgid "Service"
+msgstr "الخدمة"
+
+#. module: hotel_restricted_services
 #. odoo-python
 #: code:addons/hotel_restricted_services/models/hotel_folio.py:0
 msgid "Service '%(category)s' is blocked for guest %(guest)s on this stay."
@@ -177,7 +182,6 @@ msgstr "الخدمة '%(category)s' محظورة على النزيل %(guest)s �
 
 #. module: hotel_restricted_services
 #: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_service_restriction__category_id
-#: model:ir.model.fields,field_description:hotel_restricted_services.field_hotel_entity_service_ceiling__category_id
 msgid "Service Category"
 msgstr "فئة الخدمة"
 

@@ -86,7 +86,7 @@ class HotelEntityServiceCeiling(models.Model):
 
     _name = "hotel.entity.service.ceiling"
     _description = "Entity Service Ceiling"
-    _order = "partner_id, category_id"
+    _order = "partner_id, product_id"
 
     partner_id = fields.Many2one(
         "res.partner",
@@ -102,9 +102,10 @@ class HotelEntityServiceCeiling(models.Model):
         index=True,
         default=lambda self: self.env["hotel.property"]._get_default_property(),
     )
-    category_id = fields.Many2one(
-        "product.category",
-        string="Service Category",
+    product_id = fields.Many2one(
+        "product.product",
+        string="Service",
+        domain=[("type", "=", "service")],
         help="Leave empty to apply the ceiling to all services.",
     )
     daily_limit = fields.Monetary(
@@ -132,9 +133,9 @@ class HotelEntityServiceCeiling(models.Model):
     )
     active = fields.Boolean(default=True)
 
-    _entity_property_category_uniq = models.Constraint(
-        "unique (partner_id, property_id, category_id)",
-        "Only one ceiling is allowed per entity, property, and service category.",
+    _entity_property_product_uniq = models.Constraint(
+        "unique (partner_id, property_id, product_id)",
+        "Only one ceiling is allowed per entity, property, and service.",
     )
 
     @api.constrains("partner_id", "property_id")
@@ -148,22 +149,16 @@ class HotelEntityServiceCeiling(models.Model):
                     _("The entity and property must belong to the same company.")
                 )
 
-    @api.depends("partner_id", "category_id")
+    @api.depends("partner_id", "product_id")
     def _compute_display_name(self):
         for rec in self:
-            categ = rec.category_id.name or "All Services"
-            rec.display_name = f"{rec.partner_id.name or ''}: {categ}"
+            service = rec.product_id.display_name or "All Services"
+            rec.display_name = f"{rec.partner_id.name or ''}: {service}"
 
     def matches_product(self, product):
         """True when the ceiling applies to this product (global
         ceilings match everything)."""
         self.ensure_one()
-        if not self.category_id:
+        if not self.product_id:
             return True
-        categ = product.categ_id
-        if not categ:
-            return False
-        parent_ids = [
-            int(pid) for pid in (categ.parent_path or "").split("/") if pid
-        ]
-        return self.category_id.id in parent_ids
+        return self.product_id == product
