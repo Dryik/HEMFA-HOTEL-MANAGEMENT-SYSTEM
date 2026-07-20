@@ -1,3 +1,19 @@
+// Shared entrance animations. Use fill-mode "backwards" (never "both" /
+// "forwards") so the final state falls back to the normal cascade —
+// forwards-filled opacity would override state classes like o_is_busy.
+@keyframes o-hotel-fade-in {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes o-hotel-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(0.4rem);
+    }
+}
+
 .o_hotel_workspace {
     --hotel-bg: #{$o-gray-200};
     --hotel-surface: #{$o-gray-100};
@@ -200,6 +216,7 @@
         scroll-behavior: auto !important;
         transition-duration: 0.01ms !important;
         animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
         animation-iteration-count: 1 !important;
     }
 }
