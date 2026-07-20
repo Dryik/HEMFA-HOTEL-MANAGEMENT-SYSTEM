@@ -87,6 +87,10 @@ export class HotelDashboard extends Component {
         this.state = useState({
             data: null,
             activity: null,
+            // Bumped on user-driven activity reloads (tab, toggle, search,
+            // date); re-keys the rows so the list plays its entrance fade.
+            // Background polls keep the keys and patch rows in place.
+            activityGeneration: 0,
             activeTab: "arrivals",
             includeCompleted: false,
             query: "",
@@ -195,8 +199,11 @@ export class HotelDashboard extends Component {
                 !this.state.query;
             if (canUseInitialActivity) {
                 this.state.activity = data.activity;
+                if (!background) {
+                    this.state.activityGeneration++;
+                }
             } else {
-                await this.loadActivity({ background: true });
+                await this.loadActivity({ background });
             }
             this.state.ariaStatus = _t("Front Desk dashboard updated.");
         } catch (error) {
@@ -254,6 +261,9 @@ export class HotelDashboard extends Component {
                 return;
             }
             this.state.activity = normaliseActivity(raw);
+            if (!background) {
+                this.state.activityGeneration++;
+            }
             this.state.data.actions.open_list = raw.list_action;
             this.state.ariaStatus = _t("Dashboard activity updated.");
         } catch (error) {

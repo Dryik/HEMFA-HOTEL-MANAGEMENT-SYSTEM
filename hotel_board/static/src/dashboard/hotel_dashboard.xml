@@ -175,7 +175,8 @@
                                 <span>Loading activity…</span>
                             </div>
                             <t t-elif="state.activity and state.activity.rows.length">
-                                <article t-foreach="state.activity.rows" t-as="row" t-key="row.id"
+                                <article t-foreach="state.activity.rows" t-as="row"
+                                    t-key="`${state.activityGeneration}-${row.id}`"
                                     class="o_hotel_activity_row">
                                     <div class="o_hotel_activity_guest">
                                         <strong><t t-esc="row.guest?.name"/></strong>
