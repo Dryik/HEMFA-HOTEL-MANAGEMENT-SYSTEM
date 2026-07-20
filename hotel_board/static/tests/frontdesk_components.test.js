@@ -350,7 +350,7 @@ test("Dashboard keeps the last activity visible when a refresh fails", async () 
         throw new Error("Network unavailable");
     });
 
-    await mountWithCleanup(HotelDashboard, {
+    const dashboard = await mountWithCleanup(HotelDashboard, {
         props: {
             action: {
                 context: {
@@ -363,7 +363,8 @@ test("Dashboard keeps the last activity visible when a refresh fails", async () 
     await animationFrame();
     expect(".o_hotel_activity_row").toHaveCount(1);
 
-    await contains('button[aria-label^="Refresh dashboard"]').click();
+    // The dashboard refreshes silently on a timer; simulate one tick.
+    await dashboard.refreshDashboard({ background: true });
     await animationFrame();
     expect(".o_hotel_activity_row").toHaveCount(1);
     expect(".o_hotel_dashboard_stale").toHaveCount(1);
@@ -377,12 +378,12 @@ test("Dashboard ignores an older snapshot that resolves after a newer refresh", 
     mockAction();
     onRpc("hotel.frontdesk.workspace", "get_dashboard_snapshot", () => requests.shift());
 
-    await mountWithCleanup(HotelDashboard, {
+    const dashboard = await mountWithCleanup(HotelDashboard, {
         props: {
             action: { context: { default_business_date: BUSINESS_DATE } },
         },
     });
-    await contains('button[aria-label="Refresh dashboard"]').click();
+    dashboard.refreshDashboard({ background: true });
     const newerSnapshot = dashboardSnapshot();
     newerSnapshot.occupancy.percentage = 75;
     newer.resolve(newerSnapshot);

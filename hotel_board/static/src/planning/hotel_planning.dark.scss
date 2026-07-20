@@ -1,0 +1,8 @@
+// Dark-mode overrides for the planning tape.  Only the hex-based custom
+// properties need re-declaring; everything derived from $o-* variables
+// recompiles with the dark palette automatically.
+.o_hotel_planning {
+    --hotel-business-tint: #{rgba($o-warning, 0.16)};
+    --hotel-business-tint-soft: #{rgba($o-warning, 0.08)};
+    --hotel-business-text: #{$o-warning};
+}

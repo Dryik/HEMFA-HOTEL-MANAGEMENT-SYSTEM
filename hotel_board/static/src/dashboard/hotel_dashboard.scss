@@ -10,6 +10,17 @@
     --dashboard-amber: #f59e0b;
     --dashboard-danger: #b42318;
     --dashboard-danger-soft: #fff1f0;
+    --dashboard-chip: #e9edf3;
+    --dashboard-surface-subtle: #eef1f5;
+    --dashboard-surface-hover: #f8f9fb;
+    --dashboard-subtle-text: #48566a;
+    --dashboard-faded-text: #8a94a6;
+    --dashboard-ring-track: #e4e7ec;
+    --dashboard-warn-text: #664d03;
+    --dashboard-warn-bg: #fff7db;
+    --dashboard-warn-border: #ead58c;
+    --dashboard-backdrop: rgba(7, 29, 73, 0.24);
+    --dashboard-shadow: rgba(7, 29, 73, 0.2);
     --dashboard-touch: 2.75rem;
     --hotel-focus: var(--dashboard-primary);
     background: var(--dashboard-canvas);
@@ -64,8 +75,8 @@
 
     .o_hotel_today_button {
         min-width: 7rem;
-        background: #e9edf3;
-        border-color: #e9edf3;
+        background: var(--dashboard-chip);
+        border-color: var(--dashboard-chip);
         padding-inline: 1rem;
     }
 
@@ -109,7 +120,7 @@
 
     .o_hotel_date_day {
         display: block;
-        color: #8a94a6;
+        color: var(--dashboard-faded-text);
         font-size: clamp(3.5rem, 5vw, 5rem);
         font-variant-numeric: tabular-nums;
         line-height: 1;
@@ -135,7 +146,7 @@
         border-radius: 50%;
         background: conic-gradient(
             var(--dashboard-teal) 0 var(--dashboard-occupancy),
-            #e4e7ec var(--dashboard-occupancy) 100%
+            var(--dashboard-ring-track) var(--dashboard-occupancy) 100%
         );
     }
 
@@ -253,7 +264,7 @@
         min-height: 6.25rem;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
         justify-content: center;
         gap: 0.3rem;
         color: var(--dashboard-text);
@@ -261,10 +272,10 @@
         border: 1px solid var(--dashboard-border);
         border-radius: 0.6rem;
         padding: 0.75rem;
-        text-align: start;
+        text-align: center;
 
         &:hover {
-            background: #f8f9fb;
+            background: var(--dashboard-surface-hover);
         }
 
         &.o_is_selected {
@@ -318,8 +329,8 @@
     }
 
     .o_hotel_activity_table_head {
-        color: #48566a;
-        background: #eef1f5;
+        color: var(--dashboard-subtle-text);
+        background: var(--dashboard-surface-subtle);
         border-radius: 0.55rem;
         padding: 0.75rem 0.9rem;
     }
@@ -328,6 +339,14 @@
         min-height: 7rem;
         border-block-end: 1px solid var(--dashboard-border);
         padding: 1rem 0.9rem;
+        transition: opacity 150ms ease;
+    }
+
+    // Silent reload: keep the previous rows on screen, dimmed, instead of
+    // swapping in a spinner (which made the table flicker on every toggle).
+    .o_hotel_activity_table.o_is_busy .o_hotel_activity_row {
+        opacity: 0.55;
+        pointer-events: none;
     }
 
     .o_hotel_activity_guest,
@@ -392,8 +411,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.25rem;
-            color: #48566a;
-            background: #eef1f5;
+            color: var(--dashboard-subtle-text);
+            background: var(--dashboard-surface-subtle);
             border-radius: 0.25rem;
             font-size: 0.8rem;
             padding: 0.2rem 0.4rem;
@@ -468,8 +487,8 @@
     .o_hotel_activity_footer {
         justify-content: space-between;
         gap: 1rem;
-        color: #48566a;
-        background: #eef1f5;
+        color: var(--dashboard-subtle-text);
+        background: var(--dashboard-surface-subtle);
         border-radius: 0.55rem;
         margin-block-start: auto;
         padding: 0.75rem 0.9rem;
@@ -498,9 +517,9 @@
     .o_hotel_dashboard_stale {
         justify-content: space-between;
         gap: 1rem;
-        color: #664d03;
-        background: #fff7db;
-        border: 1px solid #ead58c;
+        color: var(--dashboard-warn-text);
+        background: var(--dashboard-warn-bg);
+        border: 1px solid var(--dashboard-warn-border);
         border-radius: 0.55rem;
         margin-block-end: 1rem;
         padding: 0.55rem 0.75rem;
@@ -687,7 +706,7 @@
     position: fixed;
     z-index: 1055;
     inset: 0;
-    background: rgba(7, 29, 73, 0.24);
+    background: var(--dashboard-backdrop);
 }
 
 .o_hotel_dashboard_drawer {
@@ -698,7 +717,7 @@
     flex-direction: column;
     background: var(--dashboard-surface);
     border-inline-start: 1px solid var(--dashboard-border);
-    box-shadow: 0 0 2rem rgba(7, 29, 73, 0.2);
+    box-shadow: 0 0 2rem var(--dashboard-shadow);
     margin-inline-start: auto;
     overflow: hidden;
 }
@@ -874,7 +893,6 @@
     .o_hotel_activity_guest,
     .o_hotel_activity_stay,
     .o_hotel_activity_status,
-    .o_hotel_activity_tab,
     .o_hotel_activity_menu button {
         text-align: start;
     }
