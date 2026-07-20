@@ -215,6 +215,7 @@
         max-width: 20rem;
         min-height: var(--dashboard-touch);
         border-color: var(--dashboard-border);
+        animation: o-hotel-fade-in 160ms ease backwards;
     }
 
     .o_hotel_activity_menu_wrapper {
@@ -233,6 +234,8 @@
         border: 1px solid var(--dashboard-border);
         border-radius: 0.6rem;
         padding: 0.35rem;
+        transform-origin: top;
+        animation: o-hotel-menu-in 150ms ease backwards;
 
         button {
             min-height: var(--dashboard-touch);
@@ -339,7 +342,17 @@
         min-height: 7rem;
         border-block-end: 1px solid var(--dashboard-border);
         padding: 1rem 0.9rem;
-        transition: opacity 150ms ease;
+        transition: opacity 200ms ease;
+        // Plays when a row enters the DOM; user-driven reloads re-key the
+        // rows so the whole list fades in, background polls patch in place.
+        animation: o-hotel-fade-up 240ms ease backwards;
+    }
+
+    // Gentle stagger for the first rows of a freshly keyed list.
+    @for $i from 2 through 9 {
+        .o_hotel_activity_row:nth-of-type(#{$i}) {
+            animation-delay: #{($i - 1) * 30}ms;
+        }
     }
 
     // Silent reload: keep the previous rows on screen, dimmed, instead of
@@ -478,6 +491,7 @@
 
     .o_hotel_activity_empty {
         flex: 1;
+        animation: o-hotel-fade-up 240ms ease backwards;
 
         p {
             margin: 0;
@@ -702,11 +716,31 @@
     }
 }
 
+@keyframes o-hotel-menu-in {
+    from {
+        opacity: 0;
+        transform: translateY(-0.25rem) scale(0.98);
+    }
+}
+
+@keyframes o-hotel-drawer-in {
+    from {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes o-hotel-drawer-in-rtl {
+    from {
+        transform: translateX(-100%);
+    }
+}
+
 .o_hotel_dashboard_drawer_backdrop {
     position: fixed;
     z-index: 1055;
     inset: 0;
     background: var(--dashboard-backdrop);
+    animation: o-hotel-fade-in 200ms ease backwards;
 }
 
 .o_hotel_dashboard_drawer {
@@ -720,6 +754,11 @@
     box-shadow: 0 0 2rem var(--dashboard-shadow);
     margin-inline-start: auto;
     overflow: hidden;
+    animation: o-hotel-drawer-in 280ms cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+
+    &:dir(rtl) {
+        animation-name: o-hotel-drawer-in-rtl;
+    }
 }
 
 .o_hotel_drawer_header {
