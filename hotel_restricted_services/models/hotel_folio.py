@@ -459,7 +459,7 @@ class HotelFolio(models.Model):
                     "across this property.",
                     limit=ceiling.daily_limit,
                     entity=payee.name,
-                    category=ceiling.category_id.display_name
+                    category=ceiling.product_id.display_name
                     or _("All Services"),
                     billed=prospective_billed,
                 )

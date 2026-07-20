@@ -53,7 +53,8 @@ technical names.
 - `hotel.housekeeping.task`: States are `new`, `cleaning`, `cleaned`, `cancel`.
 - `hotel.maintenance.request`: States are `new`, `confirmed`, `in_progress`, `done`, `verified`, `cancel`; blocking starts at `confirmed`, verify needs `group_hotel_manager`.
 - `hotel.service.restriction`: `restriction_type` is `blocked` or `limited` (with `daily_limit` / `stay_limit`); enforcement lives in `hotel.folio.add_charge`.
-- `hotel.entity.service.ceiling`: per-agency `daily_limit`, empty `category_id` = all services; `on_excess` is `block` or `charge_guest`.
+- `hotel.entity.service.ceiling`: per-agency `daily_limit`, empty `product_id` (a `product.product`, not a category) = all services; `on_excess` is `block` or `charge_guest`. The per-stay `hotel.service.restriction` still scopes by `category_id`.
+- `hotel.reservation`: has a stored related `company_id` (= `property_id.company_id`) so client-side m2o domains can filter by company; the multi-company record rules still route through `property_id.company_id`.
 
 ## Dependency Graph
 
@@ -175,6 +176,7 @@ Runtime testing happens on the Odoo.sh dev branch (no local Odoo install).
 12. **`report_action()` returns the layout configurator**: for an admin on a company with no `external_report_layout_id`, `ir.actions.report.report_action(docs)` returns the document-layout act_window instead of the report. Call `report_action(docs, config=False)`.
 13. **`create_date` is the transaction start timestamp**: Postgres `now()` is frozen at transaction start, so in tests `create_date` predates any wall-clock `fields.Datetime.now()` value captured during the test. Never compare them; pin `create_date` via SQL UPDATE when a compute filters on it.
 14. **PO entries without `#:` occurrence lines are silently dropped**: Odoo 19's `PoFileReader` (`odoo/tools/translate.py`) only yields translations from occurrence references (`model:...`, `model_terms:...`, `code:...`); code entries additionally need an `#. odoo-python` / `#. odoo-javascript` comment to be served at runtime. Never hand-write ar.po files — run `python generate_ar_po.py` (derives occurrences from the addon source; xmlid formats per `ir_model.py`: `model_<model>`, `field_<model>__<field>`, `selection__<model>__<field>__<value>`) after adding terms to the `TRANSLATIONS` dict in `translate_exported_po.py`. A server-side `trans_export` piped through `translate_exported_po.py` remains the higher-fidelity option for view/QWeb text blocks. msgids must byte-match the source strings (watch multi-line Python string concatenation).
+15. **Client-side m2o `domain` strings cannot traverse relations**: the web domain evaluator only sees the record's own field values, and a Many2one is just its id there, so a dotted path like `domain="[('company_id', '=', property_id.company_id)]"` renders an empty term and throws `InvalidDomainError: Invalid domain representation`. Add the needed value as a (related) field on the model and reference it directly — the pricelist filter on `hotel.reservation` now uses its own `company_id` field. Server-side domains (record rules, `search`, search-view `filter_domain`) still support dotted paths.
 
 ## Odoo 19 Source Reference
 
