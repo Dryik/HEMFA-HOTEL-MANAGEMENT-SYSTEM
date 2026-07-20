@@ -40,7 +40,7 @@
                            groups="hotel_base.group_hotel_fo_supervisor">
                         <list editable="bottom">
                             <field name="property_id" column_invisible="True"/>
-                            <field name="category_id"/>
+                            <field name="product_id"/>
                             <field name="daily_limit"/>
                             <field name="on_excess"/>
                             <field name="active" column_invisible="True"/>
@@ -51,7 +51,7 @@
                            groups="hotel_base.group_hotel_accountant,!hotel_base.group_hotel_fo_supervisor">
                         <list>
                             <field name="property_id" column_invisible="True"/>
-                            <field name="category_id"/>
+                            <field name="product_id"/>
                             <field name="daily_limit"/>
                             <field name="on_excess"/>
                             <field name="active" column_invisible="True"/>
