@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hotel_agency_commission_view_list" model="ir.ui.view">
+        <field name="name">hotel.agency.commission.list</field>
+        <field name="model">hotel.agency.commission</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="agency_id"/>
+                <field name="commission_type"/>
+                <field name="commission_rate" optional="show"/>
+                <field name="commission_amount" optional="show"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hotel_agency_commission_view_form" model="ir.ui.view">
+        <field name="name">hotel.agency.commission.form</field>
+        <field name="model">hotel.agency.commission</field>
+        <field name="arch" type="xml">
+            <form string="Agency Commission">
+                <sheet>
+                    <group>
+                        <field name="property_id" invisible="1"/>
+                        <field name="agency_id"/>
+                        <field name="commission_type"/>
+                        <field name="commission_rate" invisible="commission_type != 'percent'"/>
+                        <field name="commission_amount" invisible="commission_type != 'fixed'"/>
+                        <field name="currency_id" invisible="commission_type != 'fixed'"/>
+                        <field name="active"/>
+                    </group>
+                    <group string="Deferred Scope">
+                        <field name="notes" placeholder="Configuration only; accrual and settlement are deferred."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hotel_agency_commission_action" model="ir.actions.act_window">
+        <field name="name">Agency Commissions</field>
+        <field name="res_model">hotel.agency.commission</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Record agency commission terms</p>
+            <p>Commission rates are configuration only for now — accrual and settlement are planned for a later release.</p>
+        </field>
+    </record>
+</odoo>

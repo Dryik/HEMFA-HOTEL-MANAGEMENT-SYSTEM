@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hotel_frontdesk_session_frontdesk,hotel.frontdesk.session frontdesk,model_hotel_frontdesk_session,hotel_base.group_hotel_frontdesk,1,1,1,0
-access_hotel_frontdesk_session_manager,hotel.frontdesk.session manager,model_hotel_frontdesk_session,hotel_base.group_hotel_manager,1,1,1,1
-access_hotel_frontdesk_session_cash_frontdesk,hotel.frontdesk.session.cash frontdesk,model_hotel_frontdesk_session_cash,hotel_base.group_hotel_frontdesk,1,1,1,1
-access_hotel_frontdesk_session_cash_manager,hotel.frontdesk.session.cash manager,model_hotel_frontdesk_session_cash,hotel_base.group_hotel_manager,1,1,1,1

@@ -5,7 +5,7 @@ REQUEST_STATES = [
     ("new", "New"),
     ("confirmed", "Confirmed"),
     ("in_progress", "In Progress"),
-    ("done", "Done"),
+    ("done", "Completed"),
     ("verified", "Verified"),
     ("cancel", "Cancelled"),
 ]
@@ -55,7 +55,7 @@ class HotelMaintenanceRequest(models.Model):
         store=True,
         readonly=False,
         precompute=True,
-        default=lambda self: self.env["hotel.property"].search([], limit=1),
+        default=lambda self: self.env["hotel.property"]._get_default_property(),
     )
     request_source = fields.Selection(
         [
@@ -72,6 +72,7 @@ class HotelMaintenanceRequest(models.Model):
     reporter_partner_id = fields.Many2one(
         "res.partner",
         string="Reporting Guest",
+        groups="hotel_base.group_hotel_frontdesk",
         help="Guest who reported the problem, when the source is a guest.",
     )
     description = fields.Text(required=True)
@@ -115,7 +116,7 @@ class HotelMaintenanceRequest(models.Model):
     )
     date_confirmed = fields.Datetime(string="Confirmed On", readonly=True)
     date_started = fields.Datetime(string="Started On", readonly=True)
-    date_done = fields.Datetime(string="Done On", readonly=True)
+    date_done = fields.Datetime(string="Completed On", readonly=True)
     date_verified = fields.Datetime(string="Verified On", readonly=True)
     resolution_notes = fields.Text(
         help="What the technician actually did.",
@@ -130,6 +131,19 @@ class HotelMaintenanceRequest(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
+            if not self.env.su and (
+                vals.get("state", "new") != "new"
+                or any(
+                    vals.get(field)
+                    for field in (
+                        "date_confirmed",
+                        "date_started",
+                        "date_done",
+                        "date_verified",
+                    )
+                )
+            ):
+                raise UserError(_("Maintenance requests must change status through their actions."))
             if vals.get("name", _("New")) == _("New"):
                 vals["name"] = (
                     self.env["ir.sequence"].next_by_code(
@@ -140,6 +154,22 @@ class HotelMaintenanceRequest(models.Model):
         return super().create(vals_list)
 
     def write(self, vals):
+        if (
+            "state" in vals
+            and any(request.state != vals["state"] for request in self)
+        ):
+            raise UserError(
+                _("Maintenance status can only be changed through its actions.")
+            )
+        if (
+            self.filtered(lambda request: request.state == "verified")
+        ):
+            raise UserError(
+                _(
+                    "Verified maintenance requests are immutable. "
+                    "Create a new request for additional work."
+                )
+            )
         # Any change to the blocking flag, the room or the state must
         # resync out_of_order — including the room the request pointed
         # at before a room change.
@@ -148,6 +178,13 @@ class HotelMaintenanceRequest(models.Model):
         if {"blocks_room", "room_id", "state"} & vals.keys():
             self._sync_room_block(rooms_before | self.mapped("room_id"))
         return res
+
+    def _write_transition(self, values):
+        rooms_before = self.mapped("room_id")
+        result = super(HotelMaintenanceRequest, self).write(values)
+        if {"blocks_room", "room_id", "state"}.intersection(values):
+            self._sync_room_block(rooms_before | self.mapped("room_id"))
+        return result
 
     def unlink(self):
         for rec in self:
@@ -166,7 +203,7 @@ class HotelMaintenanceRequest(models.Model):
         for rec in self:
             if rec.state != "new":
                 raise UserError(_("Only new requests can be confirmed."))
-            rec.write(
+            rec._write_transition(
                 {"state": "confirmed", "date_confirmed": fields.Datetime.now()}
             )
 
@@ -182,15 +219,17 @@ class HotelMaintenanceRequest(models.Model):
             }
             if not rec.technician_id:
                 vals["technician_id"] = self.env.uid
-            rec.write(vals)
+            rec._write_transition(vals)
 
     def action_done(self):
         for rec in self:
             if rec.state != "in_progress":
                 raise UserError(
-                    _("Only in-progress requests can be marked done.")
+                    _("Only in-progress requests can be marked completed.")
                 )
-            rec.write({"state": "done", "date_done": fields.Datetime.now()})
+            rec._write_transition(
+                {"state": "done", "date_done": fields.Datetime.now()}
+            )
 
     def action_verify(self):
         if not self.env.user.has_group("hotel_base.group_hotel_manager"):
@@ -199,8 +238,8 @@ class HotelMaintenanceRequest(models.Model):
             )
         for rec in self:
             if rec.state != "done":
-                raise UserError(_("Only done requests can be verified."))
-            rec.write(
+                raise UserError(_("Only completed requests can be verified."))
+            rec._write_transition(
                 {"state": "verified", "date_verified": fields.Datetime.now()}
             )
 
@@ -210,7 +249,7 @@ class HotelMaintenanceRequest(models.Model):
                 raise UserError(
                     _("A verified request cannot be cancelled.")
                 )
-            rec.state = "cancel"
+            rec._write_transition({"state": "cancel"})
 
     def action_reset_new(self):
         for rec in self:
@@ -218,7 +257,7 @@ class HotelMaintenanceRequest(models.Model):
                 raise UserError(
                     _("Only cancelled requests can be reset to new.")
                 )
-            rec.state = "new"
+            rec._write_transition({"state": "new"})
 
     # -- room blocking -------------------------------------------------
 
@@ -234,7 +273,7 @@ class HotelMaintenanceRequest(models.Model):
             )
             should_block = bool(open_blocking)
             if room.out_of_order != should_block:
-                room.out_of_order = should_block
+                room._set_maintenance_block(should_block)
 
     @api.constrains("blocks_room", "room_id")
     def _check_blocking_needs_room(self):

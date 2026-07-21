@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_hotel_rate_rule_assigned_property" model="ir.rule">
+        <field name="name">Rate rules in active companies</field>
+        <field name="model_id" ref="model_hotel_rate_rule"/>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk'))]"/>
+    </record>
+    <record id="rule_hotel_rate_band_assigned_property" model="ir.rule">
+        <field name="name">Occupancy bands in active companies</field>
+        <field name="model_id" ref="model_hotel_rate_occupancy_band"/>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk'))]"/>
+    </record>
+    <record id="rule_hotel_rate_rule_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all rate rules</field><field name="model_id" ref="model_hotel_rate_rule"/>
+        <field name="domain_force">[(1, '=', 1)]</field><field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_hotel_rate_band_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all occupancy bands</field><field name="model_id" ref="model_hotel_rate_occupancy_band"/>
+        <field name="domain_force">[(1, '=', 1)]</field><field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_hotel_seasonal_assigned_property" model="ir.rule">
+        <field name="name">Seasonal plans in active companies</field>
+        <field name="model_id" ref="model_hotel_seasonal_pricing"/>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk'))]"/>
+    </record>
+    <record id="rule_hotel_supplement_assigned_property" model="ir.rule">
+        <field name="name">Guest supplements in active companies</field>
+        <field name="model_id" ref="model_hotel_guest_supplement"/>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk'))]"/>
+    </record>
+    <record id="rule_hotel_rate_line_assigned_property" model="ir.rule">
+        <field name="name">Nightly rates in active companies</field>
+        <field name="model_id" ref="model_hotel_reservation_rate_line"/>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk')), (4, ref('hotel_base.group_hotel_accountant'))]"/>
+    </record>
+    <record id="rule_hotel_booking_source_assigned_property" model="ir.rule">
+        <field name="name">Booking source pricing in active companies</field>
+        <field name="model_id" ref="model_hotel_booking_source"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk'))]"/>
+    </record>
+    <record id="rule_hotel_seasonal_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all seasonal plans</field><field name="model_id" ref="model_hotel_seasonal_pricing"/>
+        <field name="domain_force">[(1, '=', 1)]</field><field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_hotel_supplement_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all guest supplements</field><field name="model_id" ref="model_hotel_guest_supplement"/>
+        <field name="domain_force">[(1, '=', 1)]</field><field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_hotel_rate_line_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all nightly rates</field><field name="model_id" ref="model_hotel_reservation_rate_line"/>
+        <field name="domain_force">[(1, '=', 1)]</field><field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_hotel_booking_source_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all booking source pricing</field>
+        <field name="model_id" ref="model_hotel_booking_source"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+</odoo>

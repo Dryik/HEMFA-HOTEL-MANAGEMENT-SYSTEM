@@ -29,6 +29,16 @@ msgid "A verified request cannot be cancelled."
 msgstr "لا يمكن إلغاء طلب معتمد."
 
 #. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Are you sure you want to mark this maintenance request as completed?"
+msgstr "هل أنت متأكد من تحديد طلب الصيانة هذا كمكتمل؟"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
+msgid "Are you sure you want to verify this maintenance request as complete?"
+msgstr "هل أنت متأكد من التحقق من اكتمال طلب الصيانة هذا؟"
+
+#. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
 msgid "Blocking a Room"
 msgstr "تحجب غرفة"
@@ -49,6 +59,16 @@ msgid "Cancelled"
 msgstr "ملغي"
 
 #. module: hotel_maintenance
+#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__state__done
+msgid "Completed"
+msgstr "مكتملة"
+
+#. module: hotel_maintenance
+#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__date_done
+msgid "Completed On"
+msgstr "تاريخ الإكمال"
+
+#. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
 msgid "Confirm"
 msgstr "تأكيد"
@@ -67,16 +87,6 @@ msgstr "تاريخ التأكيد"
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
 msgid "Describe the problem..."
 msgstr "صف المشكلة..."
-
-#. module: hotel_maintenance
-#: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__state__done
-msgid "Done"
-msgstr "منجز"
-
-#. module: hotel_maintenance
-#: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__date_done
-msgid "Done On"
-msgstr "تاريخ الإنجاز"
 
 #. module: hotel_maintenance
 #: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__request_source__guest
@@ -141,9 +151,31 @@ msgid "Maintenance Requests"
 msgstr "طلبات الصيانة"
 
 #. module: hotel_maintenance
+#: model:ir.rule,name:hotel_maintenance.rule_hotel_maintenance_assigned_property
+msgid "Maintenance requests in active companies"
+msgstr "طلبات الصيانة في الشركات النشطة"
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Maintenance requests must change status through their actions."
+msgstr "يجب تغيير حالة طلبات الصيانة من خلال إجراءاتها."
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Maintenance status can only be changed through its actions."
+msgstr "لا يمكن تغيير حالة الصيانة إلا من خلال إجراءاتها."
+
+#. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
-msgid "Mark Done"
-msgstr "إنهاء العمل"
+msgid "Mark Completed"
+msgstr "تحديد كمكتمل"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
+msgid "My Tasks"
+msgstr "مهامي"
 
 #. module: hotel_maintenance
 #. odoo-python
@@ -156,6 +188,11 @@ msgstr "جديد"
 #: model:ir.model.fields.selection,name:hotel_maintenance.selection__hotel_maintenance_request__priority__1
 msgid "Normal"
 msgstr "عادي"
+
+#. module: hotel_maintenance
+#: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_kanban
+msgid "OOO"
+msgstr "خارج الخدمة"
 
 #. module: hotel_maintenance
 #. odoo-python
@@ -172,20 +209,20 @@ msgstr "يمكن فقط إعادة الطلبات الملغاة إلى جديد
 #. module: hotel_maintenance
 #. odoo-python
 #: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Only completed requests can be verified."
+msgstr "يمكن فقط اعتماد الطلبات المكتملة."
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
 msgid "Only confirmed requests can be started."
 msgstr "يمكن فقط بدء الطلبات المؤكدة."
 
 #. module: hotel_maintenance
 #. odoo-python
 #: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
-msgid "Only done requests can be verified."
-msgstr "يمكن فقط اعتماد الطلبات المنجزة."
-
-#. module: hotel_maintenance
-#. odoo-python
-#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
-msgid "Only in-progress requests can be marked done."
-msgstr "يمكن فقط إنهاء الطلبات قيد التنفيذ."
+msgid "Only in-progress requests can be marked completed."
+msgstr "يمكن فقط تحديد الطلبات قيد التنفيذ كمكتملة."
 
 #. module: hotel_maintenance
 #. odoo-python
@@ -232,7 +269,7 @@ msgstr "مرجع الطلب"
 #. module: hotel_maintenance
 #: model_terms:ir.actions.act_window,help:hotel_maintenance.hotel_maintenance_request_action
 msgid "Requests flow from reporting through confirmation, technician work and manager verification. A request that blocks the room removes it from sale until it is verified."
-msgstr ""
+msgstr "تنتقل الطلبات من الإبلاغ إلى التأكيد، ثم عمل الفني، ثم تحقق المدير. يزيل الطلب الحاجب للغرفة من البيع حتى يتم التحقق منه."
 
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form
@@ -266,6 +303,11 @@ msgid "Status"
 msgstr "الحالة"
 
 #. module: hotel_maintenance
+#: model:ir.rule,name:hotel_maintenance.rule_hotel_maintenance_system_unrestricted
+msgid "System administrators: all maintenance requests"
+msgstr "مديرو النظام: كل طلبات الصيانة"
+
+#. module: hotel_maintenance
 #: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__technician_id
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_search
 msgid "Technician"
@@ -291,6 +333,12 @@ msgstr "معتمد"
 #: model:ir.model.fields,field_description:hotel_maintenance.field_hotel_maintenance_request__date_verified
 msgid "Verified On"
 msgstr "تاريخ الاعتماد"
+
+#. module: hotel_maintenance
+#. odoo-python
+#: code:addons/hotel_maintenance/models/hotel_maintenance_request.py:0
+msgid "Verified maintenance requests are immutable. Create a new request for additional work."
+msgstr "طلبات الصيانة المتحقق منها غير قابلة للتغيير. أنشئ طلباً جديداً للعمل الإضافي."
 
 #. module: hotel_maintenance
 #: model_terms:ir.ui.view,arch_db:hotel_maintenance.hotel_maintenance_request_view_form

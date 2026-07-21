@@ -3,55 +3,108 @@
     <menuitem id="menu_hotel_root"
         name="Hotel"
         sequence="15"
-        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_maintenance"/>
+        web_icon="hotel_base,static/description/icon.png"
+        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_maintenance,hotel_base.group_hotel_fb,hotel_base.group_hotel_accountant"/>
 
-    <menuitem id="menu_hotel_rooms"
-        name="Rooms"
+    <menuitem id="menu_hotel_directory"
+        name="Directory"
         parent="menu_hotel_root"
-        action="hotel_room_action"
-        sequence="20"/>
+        sequence="50"/>
 
     <menuitem id="menu_hotel_guests"
         name="Guests"
-        parent="menu_hotel_root"
+        parent="menu_hotel_directory"
         action="hotel_guest_action"
-        sequence="30"
+        sequence="10"
         groups="hotel_base.group_hotel_frontdesk"/>
 
     <menuitem id="menu_hotel_agencies"
         name="Agencies / Entities"
-        parent="menu_hotel_root"
+        parent="menu_hotel_directory"
         action="hotel_agency_action"
+        sequence="20"
+        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant"/>
+
+    <menuitem id="menu_hotel_agency_commissions"
+        name="Agency Commissions"
+        parent="menu_hotel_directory"
+        action="hotel_agency_commission_action"
+        sequence="30"
+        groups="hotel_base.group_hotel_manager,hotel_base.group_hotel_accountant"/>
+
+    <!-- hotel_board moves this donor entry into Operations when installed. -->
+    <menuitem id="menu_hotel_room_status"
+        name="Room Status"
+        parent="menu_hotel_root"
+        action="hotel_room_status_action"
         sequence="40"
-        groups="hotel_base.group_hotel_frontdesk"/>
+        groups="hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_maintenance"/>
+
+    <menuitem id="menu_hotel_reporting"
+        name="Reporting"
+        parent="menu_hotel_root"
+        sequence="110"
+        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
 
     <menuitem id="menu_hotel_config"
         name="Configuration"
         parent="menu_hotel_root"
-        sequence="100"
+        sequence="120"
         groups="hotel_base.group_hotel_manager"/>
 
-    <menuitem id="menu_hotel_config_property"
-        name="Properties"
+    <!-- Company management (name, address, currency) is handled from Odoo's
+         standard Settings > Companies. Hotel operational settings live on the
+         "Hotel Operations" tab of that company form, so there is deliberately
+         no company-settings entry inside the Hotel app menu. -->
+
+    <!-- Configuration sections. Sections without visible children hide
+         automatically, so modules can safely target them. -->
+    <menuitem id="menu_hotel_config_section_property"
+        name="Property"
         parent="menu_hotel_config"
-        action="hotel_property_action"
         sequence="10"/>
+
+    <menuitem id="menu_hotel_config_section_pricing"
+        name="Pricing"
+        parent="menu_hotel_config"
+        sequence="20"/>
+
+    <menuitem id="menu_hotel_config_section_services"
+        name="Services"
+        parent="menu_hotel_config"
+        sequence="30"/>
+
+    <menuitem id="menu_hotel_config_section_housekeeping"
+        name="Housekeeping"
+        parent="menu_hotel_config"
+        sequence="40"/>
+
+    <menuitem id="menu_hotel_config_section_billing"
+        name="Billing"
+        parent="menu_hotel_config"
+        sequence="50"/>
+
+    <menuitem id="menu_hotel_rooms"
+        name="Rooms"
+        parent="menu_hotel_config_section_property"
+        action="hotel_room_action"
+        sequence="40"/>
 
     <menuitem id="menu_hotel_config_floor"
         name="Floors"
-        parent="menu_hotel_config"
+        parent="menu_hotel_config_section_property"
         action="hotel_floor_action"
-        sequence="20"/>
+        sequence="10"/>
 
     <menuitem id="menu_hotel_config_room_type"
         name="Room Types"
-        parent="menu_hotel_config"
+        parent="menu_hotel_config_section_property"
         action="hotel_room_type_action"
-        sequence="30"/>
+        sequence="20"/>
 
     <menuitem id="menu_hotel_config_amenity"
         name="Amenities"
-        parent="menu_hotel_config"
+        parent="menu_hotel_config_section_property"
         action="hotel_amenity_action"
-        sequence="40"/>
+        sequence="30"/>
 </odoo>

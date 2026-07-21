@@ -6,25 +6,22 @@
         <field name="model">hotel.reservation</field>
         <field name="inherit_id" ref="hotel_reservation.hotel_reservation_view_form"/>
         <field name="arch" type="xml">
-            <!-- The base reservation form has no notebook; add one. -->
-            <xpath expr="//sheet" position="inside">
-                <notebook>
-                    <page string="Restricted Services" name="restricted_services"
-                          groups="hotel_base.group_hotel_frontdesk">
-                        <field name="service_restriction_ids">
-                            <list editable="bottom">
-                                <field name="category_id"/>
-                                <field name="restriction_type"/>
-                                <field name="daily_limit"
-                                       invisible="restriction_type == 'blocked'"/>
-                                <field name="stay_limit"
-                                       invisible="restriction_type == 'blocked'"/>
-                                <field name="note"/>
-                                <field name="currency_id" column_invisible="True"/>
-                            </list>
-                        </field>
-                    </page>
-                </notebook>
+            <xpath expr="//page[@name='amendments']" position="before">
+                <page string="Restricted Services" name="restricted_services"
+                      groups="hotel_base.group_hotel_frontdesk">
+                    <field name="service_restriction_ids">
+                        <list editable="bottom">
+                            <field name="category_id"/>
+                            <field name="restriction_type"/>
+                            <field name="daily_limit"
+                                   invisible="restriction_type == 'blocked'"/>
+                            <field name="stay_limit"
+                                   invisible="restriction_type == 'blocked'"/>
+                            <field name="note"/>
+                            <field name="currency_id" column_invisible="True"/>
+                        </list>
+                    </field>
+                </page>
             </xpath>
         </field>
     </record>
@@ -38,11 +35,25 @@
             <page name="hotel_guest" position="after">
                 <page string="Service Ceilings" name="hotel_service_ceilings"
                       invisible="not is_hotel_agency"
-                      groups="hotel_base.group_hotel_fo_supervisor">
-                    <field name="service_ceiling_ids">
+                      groups="hotel_base.group_hotel_fo_supervisor,hotel_base.group_hotel_accountant">
+                    <field name="service_ceiling_ids"
+                           groups="hotel_base.group_hotel_fo_supervisor">
                         <list editable="bottom">
-                            <field name="category_id"/>
+                            <field name="property_id" column_invisible="True"/>
+                            <field name="product_id"/>
                             <field name="daily_limit"/>
+                            <field name="on_excess"/>
+                            <field name="active" column_invisible="True"/>
+                            <field name="currency_id" column_invisible="True"/>
+                        </list>
+                    </field>
+                    <field name="service_ceiling_ids" readonly="1"
+                           groups="hotel_base.group_hotel_accountant,!hotel_base.group_hotel_fo_supervisor">
+                        <list>
+                            <field name="property_id" column_invisible="True"/>
+                            <field name="product_id"/>
+                            <field name="daily_limit"/>
+                            <field name="on_excess"/>
                             <field name="active" column_invisible="True"/>
                             <field name="currency_id" column_invisible="True"/>
                         </list>
@@ -51,41 +62,4 @@
             </page>
         </field>
     </record>
-
-    <!-- Standalone management views for ceilings -->
-    <record id="hotel_entity_service_ceiling_view_list" model="ir.ui.view">
-        <field name="name">hotel.entity.service.ceiling.list</field>
-        <field name="model">hotel.entity.service.ceiling</field>
-        <field name="arch" type="xml">
-            <list editable="bottom">
-                <field name="partner_id"/>
-                <field name="category_id"/>
-                <field name="daily_limit"/>
-                <field name="currency_id" column_invisible="True"/>
-            </list>
-        </field>
-    </record>
-
-    <record id="hotel_entity_service_ceiling_action" model="ir.actions.act_window">
-        <field name="name">Entity Service Ceilings</field>
-        <field name="res_model">hotel.entity.service.ceiling</field>
-        <field name="view_mode">list</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Define per-entity daily charge ceilings
-            </p>
-            <p>
-                Ceilings cap what may be billed to an agency or company
-                per guest per day. Front desk needs a supervisor
-                override to exceed them.
-            </p>
-        </field>
-    </record>
-
-    <menuitem id="menu_hotel_config_entity_ceilings"
-        name="Entity Service Ceilings"
-        parent="hotel_base.menu_hotel_config"
-        action="hotel_entity_service_ceiling_action"
-        sequence="60"
-        groups="hotel_base.group_hotel_fo_supervisor"/>
 </odoo>

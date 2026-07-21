@@ -1,91 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="paperformat_hotel_operations" model="report.paperformat">
+        <field name="name">Hotel Operations — A4 Portrait</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">38</field>
+        <field name="margin_bottom">24</field>
+        <field name="margin_left">8</field>
+        <field name="margin_right">8</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">30</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="paperformat_hotel_landscape_detail" model="report.paperformat">
+        <field name="name">Hotel Detail — A4 Landscape</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">34</field>
+        <field name="margin_bottom">22</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">27</field>
+        <field name="dpi">90</field>
+    </record>
+
     <record id="action_report_daily_movement" model="ir.actions.report">
-        <field name="name">Daily Movement Report</field>
+        <field name="name">Hotel Operational Report</field>
         <field name="model">hotel.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">hotel_reports.report_daily_movement</field>
         <field name="report_file">hotel_reports.report_daily_movement</field>
+        <field name="paperformat_id" ref="paperformat_hotel_operations"/>
         <field name="print_report_name">'%s - %s' % (object.report_type, object.date)</field>
     </record>
+
+    <record id="action_report_landscape_detail" model="ir.actions.report">
+        <field name="name">Hotel Detailed Report</field>
+        <field name="model">hotel.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hotel_reports.report_landscape_detail</field>
+        <field name="report_file">hotel_reports.report_landscape_detail</field>
+        <field name="paperformat_id" ref="paperformat_hotel_landscape_detail"/>
+        <field name="print_report_name">'%s - %s' % (object.report_type, object.date)</field>
+    </record>
+
+    <template id="report_hotel_document">
+        <t t-set="payload" t-value="payloads[doc.id]"/>
+        <style t-translation="off">
+            .hotel_report_document {
+                color: #1f2937;
+                font-family: "Odoo Unicode Support Noto", "Noto Sans Arabic", "Noto Sans", "Tajawal", "DejaVu Sans", sans-serif;
+                font-size: 9px;
+                line-height: 1.35;
+            }
+            .hotel_report_document.hotel_report_landscape { font-size: 7.7px; }
+            .hotel_report_title {
+                color: #172554;
+                font-size: 20px;
+                font-weight: 700;
+                margin: 0 0 10px;
+                text-align: center;
+            }
+            .hotel_report_meta {
+                border: 0;
+                margin-bottom: 10px;
+                table-layout: fixed;
+                width: 100%;
+            }
+            .hotel_report_meta td {
+                border: 0;
+                font-size: 9px;
+                padding: 2px 0;
+                vertical-align: top;
+            }
+            .hotel_report_table {
+                border-collapse: collapse;
+                table-layout: fixed;
+                width: 100%;
+            }
+            .hotel_report_table thead { display: table-header-group; }
+            .hotel_report_table tr { page-break-inside: avoid; }
+            .hotel_report_table th,
+            .hotel_report_table td {
+                border: 1px solid #9ca3af;
+                padding: 4px 3px;
+                vertical-align: top;
+                word-wrap: break-word;
+            }
+            .hotel_report_table th {
+                background-color: #e8eef7;
+                color: #172554;
+                font-weight: 700;
+                text-align: center;
+            }
+            .hotel_report_table tbody tr:nth-child(even) td { background-color: #f8fafc; }
+            .hotel_report_empty {
+                color: #6b7280;
+                padding: 14px !important;
+                text-align: center;
+            }
+            .hotel_report_totals {
+                border-top: 2px solid #64748b;
+                margin-top: 10px;
+                padding-top: 6px;
+            }
+            .hotel_report_summary {
+                border-collapse: collapse;
+                margin-top: 8px;
+                width: 48%;
+            }
+            [dir="rtl"] .hotel_report_summary { margin-left: 0; margin-right: auto; }
+            [dir="ltr"] .hotel_report_summary { margin-left: auto; margin-right: 0; }
+            .hotel_report_summary th,
+            .hotel_report_summary td {
+                border: 1px solid #9ca3af;
+                padding: 4px 6px;
+            }
+            .hotel_report_summary th { background-color: #e8eef7; }
+        </style>
+        <div t-att-class="'page hotel_report_document hotel_report_%s' % payload['family']"
+             t-att-dir="'rtl' if payload['rtl'] else 'ltr'">
+            <h2 class="hotel_report_title"><t t-out="payload['title']"/></h2>
+            <table class="hotel_report_meta">
+                <tr>
+                    <td t-att-style="'text-align: right;' if payload['rtl'] else 'text-align: left;'">
+                        <strong>Company / الشركة:</strong>
+                        <t t-out="payload['property']"/>
+                    </td>
+                    <td dir="ltr" t-att-style="'text-align: left;' if payload['rtl'] else 'text-align: right;'">
+                        <strong>Date / التاريخ:</strong>
+                        <t t-out="payload['date']"/>
+                    </td>
+                </tr>
+            </table>
+            <table class="hotel_report_table">
+                <colgroup>
+                    <col t-foreach="payload['columns']" t-as="column"
+                         t-att-style="'width: %s%%;' % payload['column_widths'].get(column[0], 10)"/>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th t-foreach="payload['columns']" t-as="column">
+                            <t t-out="column[1]"/>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="payload['rows']" t-as="row">
+                        <td t-foreach="payload['columns']" t-as="column"
+                            t-att-dir="'ltr' if column[0] in ('room', 'reservation', 'arrival', 'departure', 'nights', 'id_number', 'birthdate', 'folio', 'total', 'paid', 'due', 'currency', 'transactions', 'counted', 'difference', 'date', 'rooms', 'occupied', 'occupancy', 'adr', 'revpar', 'revenue', 'tax', 'payment', 'available', 'pos_receipt', 'untaxed', 'accounting') else ('rtl' if payload['rtl'] else 'ltr')">
+                            <t t-out="doc._western(row.get(column[0], ''))"/>
+                        </td>
+                    </tr>
+                    <tr t-if="not payload['rows']">
+                        <td class="hotel_report_empty" t-att-colspan="len(payload['columns']) or 1">
+                            No records / لا توجد سجلات
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="hotel_report_totals">
+                <strong>Records / السجلات:</strong>
+                <span dir="ltr"><t t-out="doc._western(len(payload['rows']))"/></span>
+            </div>
+            <table t-if="payload['summary']" class="hotel_report_summary">
+                <tbody>
+                    <tr t-foreach="payload['summary']" t-as="item">
+                        <th><t t-out="item[0]"/></th>
+                        <td dir="ltr"><t t-out="doc._western(item[1])"/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </template>
 
     <template id="report_daily_movement">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
                 <t t-call="web.external_layout">
-                    <t t-set="reservations" t-value="reservations_for[doc.id]"/>
-                    <!-- dir=auto lets Arabic guest names and headers
-                         render RTL while Latin content stays LTR. -->
-                    <div class="page" dir="auto">
-                        <h2>
-                            <t t-if="doc.report_type == 'arrivals'">Arrivals</t>
-                            <t t-elif="doc.report_type == 'departures'">Departures</t>
-                            <t t-elif="doc.report_type == 'inhouse'">In-House Guests</t>
-                            <t t-else="">Security / Police List</t>
-                            — <span t-field="doc.date"/>
-                        </h2>
-                        <p>
-                            <strong>Property:</strong>
-                            <span t-field="doc.property_id.name"/>
-                        </p>
-
-                        <table class="table table-sm o_main_table">
-                            <thead>
-                                <tr>
-                                    <th>Room</th>
-                                    <th>Guest</th>
-                                    <th>Nationality</th>
-                                    <t t-if="doc.report_type == 'security'">
-                                        <th>ID Type</th>
-                                        <th>ID Number</th>
-                                        <th>Birth Date</th>
-                                        <th>Coming From</th>
-                                        <th>Heading To</th>
-                                    </t>
-                                    <t t-else="">
-                                        <th>Reservation</th>
-                                        <th>Arrival</th>
-                                        <th>Departure</th>
-                                        <th>Nights</th>
-                                        <th>Agency / Entity</th>
-                                    </t>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr t-foreach="reservations" t-as="res">
-                                    <!-- t-out, not t-field: room, nationality
-                                         and agency may be empty and t-field
-                                         fails on empty records. -->
-                                    <td><span t-out="res.room_id.name or ''"/></td>
-                                    <td><span t-field="res.partner_id.name"/></td>
-                                    <td><span t-out="res.guest_nationality_id.name or ''"/></td>
-                                    <t t-if="doc.report_type == 'security'">
-                                        <td><span t-field="res.partner_id.guest_id_type"/></td>
-                                        <td><span t-field="res.partner_id.guest_id_number"/></td>
-                                        <td><span t-field="res.partner_id.guest_birthdate"/></td>
-                                        <td><span t-field="res.coming_from"/></td>
-                                        <td><span t-field="res.heading_to"/></td>
-                                    </t>
-                                    <t t-else="">
-                                        <td><span t-field="res.name"/></td>
-                                        <td><span t-field="res.checkin_date"
-                                                 t-options='{"format": "yyyy-MM-dd HH:mm"}'/></td>
-                                        <td><span t-field="res.checkout_date"
-                                                 t-options='{"format": "yyyy-MM-dd HH:mm"}'/></td>
-                                        <td><span t-field="res.nights"/></td>
-                                        <td><span t-out="res.agency_id.name or ''"/></td>
-                                    </t>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <p>
-                            <strong>Total:</strong>
-                            <t t-out="len(reservations)"/> reservations
-                        </p>
-                    </div>
+                    <t t-call="hotel_reports.report_hotel_document"/>
                 </t>
             </t>
         </t>
     </template>
+
+    <template id="report_landscape_detail">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <t t-call="hotel_reports.report_hotel_document"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
 </odoo>

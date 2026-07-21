@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_hotel_folio_assigned_property" model="ir.rule">
+        <field name="name">Folios in active companies</field>
+        <field name="model_id" ref="model_hotel_folio"/>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk')), (4, ref('hotel_base.group_hotel_accountant'))]"/>
+    </record>
+    <record id="rule_hotel_folio_line_assigned_property" model="ir.rule">
+        <field name="name">Folio lines in active companies</field>
+        <field name="model_id" ref="model_hotel_folio_line"/>
+        <field name="domain_force">[('folio_id.property_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk')), (4, ref('hotel_base.group_hotel_accountant'))]"/>
+    </record>
+    <record id="rule_hotel_folio_routing_assigned_property" model="ir.rule">
+        <field name="name">Folio routing in active companies</field>
+        <field name="model_id" ref="model_hotel_folio_routing_rule"/>
+        <field name="domain_force">[('property_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hotel_base.group_hotel_frontdesk')), (4, ref('hotel_base.group_hotel_accountant'))]"/>
+    </record>
+    <record id="rule_hotel_account_move_assigned_property" model="ir.rule">
+        <field name="name">Hotel accounting documents in active companies</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="domain_force">['|', ('hotel_property_id', '=', False), ('hotel_property_id.company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_hotel_account_payment_assigned_property" model="ir.rule">
+        <field name="name">Hotel payments in active companies</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="domain_force">['|', ('hotel_property_id', '=', False), ('hotel_property_id.company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_hotel_folio_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all folios</field><field name="model_id" ref="model_hotel_folio"/>
+        <field name="domain_force">[(1, '=', 1)]</field><field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_hotel_folio_line_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all folio lines</field><field name="model_id" ref="model_hotel_folio_line"/>
+        <field name="domain_force">[(1, '=', 1)]</field><field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_hotel_routing_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all routing rules</field><field name="model_id" ref="model_hotel_folio_routing_rule"/>
+        <field name="domain_force">[(1, '=', 1)]</field><field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_hotel_move_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all hotel accounting documents</field><field name="model_id" ref="account.model_account_move"/>
+        <field name="domain_force">[(1, '=', 1)]</field><field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+    <record id="rule_hotel_payment_system_unrestricted" model="ir.rule">
+        <field name="name">System administrators: all hotel payments</field><field name="model_id" ref="account.model_account_payment"/>
+        <field name="domain_force">[(1, '=', 1)]</field><field name="groups" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+</odoo>

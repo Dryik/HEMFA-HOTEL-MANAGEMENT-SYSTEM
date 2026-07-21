@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="hotel_board.HotelOwnerDashboard">
+        <main class="o_hotel_owner_dashboard h-100 overflow-auto p-3 p-lg-4">
+            <header class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+                <div><h1 class="mb-1">Owner Dashboard</h1><p class="text-muted mb-0" t-if="state.data" t-esc="state.data.meta.property_name"/></div>
+                <div class="d-flex flex-wrap align-items-end gap-2">
+                    <div t-if="state.data and state.data.meta.properties.length &gt; 1"><label class="form-label">Hotel</label>
+                        <select class="form-select" t-att-value="state.propertyId" t-on-change="onProperty">
+                            <option t-foreach="state.data.meta.properties" t-as="property" t-key="property.id"
+                                t-att-value="property.id" t-esc="property.name"/>
+                        </select>
+                    </div>
+                    <div><label class="form-label">From</label><input class="form-control" type="date" t-att-value="state.dateFrom" t-on-change="onDateFrom"/></div>
+                    <div><label class="form-label">To</label><input class="form-control" type="date" t-att-value="state.dateTo" t-on-change="onDateTo"/></div>
+                    <button class="btn btn-primary" t-on-click="load" t-att-disabled="state.loading">Apply</button>
+                </div>
+            </header>
+            <div class="alert alert-danger" t-if="state.error" t-esc="state.error"/>
+            <div class="text-center py-5" t-if="state.loading"><i class="fa fa-spinner fa-spin fa-2x"/><p>Loading analytics…</p></div>
+            <t t-if="state.data and !state.loading">
+                <section class="o_owner_kpis mb-4">
+                    <article class="card"><div class="card-body"><small>Bookings</small><strong t-esc="number(state.data.kpis.bookings)"/><span t-att-class="state.data.comparison.bookings &gt;= 0 ? 'text-success' : 'text-danger'">vs prior <t t-esc="number(state.data.comparison.bookings)"/></span></div></article>
+                    <article class="card"><div class="card-body"><small>Revenue</small><strong t-esc="currency(state.data.kpis.revenue)"/><span t-att-class="state.data.comparison.revenue &gt;= 0 ? 'text-success' : 'text-danger'">vs prior <t t-esc="currency(state.data.comparison.revenue)"/></span></div></article>
+                    <article class="card"><div class="card-body"><small>Occupancy</small><strong><t t-esc="number(state.data.kpis.occupancy, 1)"/>%</strong></div></article>
+                    <article class="card"><div class="card-body"><small>Cancellations</small><strong t-esc="number(state.data.kpis.cancellations)"/></div></article>
+                    <article class="card"><div class="card-body"><small>Pending arrivals</small><strong t-esc="number(state.data.kpis.pending_arrivals)"/></div></article>
+                    <article class="card"><div class="card-body"><small>Pending departures</small><strong t-esc="number(state.data.kpis.pending_departures)"/></div></article>
+                </section>
+                <div class="row g-4">
+                    <div class="col-xl-8"><section class="card h-100"><div class="card-body"><h2 class="h5">Revenue and bookings trend</h2><div class="o_owner_trends"><div class="o_owner_trend" t-foreach="state.data.trends" t-as="trend" t-key="trend.date"><span class="o_owner_trend_date" t-esc="trend.date"/><span class="o_owner_bar o_revenue" t-att-style="`width:${trendWidth(trend.revenue, 'revenue')}`"><t t-esc="currency(trend.revenue)"/></span><span class="o_owner_bar o_bookings" t-att-style="`width:${trendWidth(trend.bookings, 'bookings')}`"><t t-esc="trend.bookings"/> bookings</span></div></div></div></section></div>
+                    <div class="col-xl-4"><section class="card h-100"><div class="card-body"><h2 class="h5">Booking sources</h2><div class="d-flex justify-content-between border-bottom py-2" t-foreach="state.data.source_split" t-as="item" t-key="item.label"><span t-esc="item.label"/><strong t-esc="item.bookings"/></div><h2 class="h5 mt-4">Guest geography</h2><div class="d-flex justify-content-between border-bottom py-2" t-foreach="state.data.geography" t-as="item" t-key="item.label"><span t-esc="item.label"/><strong t-esc="item.bookings"/></div></div></section></div>
+                    <div class="col-xl-6"><section class="card h-100"><div class="card-body"><h2 class="h5">Room-type performance</h2><div class="row fw-semibold border-bottom py-2"><span class="col">Room type</span><span class="col-auto">Bookings</span><span class="col-4 text-end">Revenue</span></div><div class="row border-bottom py-2" t-foreach="state.data.room_types" t-as="item" t-key="item.label"><span class="col" t-esc="item.label"/><span class="col-auto" t-esc="item.bookings"/><span class="col-4 text-end" t-esc="currency(item.revenue)"/></div></div></section></div>
+                    <div class="col-xl-6"><section class="card h-100"><div class="card-body"><h2 class="h5">Top customers</h2><div class="row fw-semibold border-bottom py-2"><span class="col">Guest</span><span class="col-auto">Bookings</span><span class="col-4 text-end">Revenue</span></div><div class="row border-bottom py-2" t-foreach="state.data.top_customers" t-as="item" t-key="item.label"><span class="col" t-esc="item.label"/><span class="col-auto" t-esc="item.bookings"/><span class="col-4 text-end" t-esc="currency(item.revenue)"/></div></div></section></div>
+                </div>
+            </t>
+        </main>
+    </t>
+</templates>

@@ -1,15 +1,13 @@
 {
-    "name": "Hotel Night Audit",
-    "summary": "Daily rollover: room-night posting, no-shows, occupancy snapshot, audit report",
-    "version": "19.0.0.1.0",
+    "name": "Retired Daily Workflow Cleanup",
+    "summary": "Migration tombstone for the removed daily rollover workflow",
+    "version": "19.0.4.0.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",
-    "depends": ["hotel_folio"],
-    "data": [
-        "security/ir.model.access.csv",
-        "data/hotel_night_audit_sequence.xml",
-        "views/hotel_night_audit_views.xml",
-    ],
+    "depends": ["base"],
+    "data": [],
+    "application": False,
+    "auto_install": False,
     "installable": True,
 }

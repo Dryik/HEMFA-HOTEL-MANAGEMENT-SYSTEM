@@ -8,11 +8,16 @@
                 <group>
                     <field name="report_type"/>
                     <field name="date"/>
-                    <field name="property_id"/>
+                    <field name="property_id" invisible="1"/>
+                    <field name="language"/>
+                    <field name="folio_id" invisible="report_type != 'folio_statement'"
+                        required="report_type == 'folio_statement'"/>
                 </group>
                 <footer>
                     <button name="action_print" type="object" string="Print"
                         class="btn-primary"/>
+                    <button name="action_export_xlsx" type="object" string="Export XLSX"
+                        class="btn-secondary"/>
                     <button string="Cancel" special="cancel"/>
                 </footer>
             </form>
@@ -20,16 +25,20 @@
     </record>
 
     <record id="hotel_report_wizard_action" model="ir.actions.act_window">
-        <field name="name">Daily Reports</field>
+        <field name="name">Hotel Reports</field>
         <field name="res_model">hotel.report.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
+        <field name="context">{
+            'default_property_id': context.get('hotel_property_id'),
+            'default_date': context.get('hotel_business_date'),
+        }</field>
     </record>
 
     <menuitem id="menu_hotel_reports"
         name="Reports"
-        parent="hotel_base.menu_hotel_root"
+        parent="hotel_base.menu_hotel_reporting"
         action="hotel_report_wizard_action"
-        sequence="90"
-        groups="hotel_base.group_hotel_frontdesk"/>
+        sequence="10"
+        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_housekeeping,hotel_base.group_hotel_accountant"/>
 </odoo>

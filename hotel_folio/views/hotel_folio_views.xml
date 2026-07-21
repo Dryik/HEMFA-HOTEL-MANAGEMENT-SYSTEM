@@ -12,9 +12,10 @@
                 <field name="reservation_id"/>
                 <field name="partner_id"/>
                 <field name="agency_id"/>
-                <field name="property_id" optional="hide"/>
                 <field name="reservation_state" optional="show" widget="badge"/>
                 <field name="amount_total"/>
+                <field name="amount_tax" optional="hide"/>
+                <field name="amount_invoiced" optional="show"/>
                 <field name="amount_paid"/>
                 <field name="amount_due"/>
                 <field name="is_open" widget="boolean"/>
@@ -29,10 +30,28 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <button name="action_open_add_charge" type="object"
+                        string="Add Charge" class="btn-primary"
+                        invisible="not is_open"
+                        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
+                    <button name="action_open_register_deposit" type="object"
+                        string="Register Deposit" class="btn-secondary"
+                        invisible="not is_open"
+                        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
+                    <button name="action_open_register_advance" type="object"
+                        string="Register Advance" class="btn-secondary"
+                        invisible="not agency_id or not is_open"
+                        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
                     <button name="action_create_invoice" type="object" string="Create Guest Invoice"
-                        class="btn-primary" context="{'partner_id': partner_id}"/>
+                        class="btn-secondary" context="{'partner_id': partner_id}"
+                        invisible="not is_open"
+                        groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
                     <button name="action_create_invoice" type="object" string="Create Agency Invoice"
-                        class="btn-secondary" invisible="not agency_id" context="{'partner_id': agency_id}"/>
+                        class="btn-secondary" invisible="not agency_id or not is_open" context="{'partner_id': agency_id}"
+                        groups="hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
+                    <button name="action_open_allocate_advance" type="object"
+                        string="Allocate Deposit / Advance" class="btn-secondary"
+                        groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager"/>
                     <field name="is_open" invisible="1"/>
                 </header>
                 <sheet>
@@ -46,11 +65,14 @@
                             <field name="reservation_id"/>
                             <field name="partner_id"/>
                             <field name="agency_id"/>
-                            <field name="property_id"/>
+                            <field name="property_id" invisible="1"/>
                             <field name="reservation_state"/>
                         </group>
                         <group string="Financials">
+                            <field name="amount_untaxed"/>
+                            <field name="amount_tax"/>
                             <field name="amount_total"/>
+                            <field name="amount_invoiced"/>
                             <field name="amount_paid"/>
                             <field name="amount_due"/>
                             <field name="is_open"/>
@@ -60,16 +82,30 @@
                     <notebook>
                         <page string="Ledger / Charges">
                             <field name="line_ids">
-                                <list editable="bottom">
-                                    <field name="date"/>
-                                    <field name="product_id"/>
-                                    <field name="name"/>
-                                    <field name="qty"/>
-                                    <field name="price_unit"/>
-                                    <field name="tax_ids" widget="many2many_tags" readonly="is_posted"/>
-                                    <field name="payee_partner_id" readonly="is_posted"/>
-                                    <field name="amount"/>
+                                <list create="0" edit="0">
+                                    <field name="date" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="product_id" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="name" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="qty" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="price_unit" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="discount" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="tax_ids" widget="many2many_tags" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="payee_partner_id" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="amount_untaxed" optional="hide"/>
+                                    <field name="amount_tax" optional="show"/>
+                                    <field name="amount_total"/>
+                                    <field name="service_date" optional="hide" readonly="is_posted or lock_state != 'unlocked'"/>
+                                    <field name="source_type" optional="hide"/>
+                                    <field name="source_reference" optional="hide"/>
+                                    <field name="invoiceable" optional="hide"/>
+                                    <field name="lock_state" optional="show"/>
                                     <field name="is_posted" readonly="1"/>
+                                    <field name="reversal_of_id" optional="hide" readonly="1"/>
+                                    <field name="reversal_line_ids" column_invisible="True"/>
+                                    <button name="action_open_reverse_wizard" type="object"
+                                        string="Reverse Line" class="btn-link"
+                                        invisible="not is_posted or reversal_of_id or reversal_line_ids"
+                                        groups="hotel_base.group_hotel_manager"/>
                                 </list>
                             </field>
                         </page>
@@ -83,6 +119,23 @@
                                     <field name="payment_state" widget="badge"/>
                                     <field name="amount_total"/>
                                     <field name="amount_residual"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Payments / Advances"
+                            groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_accountant,hotel_base.group_hotel_manager">
+                            <field name="payment_ids">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                    <field name="hotel_payment_purpose"/>
+                                    <field name="payment_type"/>
+                                    <field name="journal_id"/>
+                                    <field name="amount"/>
+                                    <field name="hotel_available_advance" optional="show"/>
+                                    <field name="state" widget="badge"/>
                                     <field name="currency_id" column_invisible="True"/>
                                 </list>
                             </field>
@@ -103,16 +156,14 @@
                 <field name="partner_id"/>
                 <field name="agency_id"/>
                 <field name="reservation_id"/>
-                <field name="property_id"/>
                 <filter string="Open Folios" name="open" domain="[('is_open', '=', True)]"/>
                 <filter string="Closed Folios" name="closed" domain="[('is_open', '=', False)]"/>
                 <filter string="Balance Due" name="balance_due" domain="[('amount_due', '&gt;', 0)]"/>
                 <separator/>
                 <filter string="Today" name="today"
                     domain="[('create_date', '&gt;=', context_today().strftime('%Y-%m-%d')),
-                             ('create_date', '&lt;', (context_today() + timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                             ('create_date', '&lt;', (context_today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
                 <group>
-                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
                     <filter string="Guest" name="group_guest" context="{'group_by': 'partner_id'}"/>
                     <filter string="Agency" name="group_agency" context="{'group_by': 'agency_id'}"/>
                     <filter string="Stay Status" name="group_res_state" context="{'group_by': 'reservation_state'}"/>
@@ -126,7 +177,9 @@
         <field name="res_model">hotel.folio</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="hotel_folio_view_search"/>
-        <field name="context">{'search_default_open': 1}</field>
+        <field name="context">{
+            'search_default_open': 1,
+        }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">No folios created yet</p>
             <p>Folios track all guest charges, routed billing, and linked Odoo invoices.</p>
@@ -141,7 +194,6 @@
             <list string="Routing Rules">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
-                <field name="property_id"/>
                 <field name="category_id"/>
                 <field name="routing_type"/>
                 <field name="agency_id"/>
@@ -160,7 +212,7 @@
                         <group string="Rule Info">
                             <field name="name"/>
                             <field name="sequence"/>
-                            <field name="property_id"/>
+                            <field name="property_id" invisible="1"/>
                             <field name="active"/>
                         </group>
                         <group string="Routing Details">
@@ -184,6 +236,7 @@
         </field>
     </record>
 
+    <!-- hotel_board positions Folios after reservation groups in Front Desk. -->
     <!-- Menu Items -->
     <menuitem id="menu_hotel_folios"
         name="Folios"
@@ -193,7 +246,7 @@
 
     <menuitem id="menu_hotel_config_folio_routing"
         name="Folio Routing Rules"
-        parent="hotel_base.menu_hotel_config"
+        parent="hotel_base.menu_hotel_config_section_billing"
         action="hotel_folio_routing_rule_action"
-        sequence="70"/>
+        sequence="10"/>
 </odoo>

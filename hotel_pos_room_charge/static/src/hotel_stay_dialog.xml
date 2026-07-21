@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="hotel_pos_room_charge.HotelStayDialog">
+        <Dialog title.translate="Charge to Room" size="lg">
+            <div class="mb-3">
+                <input class="form-control form-control-lg" type="search" placeholder="Search guest, reservation, or room…" t-model="state.query"/>
+            </div>
+            <div class="list-group overflow-auto" style="max-height: 55vh;">
+                <button t-foreach="matches" t-as="candidate" t-key="candidate.id" type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" t-on-click="() => this.select(candidate)">
+                    <span><strong t-esc="candidate.room"/> · <t t-esc="candidate.guest"/><small class="d-block text-muted"><t t-esc="candidate.reservation"/> · <t t-esc="candidate.room_type"/></small></span>
+                    <i class="fa fa-angle-right"/>
+                </button>
+                <div t-if="!matches.length" class="text-center text-muted py-5">No in-house stay matches your search.</div>
+            </div>
+        </Dialog>
+    </t>
+
+    <t t-name="hotel_pos_room_charge.ControlButtons" t-inherit="point_of_sale.ControlButtons" t-inherit-mode="extension">
+        <xpath expr="//SelectPartnerButton" position="after">
+            <button t-if="hasHotelRoomCharge and !props.showRemainingButtons" t-att-class="buttonClass" t-on-click="selectHotelStay">
+                <i class="fa fa-bed me-2"/> Charge to Room
+            </button>
+        </xpath>
+        <xpath expr="//div[hasclass('control-buttons-modal')]" position="inside">
+            <button t-if="hasHotelRoomCharge" t-att-class="buttonClass" t-on-click="selectHotelStay">
+                <i class="fa fa-bed me-2"/> Charge to Room
+            </button>
+        </xpath>
+    </t>
+</templates>

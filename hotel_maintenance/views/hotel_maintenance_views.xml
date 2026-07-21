@@ -73,10 +73,10 @@
                     <button name="action_start" type="object" string="Start Work"
                         class="btn-primary" invisible="state != 'confirmed'"
                         groups="hotel_base.group_hotel_maintenance"/>
-                    <button name="action_done" type="object" string="Mark Done"
+                    <button name="action_done" type="object" string="Mark Completed"
                         class="btn-primary" invisible="state != 'in_progress'"
                         groups="hotel_base.group_hotel_maintenance"
-                        confirm="Are you sure you want to mark this maintenance request as done?"/>
+                        confirm="Are you sure you want to mark this maintenance request as completed?"/>
                     <button name="action_verify" type="object" string="Verify"
                         class="btn-primary" invisible="state != 'done'"
                         groups="hotel_base.group_hotel_manager"
@@ -156,7 +156,10 @@
         <field name="name">Maintenance Requests</field>
         <field name="res_model">hotel.maintenance.request</field>
         <field name="view_mode">kanban,list,form</field>
-        <field name="context">{'search_default_open': 1}</field>
+        <field name="context">{
+            'search_default_open': 1,
+            'default_property_id': context.get('hotel_property_id'),
+        }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Report a maintenance problem
@@ -170,10 +173,11 @@
         </field>
     </record>
 
+    <!-- hotel_board re-parents this workflow under Hotel > Operations. -->
     <menuitem id="menu_hotel_maintenance"
         name="Maintenance"
         parent="hotel_base.menu_hotel_root"
         action="hotel_maintenance_request_action"
-        sequence="60"
+        sequence="100"
         groups="hotel_base.group_hotel_frontdesk,hotel_base.group_hotel_maintenance,hotel_base.group_hotel_housekeeping"/>
 </odoo>

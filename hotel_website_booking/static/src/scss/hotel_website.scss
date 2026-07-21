@@ -1,0 +1,44 @@
+.o_hotel_website {
+    .o_hotel_hero {
+        min-height: 30rem;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .o_hotel_search_card {
+        position: relative;
+        z-index: 2;
+        margin-top: -3rem;
+    }
+
+    .o_hotel_room_image {
+        min-height: 15rem;
+        object-fit: cover;
+    }
+
+    .o_hotel_detail_image {
+        max-height: 36rem;
+        object-fit: cover;
+    }
+
+    .o_hotel_service_image {
+        height: 12rem;
+        object-fit: cover;
+    }
+}
+
+[dir="rtl"] .o_hotel_website {
+    text-align: right;
+}
+
+@media (max-width: 767.98px) {
+    .o_hotel_website {
+        .o_hotel_hero {
+            min-height: 22rem;
+        }
+
+        .o_hotel_search_card {
+            margin-top: -1.5rem;
+        }
+    }
+}

@@ -1,0 +1,222 @@
+// Shared entrance animations. Use fill-mode "backwards" (never "both" /
+// "forwards") so the final state falls back to the normal cascade —
+// forwards-filled opacity would override state classes like o_is_busy.
+@keyframes o-hotel-fade-in {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes o-hotel-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(0.4rem);
+    }
+}
+
+.o_hotel_workspace {
+    --hotel-bg: #{$o-gray-200};
+    --hotel-surface: #{$o-gray-100};
+    --hotel-surface-raised: #{$o-view-background-color};
+    --hotel-border: #{$o-gray-300};
+    --hotel-border-strong: #{$o-gray-500};
+    --hotel-text: #{$o-gray-900};
+    --hotel-muted: #{$o-gray-700};
+    --hotel-brand: #{$o-brand-primary};
+    --hotel-focus: #{$o-brand-primary};
+    --hotel-radius: #{$o-border-radius};
+    --hotel-success: #146c43;
+    --hotel-warning: #8a5700;
+    --hotel-danger: #b42318;
+    --hotel-info: #075985;
+    --hotel-vacant: #146c43;
+    --hotel-reserved: #714b67;
+    --hotel-occupied: #3b6f78;
+    --hotel-checkout: #8a5700;
+    --hotel-touch-target: 2.75rem;
+    background: var(--hotel-bg);
+    color: var(--hotel-text);
+    padding: 1rem;
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+        overflow-wrap: anywhere;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin: 0;
+    }
+
+    h2 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        line-height: 1.3;
+        margin: 0;
+    }
+
+    h3 {
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .text-muted {
+        color: var(--hotel-muted) !important;
+    }
+
+    button,
+    input,
+    select {
+        &:focus-visible {
+            outline: 2px solid var(--hotel-focus);
+            outline-offset: 2px;
+            box-shadow: none;
+        }
+    }
+
+    button:disabled {
+        cursor: default;
+    }
+
+    .o_hotel_touch_target {
+        min-height: var(--hotel-touch-target);
+        min-width: var(--hotel-touch-target);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+    }
+
+    .o_hotel_card {
+        background: var(--hotel-surface);
+        border: 1px solid var(--hotel-border);
+        border-radius: var(--hotel-radius);
+        box-shadow: none;
+    }
+
+    .o_hotel_workspace_header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.75rem 1rem;
+        background: var(--hotel-surface);
+        border-block-end: 1px solid var(--hotel-border);
+        margin: -1rem -1rem 1rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .o_hotel_workspace_title {
+        min-width: 12rem;
+    }
+
+    .o_hotel_workspace_controls {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        min-width: 0;
+    }
+
+    .o_hotel_field {
+        min-width: 10.5rem;
+
+        label {
+            color: var(--hotel-muted);
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-block-end: 0.3rem;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: var(--hotel-touch-target);
+        }
+    }
+
+    .o_hotel_header_actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .o_hotel_workspace_alert {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-block-end: 1rem;
+
+        > span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    }
+
+    .o_hotel_loading_state,
+    .o_hotel_empty_state {
+        min-height: 18rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.65rem;
+        padding: 2rem;
+        text-align: center;
+
+        > i {
+            color: var(--hotel-muted);
+        }
+
+        > :last-child {
+            margin-block-end: 0;
+        }
+    }
+}
+
+@media (max-width: 1279.98px) {
+    .o_hotel_workspace {
+        .o_hotel_workspace_header {
+            display: block;
+        }
+
+        .o_hotel_workspace_title {
+            margin-block-end: 0.85rem;
+        }
+
+        .o_hotel_workspace_controls {
+            justify-content: flex-start;
+        }
+    }
+}
+
+.o_hotel_workspace:dir(rtl) {
+    .fa-angle-right,
+    .fa-angle-left {
+        transform: scaleX(-1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .o_hotel_workspace * {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+        animation-iteration-count: 1 !important;
+    }
+}

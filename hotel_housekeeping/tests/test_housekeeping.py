@@ -1,6 +1,9 @@
+from datetime import timedelta
+
+from odoo import fields
+from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
-from odoo.exceptions import UserError
 
 
 @tagged('post_install', '-at_install')
@@ -9,9 +12,7 @@ class TestHotelHousekeeping(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.property = cls.env["hotel.property"].create({
-            "name": "Housekeeping Test Hotel",
-        })
+        cls.property = cls.env["hotel.property"]._get_default_property()
         cls.floor = cls.env["hotel.floor"].create({
             "name": "Floor 1",
             "property_id": cls.property.id,
@@ -19,6 +20,7 @@ class TestHotelHousekeeping(TransactionCase):
         cls.room_type = cls.env["hotel.room.type"].create({
             "name": "Deluxe Room",
             "code": "DLX",
+            "property_id": cls.property.id,
         })
         cls.room = cls.env["hotel.room"].create({
             "name": "Room 101",
@@ -135,3 +137,97 @@ class TestHotelHousekeeping(TransactionCase):
         task.action_complete()
         with self.assertRaises(UserError):
             task.action_cancel()
+
+    def test_completed_task_is_immutable(self):
+        task = self.env["hotel.housekeeping.task"].create({
+            "room_id": self.room.id,
+        })
+        task.action_start()
+        task.action_complete()
+        with self.assertRaises(UserError):
+            task.write({"notes": "Changed after completion"})
+
+    def test_state_cannot_bypass_actions(self):
+        task = self.env["hotel.housekeeping.task"].create({
+            "room_id": self.room.id,
+        })
+        with self.assertRaises(UserError):
+            task.write({"state": "cleaned"})
+        with self.assertRaises(UserError):
+            task.with_context(hotel_housekeeping_transition=True).write(
+                {"state": "cleaned"}
+            )
+
+    def test_tasks_are_company_scoped(self):
+        other_company = self.env["res.company"].create(
+            {"name": "Other Housekeeping Company"}
+        )
+        other_property = self.env["hotel.property"].with_company(
+            other_company
+        )._get_default_property()
+        other_floor = self.env["hotel.floor"].create(
+            {"name": "Other Floor", "property_id": other_property.id}
+        )
+        other_room_type = self.env["hotel.room.type"].create(
+            {
+                "name": "Other Housekeeping Room",
+                "property_id": other_property.id,
+            }
+        )
+        other_room = self.env["hotel.room"].create(
+            {
+                "name": "OH101",
+                "floor_id": other_floor.id,
+                "room_type_id": other_room_type.id,
+            }
+        )
+        hidden_task = self.env["hotel.housekeeping.task"].create(
+            {"room_id": other_room.id}
+        )
+        visible = self.env["hotel.housekeeping.task"].with_user(
+            self.cleaner
+        ).search([])
+        self.assertNotIn(hidden_task, visible)
+
+    def test_checklist_must_be_completed_before_closing_task(self):
+        template_item = self.env["hotel.housekeeping.checklist.item"].create(
+            {"name": "Inspect bathroom", "property_id": self.property.id}
+        )
+        task = self.env["hotel.housekeeping.task"].create(
+            {"room_id": self.room.id, "trigger_type": "guest_request"}
+        )
+        self.assertEqual(task.checklist_line_ids.item_id, template_item)
+        task.action_start()
+        with self.assertRaises(UserError):
+            task.action_complete()
+        task.checklist_line_ids.done = True
+        task.action_complete()
+        self.assertEqual(task.state, "cleaned")
+        with self.assertRaises(UserError):
+            task.checklist_line_ids.write({"note": "Changed"})
+
+    def test_prearrival_generation_is_idempotent(self):
+        checkin = fields.Datetime.now() + timedelta(hours=2)
+        reservation = self.env["hotel.reservation"].create(
+            {
+                "partner_id": self.env["res.partner"].create(
+                    {"name": "Pre-arrival Guest", "is_hotel_guest": True}
+                ).id,
+                "property_id": self.property.id,
+                "room_type_id": self.room_type.id,
+                "room_id": self.room.id,
+                "checkin_date": checkin,
+                "checkout_date": checkin + timedelta(days=1),
+            }
+        )
+        reservation.action_confirm()
+        task_model = self.env["hotel.housekeeping.task"]
+        task_model._cron_create_prearrival_tasks()
+        task_model._cron_create_prearrival_tasks()
+        tasks = task_model.search(
+            [("source_key", "=", f"prearrival:{reservation.id}")]
+        )
+        self.assertEqual(len(tasks), 1)
+        self.assertEqual(tasks.reservation_id, reservation)
+        self.assertEqual(tasks.trigger_type, "prearrival")
+        self.assertEqual(tasks.deadline, reservation.checkin_date)

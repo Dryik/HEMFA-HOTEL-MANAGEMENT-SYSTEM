@@ -4,17 +4,30 @@
         <field name="name">hotel.floor.list</field>
         <field name="model">hotel.floor</field>
         <field name="arch" type="xml">
-            <list editable="bottom">
+            <list editable="bottom" delete="false">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
-                <field name="property_id"/>
+                <field name="property_id" column_invisible="True"/>
+                <field name="active" optional="hide"/>
             </list>
+        </field>
+    </record>
+
+    <record id="hotel_floor_view_form" model="ir.ui.view">
+        <field name="name">hotel.floor.form</field>
+        <field name="model">hotel.floor</field>
+        <field name="arch" type="xml">
+            <form delete="false"><sheet><group>
+                <field name="name"/><field name="sequence"/><field name="property_id" invisible="1"/>
+                <field name="active"/><field name="retired_at" invisible="active"/>
+                <field name="retirement_reason" invisible="active"/>
+            </group><field name="room_ids" readonly="1"><list create="0" delete="0"><field name="name"/><field name="room_type_id"/><field name="active"/></list></field></sheet></form>
         </field>
     </record>
 
     <record id="hotel_floor_action" model="ir.actions.act_window">
         <field name="name">Floors</field>
         <field name="res_model">hotel.floor</field>
-        <field name="view_mode">list</field>
+        <field name="view_mode">list,form</field>
     </record>
 </odoo>

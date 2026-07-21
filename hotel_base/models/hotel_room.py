@@ -1,5 +1,5 @@
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 # Housekeeping status lives on the room so the board and the
 # discrepancy report read one field; hotel_housekeeping drives it.
@@ -27,6 +27,13 @@ class HotelRoom(models.Model):
 
     name = fields.Char(string="Room Number", required=True, tracking=True)
     active = fields.Boolean(default=True)
+    website_published = fields.Boolean(
+        string="Published on Website",
+        default=False,
+        help="Allow this physical room to be assigned by the public booking website.",
+    )
+    retired_at = fields.Datetime(readonly=True, copy=False, tracking=True)
+    retirement_reason = fields.Text(copy=False, tracking=True)
     floor_id = fields.Many2one(
         "hotel.floor", required=True, ondelete="restrict", index=True
     )
@@ -83,21 +90,92 @@ class HotelRoom(models.Model):
                 room.active and not room.out_of_order and not room.admin_use
             )
 
+    @api.constrains("property_id", "room_type_id")
+    def _check_room_type_property(self):
+        for room in self:
+            if (
+                room.room_type_id.property_id
+                and room.room_type_id.property_id != room.property_id
+            ):
+                raise ValidationError(
+                    _(
+                        "Room type %(room_type)s belongs to %(type_property)s "
+                        "and cannot be assigned to a room in %(room_property)s.",
+                        room_type=room.room_type_id.display_name,
+                        type_property=room.room_type_id.property_id.display_name,
+                        room_property=room.property_id.display_name,
+                    )
+                )
+
     @api.depends("name", "floor_id.property_id.code")
     def _compute_display_name(self):
         for room in self:
             code = room.property_id.code
             room.display_name = f"[{code}] {room.name}" if code else room.name
 
-    def unlink(self):
-        for room in self:
-            active_res = self.env["hotel.reservation"].search_count(
-                [
-                    ("room_id", "=", room.id),
-                    ("state", "in", ("confirmed", "checked_in")),
-                ]
+    def write(self, vals):
+        if "active" in vals:
+            vals = dict(vals)
+            vals["retired_at"] = False if vals["active"] else fields.Datetime.now()
+            if vals["active"]:
+                vals["retirement_reason"] = False
+        if self.env.su or self.env.user.has_group("base.group_system"):
+            return super().write(vals)
+        configuration_fields = {
+            "name",
+            "active",
+            "retirement_reason",
+            "floor_id",
+            "room_type_id",
+            "amenity_ids",
+            "telephone_extension",
+            "admin_use",
+            "website_published",
+        }
+        if configuration_fields.intersection(vals) and not self.env.user.has_group(
+            "hotel_base.group_hotel_manager"
+        ):
+            raise UserError(_("Only a Hotel Manager can change room configuration."))
+        if {"occupancy_state", "out_of_order"}.intersection(vals):
+            raise UserError(
+                _("Room occupancy and maintenance blocks can only be changed by their workflows.")
             )
-            if active_res:
-                raise UserError(_("You cannot delete room %s because it has active reservations.") % room.name)
-        return super().unlink()
+        if "hk_status" in vals and not (
+            self.env.user.has_group("hotel_base.group_hotel_housekeeping")
+            or self.env.user.has_group("hotel_base.group_hotel_frontdesk")
+        ):
+            raise UserError(_("Only housekeeping or front desk can change cleaning status."))
+        return super().write(vals)
 
+    def _set_stay_occupancy(self, occupancy_state, hk_status=None):
+        if occupancy_state not in dict(OCCUPANCY_STATE):
+            raise UserError(_("Invalid room occupancy state."))
+        values = {"occupancy_state": occupancy_state}
+        if hk_status is not None:
+            if hk_status not in dict(HK_STATUS):
+                raise UserError(_("Invalid room cleaning status."))
+            values["hk_status"] = hk_status
+        result = super(HotelRoom, self).write(values)
+        if hk_status == "dirty" and hasattr(self, "_create_housekeeping_task"):
+            self._create_housekeeping_task()
+        return result
+
+    def _set_housekeeping_status(self, hk_status):
+        if hk_status not in dict(HK_STATUS):
+            raise UserError(_("Invalid room cleaning status."))
+        result = super(HotelRoom, self).write({"hk_status": hk_status})
+        if hk_status == "dirty" and hasattr(self, "_create_housekeeping_task"):
+            self._create_housekeeping_task()
+        return result
+
+    def _set_maintenance_block(self, blocked):
+        return super(HotelRoom, self).write({"out_of_order": bool(blocked)})
+
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_module_uninstall(self):
+        raise UserError(
+            _(
+                "Rooms are permanent hotel inventory records and cannot be deleted. "
+                "Archive the room and record a retirement reason instead."
+            )
+        )

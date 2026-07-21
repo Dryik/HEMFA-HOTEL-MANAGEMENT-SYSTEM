@@ -1,39 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="demo_property_tubactus" model="hotel.property">
-        <field name="name">Tubactus Hotel</field>
-        <field name="code">TBK</field>
-    </record>
-
     <record id="demo_floor_1" model="hotel.floor">
         <field name="name">Floor 1</field>
         <field name="sequence">1</field>
-        <field name="property_id" ref="demo_property_tubactus"/>
     </record>
     <record id="demo_floor_2" model="hotel.floor">
         <field name="name">Floor 2</field>
         <field name="sequence">2</field>
-        <field name="property_id" ref="demo_property_tubactus"/>
     </record>
     <record id="demo_floor_3" model="hotel.floor">
         <field name="name">Floor 3</field>
         <field name="sequence">3</field>
-        <field name="property_id" ref="demo_property_tubactus"/>
     </record>
     <record id="demo_floor_4" model="hotel.floor">
         <field name="name">Floor 4</field>
         <field name="sequence">4</field>
-        <field name="property_id" ref="demo_property_tubactus"/>
     </record>
     <record id="demo_floor_5" model="hotel.floor">
         <field name="name">Floor 5</field>
         <field name="sequence">5</field>
-        <field name="property_id" ref="demo_property_tubactus"/>
     </record>
     <record id="demo_floor_6" model="hotel.floor">
         <field name="name">Floor 6</field>
         <field name="sequence">6</field>
-        <field name="property_id" ref="demo_property_tubactus"/>
     </record>
 
     <record id="demo_room_type_single" model="hotel.room.type">

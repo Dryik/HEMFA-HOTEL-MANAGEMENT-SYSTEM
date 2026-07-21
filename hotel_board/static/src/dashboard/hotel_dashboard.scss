@@ -1,44 +1,938 @@
 .o_hotel_dashboard {
-    background: $o-webclient-background-color;
+    --dashboard-canvas: #f3f5f8;
+    --dashboard-surface: #ffffff;
+    --dashboard-text: #071d49;
+    --dashboard-muted: #667085;
+    --dashboard-border: #dfe4ea;
+    --dashboard-primary: #{$o-brand-primary};
+    --dashboard-primary-soft: #{rgba($o-brand-primary, 0.08)};
+    --dashboard-teal: #2fc4a5;
+    --dashboard-amber: #f59e0b;
+    --dashboard-danger: #b42318;
+    --dashboard-danger-soft: #fff1f0;
+    --dashboard-chip: #e9edf3;
+    --dashboard-surface-subtle: #eef1f5;
+    --dashboard-surface-hover: #f8f9fb;
+    --dashboard-subtle-text: #48566a;
+    --dashboard-faded-text: #8a94a6;
+    --dashboard-ring-track: #e4e7ec;
+    --dashboard-warn-text: #664d03;
+    --dashboard-warn-bg: #fff7db;
+    --dashboard-warn-border: #ead58c;
+    --dashboard-backdrop: rgba(7, 29, 73, 0.24);
+    --dashboard-shadow: rgba(7, 29, 73, 0.2);
+    --dashboard-touch: 2.75rem;
+    --hotel-focus: var(--dashboard-primary);
+    background: var(--dashboard-canvas);
+    color: var(--dashboard-text);
+    padding: 1.5rem;
 
-    .o_hotel_card {
-        background: $o-view-background-color;
-        border: 1px solid $border-color;
-        border-radius: 0.75rem;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    .o_hotel_dashboard_header,
+    .o_hotel_dashboard_date_controls,
+    .o_hotel_activity_header,
+    .o_hotel_activity_header_actions,
+    .o_hotel_activity_tab_value,
+    .o_hotel_stay_chips,
+    .o_hotel_row_actions,
+    .o_hotel_activity_footer,
+    .o_hotel_activity_total,
+    .o_hotel_completed_toggle,
+    .o_hotel_dashboard_stale {
+        display: flex;
+        align-items: center;
     }
 
-    .o_hotel_clickable {
-        cursor: pointer;
-        transition: transform 0.1s ease, box-shadow 0.1s ease;
+    .o_hotel_dashboard_header {
+        justify-content: space-between;
+        gap: 1rem;
+        margin-block-end: 1.25rem;
+    }
 
-        &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    .o_hotel_dashboard_date_controls,
+    .o_hotel_activity_header_actions,
+    .o_hotel_row_actions {
+        gap: 0.35rem;
+    }
+
+    .o_hotel_icon_button,
+    .o_hotel_today_button {
+        min-width: var(--dashboard-touch);
+        min-height: var(--dashboard-touch);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        color: var(--dashboard-text);
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 999px;
+
+        &:hover:not(:disabled) {
+            color: var(--dashboard-primary);
+            background: var(--dashboard-primary-soft);
         }
     }
 
-    .o_hotel_kpi_label {
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.05em;
-        opacity: 0.65;
+    .o_hotel_today_button {
+        min-width: 7rem;
+        background: var(--dashboard-chip);
+        border-color: var(--dashboard-chip);
+        padding-inline: 1rem;
     }
 
-    .o_hotel_kpi {
-        font-size: 2rem;
-        font-weight: 700;
-        line-height: 1.2;
+    .o_hotel_dashboard_layout {
+        display: grid;
+        grid-template-columns: minmax(13.5rem, 15rem) minmax(0, 1fr);
+        gap: 1.25rem;
+        align-items: stretch;
     }
 
-    .o_hotel_kpi_huge {
-        font-size: 3rem;
-        font-weight: 700;
-        line-height: 1.1;
+    .o_hotel_dashboard_sidebar {
+        display: grid;
+        gap: 1.25rem;
+        align-content: start;
     }
 
-    .o_hotel_progress {
-        height: 1.5rem;
+    .o_hotel_dashboard_card {
+        background: var(--dashboard-surface);
+        border: 1px solid var(--dashboard-border);
         border-radius: 0.75rem;
+    }
+
+    .o_hotel_date_card {
+        padding: 1.25rem;
+
+        h2,
+        p {
+            margin: 0;
+        }
+
+        h2 {
+            font-weight: 500;
+        }
+
+        p {
+            color: var(--dashboard-muted);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+    }
+
+    .o_hotel_date_day {
+        display: block;
+        color: var(--dashboard-faded-text);
+        font-size: clamp(3.5rem, 5vw, 5rem);
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+        margin-block: 0.5rem;
+    }
+
+    .o_hotel_occupancy_card {
+        padding: 1.25rem;
+    }
+
+    .o_hotel_occupancy_visual {
+        display: grid;
+        place-items: center;
+        padding-block: 0.75rem 1.5rem;
+    }
+
+    .o_hotel_occupancy_ring {
+        width: 100%;
+        max-width: 9rem;
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: conic-gradient(
+            var(--dashboard-teal) 0 var(--dashboard-occupancy),
+            var(--dashboard-ring-track) var(--dashboard-occupancy) 100%
+        );
+    }
+
+    .o_hotel_occupancy_ring_inner {
+        width: 68%;
+        aspect-ratio: 1;
+        display: grid;
+        place-content: center;
+        gap: 0.2rem;
+        background: var(--dashboard-surface);
+        border-radius: 50%;
+        text-align: center;
+
+        strong {
+            font-size: 1.65rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        span {
+            color: var(--dashboard-muted);
+        }
+    }
+
+    .o_hotel_occupancy_totals {
+        display: grid;
+        gap: 0.65rem;
+        border-block-start: 1px solid var(--dashboard-border);
+        margin: 0;
+        padding-block-start: 1rem;
+
+        > div {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        dt,
+        dd {
+            margin: 0;
+        }
+
+        dd {
+            order: -1;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    .o_hotel_activity_card {
+        min-width: 0;
+        min-height: 38rem;
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+
+    .o_hotel_activity_header {
+        justify-content: space-between;
+        gap: 1rem;
+        margin-block-end: 1rem;
+    }
+
+    .o_hotel_activity_search {
+        width: 35vw;
+        max-width: 20rem;
+        min-height: var(--dashboard-touch);
+        border-color: var(--dashboard-border);
+        animation: o-hotel-fade-in 160ms ease backwards;
+    }
+
+    .o_hotel_activity_menu_wrapper {
+        position: relative;
+    }
+
+    .o_hotel_activity_menu {
+        position: absolute;
+        z-index: 4;
+        inset-block-start: calc(100% + 0.35rem);
+        inset-inline-end: 0;
+        width: 13rem;
+        display: grid;
+        gap: 0.15rem;
+        background: var(--dashboard-surface);
+        border: 1px solid var(--dashboard-border);
+        border-radius: 0.6rem;
+        padding: 0.35rem;
+        transform-origin: top;
+        animation: o-hotel-menu-in 150ms ease backwards;
+
+        button {
+            min-height: var(--dashboard-touch);
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            color: var(--dashboard-text);
+            background: transparent;
+            border: 0;
+            border-radius: 0.4rem;
+            padding-inline: 0.75rem;
+            text-align: start;
+
+            &:hover {
+                background: var(--dashboard-primary-soft);
+            }
+        }
+    }
+
+    .o_hotel_activity_tabs {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 0.5rem;
+        margin-block-end: 1rem;
+    }
+
+    .o_hotel_activity_tab {
+        min-width: 0;
+        min-height: 6.25rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+        color: var(--dashboard-text);
+        background: var(--dashboard-surface);
+        border: 1px solid var(--dashboard-border);
+        border-radius: 0.6rem;
+        padding: 0.75rem;
+        text-align: center;
+
+        &:hover {
+            background: var(--dashboard-surface-hover);
+        }
+
+        &.o_is_selected {
+            background: var(--dashboard-primary-soft);
+            border: 2px solid var(--dashboard-primary);
+            padding: calc(0.75rem - 1px);
+        }
+    }
+
+    .o_hotel_activity_tab_value {
+        gap: 0.4rem;
+
+        strong {
+            font-size: 1.65rem;
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+        }
+    }
+
+    .o_hotel_pending_count {
+        min-width: 1.4rem;
+        min-height: 1.4rem;
+        display: inline-grid;
+        place-items: center;
+        color: #ffffff;
+        background: var(--dashboard-primary);
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding-inline: 0.3rem;
+    }
+
+    .o_hotel_activity_table {
+        min-width: 0;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+    }
+
+    .o_hotel_activity_table_head,
+    .o_hotel_activity_row {
+        display: grid;
+        grid-template-columns:
+            minmax(10rem, 1.15fr)
+            minmax(10rem, 1.15fr)
+            minmax(13rem, 1.45fr)
+            minmax(8rem, 0.8fr)
+            minmax(8rem, 0.75fr);
+        column-gap: 1rem;
+        align-items: center;
+    }
+
+    .o_hotel_activity_table_head {
+        color: var(--dashboard-subtle-text);
+        background: var(--dashboard-surface-subtle);
+        border-radius: 0.55rem;
+        padding: 0.75rem 0.9rem;
+    }
+
+    .o_hotel_activity_row {
+        min-height: 7rem;
+        border-block-end: 1px solid var(--dashboard-border);
+        padding: 1rem 0.9rem;
+        transition: opacity 200ms ease;
+        // Plays when a row enters the DOM; user-driven reloads re-key the
+        // rows so the whole list fades in, background polls patch in place.
+        animation: o-hotel-fade-up 240ms ease backwards;
+    }
+
+    // Gentle stagger for the first rows of a freshly keyed list.
+    @for $i from 2 through 9 {
+        .o_hotel_activity_row:nth-of-type(#{$i}) {
+            animation-delay: #{($i - 1) * 30}ms;
+        }
+    }
+
+    // Silent reload: keep the previous rows on screen, dimmed, instead of
+    // swapping in a spinner (which made the table flicker on every toggle).
+    .o_hotel_activity_table.o_is_busy .o_hotel_activity_row {
+        opacity: 0.55;
+        pointer-events: none;
+    }
+
+    .o_hotel_activity_guest,
+    .o_hotel_activity_room,
+    .o_hotel_activity_stay,
+    .o_hotel_activity_status {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .o_hotel_activity_reference,
+    .o_hotel_activity_status small,
+    .o_hotel_activity_room > span:not(.o_hotel_dirty_label) {
+        color: var(--dashboard-muted);
+        font-size: 0.85rem;
+    }
+
+    .o_hotel_activity_guest > *,
+    .o_hotel_activity_room > * {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .o_hotel_text_action {
+        max-width: 100%;
+        min-height: var(--dashboard-touch);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        color: var(--dashboard-text);
+        background: transparent;
+        border: 0;
+        padding: 0;
+        text-align: start;
+
+        &:hover {
+            color: var(--dashboard-primary);
+        }
+    }
+
+    .o_hotel_dirty_label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        color: var(--dashboard-danger);
+        background: var(--dashboard-danger-soft);
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.2rem 0.5rem;
+    }
+
+    .o_hotel_stay_chips {
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin-block-start: 0.25rem;
+
+        > span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--dashboard-subtle-text);
+            background: var(--dashboard-surface-subtle);
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            padding: 0.2rem 0.4rem;
+        }
+    }
+
+    .o_hotel_primary_workflow {
+        width: 100%;
+        min-height: var(--dashboard-touch);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        background: var(--dashboard-primary);
+        border: 1px solid var(--dashboard-primary);
+        border-radius: 999px;
+        font-weight: 700;
+        padding-inline: 1rem;
+
+        &:hover:not(:disabled) {
+            color: #ffffff;
+            filter: brightness(0.92);
+        }
+
+        &.o_is_open {
+            color: var(--dashboard-primary);
+            background: var(--dashboard-primary-soft);
+        }
+    }
+
+    .o_hotel_row_actions {
+        justify-content: flex-end;
+    }
+
+    .o_hotel_folio_action {
+        position: relative;
+    }
+
+    .o_hotel_balance_dot {
+        position: absolute;
+        inset-block-start: 0.35rem;
+        inset-inline-end: 0.35rem;
+        width: 0.5rem;
+        aspect-ratio: 1;
+        background: var(--dashboard-danger);
+        border: 2px solid var(--dashboard-surface);
+        border-radius: 50%;
+    }
+
+    .o_hotel_activity_loading,
+    .o_hotel_activity_empty,
+    .o_hotel_dashboard_loading,
+    .o_hotel_dashboard_error {
+        min-height: 14rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        color: var(--dashboard-muted);
+        text-align: center;
+    }
+
+    .o_hotel_activity_empty {
+        flex: 1;
+        animation: o-hotel-fade-up 240ms ease backwards;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .o_hotel_activity_footer {
+        justify-content: space-between;
+        gap: 1rem;
+        color: var(--dashboard-subtle-text);
+        background: var(--dashboard-surface-subtle);
+        border-radius: 0.55rem;
+        margin-block-start: auto;
+        padding: 0.75rem 0.9rem;
+    }
+
+    .o_hotel_completed_toggle {
+        min-height: var(--dashboard-touch);
+        gap: 0.6rem;
+        margin: 0;
+        cursor: pointer;
+
+        .form-check-input {
+            margin: 0;
+        }
+    }
+
+    .o_hotel_activity_total {
+        justify-content: flex-end;
+        gap: 0.35rem;
+
+        .btn-link {
+            min-height: var(--dashboard-touch);
+        }
+    }
+
+    .o_hotel_dashboard_stale {
+        justify-content: space-between;
+        gap: 1rem;
+        color: var(--dashboard-warn-text);
+        background: var(--dashboard-warn-bg);
+        border: 1px solid var(--dashboard-warn-border);
+        border-radius: 0.55rem;
+        margin-block-end: 1rem;
+        padding: 0.55rem 0.75rem;
+
+        span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .btn-link {
+            min-height: var(--dashboard-touch);
+        }
+    }
+
+    .o_hotel_dashboard_error {
+        min-height: 24rem;
+
+        .btn {
+            min-height: var(--dashboard-touch);
+        }
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .o_hotel_dashboard {
+        padding: 1rem;
+
+        .o_hotel_dashboard_layout {
+            grid-template-columns: 1fr;
+        }
+
+        .o_hotel_dashboard_sidebar {
+            grid-template-columns: minmax(13rem, 0.7fr) minmax(28rem, 1.3fr);
+        }
+
+        .o_hotel_occupancy_card {
+            display: grid;
+            grid-template-columns: minmax(10rem, 0.75fr) minmax(14rem, 1.25fr);
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .o_hotel_occupancy_visual {
+            padding: 0;
+        }
+
+        .o_hotel_occupancy_totals {
+            border-block-start: 0;
+            border-inline-start: 1px solid var(--dashboard-border);
+            padding-block-start: 0;
+            padding-inline-start: 1rem;
+        }
+
+        .o_hotel_activity_tabs {
+            gap: 0.4rem;
+        }
+
+        .o_hotel_activity_tab {
+            min-height: 5.5rem;
+            padding-inline: 0.55rem;
+        }
+    }
+}
+
+@media (max-width: 900px) {
+    .o_hotel_dashboard {
+        .o_hotel_dashboard_sidebar,
+        .o_hotel_occupancy_card {
+            grid-template-columns: 1fr;
+        }
+
+        .o_hotel_occupancy_totals {
+            border-inline-start: 0;
+            border-block-start: 1px solid var(--dashboard-border);
+            padding-inline-start: 0;
+            padding-block-start: 1rem;
+        }
+
+        .o_hotel_activity_tabs {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .o_hotel_activity_table_head {
+            display: none;
+        }
+
+        .o_hotel_activity_row {
+            grid-template-columns: minmax(0, 1fr) minmax(9rem, auto);
+            row-gap: 0.75rem;
+        }
+
+        .o_hotel_activity_guest,
+        .o_hotel_activity_stay {
+            grid-column: 1;
+        }
+
+        .o_hotel_activity_room,
+        .o_hotel_activity_status,
+        .o_hotel_row_actions {
+            grid-column: 2;
+        }
+
+        .o_hotel_activity_room {
+            grid-row: 1;
+        }
+
+        .o_hotel_activity_status {
+            grid-row: 2;
+        }
+
+        .o_hotel_row_actions {
+            grid-row: 3;
+        }
+    }
+}
+
+.o_hotel_attention_rail {
+    min-height: var(--dashboard-touch);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--dashboard-surface);
+    border: 1px solid var(--dashboard-border);
+    border-radius: 0.75rem;
+    margin-block-end: 1rem;
+    padding: 0.45rem 0.65rem;
+}
+
+.o_hotel_attention_title {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border-inline-end: 1px solid var(--dashboard-border);
+    padding-inline: 0.25rem 0.85rem;
+    white-space: nowrap;
+
+    i {
+        color: var(--dashboard-primary);
+    }
+}
+
+.o_hotel_attention_items {
+    min-width: 0;
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 0.25rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.o_hotel_attention_item {
+    min-height: var(--dashboard-touch);
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--dashboard-text);
+    background: transparent;
+    border: 0;
+    border-radius: 0.5rem;
+    padding: 0.35rem 0.55rem;
+    text-align: start;
+
+    strong {
+        min-width: 1.5rem;
+        display: inline-grid;
+        place-items: center;
+        color: var(--dashboard-primary);
+        background: var(--dashboard-primary-soft);
+        border-radius: 999px;
+        padding: 0.15rem 0.4rem;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &:hover {
+        background: var(--dashboard-primary-soft);
+    }
+}
+
+@keyframes o-hotel-menu-in {
+    from {
+        opacity: 0;
+        transform: translateY(-0.25rem) scale(0.98);
+    }
+}
+
+@keyframes o-hotel-drawer-in {
+    from {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes o-hotel-drawer-in-rtl {
+    from {
+        transform: translateX(-100%);
+    }
+}
+
+.o_hotel_dashboard_drawer_backdrop {
+    position: fixed;
+    z-index: 1055;
+    inset: 0;
+    background: var(--dashboard-backdrop);
+    animation: o-hotel-fade-in 200ms ease backwards;
+}
+
+.o_hotel_dashboard_drawer {
+    width: 32rem;
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--dashboard-surface);
+    border-inline-start: 1px solid var(--dashboard-border);
+    box-shadow: 0 0 2rem var(--dashboard-shadow);
+    margin-inline-start: auto;
+    overflow: hidden;
+    animation: o-hotel-drawer-in 280ms cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+
+    &:dir(rtl) {
+        animation-name: o-hotel-drawer-in-rtl;
+    }
+}
+
+.o_hotel_drawer_header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-block-end: 1px solid var(--dashboard-border);
+    padding: 1rem;
+}
+
+.o_hotel_guest_avatar {
+    width: 3rem;
+    aspect-ratio: 1;
+    display: inline-grid;
+    flex: 0 0 auto;
+    place-items: center;
+    color: var(--dashboard-primary);
+    background: var(--dashboard-primary-soft);
+    border-radius: 50%;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.o_hotel_drawer_identity {
+    min-width: 0;
+    flex: 1 1 auto;
+
+    h2,
+    bdi {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    bdi {
+        color: var(--dashboard-muted);
+        font-size: 0.85rem;
+    }
+}
+
+.o_hotel_drawer_status {
+    min-height: var(--dashboard-touch);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--dashboard-border);
+    border-radius: 999px;
+    margin: 0.85rem 1rem;
+    padding: 0.45rem 0.75rem;
+
+    span {
+        color: var(--dashboard-teal);
+        font-size: 0.55rem;
+    }
+}
+
+.o_hotel_drawer_tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+    border-block-end: 1px solid var(--dashboard-border);
+    padding-inline: 1rem;
+
+    span,
+    button {
+        min-height: var(--dashboard-touch);
+        display: inline-flex;
+        align-items: center;
+        color: var(--dashboard-muted);
+        background: transparent;
+        border: 0;
+        border-block-end: 0.2rem solid transparent;
+        padding: 0.5rem 0.15rem;
+    }
+
+    button:hover,
+    .o_is_selected {
+        color: var(--dashboard-primary);
+        border-block-end-color: var(--dashboard-primary);
+    }
+
+    .o_is_selected {
+        font-weight: 700;
+    }
+}
+
+.o_hotel_drawer_body {
+    display: grid;
+    gap: 0.85rem;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.o_hotel_drawer_card {
+    display: grid;
+    gap: 0.75rem;
+    background: var(--dashboard-surface);
+    border: 1px solid var(--dashboard-border);
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
+
+.o_hotel_drawer_card_title,
+.o_hotel_drawer_balance {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+}
+
+.o_hotel_drawer_card_title > i,
+.o_hotel_drawer_balance > i {
+    color: var(--dashboard-muted);
+    margin-block-start: 0.15rem;
+}
+
+.o_hotel_drawer_dates {
+    color: var(--dashboard-muted);
+    font-size: 0.85rem;
+}
+
+.o_hotel_drawer_balance {
+    align-items: center;
+
+    div {
+        display: grid;
+        gap: 0.1rem;
+    }
+
+    strong {
+        font-size: 1.25rem;
+        font-variant-numeric: tabular-nums;
+    }
+
+    span {
+        color: var(--dashboard-muted);
+        font-size: 0.8rem;
+    }
+}
+
+.o_hotel_drawer_actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+
+    .btn {
+        min-height: var(--dashboard-touch);
+    }
+}
+
+@media (max-width: 700px) {
+    .o_hotel_attention_rail {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .o_hotel_attention_title {
+        border-inline-end: 0;
+        border-block-end: 1px solid var(--dashboard-border);
+        padding: 0.25rem 0.35rem 0.6rem;
+    }
+
+    .o_hotel_drawer_actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+.o_hotel_dashboard:dir(rtl) {
+    .o_hotel_activity_room,
+    .o_hotel_activity_guest,
+    .o_hotel_activity_stay,
+    .o_hotel_activity_status,
+    .o_hotel_activity_menu button {
+        text-align: start;
     }
 }

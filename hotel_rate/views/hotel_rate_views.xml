@@ -8,11 +8,12 @@
             <list string="Rate Rules">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
-                <field name="property_id"/>
                 <field name="room_type_id"/>
                 <field name="date_start"/>
                 <field name="date_end"/>
                 <field name="guest_type"/>
+                <field name="seasonal_pricing_id" optional="show"/>
+                <field name="weekday_ids" widget="many2many_tags" optional="hide"/>
                 <field name="rate_price"/>
                 <field name="currency_id"/>
             </list>
@@ -28,7 +29,7 @@
                     <group>
                         <group string="Rule Info">
                             <field name="name"/>
-                            <field name="property_id"/>
+                            <field name="property_id" invisible="1"/>
                             <field name="room_type_id"/>
                             <field name="sequence" string="Priority"/>
                         </group>
@@ -36,6 +37,8 @@
                             <field name="date_start"/>
                             <field name="date_end"/>
                             <field name="guest_type"/>
+                            <field name="seasonal_pricing_id"/>
+                            <field name="weekday_ids" widget="many2many_tags"/>
                             <field name="rate_price"/>
                             <field name="currency_id"/>
                         </group>
@@ -67,8 +70,8 @@
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="hotel_rate_rule_view_search"/>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">Define seasonal rate rules</p>
-            <p>Seasonal rules let you override base prices for specific dates or guest nationalities.</p>
+            <p class="o_view_nocontent_smiling_face">Step 3: define nightly rate rules</p>
+            <p>A matching rule replaces the room-type base price before occupancy and pricelist adjustments. The lowest sequence wins; a seasonal rule only applies while its plan is active.</p>
         </field>
     </record>
 
@@ -79,7 +82,6 @@
         <field name="arch" type="xml">
             <list string="Occupancy Bands">
                 <field name="name"/>
-                <field name="property_id"/>
                 <field name="min_occupancy"/>
                 <field name="max_occupancy"/>
                 <field name="multiplier"/>
@@ -96,7 +98,7 @@
                 <sheet>
                     <group>
                         <field name="name"/>
-                        <field name="property_id"/>
+                        <field name="property_id" invisible="1"/>
                         <field name="min_occupancy"/>
                         <field name="max_occupancy"/>
                         <field name="multiplier"/>
@@ -113,9 +115,6 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <group>
-                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
-                </group>
             </search>
         </field>
     </record>
@@ -126,21 +125,21 @@
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="hotel_rate_occupancy_band_view_search"/>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">Define occupancy-based price bands</p>
-            <p>Occupancy bands let you adjust room prices dynamically based on the percentage of occupied rooms.</p>
+            <p class="o_view_nocontent_smiling_face">Step 4: define occupancy multipliers</p>
+            <p>The matching occupancy band multiplies the room-type base or nightly-rule price before any pricelist adjustment.</p>
         </field>
     </record>
 
     <!-- Menu Items -->
     <menuitem id="menu_hotel_config_rates"
-        name="Rate Rules"
-        parent="hotel_base.menu_hotel_config"
+        name="3. Nightly Rate Rules"
+        parent="hotel_base.menu_hotel_config_section_pricing"
         action="hotel_rate_rule_action"
-        sequence="50"/>
+        sequence="30"/>
 
     <menuitem id="menu_hotel_config_occupancy_bands"
-        name="Occupancy Bands"
-        parent="hotel_base.menu_hotel_config"
+        name="4. Occupancy Bands"
+        parent="hotel_base.menu_hotel_config_section_pricing"
         action="hotel_rate_occupancy_band_action"
-        sequence="60"/>
+        sequence="40"/>
 </odoo>

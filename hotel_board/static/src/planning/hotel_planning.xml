@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="hotel_board.HotelPlanning">
+        <main class="o_hotel_workspace o_hotel_planning h-100 overflow-auto"
+            t-att-style="planningStyle()">
+            <span class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
+                <t t-esc="state.ariaStatus"/>
+            </span>
+
+            <header class="o_hotel_workspace_header">
+                <div class="o_hotel_workspace_title">
+                    <h1>Reservation Planning</h1>
+                    <p class="text-muted mb-0" t-if="state.data">
+                        <t t-esc="state.data.meta.property_name"/>
+                    </p>
+                </div>
+                <div class="o_hotel_workspace_controls">
+                    <div class="o_hotel_field">
+                        <label for="hotel-planning-start-date">Start Date</label>
+                        <input id="hotel-planning-start-date" type="date" class="form-control" lang="en" dir="ltr"
+                            t-att-value="state.startDate" t-on-change="onStartDateChange"
+                            t-att-disabled="!state.data"/>
+                    </div>
+                    <div class="o_hotel_day_count" role="group" aria-label="Planning period">
+                        <span class="o_hotel_control_label">Days</span>
+                        <div class="btn-group">
+                            <button t-foreach="[7, 14, 30]" t-as="dayCount" t-key="dayCount"
+                                type="button"
+                                t-attf-class="btn {{ state.dayCount === dayCount ? 'btn-secondary' : 'btn-outline-secondary' }} o_hotel_touch_target"
+                                t-att-aria-pressed="state.dayCount === dayCount"
+                                t-on-click="() => this.setDayCount(dayCount)"
+                                t-att-disabled="!state.data">
+                                <t t-esc="dayCount"/>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="o_hotel_header_actions">
+                        <button type="button" class="btn btn-primary o_hotel_touch_target"
+                            t-on-click="newReservation" t-att-disabled="!state.data">
+                            <i class="fa fa-plus" aria-hidden="true"/>
+                            <span>New Reservation</span>
+                        </button>
+                        <button t-if="state.data?.actions?.reservation_planner" type="button"
+                            class="btn btn-outline-secondary o_hotel_touch_target"
+                            t-on-click="openReservationPlanner">
+                            <i class="fa fa-calendar-o" aria-hidden="true"/>
+                            <span>Reservation Planner</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div t-if="state.error" class="alert alert-danger o_hotel_workspace_alert" role="alert">
+                <span>
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"/>
+                    <t t-esc="state.error"/>
+                </span>
+                <button type="button" class="btn btn-sm btn-outline-danger o_hotel_touch_target"
+                    t-on-click="() => this.loadData({ preserveScroll: true })"
+                    t-att-disabled="state.refreshing">Retry</button>
+            </div>
+            <div t-if="state.stale and state.data" class="alert alert-warning o_hotel_workspace_alert"
+                role="status">
+                <span>
+                    <i class="fa fa-clock-o" aria-hidden="true"/>
+                    Showing previously loaded planning. Reconnecting…
+                </span>
+            </div>
+
+            <t t-if="state.data">
+                <details class="o_hotel_planning_filters o_hotel_card">
+                    <summary>
+                        <span class="o_hotel_filter_summary_label">
+                            <span class="o_hotel_filter_icon" aria-hidden="true">
+                                <i class="fa fa-sliders"/>
+                            </span>
+                            <span class="o_hotel_filter_title">Filters</span>
+                            <span t-if="activeFilterCount()" class="o_hotel_filter_count">
+                                <t t-esc="activeFilterCount()"/>
+                            </span>
+                        </span>
+                        <span class="o_hotel_filter_summary_side">
+                            <span class="text-muted">Narrow rooms and reservations</span>
+                            <i class="fa fa-chevron-down o_hotel_filter_chevron" aria-hidden="true"/>
+                        </span>
+                    </summary>
+                    <form class="o_hotel_filter_form" t-on-submit.prevent="applyFilters">
+                        <div class="o_hotel_filter_field">
+                            <label for="hotel-filter-floor">Floor</label>
+                            <select id="hotel-filter-floor" class="form-select"
+                                t-on-change="(ev) => this.onFilterSelect(ev, 'floor_ids', true)">
+                                <option value="" t-att-selected="!singleFilterValue('floor_ids')">All floors</option>
+                                <option t-foreach="state.data.filters.options.floors || []" t-as="option"
+                                    t-key="optionValue(option)" t-att-value="optionValue(option)"
+                                    t-att-selected="isFilterOptionSelected(option, 'floor_ids')">
+                                    <t t-esc="optionLabel(option)"/>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="o_hotel_filter_field">
+                            <label for="hotel-filter-room-type">Room Type</label>
+                            <select id="hotel-filter-room-type" class="form-select"
+                                t-on-change="(ev) => this.onFilterSelect(ev, 'room_type_ids', true)">
+                                <option value="" t-att-selected="!singleFilterValue('room_type_ids')">All room types</option>
+                                <option t-foreach="state.data.filters.options.room_types || []" t-as="option"
+                                    t-key="optionValue(option)" t-att-value="optionValue(option)"
+                                    t-att-selected="isFilterOptionSelected(option, 'room_type_ids')">
+                                    <t t-esc="optionLabel(option)"/>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="o_hotel_filter_field">
+                            <label for="hotel-filter-room-status">Room Status</label>
+                            <select id="hotel-filter-room-status" class="form-select"
+                                t-on-change="(ev) => this.onFilterSelect(ev, 'room_statuses')">
+                                <option value="" t-att-selected="!singleFilterValue('room_statuses')">All room statuses</option>
+                                <option t-foreach="state.data.filters.options.room_statuses || []" t-as="option"
+                                    t-key="optionValue(option)" t-att-value="optionValue(option)"
+                                    t-att-selected="isFilterOptionSelected(option, 'room_statuses')">
+                                    <t t-esc="optionLabel(option)"/>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="o_hotel_filter_field">
+                            <label for="hotel-filter-hk-status">Housekeeping</label>
+                            <select id="hotel-filter-hk-status" class="form-select"
+                                t-on-change="(ev) => this.onFilterSelect(ev, 'hk_statuses')">
+                                <option value="" t-att-selected="!singleFilterValue('hk_statuses')">All housekeeping states</option>
+                                <option t-foreach="state.data.filters.options.housekeeping_statuses || []" t-as="option"
+                                    t-key="optionValue(option)" t-att-value="optionValue(option)"
+                                    t-att-selected="isFilterOptionSelected(option, 'hk_statuses')">
+                                    <t t-esc="optionLabel(option)"/>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="o_hotel_filter_field">
+                            <label for="hotel-filter-reservation-status">Reservation Status</label>
+                            <select id="hotel-filter-reservation-status" class="form-select"
+                                t-on-change="(ev) => this.onFilterSelect(ev, 'reservation_states')">
+                                <option value="" t-att-selected="!singleFilterValue('reservation_states')">All planning states</option>
+                                <option t-foreach="state.data.filters.options.reservation_states || []" t-as="option"
+                                    t-key="optionValue(option)" t-att-value="optionValue(option)"
+                                    t-att-selected="isFilterOptionSelected(option, 'reservation_states')">
+                                    <t t-esc="optionLabel(option)"/>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="o_hotel_filter_field">
+                            <label for="hotel-filter-agency">Agency</label>
+                            <select id="hotel-filter-agency" class="form-select"
+                                t-on-change="(ev) => this.onFilterSelect(ev, 'agency_ids', true)">
+                                <option value="" t-att-selected="!singleFilterValue('agency_ids')">All agencies</option>
+                                <option t-foreach="state.data.filters.options.agencies || []" t-as="option"
+                                    t-key="optionValue(option)" t-att-value="optionValue(option)"
+                                    t-att-selected="isFilterOptionSelected(option, 'agency_ids')">
+                                    <t t-esc="optionLabel(option)"/>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="o_hotel_filter_field">
+                            <label for="hotel-filter-group">Group</label>
+                            <select id="hotel-filter-group" class="form-select"
+                                t-on-change="(ev) => this.onFilterSelect(ev, 'group_ids', true)">
+                                <option value="" t-att-selected="!singleFilterValue('group_ids')">All groups</option>
+                                <option t-foreach="state.data.filters.options.groups || []" t-as="option"
+                                    t-key="optionValue(option)" t-att-value="optionValue(option)"
+                                    t-att-selected="isFilterOptionSelected(option, 'group_ids')">
+                                    <t t-esc="optionLabel(option)"/>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="o_hotel_filter_field">
+                            <label for="hotel-filter-guest">Guest</label>
+                            <input id="hotel-filter-guest" type="search" class="form-control"
+                                placeholder="Guest name" t-model="state.filters.guest_query"/>
+                        </div>
+                        <div class="o_hotel_filter_field">
+                            <label for="hotel-filter-room">Room</label>
+                            <input id="hotel-filter-room" type="search" class="form-control"
+                                placeholder="Room number or name" t-model="state.filters.room_query"/>
+                        </div>
+                        <div class="o_hotel_filter_field">
+                            <label for="hotel-filter-reference">Reference</label>
+                            <input id="hotel-filter-reference" type="search" class="form-control"
+                                placeholder="Reservation reference" t-model="state.filters.reference_query"/>
+                        </div>
+                        <div class="o_hotel_filter_actions">
+                            <button type="submit" class="btn btn-primary o_hotel_touch_target"
+                                t-att-disabled="!state.data">Apply Filters</button>
+                            <button type="button" class="btn btn-link o_hotel_touch_target"
+                                t-on-click="clearFilters" t-att-disabled="!activeFilterCount()">
+                                Clear All
+                            </button>
+                        </div>
+                    </form>
+                </details>
+
+                <div class="o_hotel_planning_summary">
+                    <div class="o_hotel_planning_totals">
+                        <strong><t t-esc="formatCount(state.data.totals.rooms)"/></strong> rooms
+                        <span aria-hidden="true">·</span>
+                        <strong><t t-esc="formatCount(state.data.totals.reservations)"/></strong> reservations
+                    </div>
+                    <button type="button" class="btn o_hotel_legend_toggle o_hotel_touch_target"
+                        t-on-click="toggleLegend"
+                        t-att-aria-expanded="state.legendOpen"
+                        aria-controls="hotel-planning-legend">
+                        <i class="fa fa-info-circle" aria-hidden="true"/>
+                        <span>Legend</span>
+                        <i t-attf-class="fa fa-chevron-down o_hotel_filter_chevron {{ state.legendOpen ? 'o_is_open' : '' }}"
+                            aria-hidden="true"/>
+                    </button>
+                </div>
+                <div t-if="state.legendOpen" id="hotel-planning-legend"
+                    class="o_hotel_planning_legend o_hotel_card" aria-label="Planning legend">
+                    <div t-if="(state.data.legend.reservation_states || []).length" class="o_hotel_legend_group">
+                        <span class="o_hotel_legend_title">Reservations</span>
+                        <div class="o_hotel_legend_items">
+                            <span t-foreach="state.data.legend.reservation_states" t-as="item"
+                                t-key="`reservation-${item.key}`" t-attf-class="o_reservation_{{ item.key }}">
+                                <i aria-hidden="true"/><t t-esc="item.label"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div t-if="(state.data.legend.primary || []).length" class="o_hotel_legend_group">
+                        <span class="o_hotel_legend_title">Room Status</span>
+                        <div class="o_hotel_legend_items">
+                            <span t-foreach="state.data.legend.primary" t-as="item"
+                                t-key="`primary-${item.key}`" t-attf-class="o_primary_{{ item.key }}">
+                                <i aria-hidden="true"/><t t-esc="item.label"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div t-if="(state.data.legend.housekeeping || []).length" class="o_hotel_legend_group">
+                        <span class="o_hotel_legend_title">Housekeeping</span>
+                        <div class="o_hotel_legend_items">
+                            <span t-foreach="state.data.legend.housekeeping" t-as="item"
+                                t-key="`housekeeping-${item.key}`" t-attf-class="o_hk_{{ item.key }}">
+                                <i class="fa fa-bed" aria-hidden="true"/><t t-esc="item.label"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div t-if="(state.data.legend.alerts || []).length" class="o_hotel_legend_group">
+                        <span class="o_hotel_legend_title">Indicators</span>
+                        <div class="o_hotel_legend_items">
+                            <span t-foreach="state.data.legend.alerts" t-as="item"
+                                t-key="`alert-${item.key}`" class="o_has_alert">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="item.label"/>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div t-if="state.data.floors.length" class="o_hotel_planning_tape o_hotel_card"
+                    t-ref="tape" tabindex="0" role="region"
+                    t-on-keydown="onTapeKeydown"
+                    aria-label="Room inventory timeline. Use arrow keys to move between available cells and reservations.">
+                    <div class="o_hotel_planning_header">
+                        <div class="o_hotel_planning_room_header">Room / Status</div>
+                        <div class="o_hotel_planning_days">
+                            <div t-foreach="state.data.days" t-as="day" t-key="day.date"
+                                t-attf-class="o_hotel_planning_day {{ day.is_today ? 'o_is_today' : '' }} {{ day.is_business_date ? 'o_is_business_date' : '' }}">
+                                <span><t t-esc="weekdayLabel(day)"/></span>
+                                <strong><t t-esc="operationalText(day.label)"/></strong>
+                                <small class="o_hotel_day_markers">
+                                    <span t-if="day.is_today" class="o_hotel_day_marker o_today_marker">
+                                        <i class="fa fa-calendar-check-o" aria-hidden="true"/> Today
+                                    </span>
+                                    <span t-if="day.is_business_date" class="o_hotel_day_marker o_business_marker">
+                                        <i class="fa fa-clock-o" aria-hidden="true"/> Business Date
+                                    </span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <t t-foreach="state.data.floors" t-as="floor" t-key="floor.id">
+                        <div class="o_hotel_planning_floor">
+                            <strong><i class="fa fa-building-o" aria-hidden="true"/> <t t-esc="floor.name"/></strong>
+                            <span><t t-esc="floor.rows.length"/> rooms</span>
+                        </div>
+                        <div t-foreach="floor.rows" t-as="row" t-key="row.id"
+                            class="o_hotel_planning_row">
+                            <button type="button" class="o_hotel_planning_room"
+                                t-on-click="() => this.openRoom(row)"
+                                t-att-aria-label="roomAriaLabel(row)">
+                                <span class="o_hotel_planning_room_name">
+                                    <strong><t t-esc="operationalText(row.name)"/></strong>
+                                    <small class="text-truncate"><t t-esc="row.roomTypeName"/></small>
+                                </span>
+                                <span class="o_hotel_planning_room_states">
+                                    <span t-if="row.occupancy_status"
+                                        t-attf-class="o_hotel_mini_badge o_primary_{{ row.occupancyClass }}">
+                                        <t t-esc="statusLabel(row.occupancy_status)"/>
+                                    </span>
+                                    <span t-if="row.hk_status"
+                                        t-attf-class="o_hotel_mini_badge o_hk_{{ row.housekeepingClass }}">
+                                        <i class="fa fa-bed" aria-hidden="true"/>
+                                        <t t-esc="statusLabel(row.hk_status)"/>
+                                    </span>
+                                    <span t-if="row.capacity_blocker" class="o_hotel_mini_badge o_capacity_blocker">
+                                        <i class="fa fa-ban" aria-hidden="true"/>
+                                        <t t-esc="statusLabel(row.capacity_blocker)"/>
+                                    </span>
+                                    <span t-foreach="row.alerts" t-as="alert" t-key="alert.type"
+                                        t-attf-class="o_hotel_mini_badge o_alert_badge o_severity_{{ alert.severityClass }}">
+                                        <i class="fa fa-exclamation-circle" aria-hidden="true"/>
+                                        <t t-esc="alert.label"/>
+                                    </span>
+                                </span>
+                            </button>
+                            <div class="o_hotel_planning_timeline" t-att-style="rowTimelineStyle(row)">
+                                <t t-foreach="state.data.days" t-as="day" t-key="day.date">
+                                    <t t-set="status" t-value="dayStatus(row, day)"/>
+                                    <button type="button" t-att-class="dayCellClass(row, day)"
+                                        t-att-style="`grid-column: ${day.index + 1}; grid-row: 1 / span ${row.laneCount || 1};`"
+                                        t-on-click="() => this.openDayCell(row, day)"
+                                        t-att-aria-disabled="!status.can_create and !status.reservation_id"
+                                        tabindex="-1" t-att-data-day-index="day.index" t-att-data-day-end="day.index"
+                                        t-att-aria-label="dayCellAriaLabel(row, day)">
+                                        <i t-if="status.can_create" class="fa fa-plus" aria-hidden="true"/>
+                                        <i t-if="status.capacity_blocker" class="fa fa-ban" aria-hidden="true"/>
+                                        <i t-if="status.hk_status === 'dirty'" class="fa fa-bed" aria-hidden="true"/>
+                                        <i t-if="status.alertTypes.length" class="fa fa-exclamation-circle" aria-hidden="true"/>
+                                    </button>
+                                </t>
+                                <button t-foreach="row.reservations" t-as="reservation" t-key="reservation.id"
+                                    type="button" draggable="false"
+                                    t-attf-class="o_hotel_reservation_bar o_reservation_{{ reservation.stateClass }}"
+                                    t-att-style="reservationStyle(reservation)"
+                                    t-att-data-span="reservation.gridSpan"
+                                    t-att-data-day-index="reservation.gridStart - 1"
+                                    t-att-data-day-end="reservation.gridStart + reservation.gridSpan - 2"
+                                    tabindex="-1"
+                                    t-on-click.stop="() => this.openReservation(reservation)"
+                                    t-att-aria-label="reservationAriaLabel(reservation)"
+                                    t-att-title="reservationAriaLabel(reservation)">
+                                    <span class="o_hotel_reservation_main">
+                                        <strong class="text-truncate"><t t-esc="reservation.guestName || reservation.name"/></strong>
+                                        <small class="text-truncate"><t t-esc="operationalText(reservation.name)"/></small>
+                                    </span>
+                                    <span t-if="reservationDetails(reservation)" class="o_hotel_reservation_details text-truncate">
+                                        <t t-esc="reservationDetails(reservation)"/>
+                                    </span>
+                                    <span t-if="reservationBalance(reservation)" class="o_hotel_reservation_balance text-truncate">
+                                        <i class="fa fa-credit-card" aria-hidden="true"/>
+                                        <t t-esc="reservationBalance(reservation)"/>
+                                    </span>
+                                    <span t-if="reservation.warningLabels.length" class="o_hotel_reservation_warning"
+                                        t-att-title="reservation.warningLabels.join(', ')"
+                                        aria-label="Reservation warning">
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"/>
+                                    </span>
+                                    <span class="o_hotel_reservation_state">
+                                        <t t-esc="reservation.state_label || statusLabel(reservation.state)"/>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+                <div t-else="" class="o_hotel_empty_state o_hotel_card">
+                    <i class="fa fa-calendar-times-o" aria-hidden="true"/>
+                    <h2>No rooms match these filters</h2>
+                    <p>Clear filters or choose another date range.</p>
+                    <button t-if="activeFilterCount()" type="button"
+                        class="btn btn-secondary o_hotel_touch_target" t-on-click="clearFilters">
+                        Clear All Filters
+                    </button>
+                </div>
+            </t>
+
+            <div t-elif="state.loading" class="o_hotel_loading_state" role="status">
+                <i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"/>
+                <p>Loading reservation planning…</p>
+            </div>
+            <div t-elif="state.error" class="o_hotel_empty_state o_hotel_card">
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"/>
+                <h2>Planning is unavailable</h2>
+                <p>Retry when the connection is restored.</p>
+            </div>
+        </main>
+    </t>
+</templates>

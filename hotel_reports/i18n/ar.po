@@ -17,30 +17,14 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Agency / Entity"
-msgstr "الوكالة / الجهة"
+#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__agency_advances
+msgid "Agency Advances"
+msgstr "دفعات الجهات المقدمة"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Arrival"
-msgstr "الوصول"
-
-#. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
 #: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__arrivals
 msgid "Arrivals"
 msgstr "الواصلون"
-
-#. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Birth Date"
-msgstr "تاريخ الميلاد"
-
-#. module: hotel_reports
-#: model:ir.model.fields,help:hotel_reports.field_hotel_report_wizard__date
-msgid "Business date the report covers."
-msgstr "تاريخ العمل الذي يغطيه التقرير."
 
 #. module: hotel_reports
 #: model_terms:ir.ui.view,arch_db:hotel_reports.hotel_report_wizard_view_form
@@ -48,76 +32,109 @@ msgid "Cancel"
 msgstr "إلغاء"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Coming From"
-msgstr "قادم من"
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_hotel_document
+msgid "Company / الشركة:"
+msgstr "الشركة / Company:"
 
 #. module: hotel_reports
-#: model:ir.actions.report,name:hotel_reports.action_report_daily_movement
-msgid "Daily Movement Report"
-msgstr "تقرير الحركة اليومية"
+#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__folio_statement
+msgid "Consolidated Folio Statement"
+msgstr "كشف الفوليو الموحد"
 
 #. module: hotel_reports
 #: model:ir.model,name:hotel_reports.model_report_hotel_reports_report_daily_movement
 msgid "Daily Movement Report Renderer"
-msgstr ""
+msgstr "عارض تقرير الحركة اليومية"
 
 #. module: hotel_reports
-#: model:ir.actions.act_window,name:hotel_reports.hotel_report_wizard_action
-msgid "Daily Reports"
-msgstr "التقارير اليومية"
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_hotel_document
+msgid "Date / التاريخ:"
+msgstr "التاريخ:"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Departure"
-msgstr "المغادرة"
+#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__debtors
+msgid "Debtors"
+msgstr "المدينون"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
 #: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__departures
 msgid "Departures"
 msgstr "المغادرون"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Guest"
-msgstr "النزيل / الضيف"
+#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__language__en
+msgid "English"
+msgstr "الإنجليزية"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Heading To"
-msgstr "متجه إلى"
+#: model_terms:ir.ui.view,arch_db:hotel_reports.hotel_report_wizard_view_form
+msgid "Export XLSX"
+msgstr "تصدير XLSX"
+
+#. module: hotel_reports
+#: model:report.paperformat,name:hotel_reports.paperformat_hotel_landscape_detail
+msgid "Hotel Detail — A4 Landscape"
+msgstr "تفاصيل الفندق — A4 أفقي"
+
+#. module: hotel_reports
+#: model:ir.actions.report,name:hotel_reports.action_report_landscape_detail
+msgid "Hotel Detailed Report"
+msgstr "تقرير الفندق التفصيلي"
+
+#. module: hotel_reports
+#: model:ir.model,name:hotel_reports.model_report_hotel_reports_report_landscape_detail
+msgid "Hotel Landscape Detail Report Renderer"
+msgstr "عارض تقرير تفاصيل الفندق الأفقي"
+
+#. module: hotel_reports
+#: model:ir.actions.report,name:hotel_reports.action_report_daily_movement
+msgid "Hotel Operational Report"
+msgstr "التقرير التشغيلي للفندق"
+
+#. module: hotel_reports
+#: model:report.paperformat,name:hotel_reports.paperformat_hotel_operations
+msgid "Hotel Operations — A4 Portrait"
+msgstr "عمليات الفندق — A4 عمودي"
 
 #. module: hotel_reports
 #: model:ir.model,name:hotel_reports.model_hotel_report_wizard
-msgid "Hotel Daily Report Wizard"
-msgstr "معالج التقارير اليومية للفندق"
+msgid "Hotel Report Wizard"
+msgstr "معالج تقارير الفندق"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "ID Number"
-msgstr "رقم الهوية"
+#: model:ir.actions.act_window,name:hotel_reports.hotel_report_wizard_action
+msgid "Hotel Reports"
+msgstr "تقارير الفندق"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "ID Type"
-msgstr "نوع الهوية"
+#: model:ir.rule,name:hotel_reports.rule_hotel_report_wizard_assigned_property
+msgid "Hotel reports in active companies"
+msgstr "تقارير الفندق في الشركات النشطة"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
+#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__discrepancy
+msgid "Housekeeping Discrepancy"
+msgstr "فروقات التدبير الفندقي"
+
+#. module: hotel_reports
 #: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__inhouse
 msgid "In-House Guests"
 msgstr "النزلاء المقيمون"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Nationality"
-msgstr "الجنسية"
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_hotel_document
+msgid "No records / لا توجد سجلات"
+msgstr "No records / لا توجد سجلات"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Nights"
-msgstr "الليالي"
+#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__occupancy
+msgid "Occupancy"
+msgstr "الإشغال"
+
+#. module: hotel_reports
+#: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__pos_room_charges
+msgid "POS Room Charges"
+msgstr "مبيعات نقاط البيع على الغرف"
 
 #. module: hotel_reports
 #: model_terms:ir.ui.view,arch_db:hotel_reports.hotel_report_wizard_view_form
@@ -125,9 +142,9 @@ msgid "Print"
 msgstr "طباعة"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Property:"
-msgstr "الفندق:"
+#: model_terms:ir.ui.view,arch_db:hotel_reports.report_hotel_document
+msgid "Records / السجلات:"
+msgstr "Records / السجلات:"
 
 #. module: hotel_reports
 #: model:ir.ui.menu,name:hotel_reports.menu_hotel_reports
@@ -135,22 +152,23 @@ msgid "Reports"
 msgstr "التقارير"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Reservation"
-msgstr "الحجز"
-
-#. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Room"
-msgstr "الغرفة"
-
-#. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
 #: model:ir.model.fields.selection,name:hotel_reports.selection__hotel_report_wizard__report_type__security
 msgid "Security / Police List"
 msgstr "قائمة الأمن / الجوازات"
 
 #. module: hotel_reports
-#: model_terms:ir.ui.view,arch_db:hotel_reports.report_daily_movement
-msgid "Total:"
-msgstr "الإجمالي:"
+#. odoo-python
+#: code:addons/hotel_reports/wizard/hotel_report_wizard.py:0
+msgid "Select a folio for the consolidated statement."
+msgstr "اختر فوليو لكشف الحساب الموحد."
+
+#. module: hotel_reports
+#: model:ir.rule,name:hotel_reports.rule_hotel_report_system_unrestricted
+msgid "System administrators: all hotel report wizards"
+msgstr "مديرو النظام: جميع معالجات تقارير الفندق"
+
+#. module: hotel_reports
+#. odoo-python
+#: code:addons/hotel_reports/wizard/hotel_report_wizard.py:0
+msgid "Your hotel role cannot access this report type."
+msgstr "دورك الفندقي لا يسمح بالوصول إلى هذا النوع من التقارير."

@@ -1,1 +1,1 @@
-from . import models
+"""Migration tombstone for the removed cashier-session workflow."""

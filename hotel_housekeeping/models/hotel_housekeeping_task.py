@@ -71,6 +71,12 @@ class HotelHousekeepingTask(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
+            if not self.env.su and (
+                vals.get("state", "new") != "new"
+                or vals.get("date_start")
+                or vals.get("date_completed")
+            ):
+                raise UserError(_("Housekeeping tasks must change status through their actions."))
             if vals.get("name", _("New")) == _("New"):
                 vals["name"] = (
                     self.env["ir.sequence"].next_by_code("hotel.housekeeping.task")
@@ -84,6 +90,28 @@ class HotelHousekeepingTask(models.Model):
                 raise UserError(_("You can only delete housekeeping tasks that are new or cancelled."))
         return super().unlink()
 
+    def write(self, vals):
+        if (
+            "state" in vals
+            and any(task.state != vals["state"] for task in self)
+        ):
+            raise UserError(
+                _("Housekeeping status can only be changed through its actions.")
+            )
+        if (
+            self.filtered(lambda task: task.state in ("cleaned", "cancel"))
+        ):
+            raise UserError(
+                _(
+                    "Completed or cancelled housekeeping tasks are immutable. "
+                    "Create a new task for follow-up work."
+                )
+            )
+        return super().write(vals)
+
+    def _write_transition(self, values):
+        return super(HotelHousekeepingTask, self).write(values)
+
     def action_start(self):
         self.ensure_one()
         if self.state != "new":
@@ -91,17 +119,19 @@ class HotelHousekeepingTask(models.Model):
         vals = {"state": "cleaning", "date_start": fields.Datetime.now()}
         if not self.cleaner_id:
             vals["cleaner_id"] = self.env.uid
-        self.write(vals)
+        self._write_transition(vals)
 
     def action_complete(self):
         self.ensure_one()
         if self.state != "cleaning":
             raise UserError(_("You can only mark a task as cleaned when it is in cleaning state."))
-        self.write({"state": "cleaned", "date_completed": fields.Datetime.now()})
-        self.room_id.write({"hk_status": "clean"})
+        self._write_transition(
+            {"state": "cleaned", "date_completed": fields.Datetime.now()}
+        )
+        self.room_id._set_housekeeping_status("clean")
 
     def action_cancel(self):
         self.ensure_one()
         if self.state == "cleaned":
             raise UserError(_("You cannot cancel a task that is already cleaned."))
-        self.write({"state": "cancel"})
+        self._write_transition({"state": "cancel"})

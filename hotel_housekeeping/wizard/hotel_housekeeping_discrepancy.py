@@ -1,5 +1,4 @@
-from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo import api, fields, models
 
 class HotelHousekeepingDiscrepancyWizard(models.TransientModel):
     _name = "hotel.housekeeping.discrepancy.wizard"
@@ -9,7 +8,7 @@ class HotelHousekeepingDiscrepancyWizard(models.TransientModel):
         "hotel.property",
         string="Property",
         required=True,
-        default=lambda self: self.env["hotel.property"].search([], limit=1),
+        default=lambda self: self.env["hotel.property"]._get_default_property(),
     )
     line_ids = fields.One2many(
         "hotel.housekeeping.discrepancy.wizard.line",
@@ -37,7 +36,7 @@ class HotelHousekeepingDiscrepancyWizard(models.TransientModel):
     def action_apply(self):
         for line in self.line_ids:
             if line.room_id.hk_status != line.hk_status:
-                line.room_id.write({"hk_status": line.hk_status})
+                line.room_id._set_housekeeping_status(line.hk_status)
         return {"type": "ir.actions.act_window_close"}
 
 class HotelHousekeepingDiscrepancyWizardLine(models.TransientModel):

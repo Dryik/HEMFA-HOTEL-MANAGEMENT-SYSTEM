@@ -17,9 +17,98 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. module: hotel_rate
+#: model:ir.ui.menu,name:hotel_rate.menu_hotel_booking_sources
+msgid "1. Booking Source Pricing"
+msgstr "1. تسعير مصدر الحجز"
+
+#. module: hotel_rate
+#: model:ir.ui.menu,name:hotel_rate.menu_hotel_seasonal_pricing
+msgid "2. Seasonal Pricing Plans"
+msgstr "2. خطط التسعير الموسمية"
+
+#. module: hotel_rate
+#: model:ir.ui.menu,name:hotel_rate.menu_hotel_config_rates
+msgid "3. Nightly Rate Rules"
+msgstr "3. قواعد الأسعار الليلية"
+
+#. module: hotel_rate
+#: model:ir.ui.menu,name:hotel_rate.menu_hotel_config_occupancy_bands
+msgid "4. Occupancy Bands"
+msgstr "4. شرائح الإشغال"
+
+#. module: hotel_rate
+#: model:ir.ui.menu,name:hotel_rate.menu_hotel_pricelists
+msgid "5. Pricelists"
+msgstr "5. قوائم الأسعار"
+
+#. module: hotel_rate
+#: model:ir.ui.menu,name:hotel_rate.menu_hotel_guest_supplements
+msgid "6. Extra Guest Supplements"
+msgstr "6. رسوم النزلاء الإضافيين"
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_pricing.py:0
+msgid "A guest supplement percentage cannot exceed 100%."
+msgstr "لا يمكن أن تتجاوز نسبة إضافة النزيل 100٪."
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_pricing.py:0
+msgid "A hotel, room type, arrival, and departure are required."
+msgstr "الفندق ونوع الغرفة والوصول والمغادرة مطلوبة."
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_rule_action
+msgid "A matching rule replaces the room-type base price before occupancy and pricelist adjustments. The lowest sequence wins; a seasonal rule only applies while its plan is active."
+msgstr "تحل القاعدة المطابقة محل السعر الأساسي لنوع الغرفة قبل تعديلات الإشغال وقائمة الأسعار. يفوز أقل تسلسل؛ ولا تطبق القاعدة الموسمية إلا أثناء نشاط خطتها."
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_rate.py:0
+msgid "A rate rule must stay within its seasonal plan and hotel."
+msgstr "يجب أن تبقى قاعدة السعر ضمن خطتها الموسمية وفندقها."
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_seasonal_pricing_action
+msgid "A seasonal plan gates its nightly rate and pricelist rules by date and status. The plan does not set a price by itself."
+msgstr "تقيد الخطة الموسمية قواعد أسعار الليالي وقائمة الأسعار حسب التاريخ والحالة. ولا تحدد الخطة سعراً بذاتها."
+
+#. module: hotel_rate
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_seasonal_pricing_view_form
+msgid "Activate"
+msgstr "تفعيل"
+
+#. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_seasonal_pricing__state__active
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_rule_view_search
+msgid "Active"
+msgstr "نشط"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_occupancy_band__adjustment_pct
+msgid "Adjustment %"
+msgstr "نسبة التعديل %"
+
+#. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_guest_supplement__guest_category__adult
+msgid "Adult"
+msgstr "بالغ"
+
+#. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_booking_source__source__agent
+msgid "Agent"
+msgstr "وكيل"
+
+#. module: hotel_rate
 #: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_rule__guest_type__all
 msgid "All Nationalities"
 msgstr "كل الجنسيات"
+
+#. module: hotel_rate
+#: model:ir.model.fields,help:hotel_rate.field_product_pricelist__hotel_website_published
+msgid "Allow public hotel guests to select this pricelist."
+msgstr "السماح لنزلاء الموقع العام باختيار قائمة الأسعار هذه."
 
 #. module: hotel_rate
 #: model:ir.model.fields,help:hotel_rate.field_hotel_rate_rule__guest_type
@@ -27,19 +116,58 @@ msgid "Applies this rate depending on the guest's nationality."
 msgstr "يطبق هذا السعر حسب جنسية النزيل."
 
 #. module: hotel_rate
+#: model_terms:ir.ui.view,arch_db:hotel_rate.product_pricelist_item_form_inherit_hotel
+msgid "Based on"
+msgstr "مبني على"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_reservation__booking_source_config_id
+#: model:ir.actions.act_window,name:hotel_rate.hotel_booking_source_action
+msgid "Booking Source Pricing"
+msgstr "تسعير مصادر الحجز"
+
+#. module: hotel_rate
+#: model:ir.rule,name:hotel_rate.rule_hotel_booking_source_assigned_property
+msgid "Booking source pricing in active companies"
+msgstr "تسعير مصادر الحجز في الشركات النشطة"
+
+#. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_guest_supplement__guest_category__child
+msgid "Child"
+msgstr "طفل"
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_reservation.py:0
+msgid "Confirmed booking-source pricing cannot be changed."
+msgstr "لا يمكن تغيير تسعير مصدر الحجز بعد التأكيد."
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_reservation.py:0
+msgid "Confirmed nightly rates cannot be regenerated."
+msgstr "لا يمكن إعادة إنشاء أسعار الليالي المؤكدة."
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_reservation.py:0
+msgid "Confirmed-rate locking is controlled by hotel workflows."
+msgstr "تتحكم سير عمل الفندق في قفل الأسعار المؤكدة."
+
+#. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__currency_id
 msgid "Currency"
 msgstr "العملة"
 
 #. module: hotel_rate
-#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_occupancy_band_action
-msgid "Define occupancy-based price bands"
-msgstr "حدد شرائح أسعار حسب الإشغال"
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_booking_source__source__direct
+msgid "Direct"
+msgstr "مباشر"
 
 #. module: hotel_rate
-#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_rule_action
-msgid "Define seasonal rate rules"
-msgstr "حدد قواعد أسعار موسمية"
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_seasonal_pricing__state__draft
+msgid "Draft"
+msgstr "مسودة"
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__date_end
@@ -47,9 +175,46 @@ msgid "End Date"
 msgstr "تاريخ الانتهاء"
 
 #. module: hotel_rate
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_seasonal_pricing_view_form
+msgid "Expire"
+msgstr "إنهاء الصلاحية"
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_pricing.py:0
+msgid "Expire an active seasonal plan before changing its dates."
+msgstr "قم بإنهاء صلاحية الخطة الموسمية النشطة قبل تغيير تواريخها."
+
+#. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_seasonal_pricing__state__expired
+msgid "Expired"
+msgstr "منتهي الصلاحية"
+
+#. module: hotel_rate
+#: model:ir.actions.act_window,name:hotel_rate.hotel_guest_supplement_action
+msgid "Extra Guest Supplements"
+msgstr "إضافات النزلاء الزائدين"
+
+#. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_guest_supplement__charge_type__fixed
+msgid "Fixed Per Guest / Night"
+msgstr "مبلغ ثابت لكل نزيل / ليلة"
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_guest_supplement_action
+msgid "Fixed or percentage supplements are added after the pricelist result. Taxes are then computed on the room price plus supplements."
+msgstr "تضاف الرسوم الثابتة أو النسبية بعد نتيجة قائمة الأسعار. ثم تحسب الضرائب على سعر الغرفة مضافاً إليه الرسوم."
+
+#. module: hotel_rate
 #: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_rule__guest_type__foreign
 msgid "Foreigner"
 msgstr "أجنبي"
+
+#. module: hotel_rate
+#: model:hotel.rate.weekday,name:hotel_rate.weekday_friday
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_weekday__code__4
+msgid "Friday"
+msgstr "الجمعة"
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__guest_type
@@ -57,9 +222,44 @@ msgid "Guest Nationality Type"
 msgstr "نوع جنسية النزيل"
 
 #. module: hotel_rate
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_rule_view_search
+msgid "Guest Type"
+msgstr "نوع النزيل"
+
+#. module: hotel_rate
+#: model:ir.rule,name:hotel_rate.rule_hotel_supplement_assigned_property
+msgid "Guest supplements in active companies"
+msgstr "إضافات النزلاء في الشركات النشطة"
+
+#. module: hotel_rate
+#: model:ir.model,name:hotel_rate.model_hotel_booking_source
+msgid "Hotel Booking Source Configuration"
+msgstr "إعداد مصدر حجز الفندق"
+
+#. module: hotel_rate
+#: model:ir.model,name:hotel_rate.model_hotel_guest_supplement
+msgid "Hotel Extra Guest Supplement"
+msgstr "إضافة نزيل زائد للفندق"
+
+#. module: hotel_rate
+#: model_terms:ir.ui.view,arch_db:hotel_rate.res_partner_view_form_hotel_pricelist
+msgid "Hotel Pricelist"
+msgstr "قائمة أسعار الفندق"
+
+#. module: hotel_rate
+#: model:ir.model,name:hotel_rate.model_hotel_rate_weekday
+msgid "Hotel Pricing Weekday"
+msgstr "يوم أسبوع لتسعير الفندق"
+
+#. module: hotel_rate
 #: model:ir.model,name:hotel_rate.model_hotel_rate_occupancy_band
 msgid "Hotel Rate Occupancy Band"
 msgstr "شريحة إشغال الأسعار"
+
+#. module: hotel_rate
+#: model:ir.model,name:hotel_rate.model_hotel_rate_quote
+msgid "Hotel Rate Quote Service"
+msgstr "خدمة عرض أسعار الفندق"
 
 #. module: hotel_rate
 #: model:ir.model,name:hotel_rate.model_hotel_rate_rule
@@ -67,14 +267,45 @@ msgid "Hotel Rate Rule"
 msgstr "قاعدة تسعير الفندق"
 
 #. module: hotel_rate
+#: model:ir.model,name:hotel_rate.model_hotel_reservation_rate_line
+msgid "Hotel Reservation Nightly Rate Snapshot"
+msgstr "لقطة سعر ليلة حجز الفندق"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_product_pricelist_item__hotel_seasonal_pricing_id
+msgid "Hotel Seasonal Plan"
+msgstr "الخطة الموسمية للفندق"
+
+#. module: hotel_rate
+#: model:ir.model,name:hotel_rate.model_hotel_seasonal_pricing
+msgid "Hotel Seasonal Pricing Plan"
+msgstr "خطة التسعير الموسمي للفندق"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_product_pricelist_item__hotel_weekday_ids
+msgid "Hotel Weekdays"
+msgstr "أيام أسبوع الفندق"
+
+#. module: hotel_rate
 #: model:ir.model.fields,help:hotel_rate.field_hotel_reservation__rate_locked
 msgid "If checked, nightly rate will not be updated automatically by seasonal pricing or occupancy bands."
 msgstr "عند التفعيل، لن يتغير سعر الليلة تلقائياً بالمواسم أو شرائح الإشغال."
 
 #. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_guest_supplement__guest_category__infant
+msgid "Infant"
+msgstr "رضيع"
+
+#. module: hotel_rate
 #: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_rule__guest_type__local
 msgid "Libyan National"
 msgstr "نزيل ليبي"
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_pricing.py:0
+msgid "Locked nightly rate snapshots cannot be deleted."
+msgstr "لا يمكن حذف لقطات أسعار الليالي المقفلة."
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_occupancy_band__max_occupancy
@@ -87,9 +318,15 @@ msgid "Min Occupancy (%)"
 msgstr "الحد الأدنى للإشغال (%)"
 
 #. module: hotel_rate
+#: model:hotel.rate.weekday,name:hotel_rate.weekday_monday
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_weekday__code__0
+msgid "Monday"
+msgstr "الاثنين"
+
+#. module: hotel_rate
 #: model:ir.model.fields,help:hotel_rate.field_hotel_rate_occupancy_band__multiplier
-msgid "Multiplication factor to apply to the nightly rate (e.g. 1.20 for +20% price)."
-msgstr "معامل الضرب المطبق على سعر الليلة (مثال: 1.20 لزيادة 20% في السعر)."
+msgid "Multiplication factor applied to the nightly rate (e.g. 1.20 = +20%, 0.90 = −10%)."
+msgstr "معامل الضرب المطبق على السعر الليلي (مثلاً 1.20 = +20%، 0.90 = −10%)."
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__rate_price
@@ -97,21 +334,95 @@ msgid "Nightly Rate"
 msgstr "سعر الليلة"
 
 #. module: hotel_rate
-#: model:ir.ui.menu,name:hotel_rate.menu_hotel_config_occupancy_bands
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_seasonal_pricing__rate_rule_ids
+msgid "Nightly Rate Rules"
+msgstr "قواعد أسعار الليالي"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_reservation__rate_line_ids
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_seasonal_pricing_view_form
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_reservation_view_form_inherit_rate
+msgid "Nightly Rates"
+msgstr "الأسعار الليلية"
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_pricing.py:0
+msgid "Nightly rate snapshots are controlled by hotel workflows."
+msgstr "تتحكم سير عمل الفندق في لقطات أسعار الليالي."
+
+#. module: hotel_rate
+#: model:ir.rule,name:hotel_rate.rule_hotel_rate_line_assigned_property
+msgid "Nightly rates in active companies"
+msgstr "أسعار الليالي في الشركات النشطة"
+
+#. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_booking_source__source__ota_manual
+msgid "OTA (Manual)"
+msgstr "وكالة سفر إلكترونية (يدوي)"
+
+#. module: hotel_rate
 #: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_occupancy_band_view_list
 #: model:ir.actions.act_window,name:hotel_rate.hotel_rate_occupancy_band_action
 msgid "Occupancy Bands"
 msgstr "شرائح الإشغال"
 
 #. module: hotel_rate
-#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_occupancy_band_action
-msgid "Occupancy bands let you adjust room prices dynamically based on the percentage of occupied rooms."
-msgstr ""
+#: model:ir.rule,name:hotel_rate.rule_hotel_rate_band_assigned_property
+msgid "Occupancy bands in active companies"
+msgstr "شرائح الإشغال في الشركات النشطة"
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_pricing.py:0
+msgid "Only active seasonal plans can be expired."
+msgstr "يمكن إنهاء صلاحية الخطط الموسمية النشطة فقط."
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_pricing.py:0
+msgid "Only draft seasonal plans can be activated."
+msgstr "يمكن تفعيل الخطط الموسمية المسودة فقط."
+
+#. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_booking_source__source__other
+msgid "Other"
+msgstr "أخرى"
+
+#. module: hotel_rate
+#: model:ir.model.fields,help:hotel_rate.field_hotel_rate_occupancy_band__adjustment_pct
+msgid "Percentage markup or discount implied by the rate factor."
+msgstr "نسبة الزيادة أو الخصم التي يحددها معامل السعر."
+
+#. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_guest_supplement__charge_type__percent
+msgid "Percentage of Nightly Rate"
+msgstr "نسبة من سعر الليلة"
+
+#. module: hotel_rate
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_seasonal_pricing_view_form
+msgid "Pricelist Adjustments"
+msgstr "تعديلات قائمة الأسعار"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_seasonal_pricing__pricelist_item_ids
+msgid "Pricelist Rules"
+msgstr "قواعد قائمة الأسعار"
+
+#. module: hotel_rate
+#: model:ir.actions.act_window,name:hotel_rate.hotel_pricelist_action
+msgid "Pricelists"
+msgstr "قوائم الأسعار"
 
 #. module: hotel_rate
 #: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_rule_view_form
 msgid "Pricing & Conditions"
 msgstr "التسعير والشروط"
+
+#. module: hotel_rate
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_rule_view_form
+msgid "Priority"
+msgstr "الأولوية"
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__property_id
@@ -120,24 +431,34 @@ msgid "Property"
 msgstr "الفندق / المنشأة"
 
 #. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_product_pricelist__hotel_website_published
+msgid "Published for Hotel Website"
+msgstr "منشورة لموقع الفندق"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_occupancy_band__multiplier
+msgid "Rate Factor (1.0 = no change)"
+msgstr "معامل السعر (1.0 = بدون تغيير)"
+
+#. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_reservation__rate_locked
 msgid "Rate Locked"
 msgstr "قفل السعر"
 
 #. module: hotel_rate
-#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_occupancy_band__multiplier
-msgid "Rate Multiplier"
-msgstr "مضاعف السعر"
-
-#. module: hotel_rate
-#: model:ir.ui.menu,name:hotel_rate.menu_hotel_config_rates
 #: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_rule_view_list
 #: model:ir.actions.act_window,name:hotel_rate.hotel_rate_rule_action
 msgid "Rate Rules"
 msgstr "قواعد التسعير"
 
 #. module: hotel_rate
+#: model:ir.rule,name:hotel_rate.rule_hotel_rate_rule_assigned_property
+msgid "Rate rules in active companies"
+msgstr "قواعد الأسعار في الشركات النشطة"
+
+#. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__room_type_id
+#: model_terms:ir.ui.view,arch_db:hotel_rate.hotel_rate_rule_view_search
 msgid "Room Type"
 msgstr "نوع الغرفة"
 
@@ -147,14 +468,151 @@ msgid "Rule Info"
 msgstr "معلومات قاعدة التسعير"
 
 #. module: hotel_rate
-#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_rule_action
-msgid "Seasonal rules let you override base prices for specific dates or guest nationalities."
-msgstr ""
+#: model:hotel.rate.weekday,name:hotel_rate.weekday_saturday
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_weekday__code__5
+msgid "Saturday"
+msgstr "السبت"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__seasonal_pricing_id
+msgid "Seasonal Plan"
+msgstr "الخطة الموسمية"
+
+#. module: hotel_rate
+#: model:ir.actions.act_window,name:hotel_rate.hotel_seasonal_pricing_action
+msgid "Seasonal Pricing"
+msgstr "التسعير الموسمي"
+
+#. module: hotel_rate
+#: model:ir.rule,name:hotel_rate.rule_hotel_seasonal_assigned_property
+msgid "Seasonal plans in active companies"
+msgstr "الخطط الموسمية في الشركات النشطة"
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_pricing.py:0
+msgid "Seasonal pricing status is controlled by its actions."
+msgstr "تتحكم إجراءات التسعير الموسمي في حالته."
 
 #. module: hotel_rate
 #: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__date_start
 msgid "Start Date"
 msgstr "تاريخ البدء"
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_booking_source_action
+msgid "Step 1: choose the reservation pricelist"
+msgstr "الخطوة 1: اختر قائمة أسعار الحجز"
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_seasonal_pricing_action
+msgid "Step 2: define active seasonal windows"
+msgstr "الخطوة 2: حدد الفترات الموسمية النشطة"
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_rule_action
+msgid "Step 3: define nightly rate rules"
+msgstr "الخطوة 3: حدد قواعد أسعار الليالي"
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_occupancy_band_action
+msgid "Step 4: define occupancy multipliers"
+msgstr "الخطوة 4: حدد مضاعفات الإشغال"
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_pricelist_action
+msgid "Step 5: define pricelist adjustments"
+msgstr "الخطوة 5: حدد تعديلات قائمة الأسعار"
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_guest_supplement_action
+msgid "Step 6: define extra-guest supplements"
+msgstr "الخطوة 6: حدد رسوم النزلاء الإضافيين"
+
+#. module: hotel_rate
+#: model:hotel.rate.weekday,name:hotel_rate.weekday_sunday
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_weekday__code__6
+msgid "Sunday"
+msgstr "الأحد"
+
+#. module: hotel_rate
+#: model:ir.rule,name:hotel_rate.rule_hotel_booking_source_system_unrestricted
+msgid "System administrators: all booking source pricing"
+msgstr "مديرو النظام: كل تسعير مصادر الحجز"
+
+#. module: hotel_rate
+#: model:ir.rule,name:hotel_rate.rule_hotel_supplement_system_unrestricted
+msgid "System administrators: all guest supplements"
+msgstr "مديرو النظام: كل إضافات النزلاء"
+
+#. module: hotel_rate
+#: model:ir.rule,name:hotel_rate.rule_hotel_rate_line_system_unrestricted
+msgid "System administrators: all nightly rates"
+msgstr "مديرو النظام: كل أسعار الليالي"
+
+#. module: hotel_rate
+#: model:ir.rule,name:hotel_rate.rule_hotel_rate_band_system_unrestricted
+msgid "System administrators: all occupancy bands"
+msgstr "مديرو النظام: كل نطاقات الإشغال"
+
+#. module: hotel_rate
+#: model:ir.rule,name:hotel_rate.rule_hotel_rate_rule_system_unrestricted
+msgid "System administrators: all rate rules"
+msgstr "مديرو النظام: كل قواعد الأسعار"
+
+#. module: hotel_rate
+#: model:ir.rule,name:hotel_rate.rule_hotel_seasonal_system_unrestricted
+msgid "System administrators: all seasonal plans"
+msgstr "مديرو النظام: كل الخطط الموسمية"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_reservation_rate_line__tax_ids
+msgid "Taxes"
+msgstr "الضرائب"
+
+#. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_guest_supplement__guest_category__teenager
+msgid "Teenager"
+msgstr "مراهق"
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_booking_source_action
+msgid "The booking source supplies the default pricelist. A guest-specific Hotel Pricelist overrides it; the guest's standard pricelist is the final fallback."
+msgstr "يوفر مصدر الحجز قائمة الأسعار الافتراضية. وتتجاوزها قائمة أسعار الفندق الخاصة بالنزيل؛ وتكون قائمة الأسعار القياسية للنزيل هي الخيار الاحتياطي الأخير."
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_pricing.py:0
+msgid "The booking-source pricelist belongs to another company."
+msgstr "تنتمي قائمة أسعار مصدر الحجز إلى شركة أخرى."
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_rate_occupancy_band_action
+msgid "The matching occupancy band multiplies the room-type base or nightly-rule price before any pricelist adjustment."
+msgstr "تضاعف شريحة الإشغال المطابقة السعر الأساسي لنوع الغرفة أو سعر قاعدة الليلة قبل أي تعديل لقائمة الأسعار."
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_pricing.py:0
+msgid "The pricelist rule and seasonal plan must use the same company."
+msgstr "يجب أن تستخدم قاعدة قائمة الأسعار والخطة الموسمية الشركة نفسها."
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_rate.py:0
+msgid "The room type must be shared or belong to the rate rule property."
+msgstr "يجب أن يكون نوع الغرفة مشتركاً أو تابعاً لمنشأة قاعدة السعر."
+
+#. module: hotel_rate
+#: model_terms:ir.actions.act_window,help:hotel_rate.hotel_pricelist_action
+msgid "The selected pricelist adjusts the occupancy-adjusted room price. Hotel seasonal-plan and weekday conditions can further limit a rule."
+msgstr "تعدل قائمة الأسعار المختارة سعر الغرفة المعدل حسب الإشغال. ويمكن لشروط الخطة الموسمية للفندق وأيام الأسبوع تقييد القاعدة أكثر."
+
+#. module: hotel_rate
+#. odoo-python
+#: code:addons/hotel_rate/models/hotel_pricing.py:0
+msgid "The supplement room type belongs to another hotel."
+msgstr "ينتمي نوع غرفة الإضافة إلى فندق آخر."
 
 #. module: hotel_rate
 #. odoo-python
@@ -167,3 +625,31 @@ msgstr "تتداخل هذه الشريحة مع شريحة موجودة: %(overl
 #: code:addons/hotel_rate/models/hotel_rate.py:0
 msgid "This rate rule overlaps with an existing rate rule: %(overlap)s"
 msgstr "تتداخل قاعدة التسعير هذه مع قاعدة موجودة: %(overlap)s"
+
+#. module: hotel_rate
+#: model:hotel.rate.weekday,name:hotel_rate.weekday_thursday
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_weekday__code__3
+msgid "Thursday"
+msgstr "الخميس"
+
+#. module: hotel_rate
+#: model:hotel.rate.weekday,name:hotel_rate.weekday_tuesday
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_weekday__code__1
+msgid "Tuesday"
+msgstr "الثلاثاء"
+
+#. module: hotel_rate
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_booking_source__source__website
+msgid "Website"
+msgstr "الموقع الإلكتروني"
+
+#. module: hotel_rate
+#: model:hotel.rate.weekday,name:hotel_rate.weekday_wednesday
+#: model:ir.model.fields.selection,name:hotel_rate.selection__hotel_rate_weekday__code__2
+msgid "Wednesday"
+msgstr "الأربعاء"
+
+#. module: hotel_rate
+#: model:ir.model.fields,field_description:hotel_rate.field_hotel_rate_rule__weekday_ids
+msgid "Weekdays"
+msgstr "أيام الأسبوع"

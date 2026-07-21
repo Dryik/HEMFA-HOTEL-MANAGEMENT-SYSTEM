@@ -1,27 +1,29 @@
 # HEMFA HOTEL MANAGEMENT SYSTEM — Odoo 19 Enterprise
 
 Custom hotel property management addon suite (first deployment: Tubactus Hotel, Libya).
-Deployment target: **Odoo.sh** (dev / staging / production branches).
+Deployment target: **Odoo.sh** using `dev` → `staging` → `main` promotion.
 Repository: https://github.com/Dryik/HEMFA-HOTEL-MANAGEMENT-SYSTEM
 
-See `../implementation-plan-v3.md` for the full build plan and client decisions.
+See `docs/architecture_decisions.md`, `docs/release_workflow.md`, and the
+phase acceptance documents under `docs/` for the locked production design.
 
 ## Modules
 
 | Module | Phase | Status | Purpose |
 |---|---|---|---|
-| `hotel_base` | 1 | **done** | Properties, floors, room types, rooms, amenities, guest/agency partner extensions, security groups, menus |
-| `hotel_rate` | 2a | skeleton | Seasonal rates, occupancy bands, nationality→currency rule, 12:00→12:00 business day, rate lock |
-| `hotel_reservation` | 1 | **done (core)** | Reservation lifecycle, Gantt tape chart, calendar, availability + exclusion constraint; groups/amendments pending |
-| `hotel_folio` | 1–2 | skeleton | Folio ledger, charge routing matrix, deposits, invoicing (guest/entity/group) |
-| `hotel_night_audit` | 2a | skeleton | Daily rollover: room-night posting, no-shows, occupancy snapshot, audit report |
-| `hotel_frontdesk_session` | 2a | skeleton | Cashier shift sessions, multi-currency cash counts, shift-close report |
-| `hotel_restricted_services` | 2b | skeleton | Per-guest service blocklist, per-entity daily ceilings, POS/service validation |
-| `hotel_housekeeping` | 3 | skeleton | Cleaning tasks, dirty/clean/inspected flow, discrepancy report |
-| `hotel_maintenance` | 3 | skeleton | Custom maintenance workflow, room out-of-order blocking |
-| `hotel_pos_room_charge` | 4 | skeleton | POS "charge to room" payment method with folio validation |
-| `hotel_board` | 1 | **done (v1)** | Front-desk KPI dashboard (landing page); full color room board pending |
-| `hotel_reports` | 5 | skeleton | Arabic QWeb PDF + XLSX legacy reports |
+| `hotel_base` | 2 | implemented | Company-scoped hotel setup, roles, business-day service, PII protection, commission placeholders |
+| `hotel_rate` | 5 | implemented | Deterministic seasonal/occupancy pricing and confirmed-rate locking |
+| `hotel_reservation` | 4 | implemented | Availability service, lifecycle, immutable amendments, groups and rooming lists |
+| `hotel_folio` | 3 | implemented; finance gate open | Tax-aware folio, routing, invoices, deposits/advances, FX audit and reversals |
+| `hotel_restricted_services` | 3 | implemented | Property/day entity ceilings with row-lock concurrency control |
+| `hotel_housekeeping` | 4 | implemented | Cleaning/discrepancy workflow with immutable completed records |
+| `hotel_maintenance` | 4 | implemented | Room blocking and manager-verified immutable completion |
+| `hotel_guest_services` | 4 | implemented | Lost-and-found, DND, and wake-up calls |
+| `hotel_pos_room_charge` | 3 | implemented | Discount/tax parity, idempotent folio lines and clearing-to-receivable transfer |
+| `hotel_board` | 5 | implemented | Front Desk composition workspace with operational Dashboard and complete-room Planning tape |
+| `hotel_reports` | 6 | implemented | Bilingual PDF/XLSX operational, finance and consolidated folio reports |
+| `hotel_website_booking` | 7 | implemented | Sales-free website, multi-room holds, online payments, portal documents and ratings |
+| `l10n_ly_hemfa` | 3 | blocked at signed finance gate | Reserved localization addon; intentionally non-installable until approved account/tax templates arrive |
 
 ## Conventions
 
@@ -33,8 +35,15 @@ See `../implementation-plan-v3.md` for the full build plan and client decisions.
 
 ## Local checks
 
-```
-python -m py_compile $(git ls-files '*.py')
-```
+Run the repository validation command::
 
-Runtime testing happens on the Odoo.sh dev branch (no local Odoo install).
+    python scripts/validate_repository.py
+
+The repository contains tagged model and workflow tests across the addon test
+suites. Runtime installation, upgrade, and tagged tests run on Odoo.sh; GitHub
+Actions performs database-free static checks. See `docs/release_workflow.md`.
+
+Migration tooling and acceptance runbooks live under `scripts/migration/` and
+`docs/`. Finance-approved Libyan account/tax codes, Odoo.sh runtime evidence,
+legacy data, performance/UAT execution, and signed acceptance remain external
+release gates and are intentionally not fabricated in this repository.

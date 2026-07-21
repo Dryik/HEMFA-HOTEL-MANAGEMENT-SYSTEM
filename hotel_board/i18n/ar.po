@@ -17,33 +17,408 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. module: hotel_board
-#. odoo-javascript
-#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
-msgid "Admin Use"
-msgstr "استخدام إداري"
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "A valid business date is required."
+msgstr "يلزم تحديد تاريخ عمل صالح."
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "A valid dashboard row limit is required."
+msgstr "يلزم تحديد حد صالح لصفوف لوحة التحكم."
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "ADR"
+msgstr "متوسط سعر الغرفة"
 
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
-msgid "Arrivals Today"
-msgstr "الواصلون اليوم"
+msgid "Accommodation"
+msgstr "الإقامة"
 
 #. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Active Do Not Disturb"
+msgstr "طلبات عدم الإزعاج النشطة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Activity"
+msgstr "النشاط"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Activity options"
+msgstr "خيارات النشاط"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Activity records"
+msgstr "سجلات النشاط"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Activity type"
+msgstr "نوع النشاط"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Agency"
+msgstr "الوكالة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Agency Advance Available"
+msgstr "تتوفر دفعة مقدمة للجهة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "All agencies"
+msgstr "كل الوكالات"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "All floors"
+msgstr "كل الطوابق"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "All groups"
+msgstr "كل المجموعات"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "All housekeeping states"
+msgstr "كل حالات التدبير الفندقي"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "All planning states"
+msgstr "كل حالات التخطيط"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "All room statuses"
+msgstr "كل حالات الغرف"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "All room types"
+msgstr "كل أنواع الغرف"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Apply"
+msgstr "تطبيق"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Apply Filters"
+msgstr "تطبيق عوامل التصفية"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Arrival"
+msgstr "الوصول"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Arrivals"
+msgstr "الواصلون"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Arriving guests"
+msgstr "النزلاء الواصلون"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Available units"
+msgstr "الوحدات المتاحة"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Balance Due"
+msgstr "الرصيد المستحق"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Balance due"
+msgstr "رصيد مستحق"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Blocking Maintenance"
+msgstr "صيانة حاجبة للغرفة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Booked units"
+msgstr "الوحدات المحجوزة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Booking Requests"
+msgstr "طلبات الحجز"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Booking sources"
+msgstr "مصادر الحجز"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Bookings"
+msgstr "الحجوزات"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Business Date"
+msgstr "تاريخ العمل"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Cancellations"
+msgstr "الإلغاءات"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Check Out"
+msgstr "تسجيل مغادرة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Check out"
+msgstr "تسجيل المغادرة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Check out %(guest)s from room %(room)s? Checkout ends the stay and cannot be undone."
+msgstr "هل تريد تسجيل مغادرة %(guest)s من الغرفة %(room)s؟ تسجيل المغادرة ينهي الإقامة ولا يمكن التراجع عنه."
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Check-in"
+msgstr "تسجيل الوصول"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Check-out"
+msgstr "تسجيل المغادرة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Checkout"
+msgstr "المغادرة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Clean"
+msgstr "نظيفة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Clear All"
+msgstr "مسح الكل"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Clear All Filters"
+msgstr "مسح كل عوامل التصفية"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Clear filters or choose another date range."
+msgstr "امسح عوامل التصفية أو اختر نطاق تاريخ آخر."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Close"
+msgstr "إغلاق"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Configure the active company before opening Hotel."
+msgstr "اضبط الشركة النشطة قبل فتح الفندق."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Create a reservation"
+msgstr "إنشاء حجز"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
 #: model:ir.ui.menu,name:hotel_board.menu_hotel_dashboard
 msgid "Dashboard"
 msgstr "لوحة التحكم"
 
 #. module: hotel_board
 #. odoo-javascript
-#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
-msgid "Departures Today"
-msgstr "المغادرون اليوم"
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Dashboard activity updated."
+msgstr "تم تحديث نشاط لوحة التحكم."
 
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
-msgid "Front Desk"
-msgstr "مكتب الاستقبال"
+msgid "Dashboard date controls"
+msgstr "عناصر التحكم بتاريخ لوحة التحكم"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Dashboard is unavailable"
+msgstr "لوحة التحكم غير متاحة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Dashboard row limit must be between 1 and %(limit)s."
+msgstr "يجب أن يكون حد صفوف لوحة التحكم بين 1 و%(limit)s."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Date and occupancy"
+msgstr "التاريخ والإشغال"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Days"
+msgstr "الأيام"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Departing guests"
+msgstr "النزلاء المغادرون"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Departure"
+msgstr "المغادرة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Departures"
+msgstr "المغادرون"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Dirty"
+msgstr "غير نظيفة"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Do Not Disturb"
+msgstr "عدم الإزعاج"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Filters"
+msgstr "عوامل التصفية"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Floor"
+msgstr "الطابق"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Folio"
+msgstr "حساب النزيل / الفوليو"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Folios"
+msgstr "حسابات النزلاء / الفوليو"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Folios Requiring Settlement"
+msgstr "فوليوهات تتطلب التسوية"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "From"
+msgstr "من"
 
 #. module: hotel_board
 #: model:ir.actions.client,name:hotel_board.action_hotel_dashboard
@@ -52,36 +427,833 @@ msgstr "لوحة مكتب الاستقبال"
 
 #. module: hotel_board
 #. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Front Desk dashboard updated."
+msgstr "تم تحديث لوحة مكتب الاستقبال."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Group"
+msgstr "مجموعة"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
-msgid "In House"
-msgstr "نزلاء الفندق حالياً"
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Guest"
+msgstr "النزيل / الضيف"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Guest Deposit Available"
+msgstr "تتوفر دفعة مقدمة للنزيل"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Guest checked in."
+msgstr "تم تسجيل وصول النزيل."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Guest checked out."
+msgstr "تم تسجيل مغادرة النزيل."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Guest geography"
+msgstr "التوزيع الجغرافي للنزلاء"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Guest name"
+msgstr "اسم النزيل"
 
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Guest, room, or reference"
+msgstr "النزيل أو الغرفة أو المرجع"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Hotel"
+msgstr "الفندق"
+
+#. module: hotel_board
+#: model:ir.model,name:hotel_board.model_hotel_frontdesk_workspace
+msgid "Hotel Front Desk Workspace Service"
+msgstr "خدمة مساحة عمل مكتب استقبال الفندق"
+
+#. module: hotel_board
+#: model:ir.model,name:hotel_board.model_hotel_owner_dashboard
+msgid "Hotel Owner Analytics Service"
+msgstr "خدمة تحليلات مالك الفندق"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Hotel Stays"
+msgstr "إقامات الفندق"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "House Use"
+msgstr "استخدام الفندق"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "House Use Rooms"
+msgstr "غرف استخدام الفندق"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "House use"
+msgstr "استخدام الفندق"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Housekeeping"
+msgstr "التدبير الفندقي"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Housekeeping Workload"
+msgstr "عبء عمل التدبير الفندقي"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "In House"
+msgstr "نزلاء الفندق حالياً"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "In-house"
+msgstr "النزلاء المقيمون"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "In-house guests"
+msgstr "النزلاء المقيمون"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Indicators"
+msgstr "المؤشرات"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Inspected"
+msgstr "مفتشة ومفحوصة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Keep Stay"
+msgstr "إبقاء الإقامة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Late Arrivals"
+msgstr "وصولات متأخرة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Legend"
+msgstr "دليل الرموز"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Live"
+msgstr "مباشر"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Loading activity…"
+msgstr "جارٍ تحميل النشاط…"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Loading analytics…"
+msgstr "جارٍ تحميل التحليلات…"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Loading dashboard activity."
+msgstr "جارٍ تحميل نشاط لوحة التحكم."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Loading dashboard…"
+msgstr "جارٍ تحميل لوحة التحكم…"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Loading reservation planning."
+msgstr "جارٍ تحميل تخطيط الحجوزات."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Loading reservation planning…"
+msgstr "جارٍ تحميل تخطيط الحجوزات…"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Loading the Front Desk dashboard."
+msgstr "جارٍ تحميل لوحة مكتب الاستقبال."
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Maintenance"
+msgstr "الصيانة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Meals to Prepare"
+msgstr "وجبات قيد التحضير"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Narrow rooms and reservations"
+msgstr "تضييق نطاق الغرف والحجوزات"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "New Reservation"
+msgstr "حجز جديد"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Next day"
+msgstr "اليوم التالي"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "No activity for this date."
+msgstr "لا يوجد نشاط في هذا التاريخ."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "No rooms match these filters"
+msgstr "لا توجد غرف تطابق عوامل التصفية"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
 msgid "Occupancy"
 msgstr "الإشغال"
 
 #. module: hotel_board
 #. odoo-javascript
-#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
-msgid "Out of Order"
-msgstr "خارج الخدمة"
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Occupied"
+msgstr "مشغولة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Online Payment Exceptions"
+msgstr "استثناءات الدفع عبر الإنترنت"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_owner_dashboard.py:0
+msgid "Only hotel managers can open the owner dashboard."
+msgstr "يمكن لمديري الفندق فقط فتح لوحة المالك."
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Open"
+msgstr "مفتوحة"
 
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Open Full List"
+msgstr "فتح القائمة الكاملة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Open folio"
+msgstr "فتح الفوليو"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Open guest"
+msgstr "فتح النزيل"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Open reservation"
+msgstr "فتح الحجز"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Operational workload"
+msgstr "عبء العمل التشغيلي"
+
+#. module: hotel_board
+#: model:ir.ui.menu,name:hotel_board.menu_hotel_operations
+msgid "Operations"
+msgstr "العمليات"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Out of Order"
+msgstr "خارج الخدمة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Out of Order Rooms"
+msgstr "غرف خارج الخدمة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Out of service"
+msgstr "خارج الخدمة"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Overbookings"
+msgstr "الحجوزات الزائدة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Overdue Departures"
+msgstr "مغادرات متأخرة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Overview"
+msgstr "نظرة عامة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+#: model:ir.ui.menu,name:hotel_board.menu_hotel_owner_dashboard
+#: model:ir.actions.client,name:hotel_board.action_hotel_owner_dashboard
+msgid "Owner Dashboard"
+msgstr "لوحة تحكم المالك"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Pending arrivals"
+msgstr "وصولات بانتظار الإجراء"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Pending departures"
+msgstr "مغادرات بانتظار الإجراء"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+#: model:ir.actions.client,name:hotel_board.action_hotel_planning
+msgid "Planning"
+msgstr "التخطيط"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Planning day count must be 7, 14 or 30."
+msgstr "يجب أن يكون عدد أيام التخطيط 7 أو 14 أو 30."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Planning is unavailable"
+msgstr "التخطيط غير متاح"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Planning legend"
+msgstr "دليل رموز التخطيط"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Planning period"
+msgstr "فترة التخطيط"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Previous day"
+msgstr "اليوم السابق"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Reference"
+msgstr "المرجع"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Refresh failed. Previously loaded data remains visible."
+msgstr "فشل التحديث. ستبقى البيانات المحملة سابقاً ظاهرة."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Refresh failed. Previously loaded planning remains visible."
+msgstr "فشل التحديث. سيبقى التخطيط المحمل سابقاً ظاهراً."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Refreshing reservation planning."
+msgstr "جارٍ تحديث تخطيط الحجوزات."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Refreshing the Front Desk dashboard."
+msgstr "جارٍ تحديث لوحة مكتب الاستقبال."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Request Amendment"
+msgstr "طلب تعديل"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Reservation"
+msgstr "الحجز"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Reservation Planner"
+msgstr "مخطط الحجوزات"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Reservation Planning"
+msgstr "مخطط الحجوزات"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Reservation Status"
+msgstr "حالة الحجز"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Reservation actions"
+msgstr "إجراءات الحجز"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Reservation planning updated."
+msgstr "تم تحديث تخطيط الحجوزات."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Reservation reference"
+msgstr "مرجع الحجز"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Reservation warning"
+msgstr "تحذير الحجز"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Reservations"
+msgstr "الحجوزات"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Reservations to Confirm"
+msgstr "حجوزات بانتظار التأكيد"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Reserved"
+msgstr "محجوزة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
 msgid "Reserved Rooms"
 msgstr "الغرف المحجوزة"
 
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
-msgid "Vacant Clean"
-msgstr "شاغرة نظيفة"
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Retry"
+msgstr "إعادة المحاولة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Retry when the connection is restored."
+msgstr "أعد المحاولة عند استعادة الاتصال."
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "RevPAR"
+msgstr "إيراد الغرفة المتاحة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Revenue"
+msgstr "الإيرادات"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Revenue and bookings trend"
+msgstr "اتجاه الإيرادات والحجوزات"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Room"
+msgstr "الغرفة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Room %(room)s"
+msgstr "الغرفة %(room)s"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Room / Status"
+msgstr "الغرفة / الحالة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Room Status"
+msgstr "حالة الغرفة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Room Type"
+msgstr "نوع الغرفة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Room inventory timeline. Use arrow keys to move between available cells and reservations."
+msgstr "الخط الزمني لمخزون الغرف. استخدم مفاتيح الأسهم للتنقل بين الخلايا المتاحة والحجوزات."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Room number or name"
+msgstr "رقم الغرفة أو اسمها"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Room type"
+msgstr "نوع الغرفة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Room-type performance"
+msgstr "أداء أنواع الغرف"
 
 #. module: hotel_board
 #. odoo-javascript
 #: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Search activity"
+msgstr "البحث في النشاط"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Show checked-out guests"
+msgstr "إظهار النزلاء الذين غادروا"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Show completed arrivals"
+msgstr "إظهار الوصولات المكتملة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Showing previously loaded data."
+msgstr "يتم عرض البيانات المحملة سابقاً."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.xml:0
+msgid "Start Date"
+msgstr "تاريخ البدء"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Status"
+msgstr "الحالة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+msgid "Stay"
+msgstr "الحجز والإقامة"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Stayovers"
+msgstr "الإقامات المستمرة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_owner_dashboard.py:0
+msgid "The hotel is not available in the active companies."
+msgstr "الفندق غير متاح ضمن الشركات النشطة."
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "The hotel workspace follows the active Odoo company."
+msgstr "تتبع مساحة عمل الفندق شركة أودو النشطة."
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_owner_dashboard.py:0
+msgid "The reporting end date must follow the start date."
+msgstr "يجب أن يأتي تاريخ نهاية التقرير بعد تاريخ البداية."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "To"
+msgstr "إلى"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.xml:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Today"
+msgstr "اليوم"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/owner/hotel_owner_dashboard.xml:0
+msgid "Top customers"
+msgstr "أهم العملاء"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Unable to complete the workflow."
+msgstr "تعذر إكمال سير العمل."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Unable to load dashboard activity."
+msgstr "تعذر تحميل نشاط لوحة التحكم."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Unable to refresh reservation planning."
+msgstr "تعذر تحديث تخطيط الحجوزات."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "Unable to refresh the Front Desk dashboard."
+msgstr "تعذر تحديث لوحة مكتب الاستقبال."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/shared/frontdesk_utils.js:0
+msgid "Unable to refresh this workspace."
+msgstr "تعذر تحديث مساحة العمل هذه."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Unassigned Floor"
+msgstr "طابق غير محدد"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_owner_dashboard.py:0
+msgid "Unknown"
+msgstr "غير معروف"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Unsupported dashboard activity."
+msgstr "نشاط لوحة التحكم غير مدعوم."
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Vacant"
+msgstr "شاغرة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Vacant Clean"
+msgstr "شاغرة نظيفة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Vacant Clean Rooms"
+msgstr "غرف شاغرة نظيفة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
 msgid "Vacant Dirty"
 msgstr "شاغرة غير نظيفة"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Vacant Dirty Rooms"
+msgstr "غرف شاغرة غير نظيفة"
+
+#. module: hotel_board
+#. odoo-javascript
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+#: code:addons/hotel_board/static/src/planning/hotel_planning.js:0
+msgid "Wake-up Call"
+msgstr "مكالمة إيقاظ"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Wake-up Calls"
+msgstr "مكالمات الإيقاظ"
+
+#. module: hotel_board
+#. odoo-python
+#: code:addons/hotel_board/models/hotel_frontdesk_workspace.py:0
+msgid "Wake-up Calls Due"
+msgstr "مكالمات إيقاظ مستحقة"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "adults"
+msgstr "البالغين"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "children"
+msgstr "الأطفال"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "nights"
+msgstr "الليالي"
+
+#. module: hotel_board
+#. odoo-javascript
+#: code:addons/hotel_board/static/src/dashboard/hotel_dashboard.js:0
+msgid "occupancy"
+msgstr "إشغال"

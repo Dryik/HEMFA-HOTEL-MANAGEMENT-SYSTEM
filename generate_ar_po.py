@@ -19,6 +19,11 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 
+if hasattr(sys.stdout, "reconfigure"):
+    # Windows PowerShell commonly starts Python with a legacy console
+    # encoding.  Translation terms may legitimately contain arrows or Arabic.
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from translate_exported_po import TRANSLATIONS, header_template, po_escape
 
@@ -28,17 +33,30 @@ MODULES = [
     "hotel_board",
     "hotel_folio",
     "hotel_rate",
-    "hotel_night_audit",
-    "hotel_frontdesk_session",
     "hotel_housekeeping",
     "hotel_maintenance",
     "hotel_restricted_services",
     "hotel_pos_room_charge",
     "hotel_reports",
+    "hotel_guest_services",
+    "hotel_website_booking",
 ]
+# Modules still undergoing the Webkul-parity expansion intentionally permit
+# untranslated fallback entries until staging language QA signs them off.
+REQUIRED_COMPLETE_MODULES = {
+    "hotel_maintenance",
+    "hotel_restricted_services",
+    "hotel_reports",
+}
 
-RELATIONAL_FIELDS = {"Many2one", "One2many", "Many2many"}
-TRANSLATED_ATTRS = {"string", "help", "placeholder", "confirm", "title"}
+TRANSLATED_ATTRS = {
+    "string",
+    "help",
+    "placeholder",
+    "confirm",
+    "title",
+    "aria-label",
+}
 SKIP_DIRS = {"tests", "i18n", "demo", "__pycache__"}
 
 
@@ -148,9 +166,15 @@ def parse_python(module, path, rel, entries):
             pos = call.args
             string_node = kwargs.get("string")
             selection_node = kwargs.get("selection")
-            if ftype in RELATIONAL_FIELDS:
+            if ftype == "Many2one":
                 if string_node is None and len(pos) >= 2:
                     string_node = pos[1]
+            elif ftype == "One2many":
+                if string_node is None and len(pos) >= 3:
+                    string_node = pos[2]
+            elif ftype == "Many2many":
+                if string_node is None and len(pos) >= 5:
+                    string_node = pos[4]
             elif ftype == "Selection":
                 if selection_node is None and len(pos) >= 1:
                     selection_node = pos[0]
@@ -194,13 +218,23 @@ def parse_python(module, path, rel, entries):
 
 def extract_arch_terms(module, xmlid, elem, entries, occurrence):
     for node in elem.iter():
+        if node.get("t-translation") == "off":
+            continue
         for attr in TRANSLATED_ATTRS:
             value = node.get(attr)
             if value:
                 add(entries, value.strip(), occurrence)
         # Leaf text only: mixed inline content is segmented differently
         # by odoo.tools.xml_translate and would not byte-match.
-        if len(node) == 0 and node.text and node.text.strip():
+        if (
+            len(node) == 0
+            and (
+                node.tag != "attribute"
+                or node.get("name") in TRANSLATED_ATTRS
+            )
+            and node.text
+            and node.text.strip()
+        ):
             add(entries, node.text.strip(), occurrence)
 
 
@@ -273,6 +307,8 @@ def parse_static_xml(module, path, rel, entries):
         return
     occurrence = f"code:addons/{module}/{rel}:0"
     for node in root.iter():
+        if node.get("t-translation") == "off":
+            continue
         for attr in TRANSLATED_ATTRS:
             value = node.get(attr)
             if value and not value.startswith(("{", "props.", "state.")):
@@ -289,13 +325,13 @@ def parse_static_js(module, path, rel, entries):
         add(entries, match.group(2), occurrence, "odoo-javascript")
 
 
-def generate_module(base_dir, module):
+def generate_module(base_dir, module, check=False):
     module_dir = os.path.join(base_dir, module)
     entries = {}
     for dirpath, dirnames, filenames in os.walk(module_dir):
-        dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
+        dirnames[:] = sorted(d for d in dirnames if d not in SKIP_DIRS)
         in_static = os.sep + "static" + os.sep in dirpath + os.sep
-        for filename in filenames:
+        for filename in sorted(filenames):
             path = os.path.join(dirpath, filename)
             rel = os.path.relpath(path, module_dir).replace(os.sep, "/")
             if filename == "__manifest__.py":
@@ -329,27 +365,57 @@ def generate_module(base_dir, module):
         lines.append(f'msgstr "{po_escape(msgstr)}"')
         blocks.append("\n".join(lines))
 
-    with open(po_path, "w", encoding="utf-8", newline="\n") as handle:
-        handle.write(header_template.format(module_name=module))
-        handle.write("\n\n".join(blocks))
-        handle.write("\n")
+    content = (
+        header_template.format(module_name=module)
+        + "\n\n".join(blocks)
+        + "\n"
+    )
+    drifted = False
+    if check:
+        try:
+            with open(po_path, encoding="utf-8") as handle:
+                drifted = handle.read().replace("\r\n", "\n") != content
+        except FileNotFoundError:
+            drifted = True
+    else:
+        with open(po_path, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(content)
 
     total = len(entries)
     done = total - len(untranslated)
     print(f"{module}: {total} terms, {done} translated")
     for term in untranslated:
         print(f"    untranslated: {term}")
-    return total, done
+    return total, done, drifted
 
 
 def main():
+    unknown = set(sys.argv[1:]) - {"--check"}
+    if unknown:
+        raise SystemExit(f"Unknown argument(s): {', '.join(sorted(unknown))}")
+    check = "--check" in sys.argv[1:]
     base_dir = os.path.dirname(os.path.abspath(__file__))
     grand_total = grand_done = 0
+    drifted_modules = []
+    incomplete_modules = []
     for module in MODULES:
-        total, done = generate_module(base_dir, module)
+        total, done, drifted = generate_module(base_dir, module, check=check)
         grand_total += total
         grand_done += done
+        if drifted:
+            drifted_modules.append(module)
+        if module in REQUIRED_COMPLETE_MODULES and done != total:
+            incomplete_modules.append(module)
     print(f"TOTAL: {grand_total} terms, {grand_done} translated")
+    if drifted_modules:
+        print("Translation drift: " + ", ".join(drifted_modules))
+        raise SystemExit(1)
+    if incomplete_modules:
+        print(
+            "Required translation coverage is incomplete: "
+            + ", ".join(incomplete_modules)
+        )
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

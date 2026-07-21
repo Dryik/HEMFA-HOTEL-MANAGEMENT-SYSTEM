@@ -8,14 +8,16 @@ class TestHotelMaintenance(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.property = cls.env["hotel.property"].create(
-            {"name": "Maintenance Test Hotel", "code": "MTH"}
-        )
+        cls.property = cls.env["hotel.property"]._get_default_property()
         cls.floor = cls.env["hotel.floor"].create(
             {"name": "Floor M1", "property_id": cls.property.id}
         )
         cls.room_type = cls.env["hotel.room.type"].create(
-            {"name": "Maintenance Suite", "base_price": 100.0}
+            {
+                "name": "Maintenance Suite",
+                "base_price": 100.0,
+                "property_id": cls.property.id,
+            }
         )
         cls.room = cls.env["hotel.room"].create(
             {
@@ -68,6 +70,7 @@ class TestHotelMaintenance(TransactionCase):
         self.assertTrue(req.technician_id)
         req.action_done()
         self.assertEqual(req.state, "done")
+        self.assertEqual(dict(req._fields["state"].selection)["done"], "Completed")
         req.with_user(self.manager).action_verify()
         self.assertEqual(req.state, "verified")
 
@@ -167,3 +170,40 @@ class TestHotelMaintenance(TransactionCase):
             req.unlink()
         req.action_cancel()
         req.unlink()
+
+    def test_verified_request_is_immutable(self):
+        req = self._request()
+        req.action_confirm()
+        req.action_start()
+        req.action_done()
+        req.with_user(self.manager).action_verify()
+        with self.assertRaises(UserError):
+            req.with_user(self.manager).write({"resolution_notes": "Changed"})
+
+    def test_state_cannot_bypass_actions(self):
+        req = self._request()
+        with self.assertRaises(UserError):
+            req.write({"state": "verified"})
+        with self.assertRaises(UserError):
+            req.with_context(hotel_maintenance_transition=True).write(
+                {"state": "verified"}
+            )
+
+    def test_requests_are_company_scoped(self):
+        other_company = self.env["res.company"].create(
+            {"name": "Other Maintenance Company"}
+        )
+        other_property = self.env["hotel.property"].with_company(
+            other_company
+        )._get_default_property()
+        hidden_request = self.env["hotel.maintenance.request"].create(
+            {
+                "property_id": other_property.id,
+                "location": "Lobby",
+                "description": "Hidden request",
+            }
+        )
+        visible = self.env["hotel.maintenance.request"].with_user(
+            self.technician
+        ).search([])
+        self.assertNotIn(hidden_request, visible)

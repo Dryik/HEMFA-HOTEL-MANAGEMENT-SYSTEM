@@ -7,7 +7,7 @@
             <form string="Housekeeping Discrepancy Reconciliation">
                 <sheet>
                     <group>
-                        <field name="property_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="property_id" invisible="1"/>
                     </group>
                     <p class="text-muted">
                         Review physical occupancy reported by housekeeping against front-office reservation status. Adjust the cleaning status directly if needed.
@@ -36,5 +36,8 @@
         <field name="res_model">hotel.housekeeping.discrepancy.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
+        <field name="context">{
+            'default_property_id': context.get('hotel_property_id'),
+        }</field>
     </record>
 </odoo>
