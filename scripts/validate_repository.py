@@ -17,7 +17,7 @@ from xml.etree import ElementTree
 
 ROOT = Path(__file__).resolve().parents[1]
 ADDONS = sorted(path.parent for path in ROOT.glob("*/__manifest__.py"))
-TRANSLATION_REQUIRED_ADDONS = {
+OPERATIONAL_HOTEL_ADDONS = {
     "hotel_base",
     "hotel_reservation",
     "hotel_board",
@@ -31,6 +31,7 @@ TRANSLATION_REQUIRED_ADDONS = {
     "hotel_guest_services",
     "hotel_website_booking",
 }
+TRANSLATION_REQUIRED_ADDONS = OPERATIONAL_HOTEL_ADDONS
 ACL_HEADER = [
     "id",
     "name",
@@ -202,9 +203,11 @@ def load_manifest(path: Path, errors: list[str]) -> dict:
 
 def check_manifests(errors: list[str]) -> None:
     addon_names = {addon.name for addon in ADDONS}
+    manifests = {}
     for addon in ADDONS:
         manifest_path = addon / "__manifest__.py"
         manifest = load_manifest(manifest_path, errors)
+        manifests[addon.name] = manifest
         for key in ("name", "version", "depends", "installable"):
             if key not in manifest:
                 fail(errors, f"{addon.name}: manifest is missing {key!r}")
@@ -212,9 +215,58 @@ def check_manifests(errors: list[str]) -> None:
             for relative in manifest.get(section, []):
                 if not (addon / relative).is_file():
                     fail(errors, f"{addon.name}: missing manifest file {relative}")
-        for dependency in manifest.get("depends", []):
+        dependencies = manifest.get("depends", [])
+        for dependency in dependencies:
             if dependency.startswith("hotel_") and dependency not in addon_names:
                 fail(errors, f"{addon.name}: unknown local dependency {dependency}")
+        auto_install = manifest.get("auto_install")
+        if isinstance(auto_install, (list, tuple, set)):
+            invalid_triggers = set(auto_install).difference(dependencies)
+            if invalid_triggers:
+                fail(
+                    errors,
+                    f"{addon.name}: auto_install triggers must also be dependencies: "
+                    + ", ".join(sorted(invalid_triggers)),
+                )
+
+    board_manifest = manifests["hotel_board"]
+    if set(board_manifest.get("auto_install", [])) != {"hotel_base"}:
+        fail(
+            errors,
+            "hotel_board: must auto-install from hotel_base so Hotel Base "
+            "remains the single fresh-deployment entry point",
+        )
+
+    suite_closure = set()
+    pending = ["hotel_board"]
+    while pending:
+        addon_name = pending.pop()
+        if addon_name in suite_closure:
+            continue
+        suite_closure.add(addon_name)
+        pending.extend(
+            dependency
+            for dependency in manifests.get(addon_name, {}).get("depends", [])
+            if dependency in manifests
+        )
+    missing_suite_addons = OPERATIONAL_HOTEL_ADDONS.difference(suite_closure)
+    if missing_suite_addons:
+        fail(
+            errors,
+            "hotel_board: one-click dependency graph is missing operational addons: "
+            + ", ".join(sorted(missing_suite_addons)),
+        )
+    excluded_auto_addons = {
+        "hotel_frontdesk_session",
+        "hotel_night_audit",
+        "l10n_ly_hemfa",
+    }.intersection(suite_closure)
+    if excluded_auto_addons:
+        fail(
+            errors,
+            "hotel_board: one-click dependency graph includes gated/retired addons: "
+            + ", ".join(sorted(excluded_auto_addons)),
+        )
 
 
 def check_acl_files(errors: list[str]) -> None:

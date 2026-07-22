@@ -25,6 +25,16 @@ phase acceptance documents under `docs/` for the locked production design.
 | `hotel_website_booking` | 7 | implemented | Sales-free website, multi-room holds, online payments, portal documents and ratings |
 | `l10n_ly_hemfa` | 3 | blocked at signed finance gate | Reserved localization addon; intentionally non-installable until approved account/tax templates arrive |
 
+## Installation
+
+On a fresh database, install **Hotel Base** only. It automatically installs the
+Front Desk Workspace, whose dependency graph installs the complete operational
+hotel suite (reservations, rates, folios, housekeeping, maintenance, guest
+services, restricted services, POS room charging, reports and website booking).
+
+The retired migration-cleanup addons and the finance-gated `l10n_ly_hemfa`
+localization are intentionally excluded from this automatic installation.
+
 ## Conventions
 
 - Odoo 19 Enterprise APIs only; `<list>` views, Owl 2 frontend.
