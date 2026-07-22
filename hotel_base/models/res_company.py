@@ -151,11 +151,7 @@ class ResCompany(models.Model):
         # its validation. Hold the hotel_* values aside, let the company (and
         # its default-valued property) come into being, then re-apply only the
         # values the user actually set.
-        hotel_field_names = [
-            name
-            for name in self._fields
-            if name.startswith("hotel_") and name != "hotel_property_config_id"
-        ]
+        hotel_field_names = self._hotel_related_field_names()
         held_values = []
         for vals in vals_list:
             held_values.append(
@@ -171,6 +167,36 @@ class ResCompany(models.Model):
             if meaningful:
                 company.write(meaningful)
         return companies
+
+    @api.model
+    def _hotel_related_field_names(self):
+        return [
+            name
+            for name in self._fields
+            if name.startswith("hotel_") and name != "hotel_property_config_id"
+        ]
+
+    def _without_unchanged_hotel_values(self, vals):
+        """Drop hotel-field echoes from a mixed company/settings save.
+
+        The company form can send unchanged writable related fields together
+        with an ordinary company edit. Rewriting an unchanged legacy value such
+        as online_hold_minutes = 0 needlessly invokes hotel.property constraints
+        and blocks an otherwise unrelated company rename.
+        """
+        values = dict(vals)
+        if not any(not name.startswith("hotel_") for name in values):
+            return values
+
+        for name in self._hotel_related_field_names():
+            if name not in values or self._fields[name].type in {
+                "many2many",
+                "one2many",
+            }:
+                continue
+            if all(company[name] == values[name] for company in self):
+                values.pop(name)
+        return values
 
     @api.model
     def _search_hotel_property_config_id(self, operator, value):
@@ -194,6 +220,23 @@ class ResCompany(models.Model):
         return [("id", operator, company_ids)]
 
     def write(self, vals):
+        mixed_company_write = any(not name.startswith("hotel_") for name in vals)
+        vals = self._without_unchanged_hotel_values(vals)
+
+        # Older databases may contain the zero value written by the company
+        # form before the create-path guard existed. Repair it before an
+        # ordinary company save; a genuinely new zero value remains in ``vals``
+        # and is still rejected by hotel.property's validation constraint.
+        if mixed_company_write:
+            invalid_hold_properties = self.env["hotel.property"].sudo().search(
+                [
+                    ("company_id", "in", self.ids),
+                    ("online_hold_minutes", "<=", 0),
+                ]
+            )
+            if invalid_hold_properties:
+                invalid_hold_properties.write({"online_hold_minutes": 15})
+
         manager_group = self.env.ref(
             "hotel_base.group_hotel_manager", raise_if_not_found=False
         )

@@ -71,13 +71,19 @@ hotel_pos_room_charge     <- hotel_folio, hotel_restricted_services, point_of_sa
 hotel_reports             <- hotel_housekeeping, hotel_pos_room_charge
 hotel_website_booking     <- hotel_rate, hotel_guest_services,
                              website, portal, payment, account_payment
-hotel_board               <- hotel_reservation, hotel_folio, hotel_housekeeping,
+hotel_board               <- hotel_base (auto-install trigger), hotel_reservation,
+                             hotel_folio, hotel_housekeeping,
                              hotel_maintenance, hotel_guest_services, hotel_reports,
                              hotel_website_booking, web
 l10n_ly_hemfa             <- account
 hotel_night_audit         <- base (migration tombstone)
 hotel_frontdesk_session   <- base (migration tombstone)
 ```
+
+`hotel_base` is the single fresh-deployment entry point. `hotel_board` uses
+`auto_install: ["hotel_base"]`; once base is queued, the board dependency graph
+pulls in every operational hotel addon. Keep the finance-gated localization and
+the two retired migration tombstones outside that automatic graph.
 
 ## Odoo 19 Breaking Changes — MUST FOLLOW
 
@@ -138,7 +144,7 @@ hotel_frontdesk_session   <- base (migration tombstone)
 
 | Module | Tests |
 |---|---|
-| `hotel_base` | 20 tests |
+| `hotel_base` | 22 tests |
 | `hotel_board` | 17 tests |
 | `hotel_reservation` | 19 tests |
 | `hotel_folio` | 15 tests |
@@ -150,7 +156,7 @@ hotel_frontdesk_session   <- base (migration tombstone)
 | `hotel_pos_room_charge` | 10 tests |
 | `hotel_reports` | 14 tests |
 | `hotel_website_booking` | 13 tests |
-| **Total** | **166 tests** |
+| **Total** | **168 tests** |
 
 ## Local Checks
 
@@ -177,6 +183,7 @@ Runtime testing happens on the Odoo.sh dev branch (no local Odoo install).
 13. **`create_date` is the transaction start timestamp**: Postgres `now()` is frozen at transaction start, so in tests `create_date` predates any wall-clock `fields.Datetime.now()` value captured during the test. Never compare them; pin `create_date` via SQL UPDATE when a compute filters on it.
 14. **PO entries without `#:` occurrence lines are silently dropped**: Odoo 19's `PoFileReader` (`odoo/tools/translate.py`) only yields translations from occurrence references (`model:...`, `model_terms:...`, `code:...`); code entries additionally need an `#. odoo-python` / `#. odoo-javascript` comment to be served at runtime. Never hand-write ar.po files — run `python generate_ar_po.py` (derives occurrences from the addon source; xmlid formats per `ir_model.py`: `model_<model>`, `field_<model>__<field>`, `selection__<model>__<field>__<value>`) after adding terms to the `TRANSLATIONS` dict in `translate_exported_po.py`. A server-side `trans_export` piped through `translate_exported_po.py` remains the higher-fidelity option for view/QWeb text blocks. msgids must byte-match the source strings (watch multi-line Python string concatenation).
 15. **Client-side m2o `domain` strings cannot traverse relations**: the web domain evaluator only sees the record's own field values, and a Many2one is just its id there, so a dotted path like `domain="[('company_id', '=', property_id.company_id)]"` renders an empty term and throws `InvalidDomainError: Invalid domain representation`. Add the needed value as a (related) field on the model and reference it directly — the pricelist filter on `hotel.reservation` now uses its own `company_id` field. Server-side domains (record rules, `search`, search-view `filter_domain`) still support dotted paths.
+16. **Company saves can echo unchanged writable `hotel_*` related fields**: a normal company rename may resend an existing legacy `hotel_online_hold_minutes = 0`, causing `hotel.property` validation to reject an unrelated edit. On mixed company/settings writes, discard unchanged scalar hotel-field echoes before calling `super().write()`. Keep changed hotel values so deliberate invalid edits still fail, and normalize legacy zero hold values in a versioned migration.
 
 ## Odoo 19 Source Reference
 

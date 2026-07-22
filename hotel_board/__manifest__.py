@@ -1,11 +1,12 @@
 {
     "name": "Hotel Front Desk Workspace",
     "summary": "Operational dashboard, room board, and inventory planning tape",
-    "version": "19.0.6.0.0",
+    "version": "19.0.7.0.0",
     "category": "Hotel Management",
     "author": "HEMFA",
     "license": "OPL-1",
     "depends": [
+        "hotel_base",
         "hotel_reservation",
         "hotel_folio",
         "hotel_housekeeping",
@@ -33,5 +34,9 @@
             "hotel_board/static/tests/**/*.test.js",
         ],
     },
+    # Installing Hotel Base is the single entry point for a fresh deployment.
+    # Once it is queued, this workspace is auto-installed and its dependency
+    # graph pulls in the complete operational hotel suite.
+    "auto_install": ["hotel_base"],
     "installable": True,
 }
