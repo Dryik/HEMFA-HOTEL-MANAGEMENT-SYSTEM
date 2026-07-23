@@ -213,6 +213,15 @@ class TestPosRoomCharge(TransactionCase):
         self.assertIn(self.cash_method, methods)
         self.assertNotIn(self.other_room_charge_method, methods)
 
+    def test_pos_bootstrap_keeps_core_config_fields(self):
+        data = self.session.load_data(["pos.config"])
+        config_data = data["pos.config"][0]
+
+        self.assertEqual(config_data["id"], self.pos_config.id)
+        self.assertIn("use_pricelist", config_data)
+        self.assertEqual(config_data["currency_id"], self.pos_config.currency_id.id)
+        self.assertEqual(config_data["hotel_property_id"], self.property.id)
+
     def test_pos_config_view_uses_stable_active_anchor(self):
         parent_arch = self.env.ref("point_of_sale.pos_config_view_form").arch_db
         inherited_arch = self.env.ref(
