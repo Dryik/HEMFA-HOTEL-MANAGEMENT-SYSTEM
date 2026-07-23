@@ -1,4 +1,4 @@
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests.common import TransactionCase
 from odoo.tests import tagged
 from odoo.tools import mute_logger
@@ -120,6 +120,39 @@ class TestHotelBase(TransactionCase):
         )
         company.flush_recordset()
         self.assertEqual(company.hotel_property_config_id.online_hold_minutes, 30)
+
+    def test_company_rename_repairs_legacy_zero_hold_echo(self):
+        company = self.env["res.company"].create({"name": "Legacy Hotel Co"})
+        property_rec = company.hotel_property_config_id
+        self.env.cr.execute(
+            "UPDATE hotel_property SET online_hold_minutes = 0 WHERE id = %s",
+            [property_rec.id],
+        )
+        property_rec.invalidate_recordset(["online_hold_minutes"])
+        company.invalidate_recordset(["hotel_online_hold_minutes"])
+
+        # Match the web form payload: the changed name is submitted together
+        # with the unchanged invalid value displayed by the related field.
+        company.write(
+            {
+                "name": "Legacy Hotel Co (Renamed)",
+                "hotel_online_hold_minutes": 0,
+            }
+        )
+        company.flush_recordset()
+        self.assertEqual(company.name, "Legacy Hotel Co (Renamed)")
+        self.assertEqual(property_rec.name, "Legacy Hotel Co (Renamed)")
+        self.assertEqual(property_rec.online_hold_minutes, 15)
+
+    def test_company_rename_rejects_new_invalid_hold(self):
+        company = self.env["res.company"].create({"name": "Strict Hotel Co"})
+        with self.assertRaises(ValidationError), self.env.cr.savepoint():
+            company.write(
+                {
+                    "name": "Strict Hotel Co (Invalid)",
+                    "hotel_online_hold_minutes": 0,
+                }
+            )
 
     def test_guest_defaults_agency_from_parent_on_create(self):
         agency = self.env["res.partner"].create(

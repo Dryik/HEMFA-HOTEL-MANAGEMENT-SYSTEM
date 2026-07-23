@@ -62,8 +62,11 @@ class PosConfig(models.Model):
         default=lambda self: self.env["hotel.property"]._get_default_property(),
     )
 
-    def _load_pos_data_fields(self, config):
-        return super()._load_pos_data_fields(config) + ["hotel_property_id"]
+    # Do not override ``_load_pos_data_fields`` here. In Odoo 19 the core
+    # pos.config implementation intentionally returns an empty list so
+    # ``read([])`` loads every configuration field. Replacing that sentinel
+    # with only hotel_property_id removes core fields such as use_pricelist
+    # and currency_id from the POS bootstrap payload.
 
     @api.model
     def get_hotel_room_charge_candidates(self, config_id):
